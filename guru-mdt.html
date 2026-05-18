@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Form Data Guru Formal</title>
+  <base target="_top">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <style>
+    body { 
+      background-color: #f0f4f3; 
+      padding: 12px; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    }
+    .main-card { 
+      max-width: 600px; 
+      margin: auto; 
+      background: white; 
+      padding: 24px 20px; 
+      border-radius: 16px; 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05); 
+      border-top: 6px solid #198754; 
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+    .text-muted {
+      font-size: 0.85rem;
+    }
+    .section-head { 
+      display: flex; 
+      align-items: center; 
+      background: #e9f5ee; 
+      color: #198754; 
+      padding: 10px 12px; 
+      border-radius: 8px; 
+      margin-top: 20px; 
+      margin-bottom: 15px; 
+      font-weight: bold; 
+      font-size: 0.85rem; 
+      border-left: 4px solid #198754; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+    }
+    .section-head i { 
+      margin-right: 6px; 
+      font-size: 1.1rem; 
+    }
+    .form-label { 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      font-weight: 600; 
+      margin-top: 10px; 
+      font-size: 0.9rem;
+      color: #333; 
+    }
+    .form-label i { 
+      font-size: 1rem; 
+      color: #198754; 
+    }
+    .form-control, .form-select {
+      padding: 12px;
+      font-size: 0.95rem;
+      border-radius: 8px;
+    }
+    input[type="date"] {
+      min-height: 45px;
+    }
+    .loading-overlay { 
+      display: none; 
+      text-align: center; 
+      margin-top: 25px; 
+    }
+    #successPage { 
+      display: none; 
+    }
+    .result-box { 
+      background: #fdfdfd; 
+      border-radius: 12px; 
+      padding: 16px; 
+      margin-top: 15px; 
+      border: 1px solid #e0e0e0; 
+    }
+    .info-row { 
+      display: flex; 
+      flex-direction: column; 
+      border-bottom: 1px solid #f1f1f1; 
+      padding: 10px 0; 
+      font-size: 0.9rem; 
+    }
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    .info-label { 
+      width: 100%; 
+      font-weight: bold; 
+      color: #777; 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      margin-bottom: 2px;
+    }
+    .info-label i { 
+      color: #198754; 
+      font-size: 1rem; 
+    }
+    .info-value { 
+      width: 100%; 
+      color: #222; 
+      font-weight: 600; 
+      word-break: break-word;
+    }
+    .btn-relog { 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      background-color: #ffffff; 
+      color: #198754; 
+      border: 2px solid #198754; 
+      padding: 12px; 
+      font-weight: bold; 
+      border-radius: 8px; 
+      transition: 0.3s; 
+      width: 100%; 
+    }
+    .btn-relog i { 
+      margin-right: 8px; 
+    }
+    .alert-banner { 
+      display: none; 
+      padding: 10px 12px; 
+      background-color: #f8d7da; 
+      color: #842029; 
+      border: 1px solid #f5c2c7; 
+      border-radius: 8px; 
+      margin-bottom: 15px; 
+      font-size: 0.85rem; 
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-card">
+  <div id="alertBanner" class="alert-banner"></div>
+
+  <div id="formContainer">
+    <div class="text-center mb-3">
+      <h2 class="fw-bold text-success">FORM DATA GURU FORMAL</h2>
+      <p class="text-muted">Silakan lengkapi data diri Anda di bawah ini dengan benar.</p>
+    </div>
+
+    <form id="guruForm">
+      <div class="section-head"><i class="material-icons-round">assignment_ind</i>Identitas Guru</div>
+      
+      <div class="mb-3">
+        <label class="form-label" for="nik"><i class="material-icons-round">badge</i>NIK (Nomor Induk Kependudukan)</label>
+        <input type="text" id="nik" class="form-control" maxlength="16" inputmode="numeric" placeholder="Masukkan 16 digit NIK" required>
+        <div class="form-text text-muted small">Pastikan NIK berisi tepat 16 digit angka.</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="nama"><i class="material-icons-round">person</i>Nama Pendidik</label>
+        <input type="text" id="nama" class="form-control" placeholder="Masukkan nama lengkap pendidik" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="jenisKelamin"><i class="material-icons-round">wc</i>Jenis Kelamin</label>
+        <select id="jenisKelamin" class="form-select" required>
+          <option value="" disabled selected>Pilih Jenis Kelamin</option>
+          <option value="Laki-laki">Laki-laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="tempatLahir"><i class="material-icons-round">place</i>Tempat Lahir</label>
+        <input type="text" id="tempatLahir" class="form-control" placeholder="Masukkan tempat lahir" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="tanggalLahir"><i class="material-icons-round">calendar_today</i>Tanggal Lahir</label>
+        <input type="date" id="tanggalLahir" class="form-control" required>
+      </div>
+
+      <div class="section-head"><i class="material-icons-round">school</i>Riwayat Pendidikan</div>
+
+      <div class="mb-3">
+        <label class="form-label" for="pendidikanTerakhir"><i class="material-icons-round">workspace_premium</i>Pendidikan Terakhir</label>
+        <select id="pendidikanTerakhir" class="form-select" required>
+          <option value="" disabled selected>Pilih Pendidikan Terakhir</option>
+          <option value="SMA/SMK">SMA/SMK</option>
+          <option value="D3">D3</option>
+          <option value="S1">S1</option>
+          <option value="S2">S2</option>
+          <option value="S3">S3</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="riwayatPendidikanIslam"><i class="material-icons-round">mosque</i>Riwayat Pendidikan Keagamaan Islam</label>
+        <input type="text" id="riwayatPendidikanIslam" class="form-control" placeholder="Contoh: Pondok Pesantren Al-Hidayah, dll." required>
+      </div>
+
+      <div class="section-head"><i class="material-icons-round">contact_phone</i>Kontak & Domisili</div>
+
+      <div class="mb-3">
+        <label class="form-label" for="email"><i class="material-icons-round">alternate_email</i>Email</label>
+        <input type="email" id="email" class="form-control" placeholder="contoh@gmail.com" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="noTelepon"><i class="material-icons-round">phone</i>No Telepon / WhatsApp</label>
+        <input type="text" id="noTelepon" class="form-control" placeholder="Masukkan nomor HP aktif (cth: 081234567xxx)" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="provinsi"><i class="material-icons-round">map</i>Provinsi</label>
+        <input type="text" id="provinsi" class="form-control" placeholder="Masukkan provinsi" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="kabupaten"><i class="material-icons-round">location_city</i>Kabupaten / Kota</label>
+        <input type="text" id="kabupaten" class="form-control" placeholder="Masukkan kabupaten" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="alamat"><i class="material-icons-round">home</i>Alamat Lengkap</label>
+        <textarea id="alamat" class="form-control" rows="3" placeholder="Masukkan alamat jalan, RT/RW, dan desa/kelurahan" required></textarea>
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn btn-success w-100 mt-3 py-3 fw-bold">
+        <i class="material-icons-round align-middle me-2">send</i> KIRIM DATA
+      </button>
+    </form>
+  </div>
+
+  <div id="successPage">
+    <div class="text-center">
+      <div class="mb-2"><i class="material-icons-round" style="font-size: 60px; color: #198754;">check_circle</i></div>
+      <h2 class="fw-bold text-success">PENGIRIMAN BERHASIL!</h2>
+      <p class="text-muted">Data Anda telah berhasil disimpan.</p>
+    </div>
+    <div class="result-box">
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">badge</i>NIK</div><div class="info-value" id="resNik"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">person</i>Nama Pendidik</div><div class="info-value" id="resNama"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">wc</i>Jenis Kelamin</div><div class="info-value" id="resJenisKelamin"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">place</i>Tempat Lahir</div><div class="info-value" id="resTempatLahir"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">calendar_today</i>Tanggal Lahir</div><div class="info-value" id="resTanggal"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">workspace_premium</i>Pendidikan Terakhir</div><div class="info-value" id="resPendidikanTerakhir"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">mosque</i>Riwayat Pendidikan Islam</div><div class="info-value" id="resRiwayatPendidikanIslam"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">alternate_email</i>Email</div><div class="info-value" id="resEmail"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">phone</i>No Telepon</div><div class="info-value" id="resNoTelepon"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">map</i>Provinsi</div><div class="info-value" id="resProvinsi"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">location_city</i>Kabupaten</div><div class="info-value" id="resKabupaten"></div></div>
+      <div class="info-row"><div class="info-label"><i class="material-icons-round">home</i>Alamat</div><div class="info-value" id="resAlamat"></div></div>
+    </div>
+    <button id="btnRelog" class="btn btn-relog mt-4 fw-bold"><i class="material-icons-round">refresh</i> ISI FORMULIR LAGI</button>
+  </div>
+
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner-border text-success" style="width: 2.5rem; height: 2.5rem;"></div>
+    <p class="mt-3 text-success fw-bold small">Data sedang diproses......<br><small class="text-muted">Mohon jangan menutup halaman ini.</small></p>
+  </div>
+</div>
+
+<script>
+  // URL WEB APP GOOGLE APPS SCRIPT BARU
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxir_7Po4vx_maz8jq-WuxRFpMsgHo3LhWOH5f32R3PtV7y6b6DNWOrDb2TBryJWGyhYQ/exec"; 
+
+  const showAlert = (message) => {
+    const banner = document.getElementById('alertBanner');
+    banner.innerText = message;
+    banner.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Memastikan hanya angka yang bisa masuk ke kolom NIK
+  document.getElementById('nik').addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+
+  document.getElementById('guruForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('alertBanner').style.display = 'none';
+    
+    const btn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loadingOverlay');
+    const formCont = document.getElementById('formContainer');
+    
+    const nikVal = document.getElementById('nik').value.trim();
+    const namaVal = document.getElementById('nama').value.trim();
+    const jenisKelaminVal = document.getElementById('jenisKelamin').value;
+    const tempatLahirVal = document.getElementById('tempatLahir').value.trim();
+    const tanggalLahirVal = document.getElementById('tanggalLahir').value;
+    const pendidikanTerakhirVal = document.getElementById('pendidikanTerakhir').value;
+    const riwayatPendidikanIslamVal = document.getElementById('riwayatPendidikanIslam').value.trim();
+    const emailVal = document.getElementById('email').value.trim();
+    const noTeleponVal = document.getElementById('noTelepon').value.trim();
+    const provinsiVal = document.getElementById('provinsi').value.trim();
+    const kabupatenVal = document.getElementById('kabupaten').value.trim();
+    const alamatVal = document.getElementById('alamat').value.trim();
+
+    // Validasi NIK wajib 16 digit
+    if (nikVal.length !== 16) {
+      showAlert("Nomor Induk Kependudukan (NIK) wajib diisi dengan tepat 16 digit angka.");
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> PROSES...';
+    loading.style.display = 'block';
+    formCont.style.opacity = '0.5';
+
+    // Membuat objek muatan data (payload) yang dikirim ke Google Apps Script
+    const payload = {
+      nik: nikVal,
+      nama: namaVal,
+      jenisKelamin: jenisKelaminVal,
+      tempatLahir: tempatLahirVal,
+      tanggalLahir: tanggalLahirVal,
+      pendidikanTerakhir: pendidikanTerakhirVal,
+      riwayatPendidikanIslam: riwayatPendidikanIslamVal,
+      email: emailVal,
+      noTelepon: noTeleponVal,
+      provinsi: provinsiVal,
+      kabupaten: kabupatenVal,
+      alamat: alamatVal
+    };
+
+    fetch(WEB_APP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      // Memasukkan hasil inputan ke halaman sukses
+      document.getElementById('resNik').innerText = nikVal;
+      document.getElementById('resNama').innerText = namaVal;
+      document.getElementById('resJenisKelamin').innerText = jenisKelaminVal;
+      document.getElementById('resTempatLahir').innerText = tempatLahirVal;
+      
+      const bulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+      const b = tanggalLahirVal.split('-');
+      document.getElementById('resTanggal').innerText = `${parseInt(b[2], 10)} ${bulanIndo[parseInt(b[1], 10)-1]} ${b[0]}`;
+      
+      document.getElementById('resPendidikanTerakhir').innerText = pendidikanTerakhirVal;
+      document.getElementById('resRiwayatPendidikanIslam').innerText = riwayatPendidikanIslamVal;
+      document.getElementById('resEmail').innerText = emailVal;
+      document.getElementById('resNoTelepon').innerText = noTeleponVal;
+      document.getElementById('resProvinsi').innerText = provinsiVal;
+      document.getElementById('resKabupaten').innerText = kabupatenVal;
+      document.getElementById('resAlamat').innerText = alamatVal;
+
+      loading.style.display = 'none';
+      formCont.style.display = 'none';
+      document.getElementById('successPage').style.display = 'block';
+    })
+    .catch(err => {
+      showAlert("Kesalahan Jaringan: " + err);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="material-icons-round align-middle me-2">send</i> KIRIM DATA';
+      loading.style.display = 'none';
+      formCont.style.opacity = '1';
+    });
+  });
+
+  document.getElementById('btnRelog').addEventListener('click', function() {
+    location.reload();
+  });
+</script>
+</body>
+</html>
