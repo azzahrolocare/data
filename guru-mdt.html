@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Form Data Guru Formal</title>
+  <title>Form Data Guru MDT AZ-ZAHRO</title>
   <base target="_top">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -147,7 +147,7 @@
 
   <div id="formContainer">
     <div class="text-center mb-3">
-      <h2 class="fw-bold text-success">FORM DATA GURU FORMAL</h2>
+      <h2 class="fw-bold text-success">FORM DATA GURU MDT AZ-ZAHRO</h2>
       <p class="text-muted">Silakan lengkapi data diri Anda di bawah ini dengan benar.</p>
     </div>
 
@@ -206,8 +206,8 @@
       <div class="section-head"><i class="material-icons-round">contact_phone</i>Kontak & Domisili</div>
 
       <div class="mb-3">
-        <label class="form-label" for="email"><i class="material-icons-round">alternate_email</i>Email</label>
-        <input type="email" id="email" class="form-control" placeholder="contoh@gmail.com" required>
+        <label class="form-label" for="email"><i class="material-icons-round">alternate_email</i>Email (Opsional)</label>
+        <input type="email" id="email" class="form-control" placeholder="contoh@gmail.com (Boleh dikosongkan)">
       </div>
 
       <div class="mb-3">
@@ -266,8 +266,8 @@
 </div>
 
 <script>
-  // URL WEB APP GOOGLE APPS SCRIPT BARU
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxir_7Po4vx_maz8jq-WuxRFpMsgHo3LhWOH5f32R3PtV7y6b6DNWOrDb2TBryJWGyhYQ/exec"; 
+  // URL WEB APP GOOGLE APPS SCRIPT YANG SUDAH DISESUAIKAN
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyGXMCAm8i8fABEsa1PwjzmNZ-LTpGFbO3BcLVux9tf5JEci2O_HBB8i9Ih1iYnOysx/exec"; 
 
   const showAlert = (message) => {
     const banner = document.getElementById('alertBanner');
@@ -276,7 +276,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Memastikan hanya angka yang bisa masuk ke kolom NIK
   document.getElementById('nik').addEventListener('input', function(e) {
     this.value = this.value.replace(/[^0-9]/g, '');
   });
@@ -302,7 +301,6 @@
     const kabupatenVal = document.getElementById('kabupaten').value.trim();
     const alamatVal = document.getElementById('alamat').value.trim();
 
-    // Validasi NIK wajib 16 digit
     if (nikVal.length !== 16) {
       showAlert("Nomor Induk Kependudukan (NIK) wajib diisi dengan tepat 16 digit angka.");
       return;
@@ -313,7 +311,6 @@
     loading.style.display = 'block';
     formCont.style.opacity = '0.5';
 
-    // Membuat objek muatan data (payload) yang dikirim ke Google Apps Script
     const payload = {
       nik: nikVal,
       nama: namaVal,
@@ -322,7 +319,7 @@
       tanggalLahir: tanggalLahirVal,
       pendidikanTerakhir: pendidikanTerakhirVal,
       riwayatPendidikanIslam: riwayatPendidikanIslamVal,
-      email: emailVal,
+      email: emailVal ? emailVal : "-", // Jika kosong, kirim tanda strip
       noTelepon: noTeleponVal,
       provinsi: provinsiVal,
       kabupaten: kabupatenVal,
@@ -336,7 +333,6 @@
       body: JSON.stringify(payload)
     })
     .then(() => {
-      // Memasukkan hasil inputan ke halaman sukses
       document.getElementById('resNik').innerText = nikVal;
       document.getElementById('resNama').innerText = namaVal;
       document.getElementById('resJenisKelamin').innerText = jenisKelaminVal;
@@ -348,7 +344,7 @@
       
       document.getElementById('resPendidikanTerakhir').innerText = pendidikanTerakhirVal;
       document.getElementById('resRiwayatPendidikanIslam').innerText = riwayatPendidikanIslamVal;
-      document.getElementById('resEmail').innerText = emailVal;
+      document.getElementById('resEmail').innerText = emailVal ? emailVal : "-";
       document.getElementById('resNoTelepon').innerText = noTeleponVal;
       document.getElementById('resProvinsi').innerText = provinsiVal;
       document.getElementById('resKabupaten').innerText = kabupatenVal;
