@@ -7,9 +7,13 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuD6ubfsn8zTaEkyiej
 // URL File Nada Bel Sekolah Jerman (Chime)
 const URL_NADA_BEL = "https://azzahrolocare.github.io/data/jadwal/schoolbell-from-german-high-school.mp3";
 
+// Password Pengunci Akses Fitur Admin Pop-up
+const PASSWORD_ADMIN = "admin";
+
 let databaseJadwal = null;
 let audioIzinAktif = false;
 let waktuTerakhirBerbunyi = ""; 
+let daftarSuaraBrowser = [];
 
 // Mapping hari dicocokkan eksak dengan nama sheet pada Google Sheets Anda
 const mapHari = {
@@ -67,10 +71,10 @@ function renderTabelJadwal() {
     const listJadwalHariIni = databaseJadwal[namaKategoriHari];
     listJadwalHariIni.forEach(row => {
         const tr = document.createElement("tr");
-        tr.className = "hover:bg-gray-50 transition-colors";
+        tr.className = "hover:bg-white/40 transition-colors";
         tr.innerHTML = `
             <td class="p-4 text-center font-mono font-medium text-gray-400">${row.no}</td>
-            <td class="p-4 font-mono font-bold text-indigo-900 text-base">${row.jam}</td>
+            <td class="p-4 font-mono font-bold text-indigo-950 text-base">${row.jam}</td>
             <td class="p-4 font-semibold text-gray-700">${row.keterangan}</td>
         `;
         tbody.appendChild(tr);
@@ -78,7 +82,49 @@ function renderTabelJadwal() {
 }
 
 // ====================================================================
-// 3. ENGINE UTAMA: SIKLUS BERGANTIAN (NADA -> SUARA GOOGLE LEMBUT)
+// MEMUAT KARAKTER SUARA GENDER (LAKI/PEREMPUAN)
+// ====================================================================
+function inisialisasiPilihanSuara() {
+    if (typeof speechSynthesis === 'undefined') return;
+
+    daftarSuaraBrowser = speechSynthesis.getVoices();
+    const selectElement = document.getElementById("selectVoice");
+    if (!selectElement) return;
+    selectElement.innerHTML = "";
+
+    // Saring suara yang hanya mengandung modul Bahasa Indonesia atau Google bawaan
+    let suaraTersedia = daftarSuaraBrowser.filter(voice => voice.lang.includes("id") || voice.lang.includes("ID"));
+
+    // Jika tidak ditemukan instalan bahasa Indonesia, gunakan seluruh daftar suara standar browser
+    if (suaraTersedia.length === 0) {
+        suaraTersedia = daftarSuaraBrowser;
+    }
+
+    suaraTersedia.forEach((voice) => {
+        const option = document.createElement("option");
+        option.value = voice.name;
+        
+        // Penanda label manual visual gender agar mempermudah admin sekolah
+        let genderLabel = "(Suara Standar)";
+        const nameUpper = voice.name.toUpperCase();
+        if (nameUpper.includes("DAVID") || nameUpper.includes("ARDI") || nameUpper.includes("MALE") || nameUpper.includes("ANDIKA")) {
+            genderLabel = "♂ Laki-Laki";
+        } else if (nameUpper.includes("ZIRA") || nameUpper.includes("GADIS") || nameUpper.includes("FEMALE") || nameUpper.includes("PUTRI") || nameUpper.includes("GOOGLE")) {
+            genderLabel = "♀ Perempuan";
+        }
+
+        option.innerText = `${voice.name} ${genderLabel}`;
+        selectElement.appendChild(option);
+    });
+}
+
+// Eksekusi trigger pemuatan suara karena beberapa browser memuatnya secara asinkronus
+if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = inisialisasiPilihanSuara;
+}
+
+// ====================================================================
+// 3. ENGINE UTAMA: SIKLUS BERGANTIAN (NADA -> SUARA GOOGLE DENGAN UI DINAMIS)
 // ====================================================================
 function ucapkanPengumumanTTS(keterangan) {
     if (!audioIzinAktif) return;
@@ -104,6 +150,11 @@ function ucapkanPengumumanTTS(keterangan) {
     let putaranKe = 1;
     const totalPutaran = 3;
 
+    // Ambil konfigurasi bentuk suara dinamis dari nilai Input Panel UI Modal
+    const speedTerpilih = parseFloat(document.getElementById("inputSpeed").value);
+    const pitchTerpilih = parseFloat(document.getElementById("inputPitch").value);
+    const namaSuaraTerpilih = document.getElementById("selectVoice").value;
+
     // Fungsi internal rekursif pengatur antrean antarsuara agar bergantian rapi
     function jalankanSiklus() {
         if (putaranKe > totalPutaran) return; // Siklus selesai jika sudah 3 kali
@@ -114,11 +165,18 @@ function ucapkanPengumumanTTS(keterangan) {
         // B. Ketika nada bel selesai berbunyi, picu Text-to-Speech Google
         audioBel.addEventListener('ended', function() {
             const mesinSuara = new SpeechSynthesisUtterance(kalimat);
-            mesinSuara.lang = "id-ID"; // Mengunci bahasa Indonesia
             
-            // Pengaturan parameter suara agar lebih lembut dan tidak kaku
-            mesinSuara.rate = 0.82;   // Kecepatan pelafalan diturunkan (lembut & berwibawa)
-            mesinSuara.pitch = 0.95;  // Nada suara diturunkan sedikit agar lebih empuk/deep
+            // Pasang karakter suara pilihan admin dari panel UI
+            if (daftarSuaraBrowser.length > 0) {
+                const objekSuara = daftarSuaraBrowser.find(voice => voice.name === namaSuaraTerpilih);
+                if (objekSuara) {
+                    mesinSuara.voice = objekSuara;
+                }
+            }
+            
+            mesinSuara.lang = "id-ID"; 
+            mesinSuara.rate = speedTerpilih;   // Konfigurasi kecepatan dinamis
+            mesinSuara.pitch = pitchTerpilih;  // Konfigurasi bentuk nada dinamis
 
             // C. Ketika suara Google selesai berbicara, picu putaran siklus berikutnya
             mesinSuara.addEventListener('end', function() {
@@ -171,7 +229,6 @@ function periksaJadwalBel(waktuSekarang, hariIndex) {
 
     const listJadwal = databaseJadwal[namaKategoriHari];
     listJadwal.forEach(row => {
-        // row.jam langsung berisi string jam format "HH:MM" bersih dari Apps Script
         if (row.jam === waktuSekarang) {
             waktuTerakhirBerbunyi = waktuSekarang;
             ucapkanPengumumanTTS(row.keterangan);
@@ -181,35 +238,93 @@ function periksaJadwalBel(waktuSekarang, hariIndex) {
 
 function updateInformasiTanggal() {
     const d = new Date();
-    const textTanggal = `${formatHariText[d.getDay()]} , ${d.getDate()} ${formatBulanText[d.getMonth()]} ${d.getFullYear()}`;
+    const textTanggal = `${formatHariText[d.getDay()]}, ${d.getDate()} ${formatBulanText[d.getMonth()]} ${d.getFullYear()}`;
     document.getElementById("liveDate").innerText = textTanggal;
 }
 
 // ====================================================================
-// 6. BROWSER AUTOPLAY SECURITY BYPASS HANDLER
+// 6. UI EVENT LISTENERS CONTROL INTERACTION & MODAL LOGIC
 // ====================================================================
+const modalAdmin = document.getElementById("modalAdmin");
+
+// Fungsi Membuka Modal (Pop-up) dengan Animasi Smooth
+function bukaModalAdmin() {
+    modalAdmin.classList.remove("hidden");
+    setTimeout(() => {
+        modalAdmin.classList.remove("opacity-0");
+        modalAdmin.querySelector(".transform").classList.remove("scale-95");
+    }, 50);
+}
+
+// Fungsi Menutup Modal (Pop-up)
+function tutupModalAdmin() {
+    modalAdmin.classList.add("opacity-0");
+    modalAdmin.querySelector(".transform").classList.add("scale-95");
+    setTimeout(() => {
+        modalAdmin.classList.add("hidden");
+    }, 300);
+}
+
+// Logika Tombol Login Admin via Icon Gear
+document.getElementById("btnBukaAdmin").addEventListener("click", () => {
+    const inputPass = prompt("Masukkan Kata Sandi Otoritas Admin Bel Az-Zahro:");
+    if (inputPass === PASSWORD_ADMIN) {
+        bukaModalAdmin();
+    } else if (inputPass !== null) {
+        alert("❌ Kata sandi salah! Akses kontrol panel ditolak.");
+    }
+});
+
+// Tombol Tutup Pop-up Modal
+document.getElementById("btnTutupAdmin").addEventListener("click", tutupModalAdmin);
+
+// Tutup modal otomatis jika pengguna mengklik area luar jendela frosted glass
+window.addEventListener("click", (e) => {
+    if (e.target === modalAdmin) {
+        tutupModalAdmin();
+    }
+});
+
+// Real-time monitor nilai angka slider panel kontrol
+document.getElementById("inputSpeed").addEventListener("input", (e) => {
+    document.getElementById("valSpeed").innerText = e.target.value;
+});
+
+document.getElementById("inputPitch").addEventListener("input", (e) => {
+    document.getElementById("valPitch").innerText = e.target.value;
+});
+
+// Fungsi uji coba simulasi instan
+document.getElementById("btnTestBel").addEventListener("click", () => {
+    if (!audioIzinAktif) {
+        alert("Mohon klik tombol 'Aktifkan Audio Bel Suara' terlebih dahulu agar sistem diizinkan bersuara!");
+        return;
+    }
+    ucapkanPengumumanTTS("SIMULASI UJI COBA");
+});
+
+// Tombol Aktivasi Otoritas Suara Browser
 document.getElementById("btnAktivasi").addEventListener("click", () => {
     audioIzinAktif = true;
     
-    // Mengubah tampilan tombol menjadi nonaktif setelah mendapatkan izin interaksi
     const btn = document.getElementById("btnAktivasi");
-    btn.className = "w-full bg-slate-400 text-white font-bold py-3 px-6 rounded-xl cursor-not-allowed flex items-center justify-center gap-2 shadow-none";
+    btn.className = "w-full bg-slate-400/50 text-slate-700 font-bold py-3.5 px-6 rounded-2xl cursor-not-allowed flex items-center justify-center gap-2 shadow-none border border-slate-300/30";
     btn.disabled = true;
     btn.innerText = "✓ Sistem Bel Suara Aktif & Memonitor";
     
     const status = document.getElementById("statusAudio");
-    status.className = "text-xs text-emerald-600 font-bold mt-2 text-center";
+    status.className = "text-xs text-emerald-700 font-bold mt-2 text-center";
     status.innerText = "✓ Otoritas audio berhasil didapatkan. Bel memonitor waktu di latar belakang.";
 
-    // Pancingan audio instan saat tombol di-start pertama kali oleh petugas piket
+    // Nada pancingan awal pengesahan audio browser
     const pancinganAudio = new Audio(URL_NADA_BEL);
     pancinganAudio.play().then(() => {
         setTimeout(() => {
-            const pancinganTTS = new SpeechSynthesisUtterance("Sistem bel otomatis siap dijalankan.");
+            const pancinganTTS = new SpeechSynthesisUtterance("Sistem bel otomatis sekolah Lembaga Az-Zahro siap dijalankan.");
             pancinganTTS.lang = "id-ID";
             window.speechSynthesis.speak(pancinganTTS);
-        }, 2200); // Jeda penyesuaian durasi pancingan bel awal
-    }).catch(err => console.log("Otoritas suara diinisialisasi: ", err));
+        }, 2200);
+    }).catch(err => console.log("Otoritas suara aktif: ", err));
 });
 
 // ====================================================================
@@ -219,4 +334,5 @@ window.addEventListener("DOMContentLoaded", () => {
     updateInformasiTanggal();
     muatJadwalDariSheets();
     jalankanMesinWaktu();
+    setTimeout(inisialisasiPilihanSuara, 800);
 });
