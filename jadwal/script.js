@@ -7,13 +7,9 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuD6ubfsn8zTaEkyiej
 // URL File Nada Bel Sekolah Jerman (Chime)
 const URL_NADA_BEL = "https://azzahrolocare.github.io/data/jadwal/schoolbell-from-german-high-school.mp3";
 
-// Password Pengunci Akses Fitur Admin Pop-up
-const PASSWORD_ADMIN = "admin";
-
 let databaseJadwal = null;
 let audioIzinAktif = false;
 let waktuTerakhirBerbunyi = ""; 
-let daftarSuaraBrowser = [];
 
 // Mapping hari dicocokkan eksak dengan nama sheet pada Google Sheets Anda
 const mapHari = {
@@ -82,48 +78,6 @@ function renderTabelJadwal() {
 }
 
 // ====================================================================
-// MEMUAT KARAKTER SUARA GENDER (LAKI/PEREMPUAN)
-// ====================================================================
-function inisialisasiPilihanSuara() {
-    if (typeof speechSynthesis === 'undefined') return;
-
-    daftarSuaraBrowser = speechSynthesis.getVoices();
-    const selectElement = document.getElementById("selectVoice");
-    if (!selectElement) return;
-    selectElement.innerHTML = "";
-
-    // Saring suara yang hanya mengandung modul Bahasa Indonesia atau Google bawaan
-    let suaraTersedia = daftarSuaraBrowser.filter(voice => voice.lang.includes("id") || voice.lang.includes("ID"));
-
-    // Jika tidak ditemukan instalan bahasa Indonesia, gunakan seluruh daftar suara standar browser
-    if (suaraTersedia.length === 0) {
-        suaraTersedia = daftarSuaraBrowser;
-    }
-
-    suaraTersedia.forEach((voice) => {
-        const option = document.createElement("option");
-        option.value = voice.name;
-        
-        // Penanda label manual visual gender agar mempermudah admin sekolah
-        let genderLabel = "(Suara Standar)";
-        const nameUpper = voice.name.toUpperCase();
-        if (nameUpper.includes("DAVID") || nameUpper.includes("ARDI") || nameUpper.includes("MALE") || nameUpper.includes("ANDIKA")) {
-            genderLabel = "♂ Laki-Laki";
-        } else if (nameUpper.includes("ZIRA") || nameUpper.includes("GADIS") || nameUpper.includes("FEMALE") || nameUpper.includes("PUTRI") || nameUpper.includes("GOOGLE")) {
-            genderLabel = "♀ Perempuan";
-        }
-
-        option.innerText = `${voice.name} ${genderLabel}`;
-        selectElement.appendChild(option);
-    });
-}
-
-// Eksekusi trigger pemuatan suara karena beberapa browser memuatnya secara asinkronus
-if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = inisialisasiPilihanSuara;
-}
-
-// ====================================================================
 // 3. ENGINE UTAMA: SIKLUS BERGANTIAN (NADA -> SUARA GOOGLE DENGAN UI DINAMIS)
 // ====================================================================
 function ucapkanPengumumanTTS(keterangan) {
@@ -150,10 +104,9 @@ function ucapkanPengumumanTTS(keterangan) {
     let putaranKe = 1;
     const totalPutaran = 3;
 
-    // Ambil konfigurasi bentuk suara dinamis dari nilai Input Panel UI Modal
-    const speedTerpilih = parseFloat(document.getElementById("inputSpeed").value);
-    const pitchTerpilih = parseFloat(document.getElementById("inputPitch").value);
-    const namaSuaraTerpilih = document.getElementById("selectVoice").value;
+    // Nilai dikunci statis menggunakan default bawaan sebelumnya
+    const speedTerpilih = 0.82;
+    const pitchTerpilih = 0.95;
 
     // Fungsi internal rekursif pengatur antrean antarsuara agar bergantian rapi
     function jalankanSiklus() {
@@ -166,17 +119,18 @@ function ucapkanPengumumanTTS(keterangan) {
         audioBel.addEventListener('ended', function() {
             const mesinSuara = new SpeechSynthesisUtterance(kalimat);
             
-            // Pasang karakter suara pilihan admin dari panel UI
-            if (daftarSuaraBrowser.length > 0) {
-                const objekSuara = daftarSuaraBrowser.find(voice => voice.name === namaSuaraTerpilih);
-                if (objekSuara) {
-                    mesinSuara.voice = objekSuara;
+            // Mencari modul bahasa Indonesia yang tersedia secara otomatis di browser
+            if (typeof speechSynthesis !== 'undefined') {
+                const daftarSuaraBrowser = speechSynthesis.getVoices();
+                const suaraIndo = daftarSuaraBrowser.find(voice => voice.lang.includes("id") || voice.lang.includes("ID"));
+                if (suaraIndo) {
+                    mesinSuara.voice = suaraIndo;
                 }
             }
             
             mesinSuara.lang = "id-ID"; 
-            mesinSuara.rate = speedTerpilih;   // Konfigurasi kecepatan dinamis
-            mesinSuara.pitch = pitchTerpilih;  // Konfigurasi bentuk nada dinamis
+            mesinSuara.rate = speedTerpilih;   // Konfigurasi kecepatan default
+            mesinSuara.pitch = pitchTerpilih;  // Konfigurasi bentuk nada default
 
             // C. Ketika suara Google selesai berbicara, picu putaran siklus berikutnya
             mesinSuara.addEventListener('end', function() {
@@ -243,66 +197,8 @@ function updateInformasiTanggal() {
 }
 
 // ====================================================================
-// 6. UI EVENT LISTENERS CONTROL INTERACTION & MODAL LOGIC
+// 6. UI EVENT LISTENERS CONTROL INTERACTION
 // ====================================================================
-const modalAdmin = document.getElementById("modalAdmin");
-
-// Fungsi Membuka Modal (Pop-up) dengan Animasi Smooth
-function bukaModalAdmin() {
-    modalAdmin.classList.remove("hidden");
-    setTimeout(() => {
-        modalAdmin.classList.remove("opacity-0");
-        modalAdmin.querySelector(".transform").classList.remove("scale-95");
-    }, 50);
-}
-
-// Fungsi Menutup Modal (Pop-up)
-function tutupModalAdmin() {
-    modalAdmin.classList.add("opacity-0");
-    modalAdmin.querySelector(".transform").classList.add("scale-95");
-    setTimeout(() => {
-        modalAdmin.classList.add("hidden");
-    }, 300);
-}
-
-// Logika Tombol Login Admin via Icon Gear
-document.getElementById("btnBukaAdmin").addEventListener("click", () => {
-    const inputPass = prompt("Masukkan Kata Sandi Otoritas Admin Bel Az-Zahro:");
-    if (inputPass === PASSWORD_ADMIN) {
-        bukaModalAdmin();
-    } else if (inputPass !== null) {
-        alert("❌ Kata sandi salah! Akses kontrol panel ditolak.");
-    }
-});
-
-// Tombol Tutup Pop-up Modal
-document.getElementById("btnTutupAdmin").addEventListener("click", tutupModalAdmin);
-
-// Tutup modal otomatis jika pengguna mengklik area luar jendela frosted glass
-window.addEventListener("click", (e) => {
-    if (e.target === modalAdmin) {
-        tutupModalAdmin();
-    }
-});
-
-// Real-time monitor nilai angka slider panel kontrol
-document.getElementById("inputSpeed").addEventListener("input", (e) => {
-    document.getElementById("valSpeed").innerText = e.target.value;
-});
-
-document.getElementById("inputPitch").addEventListener("input", (e) => {
-    document.getElementById("valPitch").innerText = e.target.value;
-});
-
-// Fungsi uji coba simulasi instan
-document.getElementById("btnTestBel").addEventListener("click", () => {
-    if (!audioIzinAktif) {
-        alert("Mohon klik tombol 'Aktifkan Audio Bel Suara' terlebih dahulu agar sistem diizinkan bersuara!");
-        return;
-    }
-    ucapkanPengumumanTTS("SIMULASI UJI COBA");
-});
-
 // Tombol Aktivasi Otoritas Suara Browser
 document.getElementById("btnAktivasi").addEventListener("click", () => {
     audioIzinAktif = true;
@@ -334,5 +230,4 @@ window.addEventListener("DOMContentLoaded", () => {
     updateInformasiTanggal();
     muatJadwalDariSheets();
     jalankanMesinWaktu();
-    setTimeout(inisialisasiPilihanSuara, 800);
 });
