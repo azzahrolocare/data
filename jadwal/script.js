@@ -149,7 +149,7 @@ function ucapkanPengumumanTTS(keterangan) {
     jalankanSiklus();
     
     // Perbarui teks monitor aktivitas di halaman HTML
-    document.getElementById("logSuara").innerText = `[${new Date().toLocaleTimeString()}] "${keterangan}" (Pola Siklus Bergantian 3x)`;
+    document.getElementById("logSuara").innerText = `[${new Date().toLocaleTimeString()}] "${keterangan}" (MENGULANG 3x)`;
 }
 
 // ====================================================================
