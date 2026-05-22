@@ -1,19 +1,20 @@
-// GANTI teks di bawah ini dengan URL Web App milik Apps Script Anda!
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwjgZnntAU_mLTTSRn6KJW23yDKBXG4-gImoH3iIr9dEuAQXJAIPS0sGYNDnFivxxhbEg/exec";
+// GANTI dengan URL Web App milik Apps Script Anda yang baru!
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuD6ubfsn8zTaEkyiejKnoHK9ucTSqbCWh-bYhM1ZZgsF9vIH2VWDXFYZoAx-51WfXmw/exec";
 
 let databaseJadwal = null;
 let audioIzinAktif = false;
-let waktuTerakhirBerbunyi = ""; // Proteksi agar suara tidak berulang-ulang di menit yang sama
+let waktuTerakhirBerbunyi = ""; 
 
+// Mapping dicocokkan eksak dengan nama sheet baru Anda
 const mapHari = {
-    1: "SENIN - KAMIS", 2: "SENIN - KAMIS", 3: "SENIN - KAMIS", 4: "SENIN - KAMIS",
-    5: "JUM'AT - SABTU", 6: "JUM'AT - SABTU", 0: "AHAD"
+    1: "SENIN-KAMIS", 2: "SENIN-KAMIS", 3: "SENIN-KAMIS", 4: "SENIN-KAMIS",
+    5: "JUM'AT-SABTU", 6: "JUM'AT-SABTU", 0: "AHAD"
 };
 
 const formatHariText = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 const formatBulanText = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
-// 1. Ambil Data dari Jembatan API Google Sheets
+// 1. Ambil Data dari API Google Sheets
 async function muatJadwalDariSheets() {
     try {
         const respon = await fetch(SCRIPT_URL);
@@ -21,7 +22,7 @@ async function muatJadwalDariSheets() {
         localStorage.setItem("cache_jadwal_bel", JSON.stringify(databaseJadwal));
         renderTabelJadwal();
     } catch (error) {
-        console.error("Gagal sinkronisasi online, menggunakan cache lokal:", error);
+        console.error("Menggunakan data cache lokal:", error);
         const cache = localStorage.getItem("cache_jadwal_bel");
         if (cache) {
             databaseJadwal = JSON.parse(cache);
@@ -30,7 +31,7 @@ async function muatJadwalDariSheets() {
     }
 }
 
-// 2. Tampilkan Jadwal ke Tabel Berdasarkan Kategori Hari
+// 2. Tampilkan Jadwal ke Tabel Monitor
 function renderTabelJadwal() {
     if (!databaseJadwal) return;
     
@@ -42,7 +43,7 @@ function renderTabelJadwal() {
     tbody.innerHTML = "";
     
     if (namaKategoriHari === "AHAD" || !databaseJadwal[namaKategoriHari]) {
-        tbody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-emerald-600 font-bold">Hari Libur Akhir Pekan. Tidak Ada KBM.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-emerald-600 font-bold">Hari Libur Sekolah (Ahad). Tidak Ada Bel.</td></tr>`;
         return;
     }
     
@@ -52,42 +53,44 @@ function renderTabelJadwal() {
         tr.className = "hover:bg-gray-50 transition-colors";
         tr.innerHTML = `
             <td class="p-4 text-center font-mono font-medium text-gray-400">${row.no}</td>
-            <td class="p-4 font-mono font-bold text-indigo-900">${row.jam}</td>
+            <td class="p-4 font-mono font-bold text-indigo-900 text-base">${row.jam}</td>
             <td class="p-4 font-semibold text-gray-700">${row.keterangan}</td>
         `;
         tbody.appendChild(tr);
     });
 }
 
-// 3. Mesin Utama Pembuat Suara Google (Text-to-Speech)
+// 3. Mesin Detektor Suara Google Indonesia
 function ucapkanPengumumanTTS(keterangan) {
     if (!audioIzinAktif) return;
     
-    // Kalimat standar default
     let kalimat = `Perhatian, saatnya ${keterangan.toLowerCase()} dimulai.`;
     
-    // Kustomisasi kalimat otomatis berdasarkan isi teks keterangan di Google Sheets
     const ketUpper = keterangan.toUpperCase();
     if (ketUpper.includes("APEL")) {
-        kalimat = "Perhatian seluruh siswa, saatnya pelaksanaan apel pagi dimulai. Mohon segera menuju lapangan.";
+        kalimat = "Perhatian seluruh siswa, pelaksanaan apel pagi akan segera dimulai. Mohon menuju ke lapangan.";
     } else if (ketUpper.includes("JAM PERTAMA")) {
-        kalimat = "Perhatian, saatnya jam pertama dimulai. Kepada bapak dan ibu guru silakan memasuki kelas.";
+        kalimat = "Perhatian, saatnya jam pertama dimulai. Kepada bapak dan ibu guru selamat mengajar.";
+    } else if (ketUpper.includes("JAM KEDUA")) {
+        kalimat = "Perhatian, saatnya jam kedua dimulai.";
+    } else if (ketUpper.includes("JAM KETIGA")) {
+        kalimat = "Perhatian, saatnya jam ketiga dimulai.";
     } else if (ketUpper.includes("ISTIRAHAT")) {
-        kalimat = "Perhatian, saatnya istirahat dimulai. Selamat menikmati waktu istirahat Anda.";
+        kalimat = "Perhatian, saatnya istirahat dimulai. Selamat menikmati waktu istirahat.";
     } else if (ketUpper.includes("SHOLAT") || ketUpper.includes("DZUHA") || ketUpper.includes("DZUHUR")) {
         kalimat = `Perhatian, saatnya melaksanakan ibadah ${keterangan.toLowerCase()} secara berjamaah.`;
     }
 
     const mesinSuara = new SpeechSynthesisUtterance(kalimat);
-    mesinSuara.lang = "id-ID";  // Mengunci suara Google Bahasa Indonesia resmi
-    mesinSuara.rate = 0.85;     // Sedikit diperlambat agar artikulasi pengeras suara sekolah jelas
+    mesinSuara.lang = "id-ID"; 
+    mesinSuara.rate = 0.85; // Kecepatan pelafalan suara ideal untuk lingkungan sekolah
     mesinSuara.pitch = 1.0;
 
     window.speechSynthesis.speak(mesinSuara);
     document.getElementById("logSuara").innerText = `[${new Date().toLocaleTimeString()}] "${keterangan}"`;
 }
 
-// 4. Detak Jam Detik demi Detik & Pemicu Interval Mandiri Latar Belakang
+// 4. Sinkronisasi Detik Jam
 function jalankanMesinWaktu() {
     setInterval(() => {
         const sekarang = new Date();
@@ -99,24 +102,22 @@ function jalankanMesinWaktu() {
         
         document.getElementById("liveClock").innerText = `${jamStr}:${menitStr}:${detikStr}`;
         
-        // Pengecekan dijalankan tepat pada detik ke '00' di setiap menit
+        // Eksekusi bel tepat pada detik '00'
         if (detikStr === "00" && waktuTerakhirBerbunyi !== waktuSekarangMurni) {
             periksaJadwalBel(waktuSekarangMurni, sekarang.getDay());
         }
     }, 1000);
 }
 
-// 5. Pencocokan Waktu Jam Mulai dengan Isi Tabel
+// 5. Cocokkan Waktu Real-Time Langsung dengan Kolom JAM Baru
 function periksaJadwalBel(waktuSekarang, hariIndex) {
     const namaKategoriHari = mapHari[hariIndex];
     if (!databaseJadwal || !databaseJadwal[namaKategoriHari]) return;
 
     const listJadwal = databaseJadwal[namaKategoriHari];
     listJadwal.forEach(row => {
-        // Mengambil jam awal saja, misal dari teks "07:30 - 08:30" diekstrak menjadi "07:30"
-        const waktuMulaiMurni = row.jam.split("-")[0].trim();
-        
-        if (waktuMulaiMurni === waktuSekarang) {
+        // Data 'row.jam' sudah bersih berupa format string dua digit "HH:MM" berkat Apps Script yang baru
+        if (row.jam === waktuSekarang) {
             waktuTerakhirBerbunyi = waktuSekarang;
             ucapkanPengumumanTTS(row.keterangan);
         }
@@ -129,7 +130,7 @@ function updateInformasiTanggal() {
     document.getElementById("liveDate").innerText = textTanggal;
 }
 
-// 6. Penanganan Bypass Proteksi Autoplay Browser Modern
+// 6. Tombol Aktivasi Otoritas Suara Browser
 document.getElementById("btnAktivasi").addEventListener("click", () => {
     audioIzinAktif = true;
     
@@ -140,10 +141,9 @@ document.getElementById("btnAktivasi").addEventListener("click", () => {
     
     const status = document.getElementById("statusAudio");
     status.className = "text-xs text-emerald-600 font-bold mt-2 text-center";
-    status.innerText = "✓ Otoritas audio berhasil didapatkan. Bel memonitor waktu di latar belakang.";
+    status.innerText = "✓ Hak akses suara disetujui. Sistem memonitor waktu di latar belakang.";
 
-    // Suara sambutan pertama untuk memancing otentikasi suara browser
-    const pancingan = new SpeechSynthesisUtterance("Sistem bel otomatis sekolah Lembaga Az-Zahro berhasil diaktifkan.");
+    const pancingan = new SpeechSynthesisUtterance("Sistem bel otomatis sekolah Lembaga Az-Zahro siap dijalankan.");
     pancingan.lang = "id-ID";
     window.speechSynthesis.speak(pancingan);
 });
