@@ -1,28 +1,42 @@
-// GANTI dengan URL Web App milik Apps Script Anda yang baru!
+// ====================================================================
+// CONFIGURATION / CONFIG DATABASE & AUDIO URL
+// ====================================================================
+// URL Web App milik Apps Script Anda
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuD6ubfsn8zTaEkyiejKnoHK9ucTSqbCWh-bYhM1ZZgsF9vIH2VWDXFYZoAx-51WfXmw/exec";
+
+// URL File Nada Bel Sekolah Jerman (Chime)
+const URL_NADA_BEL = "https://azzahrolocare.github.io/data/jadwal/schoolbell-from-german-high-school.mp3";
 
 let databaseJadwal = null;
 let audioIzinAktif = false;
 let waktuTerakhirBerbunyi = ""; 
 
-// Mapping dicocokkan eksak dengan nama sheet baru Anda
+// Mapping hari dicocokkan eksak dengan nama sheet pada Google Sheets Anda
 const mapHari = {
-    1: "SENIN-KAMIS", 2: "SENIN-KAMIS", 3: "SENIN-KAMIS", 4: "SENIN-KAMIS",
-    5: "JUM'AT-SABTU", 6: "JUM'AT-SABTU", 0: "AHAD"
+    1: "SENIN-KAMIS", 
+    2: "SENIN-KAMIS", 
+    3: "SENIN-KAMIS", 
+    4: "SENIN-KAMIS",
+    5: "JUM'AT-SABTU", 
+    6: "JUM'AT-SABTU", 
+    0: "AHAD"
 };
 
 const formatHariText = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 const formatBulanText = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
-// 1. Ambil Data dari API Google Sheets
+// ====================================================================
+// 1. DATA SYNCHRONIZATION (GOOGLE SHEETS API)
+// ====================================================================
 async function muatJadwalDariSheets() {
     try {
         const respon = await fetch(SCRIPT_URL);
         databaseJadwal = await respon.json();
+        // Simpan ke cache lokal agar aplikasi tetap berfungsi saat offline
         localStorage.setItem("cache_jadwal_bel", JSON.stringify(databaseJadwal));
         renderTabelJadwal();
     } catch (error) {
-        console.error("Menggunakan data cache lokal:", error);
+        console.error("Gagal sinkronisasi data online, menggunakan cache lokal:", error);
         const cache = localStorage.getItem("cache_jadwal_bel");
         if (cache) {
             databaseJadwal = JSON.parse(cache);
@@ -31,7 +45,9 @@ async function muatJadwalDariSheets() {
     }
 }
 
-// 2. Tampilkan Jadwal ke Tabel Monitor
+// ====================================================================
+// 2. USER INTERFACE MONITORING TABLE RENDER
+// ====================================================================
 function renderTabelJadwal() {
     if (!databaseJadwal) return;
     
@@ -42,8 +58,9 @@ function renderTabelJadwal() {
     const tbody = document.getElementById("tabelJadwalBody");
     tbody.innerHTML = "";
     
+    // Jika hari Ahad (0) atau lembar kerja tidak ditemukan
     if (namaKategoriHari === "AHAD" || !databaseJadwal[namaKategoriHari]) {
-        tbody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-emerald-600 font-bold">Hari Libur Sekolah (Ahad). Tidak Ada Bel.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-emerald-600 font-bold">Hari Libur Sekolah (Ahad). Tidak Ada Bel Otomatis.</td></tr>`;
         return;
     }
     
@@ -60,15 +77,18 @@ function renderTabelJadwal() {
     });
 }
 
-// 3. Mesin Detektor Suara Google Indonesia
+// ====================================================================
+// 3. ENGINE UTAMA: SIKLUS BERGANTIAN (NADA -> SUARA GOOGLE LEMBUT)
+// ====================================================================
 function ucapkanPengumumanTTS(keterangan) {
     if (!audioIzinAktif) return;
     
+    // Penyusunan teks kalimat pengumuman otomatis
     let kalimat = `Perhatian, saatnya ${keterangan.toLowerCase()} dimulai.`;
-    
     const ketUpper = keterangan.toUpperCase();
+    
     if (ketUpper.includes("APEL")) {
-        kalimat = "Perhatian seluruh siswa, pelaksanaan apel pagi akan segera dimulai. Mohon menuju ke lapangan.";
+        kalimat = "Perhatian seluruh siswa, pelaksanaan apel pagi akan segera dimulai. Mohon segera menuju ke lapangan.";
     } else if (ketUpper.includes("JAM PERTAMA")) {
         kalimat = "Perhatian, saatnya jam pertama dimulai. Kepada bapak dan ibu guru selamat mengajar.";
     } else if (ketUpper.includes("JAM KEDUA")) {
@@ -81,16 +101,48 @@ function ucapkanPengumumanTTS(keterangan) {
         kalimat = `Perhatian, saatnya melaksanakan ibadah ${keterangan.toLowerCase()} secara berjamaah.`;
     }
 
-    const mesinSuara = new SpeechSynthesisUtterance(kalimat);
-    mesinSuara.lang = "id-ID"; 
-    mesinSuara.rate = 0.85; // Kecepatan pelafalan suara ideal untuk lingkungan sekolah
-    mesinSuara.pitch = 1.0;
+    let putaranKe = 1;
+    const totalPutaran = 3;
 
-    window.speechSynthesis.speak(mesinSuara);
-    document.getElementById("logSuara").innerText = `[${new Date().toLocaleTimeString()}] "${keterangan}"`;
+    // Fungsi internal rekursif pengatur antrean antarsuara agar bergantian rapi
+    function jalankanSiklus() {
+        if (putaranKe > totalPutaran) return; // Siklus selesai jika sudah 3 kali
+
+        // A. Buat objek audio baru untuk dering bel
+        const audioBel = new Audio(URL_NADA_BEL);
+        
+        // B. Ketika nada bel selesai berbunyi, picu Text-to-Speech Google
+        audioBel.addEventListener('ended', function() {
+            const mesinSuara = new SpeechSynthesisUtterance(kalimat);
+            mesinSuara.lang = "id-ID"; // Mengunci bahasa Indonesia
+            
+            // Pengaturan parameter suara agar lebih lembut dan tidak kaku
+            mesinSuara.rate = 0.82;   // Kecepatan pelafalan diturunkan (lembut & berwibawa)
+            mesinSuara.pitch = 0.95;  // Nada suara diturunkan sedikit agar lebih empuk/deep
+
+            // C. Ketika suara Google selesai berbicara, picu putaran siklus berikutnya
+            mesinSuara.addEventListener('end', function() {
+                putaranKe++;
+                setTimeout(jalankanSiklus, 1000); // Jeda istirahat 1 detik sebelum dering berikutnya
+            });
+
+            window.speechSynthesis.speak(mesinSuara);
+        });
+
+        // Eksekusi pemutaran musik bel pembuka
+        audioBel.play().catch(err => console.error("Gagal memutar berkas MP3: ", err));
+    }
+
+    // Jalankan siklus pertama dari antrean
+    jalankanSiklus();
+    
+    // Perbarui teks monitor aktivitas di halaman HTML
+    document.getElementById("logSuara").innerText = `[${new Date().toLocaleTimeString()}] "${keterangan}" (Pola Siklus Bergantian 3x)`;
 }
 
-// 4. Sinkronisasi Detik Jam
+// ====================================================================
+// 4. CLOCK TICKER & BACKGROUND PROCESS INTERVAL
+// ====================================================================
 function jalankanMesinWaktu() {
     setInterval(() => {
         const sekarang = new Date();
@@ -100,23 +152,26 @@ function jalankanMesinWaktu() {
         
         const waktuSekarangMurni = `${jamStr}:${menitStr}`;
         
+        // Update tampilan jam digital real-time ke UI HTML
         document.getElementById("liveClock").innerText = `${jamStr}:${menitStr}:${detikStr}`;
         
-        // Eksekusi bel tepat pada detik '00'
+        // Validasi eksekusi: hanya dipicu tepat pada detik ke '00' di setiap menit
         if (detikStr === "00" && waktuTerakhirBerbunyi !== waktuSekarangMurni) {
             periksaJadwalBel(waktuSekarangMurni, sekarang.getDay());
         }
     }, 1000);
 }
 
-// 5. Cocokkan Waktu Real-Time Langsung dengan Kolom JAM Baru
+// ====================================================================
+// 5. TIMETABLE TIME MATCHING LOGIC
+// ====================================================================
 function periksaJadwalBel(waktuSekarang, hariIndex) {
     const namaKategoriHari = mapHari[hariIndex];
     if (!databaseJadwal || !databaseJadwal[namaKategoriHari]) return;
 
     const listJadwal = databaseJadwal[namaKategoriHari];
     listJadwal.forEach(row => {
-        // Data 'row.jam' sudah bersih berupa format string dua digit "HH:MM" berkat Apps Script yang baru
+        // row.jam langsung berisi string jam format "HH:MM" bersih dari Apps Script
         if (row.jam === waktuSekarang) {
             waktuTerakhirBerbunyi = waktuSekarang;
             ucapkanPengumumanTTS(row.keterangan);
@@ -126,14 +181,17 @@ function periksaJadwalBel(waktuSekarang, hariIndex) {
 
 function updateInformasiTanggal() {
     const d = new Date();
-    const textTanggal = `${formatHariText[d.getDay()]}, ${d.getDate()} ${formatBulanText[d.getMonth()]} ${d.getFullYear()}`;
+    const textTanggal = `${formatHariText[d.getDay()]} , ${d.getDate()} ${formatBulanText[d.getMonth()]} ${d.getFullYear()}`;
     document.getElementById("liveDate").innerText = textTanggal;
 }
 
-// 6. Tombol Aktivasi Otoritas Suara Browser
+// ====================================================================
+// 6. BROWSER AUTOPLAY SECURITY BYPASS HANDLER
+// ====================================================================
 document.getElementById("btnAktivasi").addEventListener("click", () => {
     audioIzinAktif = true;
     
+    // Mengubah tampilan tombol menjadi nonaktif setelah mendapatkan izin interaksi
     const btn = document.getElementById("btnAktivasi");
     btn.className = "w-full bg-slate-400 text-white font-bold py-3 px-6 rounded-xl cursor-not-allowed flex items-center justify-center gap-2 shadow-none";
     btn.disabled = true;
@@ -141,13 +199,22 @@ document.getElementById("btnAktivasi").addEventListener("click", () => {
     
     const status = document.getElementById("statusAudio");
     status.className = "text-xs text-emerald-600 font-bold mt-2 text-center";
-    status.innerText = "✓ Hak akses suara disetujui. Sistem memonitor waktu di latar belakang.";
+    status.innerText = "✓ Otoritas audio berhasil didapatkan. Bel memonitor waktu di latar belakang.";
 
-    const pancingan = new SpeechSynthesisUtterance("Sistem bel otomatis sekolah Lembaga Az-Zahro siap dijalankan.");
-    pancingan.lang = "id-ID";
-    window.speechSynthesis.speak(pancingan);
+    // Pancingan audio instan saat tombol di-start pertama kali oleh petugas piket
+    const pancinganAudio = new Audio(URL_NADA_BEL);
+    pancinganAudio.play().then(() => {
+        setTimeout(() => {
+            const pancinganTTS = new SpeechSynthesisUtterance("Sistem bel otomatis siap dijalankan.");
+            pancinganTTS.lang = "id-ID";
+            window.speechSynthesis.speak(pancinganTTS);
+        }, 2200); // Jeda penyesuaian durasi pancingan bel awal
+    }).catch(err => console.log("Otoritas suara diinisialisasi: ", err));
 });
 
+// ====================================================================
+// INITIALIZATION ON LOAD
+// ====================================================================
 window.addEventListener("DOMContentLoaded", () => {
     updateInformasiTanggal();
     muatJadwalDariSheets();
