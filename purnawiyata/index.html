@@ -63,15 +63,6 @@
       box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
     }
     .overlay-card h2 { color: #d4af37; margin-bottom: 10px; }
-    
-    /* Indikator Loading Saat Preload Foto */
-    #loading-status {
-      font-size: 0.95rem;
-      color: #b3b3b3;
-      margin-top: 10px;
-      font-style: italic;
-    }
-
     .btn-start {
       margin-top: 20px;
       padding: 12px 30px;
@@ -82,12 +73,7 @@
       border-radius: 5px;
       transition: transform 0.2s;
     }
-    .btn-start:disabled {
-      background: #444;
-      color: #888;
-      cursor: not-allowed;
-    }
-    .btn-start:not(:disabled):hover { transform: scale(1.05); }
+    .btn-start:hover { transform: scale(1.05); }
 
     /* KONTANER UTAMA */
     .main-container {
@@ -140,7 +126,7 @@
     @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
     /* ==========================================================================
-       STRUKTUR 3 KOLOM KUNCI (LAYOUT ANTI-BERGERAK)
+       STRUKTUR 3 KOLOM KUNCI (LAYOUT ANTI-GERSANG / BERGERAK)
        ========================================================================== */
 
     /* KOLOM 1: Sisi Kiri (Ukuran Lebar Dikunci Permanen) */
@@ -171,7 +157,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 1; /* Langsung aktif 100% dari awal pemuatan nama */
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
     }
 
     .photo-frame::after {
@@ -188,7 +175,7 @@
       padding: 40px 45px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between; 
+      justify-content: space-between; /* Menjaga jarak atas dan bawah konsisten */
       color: #ffffff;
       overflow: hidden;
     }
@@ -225,7 +212,7 @@
     }
 
     .name-container {
-      height: 90px; 
+      height: 90px; /* Tinggi dikunci agar nama panjang/pendek 2 baris tidak menggeser komponen bawah */
       display: flex;
       align-items: center;
       position: relative;
@@ -314,10 +301,10 @@
 
 
     /* ==========================================================================
-       KOLOM 3: Sisi Kanan (Efek Foto Memudar Dari Hitam-Putih Ke Asli)
+       KOLOM 3: Sisi Kanan (Efek Foto Menghapus Hitam-Putih Jadi Berwarna)
        ========================================================================== */
     .column-right {
-      width: 440px; 
+      width: 440px; /* Lebar dikunci permanen */
       flex-shrink: 0;
       position: relative;
       overflow: hidden; 
@@ -327,6 +314,7 @@
       background: #110d08;
     }
 
+    /* Lapisan Gradien Gelap Permanen di atas foto */
     .column-right::after {
       content: '';
       position: absolute;
@@ -336,16 +324,18 @@
       pointer-events: none;
     }
 
+    /* WADAH UTAMA FOTO CITA-CITA (Sistem Tumpuk Lapisan Warna) */
     .image-reveal-wrapper {
       position: relative;
       width: 100%;
       height: 100%;
       
+      /* Pemudar tepi kiri mask agar menyatu mulus dengan kolom teks */
       -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
       mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
     }
 
-    /* FOTO 1: Lapisan Dasar Hitam Putih (Langsung Muncul Instan) */
+    /* FOTO 1: Lapisan Dasar (Selalu Hitam Putih) */
     .img-base-bw {
       width: 100%;
       height: 100%;
@@ -353,11 +343,12 @@
       filter: grayscale(100%) brightness(0.7) contrast(1.1);
       position: absolute;
       top: 0; left: 0;
-      opacity: 1; 
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
       z-index: 2;
     }
 
-    /* FOTO 2: Lapisan Atas Berwarna */
+    /* FOTO 2: Lapisan Atas Berwarna (Dipotong Menggunakan Clip-Path untuk Efek Menyapu) */
     .img-reveal-color {
       width: 100%;
       height: 100%;
@@ -365,15 +356,20 @@
       position: absolute;
       top: 0; left: 0;
       z-index: 3;
-      opacity: 0; 
-      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1); /* Transisi cross-fade super halus */
+      opacity: 0;
+      
+      /* Efek transisi kliping menyapu dari kiri ke kanan (awal: terpotong habis di kiri) */
+      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+      transition: opacity 0.4s ease, clip-path 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* Ketika Teks Selesai Diketik, Jalankan Animasi Menghapus / Menjadikan Berwarna */
     .reveal-active .img-reveal-color {
-      opacity: 1; 
+      opacity: 1;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Menyapu penuh hingga terlihat semua */
     }
 
-    /* PARTIKEL KHUSUS EMAS */
+    /* PARTIKEL KHUSUS EMAS: Mengalir di depan foto cita-cita */
     .cc-particle {
       position: absolute;
       background: radial-gradient(circle, rgba(255, 232, 156, 0.95) 0%, rgba(212, 175, 55, 0.5) 40%, rgba(212, 175, 55, 0) 70%);
@@ -396,7 +392,9 @@
       100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
     }
 
-    /* STYLE NAVIGASI PANAH */
+    /* ==========================================================================
+       STYLE UTK TOMBOL NAVIGASI KIRI & KANAN
+       ========================================================================== */
     .btn-nav-arrow {
       position: absolute;
       bottom: 30px;
@@ -470,12 +468,11 @@
   </audio>
 
   <!-- Overlay Start Presentasi -->
-  <div id="music-overlay">
+  <div id="music-overlay" onclick="startPresentation()">
     <div class="overlay-card">
       <h2>Selamat & Sukses</h2>
       <p>Persiapan Purnawiyata Ke-III SMP Islam Az-Zahro</p>
-      <div id="loading-status">Mengunduh aset media siswa... (0%)</div>
-      <button class="btn-start" id="start-btn" onclick="startPresentation()" disabled>Mohon Tunggu...</button>
+      <button class="btn-start">Mulai Presentasi</button>
     </div>
   </div>
 
@@ -492,7 +489,7 @@
           <button class="btn-nav-arrow btn-left" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
         </div>
 
-        <!-- KOLOM 2: Sisi Tengah -->
+        <!-- KOLOM 2: Sisi Tengah (Biodata - Layout Terkunci) -->
         <div class="column-center">
           <div class="brand-header">
             <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
@@ -529,12 +526,12 @@
           </footer>
         </div>
 
-        <!-- KOLOM 3: Sisi Kanan -->
+        <!-- KOLOM 3: Sisi Kanan (Double Layer Ringan Efek Kupas Menyapu) -->
         <div class="column-right" id="column-cc">
           <div class="image-reveal-wrapper">
-            <!-- Foto Hitam Putih Base -->
+            <!-- Foto Hitam Putih (Base) -->
             <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-            <!-- Foto Berwarna Layer Atas -->
+            <!-- Foto Berwarna (Akan disapu/di-wipe keluar) -->
             <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
           </div>
           <button class="btn-nav-arrow btn-right" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
@@ -549,7 +546,6 @@
     let studentsData = [];
     let currentIndex = 0;
     let typingTimeouts = []; 
-    let preloadedImages = {}; // Menyimpan objek Image yang sudah selesai di-preload
     const bgMusic = document.getElementById('bg-music');
     const overlay = document.getElementById('music-overlay');
 
@@ -573,7 +569,7 @@
       type();
     }
 
-    // Generator partikel latar belakang global
+    // Generator partikel luar
     function createGlobalParticles() {
       const particleCount = 35;
       for (let i = 0; i < particleCount; i++) {
@@ -591,7 +587,7 @@
       }
     }
 
-    // Generator partikel emas di kolom cita-cita
+    // Generator partikel emas mengapung di kolom cita-cita
     function createCitaCitaParticles() {
       const ccContainer = document.getElementById('column-cc');
       const ccParticleCount = 20; 
@@ -605,49 +601,10 @@
         p.style.left = Math.random() * 100 + '%';
         let duration = Math.random() * 3 + 4;
         p.style.animationDuration = duration + 's';
+        let delay = Math.random() * 7;
         p.style.animationDelay = '-' + delay + 's';
         ccContainer.appendChild(p);
       }
-    }
-
-    // FUNGSI PRELOAD: Mengunduh foto ke cache lokal sebelum presentasi dimulai
-    function preloadStudentImages(data) {
-      const loadStatusText = document.getElementById('loading-status');
-      const startBtn = document.getElementById('start-btn');
-      
-      let totalUrls = [];
-      data.forEach(s => {
-        totalUrls.push(s.foto_url);
-        totalUrls.push(s.foto_citacita_url || s.foto_url);
-      });
-
-      // Hapus duplikasi url jika ada
-      totalUrls = [...new Set(totalUrls)];
-      let loadedCount = 0;
-      const totalImages = totalUrls.length;
-
-      if (totalImages === 0) {
-        loadStatusText.innerText = "Tidak ada foto yang perlu dimuat.";
-        startBtn.disabled = false;
-        startBtn.innerText = "Mulai Presentasi";
-        return;
-      }
-
-      totalUrls.forEach(url => {
-        const img = new Image();
-        img.src = url;
-        img.onload = img.onerror = () => {
-          loadedCount++;
-          let progress = Math.round((loadedCount / totalImages) * 100);
-          loadStatusText.innerText = `Mengunduh aset media siswa... (${progress}%)`;
-          
-          if (loadedCount === totalImages) {
-            loadStatusText.innerText = "Semua foto berhasil dimuat instan!";
-            startBtn.disabled = false;
-            startBtn.innerText = "Mulai Presentasi";
-          }
-        };
-      });
     }
 
     async function loadStudentsData() {
@@ -655,17 +612,15 @@
         const response = await fetch('data-siswa.json');
         studentsData = await response.json();
         if(studentsData.length > 0) {
-          preloadStudentImages(studentsData);
           renderStudent(0);
         }
       } catch (error) {
         console.error("Gagal memuat file data-siswa.json:", error);
-        document.getElementById('loading-status').innerText = "Gagal memuat file data-siswa.json";
       }
     }
 
     function renderStudent(index) {
-      // Hentikan proses mengetik siswa sebelumnya
+      // Bersihkan antrean ketik sebelumnya
       typingTimeouts.forEach(clearTimeout);
       typingTimeouts = [];
 
@@ -684,33 +639,47 @@
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Reset animasi & hilangkan status pewarnaan
+      // Reset Kartu & Hilangkan State Transisi Menyapu Warna
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
       elWishBox.classList.remove('fade-in-visible');
       void card.offsetWidth; 
       card.classList.add('active');
 
-      // Bersihkan teks tanpa mengganggu kestabilan layout kolom tengah
+      // Kosongkan Text (Layout tidak bergeser karena di-lock ukurannya di CSS)
       elNama.innerText = "";
       elTtl.innerText = "";
       elOrtu.innerText = "";
       elNisBox.innerHTML = "";
       elCitaCita.innerText = student.cita_cita || "-";
 
-      // String Data Masukan
+      // String Data
       const textNama = student.nama;
       const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
-      // EKSEKUSI INSTAN: Karena sudah di-preload, foto langsung berganti tanpa jeda download
-      fotoElement.src = student.foto_url;
+      // Ambil Gambar Profil Utama
+      fotoElement.style.opacity = '0';
+      const separator = student.foto_url.includes('?') ? '&' : '?';
+      const timestamp = 't=' + new Date().getTime();
+      fotoElement.src = student.foto_url + separator + timestamp;
+      fotoElement.onload = () => fotoElement.style.opacity = '1';
 
-      const finalCCUrl = student.foto_citacita_url || student.foto_url;
+      // Sinkronisasi Gambar Cita-Cita (Double Layer)
+      fotoBw.style.opacity = '0';
+      const urlFotoCitaCitaRaw = student.foto_citacita_url || student.foto_url;
+      const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
+      const finalCCUrl = urlFotoCitaCitaRaw + separatorCC + timestamp;
+      
       fotoBw.src = finalCCUrl;
       fotoColor.src = finalCCUrl;
+
+      // Saat gambar siap, tampilkan versi Hitam Putih (BW) terlebih dahulu
+      fotoBw.onload = () => {
+        fotoBw.style.opacity = '1';
+      };
 
       // ==========================================
       // ALUR EKSEKUSI PENGETIKAN BERANTAI
@@ -731,14 +700,14 @@
             
             typeEffect(nisSpan, textNisNisn, 25, () => {
               
-              // 5. SELESAI KETIK: Lapisan berwarna memudar naik menggantikan hitam-putih secara elegan
-              ccContainer.classList.add('reveal-active'); 
+              // 5. SELESAI KETIK: Eksekusi Efek Menghapus Hitam-Putih Menjadi Berwarna Asli
+              ccContainer.classList.add('reveal-active'); // Mengubah Clip-Path foto warna (Menyapu)
               
-              // Tampilkan box deskripsi cita-cita beserta partikel emasnya
+              // Tampilkan kotak teks Cita-Cita & Partikel emas pelan-pelan
               setTimeout(() => {
                 elWishBox.classList.add('fade-in-visible');
                 ccContainer.classList.add('show-particles');
-              }, 300);
+              }, 400); // Dijeda sedikit agar efek sapuan warna berjalan lebih dulu
               
             });
           });
@@ -760,7 +729,7 @@
 
     function startPresentation() {
       overlay.style.display = 'none';
-      bgMusic.play().catch(error => console.log("Musik dihambat browser:", error));
+      bgMusic.play().catch(error => console.log("Musik tertahan browser:", error));
     }
 
     window.addEventListener('DOMContentLoaded', () => {
