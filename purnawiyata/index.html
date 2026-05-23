@@ -230,20 +230,23 @@
     }
 
     .name-container {
-      height: 95px;
+      min-height: 95px;
+      height: auto;
       display: flex;
       align-items: center;
       position: relative;
+      padding-bottom: 15px;
     }
 
     #siswa-nama {
       font-size: 2.5rem;
       font-weight: 800;
       color: #fff;
-      letter-spacing: 0.05em;
+      letter-spacing: normal;
+      word-spacing: 2px;
       text-transform: uppercase;
       padding-bottom: 8px;
-      line-height: 1.2;
+      line-height: 1.3;
       white-space: normal;
       word-wrap: break-word;
       width: 100%;
@@ -494,12 +497,10 @@
 </head>
 <body>
 
-  <!-- Musik Latar Belakang -->
   <audio id="bg-music" loop>
     <source src="musik-purnawiyata.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Overlay Start Presentasi -->
   <div id="music-overlay" onclick="startPresentation()">
     <div class="overlay-card">
       <h2>Selamat & Sukses</h2>
@@ -513,18 +514,15 @@
       
       <div class="card-content-wrapper">
         
-        <!-- KOLOM 1: Sisi Kiri (Foto & No. Absen) -->
         <div class="column-left">
           <div class="photo-frame">
             <img id="siswa-foto" src="" alt="Foto Profil Siswa">
           </div>
-          <!-- PENEMPATAN BARU: Informasi Absensi di Bawah Foto -->
           <div class="absen-label" id="siswa-absen-box">
             No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
           </div>
         </div>
 
-        <!-- KOLOM 2: Sisi Tengah (Biodata - Layout Terkunci) -->
         <div class="column-center">
           <div class="brand-header">
             <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
@@ -561,12 +559,9 @@
           </footer>
         </div>
 
-        <!-- KOLOM 3: Sisi Kanan -->
         <div class="column-right" id="column-cc">
           <div class="image-reveal-wrapper">
-            <!-- Foto Hitam Putih (Base) -->
             <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-            <!-- Foto Berwarna (Akan langsung ganti tanpa wipe) -->
             <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
           </div>
         </div>
@@ -574,7 +569,6 @@
       </div>
     </div>
 
-    <!-- KONTROLLER NAVIGASI PINDAH HALAMAN (KEMBALI KE POSISI SEMULA) -->
     <div class="nav-container">
       <button class="btn-nav-arrow" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
       <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
