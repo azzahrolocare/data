@@ -907,6 +907,17 @@
 
     function startPresentation() {
       overlay.style.display = 'none';
+      
+      // Memicu mode Fullscreen otomatis
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.log(`Gagal memicu mode fullscreen: ${err.message}`);
+        });
+      }
+
+      // Memuat dan merender data siswa tepat setelah tombol diklik
+      loadStudentsData();
+
       initVisualizer();
       if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -932,7 +943,7 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      loadStudentsData();
+      // Data siswa tidak dipanggil di sini lagi agar tidak berjalan di latar belakang sebelum klik
       createGlobalParticles();
       createCitaCitaParticles(); 
     });
