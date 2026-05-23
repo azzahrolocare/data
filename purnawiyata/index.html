@@ -730,18 +730,15 @@
       // Murni hanya menampilkan NIS dan NISN tanpa no urut lagi
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
-      // Ambil Gambar Profil Utama
+      // Ambil Gambar Profil Utama (Timestamp Dihapus Agar Load Cepat via Cache)
       fotoElement.style.opacity = '0';
-      const separator = student.foto_profil_url.includes('?') ? '&' : '?';
-      const timestamp = 't=' + new Date().getTime();
-      fotoElement.src = student.foto_profil_url + separator + timestamp;
+      const finalFotoUrl = student.foto_profil_url;
+      fotoElement.src = finalFotoUrl;
       fotoElement.onload = () => fotoElement.style.opacity = '1';
 
-      // Sinkronisasi Gambar Cita-Cita Double Layer
+      // Sinkronisasi Gambar Cita-Cita Double Layer (Timestamp Dihapus Agar Load Cepat via Cache)
       fotoBw.style.opacity = '0';
-      const urlFotoCitaCitaRaw = student.foto_cita_cita_url || student.foto_profil_url;
-      const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
-      const finalCCUrl = urlFotoCitaCitaRaw + separatorCC + timestamp;
+      const finalCCUrl = student.foto_cita_cita_url || student.foto_profil_url;
       
       fotoBw.src = finalCCUrl;
       fotoColor.src = finalCCUrl;
