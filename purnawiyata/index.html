@@ -402,40 +402,46 @@
       100% { top: -10%; transform: scale(1.2) translateX(-15px) opacity: 0; }
     }
 
-    /* KEMBALI KE SEMULA: STYLE NAVIGASI KANAN BAWAH */
+    /* MODIFIKASI: STYLE NAVIGASI SAMAR DI POJOK BAWAH LAYAR */
     .nav-container {
-      position: absolute;
-      bottom: 25px;
-      right: 45px;
-      display: flex;
-      gap: 20px;
-      z-index: 100;
+      display: contents;
     }
 
     .btn-nav-arrow {
-      background: rgba(26, 21, 14, 0.8);
-      border: 1px solid rgba(212, 175, 55, 0.4);
+      position: fixed;
+      bottom: 25px;
+      background: none;
+      border: none;
       color: #d4af37;
-      font-size: 1.8rem;
+      font-size: 3.5rem;
       font-weight: bold;
       cursor: pointer;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
       user-select: none;
+      z-index: 100;
+      opacity: 0.35;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+      padding: 10px 20px;
+    }
+
+    /* Panah Kiri di Pojok Kiri Bawah */
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] {
+      left: 25px;
+    }
+
+    /* Panah Kanan di Pojok Kanan Bawah */
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
+      right: 25px;
     }
 
     .btn-nav-arrow:hover {
       color: #f3e5ab;
-      background: #1a150e;
-      border-color: #d4af37;
+      opacity: 0.9;
       transform: scale(1.1);
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
     }
 
     /* ANIMASI MASUK KARTU UTAMA */
@@ -478,20 +484,17 @@
         mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
       }
       
-      .nav-container {
-        position: fixed;
+      /* Penyesuaian tata letak tombol samar di perangkat mobile agar tetap di pojok bawah */
+      .btn-nav-arrow {
         bottom: 15px;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        gap: 40px;
-        background: rgba(15, 12, 8, 0.9);
-        padding: 8px 25px;
-        border-radius: 30px;
-        border: 1px solid rgba(212, 175, 55, 0.3);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        font-size: 2.8rem;
       }
-      .btn-nav-arrow { width: 45px; height: 45px; font-size: 1.5rem; }
+      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] {
+        left: 15px;
+      }
+      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
+        right: 15px;
+      }
     }
   </style>
 </head>
