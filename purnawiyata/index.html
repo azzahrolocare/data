@@ -4,7 +4,282 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ==========================================================================
+       STYLE / CSS (Tema Luxury Gold & Animasi)
+       ========================================================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #0f0c08; 
+      background: linear-gradient(to right, #2b1f0d, #0f0c08, #2b1f0d);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Overlay Interaksi Awal untuk Mengaktifkan Musik */
+    #music-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 12, 8, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .overlay-card {
+      text-align: center;
+      color: #fff;
+      border: 2px solid #d4af37;
+      padding: 40px;
+      background: #1a150e;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    }
+    .overlay-card h2 {
+      color: #d4af37;
+      margin-bottom: 10px;
+    }
+    .btn-start {
+      margin-top: 20px;
+      padding: 12px 30px;
+      background: linear-gradient(45deg, #a67c1e, #f3e5ab, #a67c1e);
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: transform 0.2s;
+    }
+    .btn-start:hover { transform: scale(1.05); }
+
+    /* Kontainer Utama & Kartu Purnawiyata */
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 1000px;
+      padding: 20px;
+    }
+
+    .purnawiyata-card {
+      display: flex;
+      width: 100%;
+      background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
+      border: 3px solid #d4af37;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.2);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    /* Bagian Kiri (Foto Siswa) */
+    .left-side {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
+      padding: 40px;
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+    }
+
+    .photo-frame {
+      width: 100%;
+      max-width: 250px;
+      height: 350px;
+      border: 5px solid #fff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #333;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Bagian Kanan (Identitas) */
+    .right-side {
+      flex: 1.5;
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+    }
+
+    .header-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .identity-box {
+      margin: 20px 0;
+    }
+
+    #siswa-nama {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      border-bottom: 2px solid #d4af37;
+      padding-bottom: 5px;
+      display: inline-block;
+    }
+
+    #siswa-ttl {
+      font-size: 1.2rem;
+      color: #e0e0e0;
+      font-weight: 500;
+    }
+
+    .sub-detail {
+      font-size: 1.3rem;
+      margin-top: 10px;
+      font-style: italic;
+      color: #f3e5ab;
+    }
+
+    .nis-box {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #b3b3b3;
+    }
+    .nis-box strong {
+      color: #d4af37;
+    }
+
+    /* Styling Baru untuk Cita-cita */
+    .wish-box {
+      margin-top: 15px;
+      font-size: 1.1rem;
+      color: #ffffff;
+      background: rgba(212, 175, 55, 0.1);
+      padding: 8px 15px;
+      border-left: 3px solid #d4af37;
+      display: inline-block;
+      border-radius: 0 5px 5px 0;
+    }
+    .wish-box span {
+      color: #f3e5ab;
+      font-weight: bold;
+    }
+
+    .footer-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+    .footer-title span {
+      color: #d4af37;
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+
+    /* Tombol Navigasi */
+    .navigation-box {
+      margin-top: 25px;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-nav {
+      padding: 12px 35px;
+      background: #1a150e;
+      color: #d4af37;
+      border: 2px solid #d4af37;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-nav:hover {
+      background: linear-gradient(45deg, #a67c1e, #d4af37);
+      color: #000;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Animasi Masuk Utama */
+    .purnawiyata-card.active {
+      animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .purnawiyata-card.active .animate-text {
+      animation: textEntrance 0.6s ease-out 0.4s both;
+    }
+
+    @keyframes cardEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.95) translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes textEntrance {
+      0% {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Responsif Ponsel / Mobile */
+    @media (max-width: 768px) {
+      .purnawiyata-card {
+        flex-direction: column;
+      }
+      .left-side {
+        clip-path: none;
+        padding: 30px;
+      }
+      .right-side {
+        text-align: center;
+        padding: 30px 20px;
+      }
+      #siswa-nama {
+        font-size: 1.8rem;
+      }
+      .navigation-box {
+        justify-content: center;
+      }
+      .wish-box {
+        border-left: none;
+        border-top: 2px solid #d4af37;
+        border-radius: 5px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -15,7 +290,7 @@
   <div id="music-overlay" onclick="startPresentation()">
     <div class="overlay-card">
       <h2>Selamat & Sukses</h2>
-      <p>Purnawiyata Ke-III SMP Islam Az-Zahro</p>
+      <p>Persiapan Purnawiyata Ke-III SMP Islam Az-Zahro</p>
       <button class="btn-start">Mulai Presentasi</button>
     </div>
   </div>
@@ -44,6 +319,10 @@
             <span>NIS: <strong id="siswa-nis">-</strong></span> | 
             <span>NISN: <strong id="siswa-nisn">-</strong></span>
           </div>
+
+          <div class="wish-box animate-text">
+            Cita-cita: <span id="siswa-citacita">-</span>
+          </div>
         </div>
 
         <footer class="footer-title">
@@ -65,7 +344,7 @@
     const bgMusic = document.getElementById('bg-music');
     const overlay = document.getElementById('music-overlay');
 
-    // Ambil data dari file JSON
+    // Mengambil data eksternal JSON
     async function loadStudentsData() {
       try {
         const response = await fetch('data-siswa.json');
@@ -74,47 +353,46 @@
           renderStudent(0);
         }
       } catch (error) {
-        console.error("Gagal memuat data siswa:", error);
+        console.error("Gagal memuat file data-siswa.json:", error);
       }
     }
 
-    // Fungsi menampilkan data ke elemen HTML beserta trigger animasi
+    // Mengisi data ke HTML & mereset animasi masuk
     function renderStudent(index) {
       const card = document.getElementById('student-card');
       const student = studentsData[index];
 
-      // Reset animasi dengan menghapus dan memicu ulang class
+      // Reset Animasi CSS
       card.classList.remove('active');
-      void card.offsetWidth; // Trigger reflow untuk reset CSS animasi
+      void card.offsetWidth; 
       card.classList.add('active');
 
-      // Manipulasi data teks & gambar
+      // Terapkan Data Siswa
       document.getElementById('siswa-foto').src = student.foto_url;
-      document.getElementById('siswa-nama').textPlain = student.nama; // Aman dari XSS
       document.getElementById('siswa-nama').innerText = student.nama;
       document.getElementById('siswa-ttl').innerText = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       document.getElementById('siswa-nis').innerText = student.nis;
       document.getElementById('siswa-nisn').innerText = student.nisn;
+      document.getElementById('siswa-citacita').innerText = student.cita_cita || "-";
 
-      // Logika Jenis Kelamin
+      // Logika Jenis Kelamin (L/P) untuk nama orang tua
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       document.getElementById('siswa-ortu').innerText = `${hubunganOrtu} ${student.orang_tua}`;
     }
 
-    // Fungsi tombol selanjutnya
+    // Logika tombol selanjutnya
     function nextStudent() {
       if (studentsData.length === 0) return;
-      currentIndex = (currentIndex + 1) % studentsData.length; // Kembali ke awal jika data habis
+      currentIndex = (currentIndex + 1) % studentsData.length;
       renderStudent(currentIndex);
     }
 
-    // Fungsi memulai halaman dan memutar musik
+    // Fungsi klik awal untuk menyalakan musik & menyembunyikan overlay
     function startPresentation() {
       overlay.style.display = 'none';
-      bgMusic.play().catch(error => console.log("Playback dicegah oleh browser:", error));
+      bgMusic.play().catch(error => console.log("Musik tertahan sistem browser:", error));
     }
 
-    // Panggil fungsi muat data saat halaman siap
     window.addEventListener('DOMContentLoaded', loadStudentsData);
   </script>
 </body>
