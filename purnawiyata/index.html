@@ -156,8 +156,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      opacity: 1; /* Diubah menjadi 1 agar langsung muncul secara instan */
     }
 
     .photo-frame::after {
@@ -575,7 +574,7 @@
     </div>
   </main>
 
-  <script {="true"}>
+  <script>
     let studentsData = [];
     let currentIndex = 0;
     let typingTimeouts = []; 
@@ -707,12 +706,10 @@
       // Murni hanya menampilkan NIS dan NISN tanpa no urut lagi
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
-      // Ambil Gambar Profil Utama
-      fotoElement.style.opacity = '0';
+      // Ambil Gambar Profil Utama Langsung Instan Tanpa Animasi Memudar (opacity tetap 1)
       const separator = student.foto_url.includes('?') ? '&' : '?';
       const timestamp = 't=' + new Date().getTime();
       fotoElement.src = student.foto_url + separator + timestamp;
-      fotoElement.onload = () => fotoElement.style.opacity = '1';
 
       // Sinkronisasi Gambar Cita-Cita (Double Layer)
       fotoBw.style.opacity = '0';
