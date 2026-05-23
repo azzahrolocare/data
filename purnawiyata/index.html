@@ -6,7 +6,7 @@
   <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
   <style>
     /* ==========================================================================
-       STYLE / CSS (Tema Luxury Gold, 3-Column Layout & Ukuran Jumbo)
+       STYLE / CSS (Tema Luxury Gold, 3-Column Layout & Ukuran Super Jumbo)
        ========================================================================== */
     * {
       margin: 0;
@@ -24,7 +24,7 @@
       min-height: 100vh;
       overflow: hidden;
       position: relative;
-      padding: 20px;
+      padding: 30px 20px;
     }
 
     /* Efek Partikel Latar Belakang */
@@ -74,26 +74,26 @@
     }
     .btn-start:hover { transform: scale(1.05); }
 
-    /* Kontainer Utama & Kartu Diperbesar Jauh Lebih Luas */
+    /* KONTANER UTAMA: Diperlebar agar seimbang dengan tinggi kartu */
     .main-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      max-width: 1250px; 
+      max-width: 1300px; 
       z-index: 10;
     }
 
-    /* KARTU JUMBO: Efek garis emas bergerak */
+    /* KARTU SUPER JUMBO: Tinggi minimum dinaikkan signifikan untuk memangkas space kosong bawah */
     .purnawiyata-card {
       display: flex;
       width: 100%;
-      min-height: 520px; 
+      min-height: 620px; /* Ukuran diperbesar ke bawah agar megah */
       background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
-      border-radius: 20px;
+      border-radius: 25px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
       opacity: 0;
       transform: translateY(30px);
     }
@@ -107,14 +107,14 @@
       z-index: 1;
     }
 
-    /* Lapisan dalam pembungkus struktur 3 KOLOM */
+    /* Lapisan dalam pembungkus struktur kartu */
     .card-content-wrapper {
       display: flex;
       width: calc(100% - 6px);
       height: calc(100% - 6px);
       margin: 3px;
       background: inherit;
-      border-radius: 17px;
+      border-radius: 22px;
       overflow: hidden;
       z-index: 2;
     }
@@ -122,28 +122,28 @@
     @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
     /* ==========================================================================
-       STRUKTUR 3 KOLOM (KIRI - TENGAH - KANAN)
+       STRUKTUR 3 KOLOM 
        ========================================================================== */
 
-    /* KOLOM 1: Sisi Kiri (Tempat Foto Profil Siswa) */
+    /* KOLOM 1: Sisi Kiri (Foto Profil Utama) */
     .column-left {
-      flex: 1;
+      flex: 0.9;
       display: flex;
       justify-content: center;
       align-items: center;
       background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
-      padding: 40px;
+      padding: 50px;
       position: relative;
       clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
     }
 
     .photo-frame {
       width: 100%;
-      max-width: 260px;
-      height: 370px;
-      border: 5px solid #fff;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-      border-radius: 8px;
+      max-width: 280px;
+      height: 400px; /* Bingkai foto profil ikut diperbesar */
+      border: 6px solid #fff;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      border-radius: 12px;
       overflow: hidden;
       background: #333;
       position: relative;
@@ -157,7 +157,6 @@
       transition: opacity 0.3s ease-in-out;
     }
 
-    /* Efek bayangan hitam lembut di bagian bawah foto utama */
     .photo-frame::after {
       content: '';
       position: absolute;
@@ -166,14 +165,29 @@
       pointer-events: none;
     }
 
-    /* KOLOM 2: Sisi Tengah (Khusus Teks Biodata) */
+    /* KOLOM 2: Sisi Tengah (Biodata & Header Komponen Logo) */
     .column-center {
       flex: 1.4;
-      padding: 50px 30px;
+      padding: 45px 35px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       color: #ffffff;
+    }
+
+    /* Pembungkus Atas: Tempat Logo dan Judul Utama */
+    .brand-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Style Logo Sekolah */
+    .school-logo {
+      width: 75px;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
     }
 
     .header-title {
@@ -185,29 +199,29 @@
     }
 
     .identity-box {
-      margin: 25px 0;
+      margin: 20px 0;
     }
 
     #siswa-nama {
-      font-size: 2.5rem; 
+      font-size: 2.7rem; /* Nama diperbesar agar seimbang dengan skala kartu */
       font-weight: 800;
       color: #fff;
       letter-spacing: 1px;
       text-transform: uppercase;
       margin-bottom: 8px;
       border-bottom: 2px solid #d4af37;
-      padding-bottom: 5px;
+      padding-bottom: 6px;
       display: inline-block;
     }
 
     #siswa-ttl {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       color: #e0e0e0;
       font-weight: 500;
     }
 
     .sub-detail {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       margin-top: 12px;
       font-style: italic;
       color: #f3e5ab;
@@ -215,17 +229,17 @@
 
     .nis-box {
       margin-top: 12px;
-      font-size: 1rem;
+      font-size: 1.05rem;
       color: #b3b3b3;
     }
     .nis-box strong { color: #d4af37; }
 
     .wish-box {
-      margin-top: 20px;
-      font-size: 1.15rem;
+      margin-top: 22px;
+      font-size: 1.2rem;
       color: #ffffff;
       background: rgba(212, 175, 55, 0.15);
-      padding: 10px 18px;
+      padding: 10px 20px;
       border-left: 4px solid #d4af37;
       display: inline-block;
       border-radius: 0 5px 5px 0;
@@ -241,9 +255,9 @@
     }
     .footer-title span { color: #d4af37; font-size: 1.6rem; font-weight: 800; }
 
-    /* KOLOM 3: Sisi Kanan (FOTO CITA-CITA BERWARNA ALAMI DENGAN GRADIENT MASKING MIRING) */
+    /* KOLOM 3: Sisi Kanan (Foto Cita-cita Tanpa Blur + Gradasi Samping Alami) */
     .column-right {
-      flex: 1.1;
+      flex: 1.2;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -256,34 +270,34 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0; /* Dikontrol penuh transisinya via JS */
+      opacity: 0; /* Diatur via JS */
       pointer-events: none;
       
       /* 
-         GRADASI MIRING (MASK-IMAGE): 
-         Membuat potongan transparan diagonal miring (135 derajat).
-         Sisi kiri atas gambar memudar halus mengikuti alur background, sisi kanan bawah tetap tajam & full warna.
+         GRADASI SISI SAMPING KIRI: 
+         Efek shading miring/diagonal dikembalikan untuk membuat pinggiran kiri memudar transparan,
+         namun kualitas gambar tetap tajam & jernih tanpa filter blur.
       */
-      -webkit-mask-image: linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 15%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
-      mask-image: linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 15%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
+      -webkit-mask-image: linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 12%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
+      mask-image: linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 12%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
       
       transition: opacity 0.6s ease-in-out;
     }
 
     /* Tombol Navigasi */
     .navigation-box {
-      margin-top: 30px;
+      margin-top: 35px;
       width: 100%;
       display: flex;
       justify-content: flex-end;
     }
 
     .btn-nav {
-      padding: 12px 40px;
+      padding: 14px 45px;
       background: #1a150e;
       color: #d4af37;
       border: 2px solid #d4af37;
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: bold;
       cursor: pointer;
       border-radius: 30px;
@@ -318,16 +332,17 @@
     }
 
     /* Responsif Layar Hp / Mobile */
-    @media (max-width: 900px) {
+    @media (max-width: 950px) {
       .card-content-wrapper { flex-direction: column; }
-      .column-left { clip-path: none; padding: 30px; }
-      .column-center { text-align: center; padding: 30px 20px; }
-      .column-right { height: 300px; width: 100%; }
+      .column-left { clip-path: none; padding: 40px; }
+      .column-center { text-align: center; padding: 35px 20px; align-items: center; }
+      .brand-header { align-items: center; }
+      .column-right { height: 350px; width: 100%; }
       #foto-citacita {
         -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
         mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
       }
-      #siswa-nama { font-size: 2rem; }
+      #siswa-nama { font-size: 2.2rem; }
       .navigation-box { justify-content: center; }
       .wish-box { border-left: none; border-top: 3px solid #d4af37; border-radius: 5px; }
     }
@@ -361,9 +376,13 @@
           </div>
         </div>
 
-        <!-- KOLOM 2: Sisi Tengah (Biodata Teks Lengkap) -->
+        <!-- KOLOM 2: Sisi Tengah (Logo Sekolah & Biodata Teks) -->
         <div class="column-center">
-          <header class="header-title">SELAMAT & SUKSES</header>
+          <div class="brand-header">
+            <!-- Logo Sekolah Baru Ditambahkan di Atas Judul -->
+            <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
+            <header class="header-title">SELAMAT & SUKSES</header>
+          </div>
           
           <div class="identity-box">
             <h1 id="siswa-nama" class="animate-text">-</h1>
@@ -389,7 +408,7 @@
           </footer>
         </div>
 
-        <!-- KOLOM 3: Sisi Kanan (Foto Cita-cita Besar Berwarna Alami & Tajam) -->
+        <!-- KOLOM 3: Sisi Kanan (Foto Cita-cita - Jernih Berwarna dengan Gradient Masking) -->
         <div class="column-right">
           <img id="foto-citacita" src="" alt="Foto Visual Cita-cita">
         </div>
@@ -477,7 +496,7 @@
       };
 
       fotoCitaCitaElement.onload = function() {
-        // Opacity diset ke 0.95 agar gambar tampak cerah, tajam, dan penuh warna
+        // Opacity diset ke 0.95 agar foto tampil cerah, berwarna penuh, dan kontras tajam
         fotoCitaCitaElement.style.opacity = '0.95'; 
       };
     }
