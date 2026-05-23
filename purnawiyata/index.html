@@ -110,6 +110,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      opacity: 0; /* Mulai dari 0 untuk efek transisi halus saat berganti */
+      transition: opacity 0.3s ease-in-out;
     }
 
     /* Bagian Kanan (Identitas) */
@@ -168,7 +170,7 @@
       color: #d4af37;
     }
 
-    /* Styling Baru untuk Cita-cita */
+    /* Styling Cita-cita */
     .wish-box {
       margin-top: 15px;
       font-size: 1.1rem;
@@ -357,18 +359,18 @@
       }
     }
 
-    // Mengisi data ke HTML & mereset animasi masuk
+    // Mengisi data ke HTML & mereset animasi masuk dengan perbaikan pemuatan foto
     function renderStudent(index) {
       const card = document.getElementById('student-card');
       const student = studentsData[index];
+      const fotoElement = document.getElementById('siswa-foto');
 
-      // Reset Animasi CSS
+      // 1. Reset Animasi CSS Kartu dan Teks
       card.classList.remove('active');
-      void card.offsetWidth; 
+      void card.offsetWidth; // Trigger reflow agar CSS animasi terulang dari awal
       card.classList.add('active');
 
-      // Terapkan Data Siswa
-      document.getElementById('siswa-foto').src = student.foto_url;
+      // 2. Terapkan Data Teks Siswa
       document.getElementById('siswa-nama').innerText = student.nama;
       document.getElementById('siswa-ttl').innerText = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       document.getElementById('siswa-nis').innerText = student.nis;
@@ -378,6 +380,20 @@
       // Logika Jenis Kelamin (L/P) untuk nama orang tua
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       document.getElementById('siswa-ortu').innerText = `${hubunganOrtu} ${student.orang_tua}`;
+
+      // 3. Solusi Foto Macet: Sembunyikan foto lama sekejap & paksa bypass cache browser
+      fotoElement.style.opacity = '0';
+      
+      // Sisipkan timestamp unik di ujung URL gambar agar browser mengunduh data gambar terbaru
+      const separator = student.foto_url.includes('?') ? '&' : '?';
+      const urlBaru = student.foto_url + separator + 't=' + new Date().getTime();
+      
+      fotoElement.src = urlBaru;
+
+      // Munculkan kembali foto dengan transisi lembut setelah browser selesai memuat gambar utuh
+      fotoElement.onload = function() {
+        fotoElement.style.opacity = '1';
+      };
     }
 
     // Logika tombol selanjutnya
