@@ -82,7 +82,7 @@
       justify-content: center;
       width: 100%;
       max-width: 1380px; 
-      height: 92vh; /* Mengisi penuh porsi layar atas-bawah secara presisi */
+      height: 92vh; 
       z-index: 10;
     }
 
@@ -168,7 +168,7 @@
       pointer-events: none;
     }
 
-    /* KOLOM 2: Sisi Tengah (Logo Sekolah, Biodata Teks & Tombol Navigasi) */
+    /* KOLOM 2: Sisi Tengah (Logo Sekolah, Biodata Teks) */
     .column-center {
       flex: 1.4;
       padding: 40px 35px;
@@ -255,46 +255,20 @@
     }
     .wish-box span { color: #f3e5ab; font-weight: bold; }
 
-    /* Pembungkus Bagian Bawah: Menyatukan Footer Teks & Tombol Navigasi */
-    .footer-action-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end; /* Memastikan ikon sejajar dengan baris bawah teks */
-      margin-top: 15px;
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
-      padding-top: 15px;
-    }
-
     .footer-title {
       font-size: 1.35rem;
       font-weight: 700;
       letter-spacing: 2px;
       color: #ffffff;
       line-height: 1.3;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      padding-top: 15px;
+      margin-top: 15px;
     }
     .footer-title span { color: #d4af37; font-size: 1.55rem; font-weight: 800; }
 
-    /* TOMBOL NAVIGASI MINIMALIS: Hanya panah, di pojok bawah, sedikit samar */
-    .btn-nav-arrow {
-      background: none;
-      border: none;
-      color: #d4af37;
-      font-size: 1.8rem;
-      font-weight: bold;
-      cursor: pointer;
-      opacity: 0.4; /* Efek samar secara default */
-      transition: all 0.3s ease;
-      padding: 0 10px;
-      line-height: 1;
-    }
 
-    .btn-nav-arrow:hover {
-      opacity: 1; /* Menyala jelas saat disorot */
-      text-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
-      transform: translateX(3px); /* Efek dorong dinamis ke kanan */
-    }
-
-    /* KOLOM 3: Sisi Kanan (Tempat Gambar Cita-cita Berwarna Asli & Gradasi Sisi Kiri) */
+    /* KOLOM 3: Sisi Kanan (Tempat Gambar Cita-cita & TOMBOL PANAH POJOK BAWAH) */
     .column-right {
       flex: 1.15;
       position: relative;
@@ -312,10 +286,37 @@
       opacity: 0;
       pointer-events: none;
       
+      /* Gradasi halus hanya di sisi kiri agar menyatu background */
       -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
       mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
       
       transition: opacity 0.6s ease-in-out;
+    }
+
+    /* TOMBOL NAVIGASI FIXED DI POJOK KANAN BAWAH TAG FOTO CITA-CITA */
+    .btn-nav-arrow {
+      position: absolute;
+      bottom: 30px;
+      right: 35px;
+      background: none;
+      border: none;
+      color: #d4af37;
+      font-size: 2.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      opacity: 0.4; /* Sedikit samar sesuai permintaan */
+      z-index: 50;
+      transition: all 0.3s ease;
+      line-height: 1;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+      user-select: none;
+    }
+
+    .btn-nav-arrow:hover {
+      opacity: 1; /* Menyala jelas saat disorot mouse */
+      color: #f3e5ab;
+      transform: scale(1.15) translateX(3px);
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
     }
 
     /* ==========================================================================
@@ -348,14 +349,13 @@
       .brand-header { align-items: center; }
       .name-container { min-height: auto; justify-content: center; }
       #siswa-nama { font-size: 2rem; }
-      .footer-action-wrapper { flex-direction: column; align-items: center; gap: 15px; width: 100%; }
-      .btn-nav-arrow { font-size: 2.2rem; opacity: 0.7; }
       
       .column-right { height: 380px; width: 100%; }
       #foto-citacita {
         -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
         mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
       }
+      .btn-nav-arrow { bottom: 20px; right: 25px; font-size: 2.5rem; opacity: 0.7; }
     }
   </style>
 </head>
@@ -387,7 +387,7 @@
           </div>
         </div>
 
-        <!-- KOLOM 2: Sisi Tengah (Logo Sekolah, Biodata Teks & Tombol Navigasi) -->
+        <!-- KOLOM 2: Sisi Tengah (Logo Sekolah & Biodata Teks Tanpa Gangguan Navigasi) -->
         <div class="column-center">
           <div class="brand-header">
             <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
@@ -415,21 +415,17 @@
             </div>
           </div>
 
-          <!-- Bagian Bawah: Menyatukan teks footer dan tombol aksi navigasi minimalis -->
-          <div class="footer-action-wrapper">
-            <footer class="footer-title">
-              PURNAWIYATA KE-III<br>
-              <span>SMP ISLAM AZ-ZAHRO</span>
-            </footer>
-            
-            <!-- Tombol diganti menjadi ikon panah murni saja & ber-efek samar -->
-            <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
-          </div>
+          <footer class="footer-title">
+            PURNAWIYATA KE-III<br>
+            <span>SMP ISLAM AZ-ZAHRO</span>
+          </footer>
         </div>
 
-        <!-- KOLOM 3: Sisi Kanan (Gambar Cita-cita Berwarna Penuh + Gradasi Sisi Kiri Samar) -->
+        <!-- KOLOM 3: Sisi Kanan (Gambar Cita-cita Berwarna Penuh + Navigasi Panah Pojok Bawah) -->
         <div class="column-right">
           <img id="foto-citacita" src="" alt="Foto Visual Cita-cita">
+          <!-- Tombol Panah Samar diletakkan di sini (Pojok kanan bawah tag foto) -->
+          <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
         </div>
 
       </div>
