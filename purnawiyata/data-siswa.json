@@ -1,0 +1,22 @@
+[
+  {
+    "nama": "DIANATUN HOLIDAH",
+    "tempat_lahir": "Bondowoso",
+    "tanggal_lahir": "09 Juni 2010",
+    "nis": "12345",
+    "nisn": "0102030405",
+    "jk": "P",
+    "orang_tua": "Bpk. Yudi",
+    "foto_url": "https://via.placeholder.com/300x400?text=Foto+Dianatun"
+  },
+  {
+    "nama": "AHMAD REZA MUKTI",
+    "tempat_lahir": "Bondowoso",
+    "tanggal_lahir": "15 Agustus 2009",
+    "nis": "12346",
+    "nisn": "0098765432",
+    "jk": "L",
+    "orang_tua": "Bpk. Lukman",
+    "foto_url": "https://via.placeholder.com/300x400?text=Foto+Reza"
+  }
+]
