@@ -230,7 +230,7 @@
     }
 
     .name-container {
-      min-height: 95px;
+      min-height: 110px;
       height: auto;
       display: flex;
       align-items: center;
@@ -242,12 +242,12 @@
       font-size: 2.5rem;
       font-weight: 800;
       color: #fff;
-      letter-spacing: normal;
-      word-spacing: 2px;
+      letter-spacing: 0.5px;
+      word-spacing: 4px;
       text-transform: uppercase;
       padding-bottom: 8px;
-      line-height: 1.3;
-      white-space: normal;
+      line-height: 1.4;
+      white-space: pre-wrap;
       word-wrap: break-word;
       width: 100%;
       position: relative;
@@ -587,15 +587,15 @@
       return num < 10 ? '0' + num : num;
     }
 
-    // Fungsi Utama Efek Mengetik Berantai
+    // Perbaikan Logika Mengetik Agar Spasi Terbaca Akurat
     function typeEffect(element, fullText, speed, onComplete) {
-      element.innerText = "";
+      element.textContent = ""; 
       element.classList.add('typing-cursor');
       let i = 0;
       
       function type() {
         if (i < fullText.length) {
-          element.innerText += fullText.charAt(i);
+          element.textContent += fullText.charAt(i);
           i++;
           let timer = setTimeout(type, speed);
           typingTimeouts.push(timer);
@@ -692,9 +692,9 @@
       elTotalAbsen.innerText = padZero(studentsData.length);
 
       // Kosongkan Text Kolom Tengah
-      elNama.innerText = "";
-      elTtl.innerText = "";
-      elOrtu.innerText = "";
+      elNama.textContent = "";
+      elTtl.textContent = "";
+      elOrtu.textContent = "";
       elNisBox.innerHTML = "";
       elCitaCita.innerText = student.cita_cita || "-";
 
