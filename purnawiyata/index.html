@@ -126,12 +126,13 @@
     @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
     /* ==========================================================================
-       STRUKTUR 3 KOLOM 
+       STRUKTUR 3 KOLOM KUNCI (LAYOUT ANTI-GERSANG / BERGERAK)
        ========================================================================== */
 
-    /* KOLOM 1: Sisi Kiri (Foto Profil Utama & Tombol Kembali) */
+    /* KOLOM 1: Sisi Kiri (Ukuran Lebar Dikunci Permanen) */
     .column-left {
-      flex: 0.85;
+      width: 320px;
+      flex-shrink: 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -143,8 +144,7 @@
 
     .photo-frame {
       width: 100%;
-      max-width: 300px;
-      height: 440px; 
+      height: 380px; 
       border: 6px solid #fff;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       border-radius: 12px;
@@ -169,20 +169,22 @@
       pointer-events: none;
     }
 
-    /* KOLOM 2: Sisi Tengah (Logo Sekolah & Biodata Teks) */
+    /* KOLOM 2: Sisi Tengah (Ruang Teks Dikunci Menggunakan Nilai Tinggi Flex yang Stabil) */
     .column-center {
-      flex: 1.4;
-      padding: 40px 35px;
+      flex: 1;
+      padding: 40px 45px;
       display: flex;
       flex-direction: column;
-      justify-content: space-around; 
+      justify-content: space-between; /* Menjaga jarak atas dan bawah konsisten */
       color: #ffffff;
+      overflow: hidden;
     }
 
     .brand-header {
       display: flex;
       flex-direction: column;
       gap: 8px;
+      flex-shrink: 0;
     }
 
     .school-logo {
@@ -200,31 +202,34 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
+    /* Wadah Utama Biodata - Ukuran Di-lock agar Teks Mengetik Tidak Mengubah Skala Kolom */
     .identity-box {
-      margin: 10px 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; 
+      margin: 20px 0;
     }
 
     .name-container {
-      min-height: 110px; 
+      height: 90px; /* Tinggi dikunci agar nama panjang/pendek 2 baris tidak menggeser komponen bawah */
       display: flex;
       align-items: center;
       position: relative;
     }
 
-    /* Efek Animasi Glow Gold Line Berjalan di Bawah Nama */
     #siswa-nama {
-      font-size: 2.6rem;
+      font-size: 2.5rem;
       font-weight: 800;
       color: #fff;
       letter-spacing: 1px;
       text-transform: uppercase;
-      padding-bottom: 12px;
-      line-height: 1.2;
+      padding-bottom: 8px;
+      line-height: 1.1;
       word-wrap: break-word;
-      max-width: 100%;
+      width: 100%;
       position: relative;
       display: inline-block;
-      width: 100%;
     }
 
     #siswa-nama::after {
@@ -255,45 +260,31 @@
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    #siswa-ttl {
-      font-size: 1.3rem;
-      color: #e0e0e0;
-      font-weight: 500;
-      margin-top: 14px;
-    }
+    /* Elemen Dibawah Nama Di-lock Tinggi Barisnya */
+    .ttl-container { height: 30px; display: flex; align-items: center; margin-top: 10px; }
+    #siswa-ttl { font-size: 1.3rem; color: #e0e0e0; font-weight: 500; }
 
-    .sub-detail {
-      font-size: 1.4rem;
-      margin-top: 8px;
-      font-style: italic;
-      color: #f3e5ab;
-    }
+    .ortu-container { height: 30px; display: flex; align-items: center; }
+    .sub-detail { font-size: 1.4rem; font-style: italic; color: #f3e5ab; }
 
-    .nis-box {
-      margin-top: 10px;
-      font-size: 1.05rem;
-      color: #b3b3b3;
-    }
-    .nis-box strong { color: #d4af37; }
+    .nis-container { height: 30px; display: flex; align-items: center; }
+    .nis-box { font-size: 1.05rem; color: #b3b3b3; }
 
-    /* KOTAK CITA-CITA: Efek Memudar Halus Dikontrol via JS */
+    /* KOTAK TULISAN CITA-CITA */
+    .wish-container { height: 60px; display: flex; align-items: center; margin-top: 15px; }
     .wish-box {
-      margin-top: 18px;
       font-size: 1.2rem;
       color: #ffffff;
       background: rgba(212, 175, 55, 0.15);
       padding: 10px 20px;
       border-left: 4px solid #d4af37;
-      display: inline-block;
       border-radius: 0 5px 5px 0;
-      opacity: 0; /* Awalnya tidak terlihat */
-      transform: translateY(10px);
+      opacity: 0; 
+      transform: translateX(-15px);
       transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      width: auto;
     }
-    .wish-box.fade-in-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .wish-box.fade-in-visible { opacity: 1; transform: translateX(0); }
     .wish-box span { color: #f3e5ab; font-weight: bold; }
 
     .footer-title {
@@ -304,52 +295,81 @@
       line-height: 1.3;
       border-top: 1px solid rgba(212, 175, 55, 0.2);
       padding-top: 15px;
-      margin-top: 15px;
+      flex-shrink: 0;
     }
     .footer-title span { color: #d4af37; font-size: 1.55rem; font-weight: 800; }
 
 
     /* ==========================================================================
-       KOLOM 3: Sisi Kanan (Modifikasi Efek Gradien & Partikel Tepat Pada Foto)
+       KOLOM 3: Sisi Kanan (Efek Foto Menghapus Hitam-Putih Jadi Berwarna)
        ========================================================================== */
     .column-right {
-      flex: 1.15;
+      width: 440px; /* Lebar dikunci permanen */
+      flex-shrink: 0;
       position: relative;
       overflow: hidden; 
       display: flex;
       align-items: center;
       justify-content: center;
-      background: transparent;
+      background: #110d08;
     }
 
-    /* Lapisan Gradien Gelap di bagian paling bawah foto cita-cita */
+    /* Lapisan Gradien Gelap Permanen di atas foto */
     .column-right::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 35%;
+      bottom: 0; left: 0; width: 100%; height: 35%;
       background: linear-gradient(to top, #16120b 10%, rgba(22, 18, 11, 0.6) 50%, transparent 100%);
       z-index: 10;
       pointer-events: none;
     }
 
-    #foto-citacita {
+    /* WADAH UTAMA FOTO CITA-CITA (Sistem Tumpuk Lapisan Warna) */
+    .image-reveal-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      
+      /* Pemudar tepi kiri mask agar menyatu mulus dengan kolom teks */
+      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
+      mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
+    }
+
+    /* FOTO 1: Lapisan Dasar (Selalu Hitam Putih) */
+    .img-base-bw {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0; /* Muncul memudar setelah pengetikan selesai */
-      pointer-events: none;
+      filter: grayscale(100%) brightness(0.7) contrast(1.1);
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
       z-index: 2;
-      
-      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
-      mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
-      
-      transition: opacity 1.2s ease-in-out; /* Durasi memudar lebih lembut */
     }
 
-    /* PARTIKEL KHUSUS: Hanya aktif/kelihatan ketika foto cita-cita memudar masuk */
+    /* FOTO 2: Lapisan Atas Berwarna (Dipotong Menggunakan Clip-Path untuk Efek Menyapu) */
+    .img-reveal-color {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 3;
+      opacity: 0;
+      
+      /* Efek transisi kliping menyapu dari kiri ke kanan (awal: terpotong habis di kiri) */
+      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+      transition: opacity 0.4s ease, clip-path 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Ketika Teks Selesai Diketik, Jalankan Animasi Menghapus / Menjadikan Berwarna */
+    .reveal-active .img-reveal-color {
+      opacity: 1;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Menyapu penuh hingga terlihat semua */
+    }
+
+    /* PARTIKEL KHUSUS EMAS: Mengalir di depan foto cita-cita */
     .cc-particle {
       position: absolute;
       background: radial-gradient(circle, rgba(255, 232, 156, 0.95) 0%, rgba(212, 175, 55, 0.5) 40%, rgba(212, 175, 55, 0) 70%);
@@ -362,10 +382,7 @@
       transition: opacity 0.5s ease;
     }
 
-    /* Partikel ikut muncul saat foto cita-cita aktif */
-    .show-particles .cc-particle {
-      opacity: 1;
-    }
+    .show-particles .cc-particle { opacity: 1; }
 
     @keyframes floatUpCC {
       0% { top: 105%; transform: scale(0.3) translateX(0); opacity: 0; }
@@ -376,7 +393,7 @@
     }
 
     /* ==========================================================================
-       STYLE UTK TOMBOL NAVIGASI KIRI & KANAN FIXED POSITION
+       STYLE UTK TOMBOL NAVIGASI KIRI & KANAN
        ========================================================================== */
     .btn-nav-arrow {
       position: absolute;
@@ -407,7 +424,7 @@
     .btn-left:hover { transform: scale(1.15) translateX(-3px); }
     .btn-right:hover { transform: scale(1.15) translateX(3px); }
 
-    /* ANIMASI MASUK CARD */
+    /* ANIMASI MASUK KARTU UTAMA */
     .purnawiyata-card.active {
       animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
@@ -419,19 +436,20 @@
     /* Responsif Layar Hp / Mobile */
     @media (max-width: 950px) {
       .main-container { height: auto; }
+      .purnawiyata-card { height: auto; }
       .card-content-wrapper { flex-direction: column; }
-      .column-left { clip-path: none; padding: 40px; }
+      .column-left { width: 100%; clip-path: none; padding: 40px; }
       .column-center { text-align: center; padding: 35px 20px; align-items: center; }
-      .brand-header { align-items: center; }
-      .name-container { min-height: auto; justify-content: center; }
-      #siswa-nama { font-size: 2rem; }
       
-      .column-right { height: 380px; width: 100%; }
-      .column-right::after {
-        height: 45%;
-        background: linear-gradient(to top, #16120b 15%, rgba(22, 18, 11, 0.7) 60%, transparent 100%);
+      .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
+        height: auto; 
+        min-height: inherit;
+        justify-content: center; 
       }
-      #foto-citacita {
+      
+      #siswa-nama { font-size: 2rem; }
+      .column-right { height: 380px; width: 100%; }
+      .image-reveal-wrapper {
         -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
         mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
       }
@@ -471,7 +489,7 @@
           <button class="btn-nav-arrow btn-left" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
         </div>
 
-        <!-- KOLOM 2: Sisi Tengah (Biodata dengan Efek Ketik) -->
+        <!-- KOLOM 2: Sisi Tengah (Biodata - Layout Terkunci) -->
         <div class="column-center">
           <div class="brand-header">
             <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
@@ -483,18 +501,22 @@
               <h1 id="siswa-nama">-</h1>
             </div>
             
-            <p id="siswa-ttl">-</p>
-            
-            <div class="sub-detail">
-              <span id="siswa-ortu">-</span>
+            <div class="ttl-container">
+              <p id="siswa-ttl"></p>
             </div>
             
-            <div class="nis-box" id="siswa-nis-box">
-              <!-- Struktur diubah sedikit agar proses ngetik label dan nilai menyatu mulus -->
+            <div class="ortu-container">
+              <div class="sub-detail" id="siswa-ortu"></div>
+            </div>
+            
+            <div class="nis-container">
+              <div class="nis-box" id="siswa-nis-box"></div>
             </div>
 
-            <div class="wish-box" id="siswa-wish-box">
-              Cita-cita: <span id="siswa-citacita">-</span>
+            <div class="wish-container">
+              <div class="wish-box" id="siswa-wish-box">
+                Cita-cita: <span id="siswa-citacita">-</span>
+              </div>
             </div>
           </div>
 
@@ -504,9 +526,14 @@
           </footer>
         </div>
 
-        <!-- KOLOM 3: Sisi Kanan -->
+        <!-- KOLOM 3: Sisi Kanan (Double Layer Ringan Efek Kupas Menyapu) -->
         <div class="column-right" id="column-cc">
-          <img id="foto-citacita" src="" alt="Foto Visual Cita-cita">
+          <div class="image-reveal-wrapper">
+            <!-- Foto Hitam Putih (Base) -->
+            <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
+            <!-- Foto Berwarna (Akan disapu/di-wipe keluar) -->
+            <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
+          </div>
           <button class="btn-nav-arrow btn-right" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
         </div>
 
@@ -518,11 +545,11 @@
   <script>
     let studentsData = [];
     let currentIndex = 0;
-    let typingTimeouts = []; // Menyimpan semua antrean timeout ketik agar bisa dibersihkan saat pindah siswa
+    let typingTimeouts = []; 
     const bgMusic = document.getElementById('bg-music');
     const overlay = document.getElementById('music-overlay');
 
-    // Fungsi Utama Efek Mengetik Berantai (Sequential Typing Effect)
+    // Fungsi Utama Efek Mengetik Berantai
     function typeEffect(element, fullText, speed, onComplete) {
       element.innerText = "";
       element.classList.add('typing-cursor');
@@ -542,7 +569,7 @@
       type();
     }
 
-    // Generator partikel latar belakang luar
+    // Generator partikel luar
     function createGlobalParticles() {
       const particleCount = 35;
       for (let i = 0; i < particleCount; i++) {
@@ -560,7 +587,7 @@
       }
     }
 
-    // Generator mikro partikel EMAS di foto cita-cita
+    // Generator partikel emas mengapung di kolom cita-cita
     function createCitaCitaParticles() {
       const ccContainer = document.getElementById('column-cc');
       const ccParticleCount = 20; 
@@ -593,7 +620,7 @@
     }
 
     function renderStudent(index) {
-      // 1. Bersihkan semua sisa antrean pengetikan siswa sebelumnya jika ada
+      // Bersihkan antrean ketik sebelumnya
       typingTimeouts.forEach(clearTimeout);
       typingTimeouts = [];
 
@@ -608,68 +635,79 @@
       const elCitaCita = document.getElementById('siswa-citacita');
       
       const fotoElement = document.getElementById('siswa-foto');
-      const fotoCitaCitaElement = document.getElementById('foto-citacita');
+      const fotoBw = document.getElementById('foto-citacita-bw');
+      const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Reset tampilan awal animasi kartu
+      // Reset Kartu & Hilangkan State Transisi Menyapu Warna
       card.classList.remove('active');
+      ccContainer.classList.remove('reveal-active', 'show-particles');
+      elWishBox.classList.remove('fade-in-visible');
       void card.offsetWidth; 
       card.classList.add('active');
 
-      // Sembunyikan elemen cita-cita & foto kanan terlebih dahulu sebelum ngetik kelar
-      elWishBox.classList.remove('fade-in-visible');
-      ccContainer.classList.remove('show-particles');
-      fotoCitaCitaElement.style.opacity = '0';
-
-      // Kosongkan wadah teks biodata sebelum efek ketik dimulai
+      // Kosongkan Text (Layout tidak bergeser karena di-lock ukurannya di CSS)
       elNama.innerText = "";
       elTtl.innerText = "";
       elOrtu.innerText = "";
       elNisBox.innerHTML = "";
       elCitaCita.innerText = student.cita_cita || "-";
 
-      // Siapkan string data teks lengkap
+      // String Data
       const textNama = student.nama;
       const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
-      // Memuat berkas gambar profil & cita-cita di balik layar
+      // Ambil Gambar Profil Utama
       fotoElement.style.opacity = '0';
       const separator = student.foto_url.includes('?') ? '&' : '?';
       const timestamp = 't=' + new Date().getTime();
       fotoElement.src = student.foto_url + separator + timestamp;
       fotoElement.onload = () => fotoElement.style.opacity = '1';
 
+      // Sinkronisasi Gambar Cita-Cita (Double Layer)
+      fotoBw.style.opacity = '0';
       const urlFotoCitaCitaRaw = student.foto_citacita_url || student.foto_url;
       const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
-      fotoCitaCitaElement.src = urlFotoCitaCitaRaw + separatorCC + timestamp;
+      const finalCCUrl = urlFotoCitaCitaRaw + separatorCC + timestamp;
+      
+      fotoBw.src = finalCCUrl;
+      fotoColor.src = finalCCUrl;
+
+      // Saat gambar siap, tampilkan versi Hitam Putih (BW) terlebih dahulu
+      fotoBw.onload = () => {
+        fotoBw.style.opacity = '1';
+      };
 
       // ==========================================
-      // ALUR EKSEKUSI MENGETIK BERUNTUN (SEQUENTIAL)
+      // ALUR EKSEKUSI PENGETIKAN BERANTAI
       // ==========================================
       
-      // Langkah 1: Ketik Nama
+      // 1. Ketik Nama
       typeEffect(elNama, textNama, 40, () => {
         
-        // Langkah 2: Ketik Tempat Tanggal Lahir (setelah nama selesai)
+        // 2. Ketik TTL
         typeEffect(elTtl, textTtl, 30, () => {
           
-          // Langkah 3: Ketik Hubungan Orang Tua
+          // 3. Ketik Hubungan Orang Tua
           typeEffect(elOrtu, textOrtu, 30, () => {
             
-            // Langkah 4: Ketik Informasi NIS & NISN
-            // Membuat elemen span baru agar kursor ketik terfokus rapi
+            // 4. Ketik Label NIS & NISN
             let nisSpan = document.createElement('span');
             elNisBox.appendChild(nisSpan);
             
             typeEffect(nisSpan, textNisNisn, 25, () => {
               
-              // Langkah 5: Efek Ketik Selesai! Saatnya Cita-Cita & Foto Memudar Masuk Harmonis
-              elWishBox.classList.add('fade-in-visible');
-              fotoCitaCitaElement.style.opacity = '0.95';
-              ccContainer.classList.add('show-particles'); // Mengaktifkan semburan emas melayang
+              // 5. SELESAI KETIK: Eksekusi Efek Menghapus Hitam-Putih Menjadi Berwarna Asli
+              ccContainer.classList.add('reveal-active'); // Mengubah Clip-Path foto warna (Menyapu)
+              
+              // Tampilkan kotak teks Cita-Cita & Partikel emas pelan-pelan
+              setTimeout(() => {
+                elWishBox.classList.add('fade-in-visible');
+                ccContainer.classList.add('show-particles');
+              }, 400); // Dijeda sedikit agar efek sapuan warna berjalan lebih dulu
               
             });
           });
