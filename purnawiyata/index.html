@@ -167,20 +167,13 @@
       transition: opacity 0.3s ease-in-out;
     }
 
-    /* Efek Shadow Hitam & Emas Bergerak Menutupi Bagian Bawah Foto */
+    /* Efek Shadow Hitam & Emas Statis (Tidak Bergerak) Menutupi Bagian Bawah Foto */
     .photo-frame::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; width: 100%; height: 40%;
       background: linear-gradient(to top, rgba(15, 12, 8, 1) 0%, rgba(212, 175, 55, 0.4) 30%, rgba(0,0,0,0) 100%);
-      background-size: 100% 200%;
-      animation: shadowWave 4s ease-in-out infinite alternate;
       pointer-events: none;
-    }
-
-    @keyframes shadowWave {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 0% 100%; }
     }
 
     /* Bagian Kanan (Identitas) */
@@ -266,7 +259,6 @@
       color: #d4af37;
       font-size: 1.6rem;
       font-weight: 800;
-      box-shadow: 0 0 10px rgba(212,175,55,0); /* placeholder text glow */
     }
 
     /* Tombol Navigasi */
