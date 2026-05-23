@@ -24,7 +24,7 @@
       min-height: 100vh;
       overflow: hidden;
       position: relative;
-      padding: 30px 20px;
+      padding: 20px;
     }
 
     /* Efek Partikel Latar Belakang */
@@ -74,21 +74,24 @@
     }
     .btn-start:hover { transform: scale(1.05); }
 
-    /* KONTANER UTAMA: Diperlebar agar seimbang dengan tinggi kartu */
+    /* KONTANER UTAMA: Memaksimalkan tinggi layar */
     .main-container {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       width: 100%;
-      max-width: 1300px; 
+      max-width: 1350px; 
+      height: 85vh; /* Mengunci porsi layout di layar */
       z-index: 10;
     }
 
-    /* KARTU SUPER JUMBO: Tinggi minimum dinaikkan signifikan untuk memangkas space kosong bawah */
+    /* KARTU SUPER JUMBO FULL BAWAH */
     .purnawiyata-card {
       display: flex;
       width: 100%;
-      min-height: 620px; /* Ukuran diperbesar ke bawah agar megah */
+      height: 100%; /* Mengikuti tinggi main-container secara penuh */
+      min-height: 620px;
       background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
       border-radius: 25px;
       overflow: hidden;
@@ -132,15 +135,15 @@
       justify-content: center;
       align-items: center;
       background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
-      padding: 50px;
+      padding: 40px;
       position: relative;
       clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
     }
 
     .photo-frame {
       width: 100%;
-      max-width: 280px;
-      height: 400px; /* Bingkai foto profil ikut diperbesar */
+      max-width: 290px;
+      height: 420px;
       border: 6px solid #fff;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       border-radius: 12px;
@@ -165,7 +168,7 @@
       pointer-events: none;
     }
 
-    /* KOLOM 2: Sisi Tengah (Biodata & Header Komponen Logo) */
+    /* KOLOM 2: Sisi Tengah (Logo Sekolah & Biodata Teks) */
     .column-center {
       flex: 1.4;
       padding: 45px 35px;
@@ -175,14 +178,12 @@
       color: #ffffff;
     }
 
-    /* Pembungkus Atas: Tempat Logo dan Judul Utama */
     .brand-header {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    /* Style Logo Sekolah */
     .school-logo {
       width: 75px;
       height: auto;
@@ -198,44 +199,58 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
+    /* Penyamaan Ruang: Mengunci box identitas agar layout tidak melompat saat ganti nama */
     .identity-box {
-      margin: 20px 0;
+      margin: 15px 0;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Diberikan min-height & ukuran font fluid agar nama panjang/pendek space-nya tetap stabil */
+    .name-container {
+      min-height: 110px; 
+      display: flex;
+      align-items: center;
     }
 
     #siswa-nama {
-      font-size: 2.7rem; /* Nama diperbesar agar seimbang dengan skala kartu */
+      font-size: 2.5rem;
       font-weight: 800;
       color: #fff;
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 8px;
       border-bottom: 2px solid #d4af37;
       padding-bottom: 6px;
-      display: inline-block;
+      line-height: 1.2;
+      word-wrap: break-word;
+      max-width: 100%;
     }
 
     #siswa-ttl {
       font-size: 1.3rem;
       color: #e0e0e0;
       font-weight: 500;
+      margin-top: 10px;
     }
 
     .sub-detail {
       font-size: 1.4rem;
-      margin-top: 12px;
+      margin-top: 8px;
       font-style: italic;
       color: #f3e5ab;
     }
 
     .nis-box {
-      margin-top: 12px;
+      margin-top: 10px;
       font-size: 1.05rem;
       color: #b3b3b3;
     }
     .nis-box strong { color: #d4af37; }
 
     .wish-box {
-      margin-top: 22px;
+      margin-top: 20px;
       font-size: 1.2rem;
       color: #ffffff;
       background: rgba(212, 175, 55, 0.15);
@@ -243,6 +258,7 @@
       border-left: 4px solid #d4af37;
       display: inline-block;
       border-radius: 0 5px 5px 0;
+      align-self: flex-start;
     }
     .wish-box span { color: #f3e5ab; font-weight: bold; }
 
@@ -255,7 +271,7 @@
     }
     .footer-title span { color: #d4af37; font-size: 1.6rem; font-weight: 800; }
 
-    /* KOLOM 3: Sisi Kanan (Foto Cita-cita Tanpa Blur + Gradasi Samping Alami) */
+    /* KOLOM 3: Sisi Kanan (Tempat Gambar Cita-cita & Navigasi Pojok Atas) */
     .column-right {
       flex: 1.2;
       position: relative;
@@ -270,44 +286,36 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0; /* Diatur via JS */
+      opacity: 0;
       pointer-events: none;
       
-      /* 
-         GRADASI SISI SAMPING KIRI: 
-         Efek shading miring/diagonal dikembalikan untuk membuat pinggiran kiri memudar transparan,
-         namun kualitas gambar tetap tajam & jernih tanpa filter blur.
-      */
       -webkit-mask-image: linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 12%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
       mask-image: linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 12%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
       
       transition: opacity 0.6s ease-in-out;
     }
 
-    /* Tombol Navigasi */
-    .navigation-box {
-      margin-top: 35px;
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .btn-nav {
-      padding: 14px 45px;
-      background: #1a150e;
+    /* TOMBOL NAVIGASI BARU: Berupa panah samar di pojok kanan atas gambar cita-cita */
+    .btn-next-arrow {
+      position: absolute;
+      top: 25px;
+      right: 30px;
+      background: none;
+      border: none;
       color: #d4af37;
-      border: 2px solid #d4af37;
-      font-size: 1.05rem;
-      font-weight: bold;
+      font-size: 3.5rem; /* Ukuran panah besar agar mudah diklik */
       cursor: pointer;
-      border-radius: 30px;
+      opacity: 0.35; /* Dibuat sedikit samar secara default */
+      z-index: 50;
       transition: all 0.3s ease;
+      text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.9);
+      user-select: none;
     }
 
-    .btn-nav:hover {
-      background: linear-gradient(45deg, #a67c1e, #d4af37);
-      color: #000;
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    .btn-next-arrow:hover {
+      opacity: 1; /* Menyala jelas saat disorot kursor */
+      transform: scale(1.15) translateX(3px);
+      color: #f3e5ab;
     }
 
     /* ==========================================================================
@@ -333,18 +341,21 @@
 
     /* Responsif Layar Hp / Mobile */
     @media (max-width: 950px) {
+      .main-container { height: auto; }
       .card-content-wrapper { flex-direction: column; }
       .column-left { clip-path: none; padding: 40px; }
       .column-center { text-align: center; padding: 35px 20px; align-items: center; }
       .brand-header { align-items: center; }
-      .column-right { height: 350px; width: 100%; }
+      .name-container { min-height: auto; justify-content: center; }
+      #siswa-nama { font-size: 2rem; }
+      .wish-box { align-self: center; border-left: none; border-top: 3px solid #d4af37; border-radius: 5px; }
+      
+      .column-right { height: 380px; width: 100%; }
       #foto-citacita {
         -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
         mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
       }
-      #siswa-nama { font-size: 2.2rem; }
-      .navigation-box { justify-content: center; }
-      .wish-box { border-left: none; border-top: 3px solid #d4af37; border-radius: 5px; }
+      .btn-next-arrow { top: auto; bottom: 25px; right: 25px; font-size: 3rem; opacity: 0.7; }
     }
   </style>
 </head>
@@ -379,13 +390,16 @@
         <!-- KOLOM 2: Sisi Tengah (Logo Sekolah & Biodata Teks) -->
         <div class="column-center">
           <div class="brand-header">
-            <!-- Logo Sekolah Baru Ditambahkan di Atas Judul -->
             <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
             <header class="header-title">SELAMAT & SUKSES</header>
           </div>
           
           <div class="identity-box">
-            <h1 id="siswa-nama" class="animate-text">-</h1>
+            <!-- Box penyeimbang tinggi nama -->
+            <div class="name-container">
+              <h1 id="siswa-nama" class="animate-text">-</h1>
+            </div>
+            
             <p id="siswa-ttl" class="animate-text">-</p>
             
             <div class="sub-detail animate-text">
@@ -408,18 +422,15 @@
           </footer>
         </div>
 
-        <!-- KOLOM 3: Sisi Kanan (Foto Cita-cita - Jernih Berwarna dengan Gradient Masking) -->
+        <!-- KOLOM 3: Sisi Kanan (Gambar Cita-cita & Tombol Panah Navigasi) -->
         <div class="column-right">
+          <!-- Tombol Panah Selanjutnya ditaruh samar di dalam tag pojok atas gambar -->
+          <button class="btn-next-arrow" onclick="nextStudent()" title="Siswa Selanjutnya">❯</button>
           <img id="foto-citacita" src="" alt="Foto Visual Cita-cita">
         </div>
 
       </div>
 
-    </div>
-
-    <!-- Tombol Navigasi -->
-    <div class="navigation-box">
-      <button class="btn-nav" onclick="nextStudent()">Selanjutnya ❯</button>
     </div>
   </main>
 
@@ -496,7 +507,6 @@
       };
 
       fotoCitaCitaElement.onload = function() {
-        // Opacity diset ke 0.95 agar foto tampil cerah, berwarna penuh, dan kontras tajam
         fotoCitaCitaElement.style.opacity = '0.95'; 
       };
     }
