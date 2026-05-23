@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
+  <style>
+    /* ==========================================================================
+       STYLE / CSS (Tema Bright, Fresh & Dynamic Animation)
+       ========================================================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      /* Menggunakan gradasi cerah yang segar dan estetik */
+      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      perspective: 1000px; /* Memberikan efek kedalaman 3D untuk animasi */
+    }
+
+    /* Overlay Interaksi Awal Cerah */
+    #music-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      transition: all 0.5s ease;
+    }
+    
+    .overlay-card {
+      text-align: center;
+      color: #333;
+      padding: 40px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transform: scale(1);
+      animation: pulseOverlay 2s infinite alternate;
+    }
+    
+    .overlay-card h2 {
+      color: #4a00e0;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+    
+    .overlay-card p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+    
+    .btn-start {
+      margin-top: 25px;
+      padding: 14px 35px;
+      background: linear-gradient(45deg, #ff007f, #7f00ff);
+      color: white;
+      border: none;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(127, 0, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-start:hover { 
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(127, 0, 255, 0.6);
+    }
+
+    /* Kontainer Utama */
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 950px;
+      padding: 25px;
+      z-index: 10;
+    }
+
+    /* Kartu Purnawiyata Modern & Cerah */
+    .purnawiyata-card {
+      display: flex;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(50px) rotateX(10deg);
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Bagian Kiri (Frame Foto Colorful) */
+    .left-side {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #85ffbd 0%, #fffb7d 100%);
+      padding: 40px;
+      position: relative;
+    }
+
+    .photo-frame {
+      width: 100%;
+      max-width: 260px;
+      height: 360px;
+      border: 8px solid #ffffff;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+      border-radius: 20px;
+      overflow: hidden;
+      background: #f0f0f0;
+      transform: rotate(-3deg);
+      transition: transform 0.5s ease;
+    }
+
+    .purnawiyata-card:hover .photo-frame {
+      transform: rotate(0deg) scale(1.03);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    /* Bagian Kanan (Identitas Modern) */
+    .right-side {
+      flex: 1.4;
+      padding: 40px 45px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #333333;
+    }
+
+    .header-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: #7f00ff;
+      background: linear-gradient(45deg, #7f00ff, #ff007f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .identity-box {
+      margin: 15px 0;
+    }
+
+    #siswa-nama {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #222;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    #siswa-ttl {
+      font-size: 1.1rem;
+      color: #666;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sub-detail {
+      font-size: 1.2rem;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .nis-box {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      color: #777;
+      background: rgba(0,0,0,0.04);
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    
+    .nis-box strong {
+      color: #000;
+    }
+
+    /* Kotak Cita-cita Interaktif */
+    .wish-box {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #333;
+      background: linear-gradient(135deg, #ff007f15, #7f00ff15);
+      padding: 12px 20px;
+      border-left: 4px solid #ff007f;
+      display: block;
+      border-radius: 4px 15px 15px 4px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    
+    .wish-box span {
+      color: #7f00ff;
+      font-weight: 800;
+    }
+
+    .footer-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #555;
+      line-height: 1.4;
+      margin-top: 20px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      padding-top: 15px;
+    }
+    
+    .footer-title span {
+      color: #222;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    /* Kontrol Navigasi Cantik */
+    .navigation-box {
+      margin-top: 30px;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-nav {
+      padding: 14px 40px;
+      background: #ffffff;
+      color: #7f00ff;
+      border: none;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 50px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-nav:hover {
+      transform: translateY(-4px) scale(1.03);
+      background: linear-gradient(45deg, #7f00ff, #ff007f);
+      color: #fff;
+      box-shadow: 0 15px 25px rgba(127, 0, 255, 0.3);
+    }
+    
+    .btn-nav:active {
+      transform: translateY(-1px);
+    }
+
+    /* Animasi Masuk (Slide-In & Pop-Up) */
+    .purnawiyata-card.active {
+      animation: cardPopUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+    }
+
+    .purnawiyata-card.active .animate-text {
+      animation: textSlideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+    }
+    
+    /* Staggered Delay untuk Efek Teks Berurutan */
+    .purnawiyata-card.active .delay-1 { animation-delay: 0.2s; }
+    .purnawiyata-card.active .delay-2 { animation-delay: 0.3s; }
+    .purnawiyata-card.active .delay-3 { animation-delay: 0.4s; }
+    .purnawiyata-card.active .delay-4 { animation-delay: 0.5s; }
+
+    @keyframes cardPopUp {
+      0% {
+        opacity: 0;
+        transform: translateY(60px) scale(0.9) rotateX(-10deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg);
+      }
+    }
+
+    @keyframes textSlideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes pulseOverlay {
+      0% { transform: scale(0.98); }
+      100% { transform: scale(1.02); }
+    }
+
+    /* Responsif Ponsel / Mobile */
+    @media (max-width: 768px) {
+      body {
+        overflow-y: auto;
+        padding: 20px 10px;
+      }
+      .purnawiyata-card {
+        flex-direction: column;
+        transform: none;
+      }
+      .left-side {
+        padding: 30px;
+      }
+      .photo-frame {
+        transform: none !important;
+        max-width: 200px;
+        height: 280px;
+      }
+      .right-side {
+        text-align: center;
+        padding: 35px 25px;
+      }
+      #siswa-nama {
+        font-size: 2rem;
+      }
+      .navigation-box {
+        justify-content: center;
+      }
+      .wish-box {
+        border-left: none;
+        border-top: 4px solid #ff007f;
+        border-radius: 10px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <audio id="bg-music" loop>
+    <source src="musik-purnawiyata.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="music-overlay" onclick="startPresentation()">
+    <div class="overlay-card">
+      <h2>Selamat & Sukses 🎉</h2>
+      <p>Purnawiyata Ke-III SMP Islam Az-Zahro</p>
+      <button class="btn-start">Mulai Presentasi ✨</button>
+    </div>
+  </div>
+
+  <main class="main-container">
+    <div class="purnawiyata-card" id="student-card">
+      
+      <div class="left-side">
+        <div class="photo-frame">
+          <img id="siswa-foto" src="" alt="Foto Siswa">
+        </div>
+      </div>
+
+      <div class="right-side">
+        <header class="header-title animate-text">SELAMAT & SUKSES</header>
+        
+        <div class="identity-box">
+          <h1 id="siswa-nama" class="animate-text delay-1">-</h1>
+          <p id="siswa-ttl" class="animate-text delay-2">-</p>
+          
+          <div class="sub-detail animate-text delay-2">
+            <span id="siswa-ortu">-</span>
+          </div>
+          
+          <div class="nis-box animate-text delay-3">
+            <span>NIS: <strong id="siswa-nis">-</strong></span> &nbsp;|&nbsp; 
+            <span>NISN: <strong id="siswa-nisn">-</strong></span>
+          </div>
+
+          <div class="wish-box animate-text delay-4">
+            🎯 Cita-cita: <span id="siswa-citacita">-</span>
+          </div>
+        </div>
+
+        <footer class="footer-title animate-text delay-4">
+          PURNAWIYATA KE-III<br>
+          <span>SMP ISLAM AZ-ZAHRO</span>
+        </footer>
+      </div>
+
+    </div>
+
+    <div class="navigation-box">
+      <button class="btn-nav" onclick="nextStudent()">Selanjutnya ❯</button>
+    </div>
+  </main>
+
+  <script>
+    let studentsData = [];
+    let currentIndex = 0;
+    const bgMusic = document.getElementById('bg-music');
+    const overlay = document.getElementById('music-overlay');
+
+    // Mengambil data eksternal JSON
+    async function loadStudentsData() {
+      try {
+        const response = await fetch('data-siswa.json');
+        studentsData = await response.json();
+        if(studentsData.length > 0) {
+          renderStudent(0);
+        }
+      } catch (error) {
+        console.error("Gagal memuat file data-siswa.json:", error);
+      }
+    }
+
+    // Mengisi data ke HTML & mereset animasi masuk dengan perbaikan pemuatan foto
+    function renderStudent(index) {
+      const card = document.getElementById('student-card');
+      const student = studentsData[index];
+      const fotoElement = document.getElementById('siswa-foto');
+
+      // 1. Reset Animasi CSS Kartu dan Teks
+      card.classList.remove('active');
+      void card.offsetWidth; // Trigger reflow agar CSS animasi terulang dari awal
+      card.classList.add('active');
+
+      // 2. Terapkan Data Teks Siswa
+      document.getElementById('siswa-nama').innerText = student.nama;
+      document.getElementById('siswa-ttl').innerText = `📍 ${student.tempat_lahir}, ${student.tanggal_lahir}`;
+      document.getElementById('siswa-nis').innerText = student.nis;
+      document.getElementById('siswa-nisn').innerText = student.nisn;
+      document.getElementById('siswa-citacita').innerText = student.cita_cita || "-";
+
+      // Logika Jenis Kelamin (L/P) untuk nama orang tua
+      const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
+      document.getElementById('siswa-ortu').innerText = `✨ ${hubunganOrtu} Bapak/Ibu ${student.orang_tua}`;
+
+      // 3. Solusi Foto Macet
+      fotoElement.style.opacity = '0';
+      
+      const separator = student.foto_url.includes('?') ? '&' : '?';
+      const urlBaru = student.foto_url + separator + 't=' + new Date().getTime();
+      
+      fotoElement.src = urlBaru;
+
+      fotoElement.onload = function() {
+        fotoElement.style.opacity = '1';
+      };
+    }
+
+    // Logika tombol selanjutnya
+    function nextStudent() {
+      if (studentsData.length === 0) return;
+      currentIndex = (currentIndex + 1) % studentsData.length;
+      renderStudent(currentIndex);
+    }
+
+    // Fungsi klik awal untuk menyalakan musik & menyembunyikan overlay
+    function startPresentation() {
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 500);
+      bgMusic.play().catch(error => console.log("Musik tertahan sistem browser:", error));
+    }
+
+    window.addEventListener('DOMContentLoaded', loadStudentsData);
+  </script>
+</body>
+</html>
