@@ -208,7 +208,7 @@
     }
 
     .name-container {
-      height: 90px;
+      height: 95px;
       display: flex;
       align-items: center;
       position: relative;
@@ -218,10 +218,11 @@
       font-size: 2.5rem;
       font-weight: 800;
       color: #fff;
-      letter-spacing: 1px;
+      letter-spacing: 0.05em; /* Perbaikan jarak spasi nama agar tidak menempel */
       text-transform: uppercase;
       padding-bottom: 8px;
-      line-height: 1.1;
+      line-height: 1.2;
+      white-space: normal; /* Memastikan spasi diproses normal & melakukan word-wrap */
       word-wrap: break-word;
       width: 100%;
       position: relative;
@@ -258,10 +259,24 @@
     .ortu-container { height: 30px; display: flex; align-items: center; }
     .sub-detail { font-size: 1.4rem; font-style: italic; color: #f3e5ab; }
 
-    .nis-container { height: 30px; display: flex; align-items: center; }
-    .nis-box { font-size: 1.05rem; color: #b3b3b3; }
+    .nis-container { height: 35px; display: flex; align-items: center; }
+    
+    /* MODIFIKASI: Penegasan Ketebalan & Warna Akurat Text NIS/NISN */
+    .nis-box { 
+      font-size: 1.15rem; 
+      color: #ffffff !important; 
+      font-weight: 700; 
+      letter-spacing: 0.5px;
+      text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
 
     .wish-container { height: 60px; display: flex; align-items: center; margin-top: 15px; }
+    
+    /* MODIFIKASI: Kotak Cita-cita langsung muncul instan tanpa jeda slide gerakan */
     .wish-box {
       font-size: 1.2rem;
       color: #ffffff;
@@ -270,11 +285,9 @@
       border-left: 4px solid #d4af37;
       border-radius: 0 5px 5px 0;
       opacity: 0; 
-      transform: translateX(-15px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
       width: auto;
     }
-    .wish-box.fade-in-visible { opacity: 1; transform: translateX(0); }
+    .wish-box.fade-in-visible { opacity: 1; } /* Muncul langsung instan */
     .wish-box span { color: #f3e5ab; font-weight: bold; }
 
     .footer-title {
@@ -326,10 +339,11 @@
       position: absolute;
       top: 0; left: 0;
       opacity: 0;
-      transition: opacity 0.5s ease-in-out;
+      transition: opacity 0.3s ease-in-out;
       z-index: 2;
     }
 
+    /* MODIFIKASI: Foto Berwarna Langsung Muncul Instan Tanpa Efek Gerakan Wipe */
     .img-reveal-color {
       width: 100%;
       height: 100%;
@@ -338,13 +352,10 @@
       top: 0; left: 0;
       z-index: 3;
       opacity: 0;
-      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-      transition: opacity 0.4s ease, clip-path 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .reveal-active .img-reveal-color {
-      opacity: 1;
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      opacity: 1; /* Langsung muncul penuh */
     }
 
     .cc-particle {
@@ -356,7 +367,7 @@
       animation: floatUpCC linear infinite;
       filter: drop-shadow(0 0 4px rgba(243, 229, 171, 0.6));
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.3s ease;
     }
 
     .show-particles .cc-particle { opacity: 1; }
@@ -369,9 +380,7 @@
       100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
     }
 
-    /* ==========================================================================
-       STYLE NAVIGASI GLOBAL (Perbaikan agar tidak pecah di HP)
-       ========================================================================== */
+    /* STYLE NAVIGASI GLOBAL */
     .nav-container {
       position: absolute;
       bottom: 25px;
@@ -446,7 +455,6 @@
         mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
       }
       
-      /* Navigasi Melayang Statis di Bawah Layar Mobile */
       .nav-container {
         position: fixed;
         bottom: 15px;
@@ -534,7 +542,7 @@
           <div class="image-reveal-wrapper">
             <!-- Foto Hitam Putih (Base) -->
             <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-            <!-- Foto Berwarna (Akan disapu/di-wipe keluar) -->
+            <!-- Foto Berwarna (Akan langsung ganti tanpa wipe) -->
             <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
           </div>
         </div>
@@ -542,7 +550,7 @@
       </div>
     </div>
 
-    <!-- KONTROLLER NAVIGASI PINDAH HALAMAN (Dikelompokkan secara Global) -->
+    <!-- KONTROLLER NAVIGASI PINDAH HALAMAN -->
     <div class="nav-container">
       <button class="btn-nav-arrow" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
       <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
@@ -646,7 +654,7 @@
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Reset Kartu & Hilangkan State Transisi Menyapu Warna
+      // Reset Kartu & Hilangkan State Instan
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
       elWishBox.classList.remove('fade-in-visible');
@@ -665,7 +673,9 @@
       const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
-      const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
+      
+      // MODIFIKASI: Menambahkan teks nomor urut siswa secara dinamis (contoh: No. 1 | NIS: ... )
+      const textNisNisn = `No. ${index + 1} | NIS: ${student.nis} | NISN: ${student.nisn}`;
 
       // Ambil Gambar Profil Utama
       fotoElement.style.opacity = '0';
@@ -701,20 +711,16 @@
           // 3. Ketik Hubungan Orang Tua
           typeEffect(elOrtu, textOrtu, 30, () => {
             
-            // 4. Ketik Label NIS & NISN
+            // 4. Ketik Label Nomor Siswa, NIS & NISN
             let nisSpan = document.createElement('span');
             elNisBox.appendChild(nisSpan);
             
             typeEffect(nisSpan, textNisNisn, 25, () => {
               
-              // 5. SELESAI KETIK: Eksekusi Efek Menghapus Hitam-Putih Menjadi Berwarna Asli
+              // 5. SELESAI KETIK: Langsung aktifkan foto berwarna & kotak cita-cita (Instan)
               ccContainer.classList.add('reveal-active');
-              
-              // Tampilkan kotak teks Cita-Cita & Partikel emas pelan-pelan
-              setTimeout(() => {
-                elWishBox.classList.add('fade-in-visible');
-                ccContainer.classList.add('show-particles');
-              }, 400);
+              elWishBox.classList.add('fade-in-visible');
+              ccContainer.classList.add('show-particles');
               
             });
           });
