@@ -143,7 +143,7 @@
     .photo-frame {
       width: 100%;
       max-width: 300px;
-      height: 440px; /* Ukuran frame foto profil dimaksimalkan ke bawah */
+      height: 440px; 
       border: 6px solid #fff;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       border-radius: 12px;
@@ -174,7 +174,7 @@
       padding: 40px 35px;
       display: flex;
       flex-direction: column;
-      justify-content: space-around; /* Menyebarkan konten secara merata agar tidak kosong di bawah */
+      justify-content: space-around; 
       color: #ffffff;
     }
 
@@ -199,7 +199,6 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
-    /* Mengunci ruang identitas agar layout kokoh stabil */
     .identity-box {
       margin: 10px 0;
     }
@@ -260,7 +259,7 @@
     .footer-action-wrapper {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: flex-end; /* Memastikan ikon sejajar dengan baris bawah teks */
       margin-top: 15px;
       border-top: 1px solid rgba(212, 175, 55, 0.2);
       padding-top: 15px;
@@ -275,23 +274,24 @@
     }
     .footer-title span { color: #d4af37; font-size: 1.55rem; font-weight: 800; }
 
-    /* TOMBOL NAVIGASI: Kembali ditaruh di sisi bawah dengan style modern minimalis */
-    .btn-nav-bottom {
-      padding: 10px 30px;
-      background: rgba(26, 21, 14, 0.8);
+    /* TOMBOL NAVIGASI MINIMALIS: Hanya panah, di pojok bawah, sedikit samar */
+    .btn-nav-arrow {
+      background: none;
+      border: none;
       color: #d4af37;
-      border: 1px solid #d4af37;
-      font-size: 0.95rem;
+      font-size: 1.8rem;
       font-weight: bold;
       cursor: pointer;
-      border-radius: 4px;
+      opacity: 0.4; /* Efek samar secara default */
       transition: all 0.3s ease;
+      padding: 0 10px;
+      line-height: 1;
     }
 
-    .btn-nav-bottom:hover {
-      background: linear-gradient(45deg, #a67c1e, #d4af37);
-      color: #000;
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    .btn-nav-arrow:hover {
+      opacity: 1; /* Menyala jelas saat disorot */
+      text-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+      transform: translateX(3px); /* Efek dorong dinamis ke kanan */
     }
 
     /* KOLOM 3: Sisi Kanan (Tempat Gambar Cita-cita Berwarna Asli & Gradasi Sisi Kiri) */
@@ -312,11 +312,6 @@
       opacity: 0;
       pointer-events: none;
       
-      /* 
-         GRADASI SISI SAMPING KIRI SAJA (To Right):
-         Membuat transisi transparan halus dari arah kiri ke kanan.
-         Sisi kiri gambar melebur tipis dengan latar belakang, sisi atas-bawah-kanan full tajam & jernih.
-      */
       -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
       mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
       
@@ -354,6 +349,7 @@
       .name-container { min-height: auto; justify-content: center; }
       #siswa-nama { font-size: 2rem; }
       .footer-action-wrapper { flex-direction: column; align-items: center; gap: 15px; width: 100%; }
+      .btn-nav-arrow { font-size: 2.2rem; opacity: 0.7; }
       
       .column-right { height: 380px; width: 100%; }
       #foto-citacita {
@@ -419,14 +415,15 @@
             </div>
           </div>
 
-          <!-- Bagian Bawah: Menyatukan teks footer dan tombol aksi navigasi -->
+          <!-- Bagian Bawah: Menyatukan teks footer dan tombol aksi navigasi minimalis -->
           <div class="footer-action-wrapper">
             <footer class="footer-title">
               PURNAWIYATA KE-III<br>
               <span>SMP ISLAM AZ-ZAHRO</span>
             </footer>
             
-            <button class="btn-nav-bottom" onclick="nextStudent()">Selanjutnya ❯</button>
+            <!-- Tombol diganti menjadi ikon panah murni saja & ber-efek samar -->
+            <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
           </div>
         </div>
 
