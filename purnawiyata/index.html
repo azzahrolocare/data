@@ -185,27 +185,32 @@
       flex-direction: column;
       justify-content: space-between;
       color: #ffffff;
-      position: relative; /* Diperlukan untuk penempatan absolute foto cita-cita */
+      position: relative;
       overflow: hidden;
     }
 
-    /* TAG BARU: Foto Cita-Cita Besar Latar Belakang (Samar-samar) */
+    /* FOTO CITA-CITA BESAR: Diperbesar ukurannya & dipotong pinggirannya agar menyatu dengan background kartu */
     #foto-citacita {
       position: absolute;
-      top: 5%;
-      right: -5%;
-      width: 85%;
-      height: 90%;
-      object-fit: contain;
+      top: -10%;
+      right: -10%;
+      width: 110%; /* Diperbesar agar hampir memenuhi area kanan */
+      height: 120%;
+      object-fit: cover;
       opacity: 0; /* Diatur lewat JS dengan transisi halus */
-      mix-blend-mode: screen; /* Membuat bagian gelap gambar menyatu dengan background kartu */
-      filter: grayscale(30%) brightness(80%);
-      pointer-events: none; /* Supaya tidak bisa diklik/mengganggu interaksi */
-      z-index: 1; /* Di bawah teks, di atas background */
-      transition: opacity 0.5s ease-in-out;
+      mix-blend-mode: screen;
+      filter: grayscale(15%) brightness(60%);
+      pointer-events: none;
+      z-index: 1; /* Berada di bawah text biodata */
+      
+      /* CSS MASKING: Membuat pinggiran foto memudar transparan secara melingkar */
+      -webkit-mask-image: radial-gradient(circle at 60% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
+      mask-image: radial-gradient(circle at 60% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
+      
+      transition: opacity 0.6s ease-in-out;
     }
 
-    /* Memastikan teks berada di atas foto cita-cita besar */
+    /* Memastikan teks berada di atas foto cita-cita besar agar tidak terhalang */
     .header-title, .identity-box, .footer-title {
       position: relative;
       z-index: 2; 
@@ -317,7 +322,7 @@
       animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
 
-    /* Modifikasi Animasi: Teks masuk bergerak samar dari KIRI */
+    /* Animasi Teks masuk bergerak samar dari KIRI */
     .purnawiyata-card.active .animate-text {
       animation: textEntranceLeft 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.4s both;
     }
@@ -333,7 +338,7 @@
       }
     }
 
-    /* Keyframes Baru untuk Efek Gerak Samar dari Kiri */
+    /* Keyframes Efek Gerak Samar dari Kiri */
     @keyframes textEntranceLeft {
       0% {
         opacity: 0;
@@ -359,11 +364,12 @@
         padding: 30px 20px;
       }
       #foto-citacita {
-        width: 100%;
-        height: 60%;
-        top: 35%;
-        right: 0;
-        opacity: 0.1 !important; /* Kurangi opasitas di HP agar teks tetap terbaca jelas */
+        width: 120%;
+        height: 70%;
+        top: 30%;
+        right: -10%;
+        -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+        mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
       }
       #siswa-nama {
         font-size: 1.8rem;
@@ -411,7 +417,7 @@
         <!-- Sisi Kanan: Tempat Identitas & Foto Cita-cita Besar -->
         <div class="right-side">
           
-          <!-- TAG BARU: Foto Cita-cita Besar yang hampir memenuhi layar sisi kanan -->
+          <!-- Foto Cita-cita Besar (Dengan Efek Masking di Pinggirannya) -->
           <img id="foto-citacita" src="" alt="Foto Cita-cita">
 
           <header class="header-title">SELAMAT & SUKSES</header>
@@ -522,7 +528,7 @@
       const timestamp = 't=' + new Date().getTime();
       const urlFotoProfil = student.foto_url + separator + timestamp;
       
-      // Menentukan URL Foto Cita-cita (Menggunakan key 'foto_citacita_url' dari JSON jika ada, jika tidak, gunakan foto_url sebagai fallback)
+      // Menentukan URL Foto Cita-cita
       const urlFotoCitaCitaRaw = student.foto_citacita_url || student.foto_url;
       const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
       const urlFotoCitaCita = urlFotoCitaCitaRaw + separatorCC + timestamp;
@@ -536,9 +542,9 @@
         fotoElement.style.opacity = '1';
       };
 
-      // Munculkan kembali foto cita-cita besar dengan kesamaran tingkat tinggi (opacity 0.15)
+      // Munculkan kembali foto cita-cita besar (opacity diset ke 0.35 agar bagian tengahnya lebih hidup/kontras)
       fotoCitaCitaElement.onload = function() {
-        fotoCitaCitaElement.style.opacity = '0.15';
+        fotoCitaCitaElement.style.opacity = '0.35';
       };
     }
 
