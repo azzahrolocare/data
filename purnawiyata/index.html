@@ -825,12 +825,24 @@
     function nextStudent() {
       if (studentsData.length === 0) return;
       currentIndex = (currentIndex + 1) % studentsData.length;
+      
+      // Reset musik agar memutar dari awal
+      if (!bgMusic.paused) {
+        bgMusic.currentTime = 0;
+      }
+      
       renderStudent(currentIndex);
     }
 
     function prevStudent() {
       if (studentsData.length === 0) return;
       currentIndex = (currentIndex - 1 + studentsData.length) % studentsData.length;
+      
+      // Reset musik agar memutar dari awal
+      if (!bgMusic.paused) {
+        bgMusic.currentTime = 0;
+      }
+      
       renderStudent(currentIndex);
     }
 
@@ -901,6 +913,23 @@
       }
       bgMusic.play().catch(error => console.log("Musik tertahan browser:", error));
     }
+
+    // Mendengarkan tombol remote IFP (Keyboard Events) secara global
+    window.addEventListener('keydown', (event) => {
+      // Abaikan jika overlay penutup presentasi belum di-klik
+      if (overlay.style.display !== 'none') return;
+
+      switch(event.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+          nextStudent();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          prevStudent();
+          break;
+      }
+    });
 
     window.addEventListener('DOMContentLoaded', () => {
       loadStudentsData();
