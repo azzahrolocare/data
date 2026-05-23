@@ -135,7 +135,7 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Bagian Kiri (Foto Siswa) */
+    /* Bagian Kiri (Tempat Foto Profil) */
     .left-side {
       flex: 1;
       display: flex;
@@ -145,6 +145,7 @@
       padding: 40px;
       position: relative;
       clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+      z-index: 5;
     }
 
     .photo-frame {
@@ -167,7 +168,7 @@
       transition: opacity 0.3s ease-in-out;
     }
 
-    /* Efek Shadow Hitam & Emas Statis (Tidak Bergerak) Menutupi Bagian Bawah Foto */
+    /* Efek Shadow Hitam & Emas Statis Menutupi Bagian Bawah Foto */
     .photo-frame::after {
       content: '';
       position: absolute;
@@ -176,7 +177,7 @@
       pointer-events: none;
     }
 
-    /* Bagian Kanan (Identitas) */
+    /* Bagian Kanan (Tempat Identitas & Foto Cita-cita Besar) */
     .right-side {
       flex: 1.5;
       padding: 40px 30px;
@@ -184,6 +185,30 @@
       flex-direction: column;
       justify-content: space-between;
       color: #ffffff;
+      position: relative; /* Diperlukan untuk penempatan absolute foto cita-cita */
+      overflow: hidden;
+    }
+
+    /* TAG BARU: Foto Cita-Cita Besar Latar Belakang (Samar-samar) */
+    #foto-citacita {
+      position: absolute;
+      top: 5%;
+      right: -5%;
+      width: 85%;
+      height: 90%;
+      object-fit: contain;
+      opacity: 0; /* Diatur lewat JS dengan transisi halus */
+      mix-blend-mode: screen; /* Membuat bagian gelap gambar menyatu dengan background kartu */
+      filter: grayscale(30%) brightness(80%);
+      pointer-events: none; /* Supaya tidak bisa diklik/mengganggu interaksi */
+      z-index: 1; /* Di bawah teks, di atas background */
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    /* Memastikan teks berada di atas foto cita-cita besar */
+    .header-title, .identity-box, .footer-title {
+      position: relative;
+      z-index: 2; 
     }
 
     .header-title {
@@ -292,8 +317,9 @@
       animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
 
+    /* Modifikasi Animasi: Teks masuk bergerak samar dari KIRI */
     .purnawiyata-card.active .animate-text {
-      animation: textEntrance 0.6s ease-out 0.4s both;
+      animation: textEntranceLeft 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.4s both;
     }
 
     @keyframes cardEntrance {
@@ -307,10 +333,11 @@
       }
     }
 
-    @keyframes textEntrance {
+    /* Keyframes Baru untuk Efek Gerak Samar dari Kiri */
+    @keyframes textEntranceLeft {
       0% {
         opacity: 0;
-        transform: translateX(20px);
+        transform: translateX(-40px);
       }
       100% {
         opacity: 1;
@@ -330,6 +357,13 @@
       .right-side {
         text-align: center;
         padding: 30px 20px;
+      }
+      #foto-citacita {
+        width: 100%;
+        height: 60%;
+        top: 35%;
+        right: 0;
+        opacity: 0.1 !important; /* Kurangi opasitas di HP agar teks tetap terbaca jelas */
       }
       #siswa-nama {
         font-size: 1.8rem;
@@ -366,13 +400,20 @@
       
       <!-- Wrapper Konten Utama agar terpisah dari Border Glow -->
       <div class="card-content-wrapper">
+        
+        <!-- Sisi Kiri: Kotak / Tempat Foto Profil -->
         <div class="left-side">
           <div class="photo-frame">
             <img id="siswa-foto" src="" alt="Foto Siswa">
           </div>
         </div>
 
+        <!-- Sisi Kanan: Tempat Identitas & Foto Cita-cita Besar -->
         <div class="right-side">
+          
+          <!-- TAG BARU: Foto Cita-cita Besar yang hampir memenuhi layar sisi kanan -->
+          <img id="foto-citacita" src="" alt="Foto Cita-cita">
+
           <header class="header-title">SELAMAT & SUKSES</header>
           
           <div class="identity-box">
@@ -454,6 +495,7 @@
       const card = document.getElementById('student-card');
       const student = studentsData[index];
       const fotoElement = document.getElementById('siswa-foto');
+      const fotoCitaCitaElement = document.getElementById('foto-citacita');
 
       // 1. Reset Animasi CSS Kartu dan Teks
       card.classList.remove('active');
@@ -471,18 +513,32 @@
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       document.getElementById('siswa-ortu').innerText = `${hubunganOrtu} ${student.orang_tua}`;
 
-      // 3. Solusi Foto Macet: Sembunyikan foto lama sekejap & paksa bypass cache browser
+      // 3. Solusi Foto Macet & Load Gambar (Foto Profil & Foto Cita-Cita)
       fotoElement.style.opacity = '0';
+      fotoCitaCitaElement.style.opacity = '0';
       
-      // Sisipkan timestamp unik di ujung URL gambar agar browser mengunduh data gambar terbaru
+      // Ambil pemisah URL unik bypass cache
       const separator = student.foto_url.includes('?') ? '&' : '?';
-      const urlBaru = student.foto_url + separator + 't=' + new Date().getTime();
+      const timestamp = 't=' + new Date().getTime();
+      const urlFotoProfil = student.foto_url + separator + timestamp;
       
-      fotoElement.src = urlBaru;
+      // Menentukan URL Foto Cita-cita (Menggunakan key 'foto_citacita_url' dari JSON jika ada, jika tidak, gunakan foto_url sebagai fallback)
+      const urlFotoCitaCitaRaw = student.foto_citacita_url || student.foto_url;
+      const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
+      const urlFotoCitaCita = urlFotoCitaCitaRaw + separatorCC + timestamp;
+      
+      // Set sumber gambar baru
+      fotoElement.src = urlFotoProfil;
+      fotoCitaCitaElement.src = urlFotoCitaCita;
 
-      // Munculkan kembali foto dengan transisi lembut setelah browser selesai memuat gambar utuh
+      // Munculkan kembali foto profil setelah selesai dimuat
       fotoElement.onload = function() {
         fotoElement.style.opacity = '1';
+      };
+
+      // Munculkan kembali foto cita-cita besar dengan kesamaran tingkat tinggi (opacity 0.15)
+      fotoCitaCitaElement.onload = function() {
+        fotoCitaCitaElement.style.opacity = '0.15';
       };
     }
 
