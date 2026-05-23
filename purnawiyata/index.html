@@ -38,723 +38,985 @@
     }
 
     @keyframes floatParticles {
-      0% { transform: translateY(100vh) scale(0.3); opacity: 0; }
-      50% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+      0% {
+        transform: translateY(100vh) translateX(0) scale(0.5);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% {
+        transform: translateY(-10vh) translateX(100px) scale(1.2);
+        opacity: 0;
+      }
     }
 
-    /* Overlay Interaksi Awal untuk Mengaktifkan Musik */
-    #music-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 12, 8, 0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-    .overlay-card {
-      text-align: center;
-      color: #fff;
-      border: 2px solid #d4af37;
-      padding: 40px;
-      background: #1a150e;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-    }
-    .overlay-card h2 { color: #d4af37; margin-bottom: 10px; }
-    .btn-start {
-      margin-top: 20px;
-      padding: 12px 30px;
-      background: linear-gradient(45deg, #a67c1e, #f3e5ab, #a67c1e);
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: transform 0.2s;
-    }
-    .btn-start:hover { transform: scale(1.05); }
-
-    /* KONTANER UTAMA */
-    .main-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    /* Bingkai Utama Aplikasi (Super Jumbo & Megah) */
+    .presentation-container {
       width: 100%;
-      max-width: 1380px; 
-      height: 92vh; 
-      z-index: 10;
+      max-width: 1500px;
+      height: 850px;
+      background: rgba(25, 20, 15, 0.85);
+      border: 3px solid #d4af37;
+      border-radius: 30px;
+      box-shadow: 0 0 80px rgba(212, 175, 55, 0.25), inset 0 0 40px rgba(0,0,0,0.9);
+      display: flex;
+      flex-col: row;
       position: relative;
-    }
-
-    /* KARTU SUPER JUMBO FULL BAWAH */
-    .purnawiyata-card {
-      display: flex;
-      width: 100%;
-      height: 100%; 
-      min-height: 620px;
-      background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
-      border-radius: 25px;
+      z-index: 5;
       overflow: hidden;
-      position: relative;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
-      opacity: 0;
-      transform: translateY(30px);
+      backdrop-filter: blur(15px);
+      padding: 35px;
     }
 
-    .purnawiyata-card::before {
-      content: '';
+    /* Ornamen Sudut Klasik Khas Piagam Kemegahan */
+    .corner-ornament {
       position: absolute;
-      top: -50%; left: -50%; width: 200%; height: 200%;
-      background: conic-gradient(transparent, transparent, transparent, #d4af37, #f3e5ab, #d4af37);
-      animation: borderRotate 6s linear infinite;
-      z-index: 1;
+      width: 50px;
+      height: 50px;
+      border: 4px solid #d4af37;
+      z-index: 10;
+      pointer-events: none;
     }
+    .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; border-top-left-radius: 12px; }
+    .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; border-top-right-radius: 12px; }
+    .bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; border-bottom-left-radius: 12px; }
+    .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; border-bottom-right-radius: 12px; }
 
-    /* Lapisan dalam pembungkus struktur kartu */
-    .card-content-wrapper {
-      display: flex;
-      width: calc(100% - 6px);
-      height: calc(100% - 6px);
-      margin: 3px;
-      background: inherit;
-      border-radius: 22px;
-      overflow: hidden;
-      z-index: 2;
-    }
-
-    @keyframes borderRotate { 100% { transform: rotate(360deg); } }
-
-    /* KOLOM 1: Sisi Kiri */
-    .column-left {
-      width: 320px;
-      flex-shrink: 0;
+    /* Layout 3 Kolom Utama */
+    .left-column {
+      width: 30%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
-      padding: 40px;
       position: relative;
-      clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
-      gap: 20px;
+    }
+
+    .center-column {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+      border-left: 1px dashed rgba(212, 175, 55, 0.2);
+      border-right: 1px dashed rgba(212, 175, 55, 0.2);
+    }
+
+    .right-column {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* ==========================================================================
+       KOMPONEN FOTO KIRI (FOTO PROFIL / UTAMA)
+       ========================================================================== */
+    .photo-frame-container {
+      position: relative;
+      width: 360px;
+      height: 480px;
+      perspective: 1000px;
     }
 
     .photo-frame {
       width: 100%;
-      height: 380px; 
-      border: 6px solid #fff;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-      border-radius: 12px;
-      overflow: hidden;
-      background: #333;
+      height: 100%;
+      background: #15110b;
+      border: 6px double #d4af37;
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
       position: relative;
+      overflow: hidden;
+      transition: all 0.5s ease;
     }
 
     .photo-frame img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      object-cover: cover;
+      border-radius: 10px;
+      filter: grayscale(100%) contrast(110%);
+      transition: filter 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Saat pengetikan selesai (.reveal-active), foto profil menjadi berwarna secara instan */
+    .reveal-active .photo-frame img {
+      filter: grayscale(0%) contrast(100%);
     }
 
     .photo-frame::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 35%;
-      background: linear-gradient(to top, rgba(15, 12, 8, 0.9) 0%, rgba(0,0,0,0) 100%);
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.7));
       pointer-events: none;
     }
 
-    /* GAYA BARU: Label Nomor Urut Absensi di bawah foto */
-    .absen-label {
-      background: rgba(15, 12, 8, 0.85);
-      color: #f3e5ab;
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      text-align: center;
-      width: 90%;
-      margin-right: 25px; /* Kompensasi miring clip-path kolom kiri */
+    /* Badge Label di Bawah Frame Foto */
+    .photo-label {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #b8860b, #e6ca65, #996515);
+      color: #000;
+      padding: 8px 30px;
+      font-weight: 800;
+      font-size: 14px;
       text-transform: uppercase;
-    }
-    .absen-label span {
-      color: #ffffff;
+      letter-spacing: 2px;
+      border-radius: 30px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      white-space: nowrap;
+      border: 1px solid #fff;
     }
 
-    /* KOLOM 2: Sisi Tengah */
-    .column-center {
-      flex: 1;
-      padding: 40px 45px;
+    /* ==========================================================================
+       KOMPONEN TENGAH (IDENTITAS DATA TEKS)
+       ========================================================================== */
+    .school-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .school-header h3 {
+      color: #e6ca65;
+      font-size: 16px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      font-weight: 400;
+    }
+
+    .school-header h2 {
+      color: #fff;
+      font-size: 26px;
+      font-family: 'Georgia', serif;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .school-header .divider {
+      width: 180px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #d4af37, transparent);
+      margin: 12px auto 0 auto;
+    }
+
+    /* Wadah Penulisan Teks Otomatis */
+    .data-display-box {
+      width: 100%;
+      flex-grow: 1;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      color: #ffffff;
+      justify-content: center;
+      gap: 25px;
+      margin: 30px 0;
+    }
+
+    .data-row {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .data-label {
+      color: #8c8273;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .data-value {
+      color: #fff;
+      font-size: 22px;
+      font-weight: 500;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Mode Ketik Khusus Nama Siswa */
+    .data-value.student-name {
+      color: #e6ca65;
+      font-family: 'Georgia', serif;
+      font-size: 32px;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(22a,202,101,0.2);
+      line-height: 1.2;
+    }
+
+    /* Tampilan Label Kecil untuk Data Angka Terbawah */
+    .nis-nisn-box {
+      background: rgba(212, 175, 55, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      padding: 10px 20px;
+      border-radius: 12px;
+      color: #d4af37;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-align: center;
+      min-height: 46px;
+    }
+
+    /* Kursor Ketik Berkedip */
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 24px;
+      background-color: #d4af37;
+      margin-left: 4px;
+      animation: blink 0.8s infinite;
+      vertical-align: middle;
+    }
+    .student-name .cursor {
+      height: 34px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    /* Tombol Navigasi Footer Kontrol */
+    .control-panel {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 25px;
+      border-radius: 40px;
+      border: 1px solid rgba(212,175,55,0.2);
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #8c8273;
+      font-size: 20px;
+      cursor: pointer;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+
+    .nav-btn:hover {
+      background: #d4af37;
+      color: #000;
+      box-shadow: 0 0 15px rgba(212,175,55,0.5);
+    }
+
+    .counter-display {
+      color: #e6ca65;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* ==========================================================================
+       KOMPONEN FOTO KANAN (FOTO IMPRESI CITA-CITA)
+       ========================================================================== */
+    .wish-container {
+      width: 360px;
+      height: 480px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Ketika Teks Selesai Diketik, Bagian Kanan Memudar Masuk Secara Halus */
+    .wish-container.fade-in-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .wish-frame {
+      width: 100%;
+      height: 100%;
+      background: #15110b;
+      border: 6px double #d4af37;
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+      position: relative;
       overflow: hidden;
     }
 
-    .brand-header {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    /* Pembungkus dua logo berdampingan */
-    .logo-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .school-logo {
-      width: 75px;
-      height: auto;
-      object-fit: contain;
-      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
-    }
-
-    /* UKURAN KHUSUS LOGO PPSS (Bisa diubah angkanya di sini jika kurang besar/kecil) */
-    .school-logo.logo-ppss {
-      width: 150px; 
-    }
-
-    .header-title {
-      font-size: 1.8rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      color: #ffffff;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-
-    .identity-box {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center; 
-      margin: 20px 0;
-    }
-
-    .name-container {
-      min-height: 110px;
-      height: auto;
-      display: flex;
-      align-items: center;
-      position: relative;
-      padding-bottom: 15px;
-    }
-
-    #siswa-nama {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: 0.5px;
-      word-spacing: 4px;
-      text-transform: uppercase;
-      padding-bottom: 8px;
-      line-height: 1.4;
-      white-space: pre-wrap;
-      word-wrap: break-word;
+    .wish-frame img {
       width: 100%;
-      position: relative;
-      display: inline-block;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
     }
 
-    #siswa-nama::after {
+    /* Efek Berkilau Mewah Terkunci pada Frame Cita-Cita */
+    .wish-frame::before {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 3px;
-      background: linear-gradient(to right, #a67c1e 0%, #f3e5ab 25%, #d4af37 50%, #f3e5ab 75%, #a67c1e 100%);
-      background-size: 200% auto;
-      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.8), 0 0 4px rgba(243, 229, 171, 0.5);
-      border-radius: 2px;
-      animation: goldLineFlow 3s linear infinite;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: rotate(45deg);
+      animation: sweepGlance 4s infinite linear;
     }
 
-    @keyframes goldLineFlow {
-      0% { background-position: 0% center; }
-      100% { background-position: -200% center; }
+    @keyframes sweepGlance {
+      0% { transform: translate(-30%, -30%) rotate(45deg); }
+      100% { transform: translate(30%, 30%) rotate(45deg); }
     }
 
-    .typing-cursor::after {
-      content: '|';
-      color: #d4af37;
-      animation: blink 0.7s infinite;
-      margin-left: 2px;
-    }
-    @keyframes blink { 50% { opacity: 0; } }
-
-    .ttl-container { height: 30px; display: flex; align-items: center; margin-top: 10px; }
-    #siswa-ttl { font-size: 1.3rem; color: #e0e0e0; font-weight: 500; }
-
-    .ortu-container { height: 30px; display: flex; align-items: center; }
-    .sub-detail { font-size: 1.4rem; font-style: italic; color: #f3e5ab; }
-
-    .nis-container { height: 35px; display: flex; align-items: center; }
-    
-    .nis-box { 
-      font-size: 1.15rem; 
-      color: #ffffff !important; 
-      font-weight: 700; 
-      letter-spacing: 0.5px;
-      text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
-      background: rgba(255, 255, 255, 0.08);
-      padding: 3px 12px;
-      border-radius: 4px;
-      border: 1px solid rgba(212, 175, 55, 0.2);
-    }
-
-    .wish-container { height: 60px; display: flex; align-items: center; margin-top: 15px; }
-    
-    .wish-box {
-      font-size: 1.2rem;
-      color: #ffffff;
-      background: rgba(212, 175, 55, 0.15);
-      padding: 10px 20px;
-      border-left: 4px solid #d4af37;
-      border-radius: 0 5px 5px 0;
-      opacity: 0; 
-      width: auto;
-    }
-    .wish-box.fade-in-visible { opacity: 1; } 
-    .wish-box span { color: #f3e5ab; font-weight: bold; }
-
-    .footer-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: #ffffff;
-      line-height: 1.3;
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
-      padding-top: 15px;
-      flex-shrink: 0;
-    }
-    .footer-title span { color: #d4af37; font-size: 1.55rem; font-weight: 800; }
-
-    /* KOLOM 3: Sisi Kanan */
-    .column-right {
-      width: 440px;
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #110d08;
-    }
-
-    .column-right::after {
-      content: '';
+    /* Wadah Efek Ledakan Partkel Magis Internal */
+    .magical-particles-spark {
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 35%;
-      background: linear-gradient(to top, #16120b 10%, rgba(22, 18, 11, 0.6) 50%, transparent 100%);
-      z-index: 10;
+      inset: 0;
       pointer-events: none;
+      z-index: 12;
+      overflow: hidden;
+      border-radius: 20px;
     }
 
-    .image-reveal-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
-      mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
-    }
-
-    .img-base-bw {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(100%) brightness(0.7) contrast(1.1);
+    .sparkle-dot {
       position: absolute;
-      top: 0; left: 0;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-      z-index: 2;
-    }
-
-    .img-reveal-color {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      top: 0; left: 0;
-      z-index: 3;
-      opacity: 0;
-    }
-
-    .reveal-active .img-reveal-color {
-      opacity: 1; 
-    }
-
-    .cc-particle {
-      position: absolute;
-      background: radial-gradient(circle, rgba(255, 232, 156, 0.95) 0%, rgba(212, 175, 55, 0.5) 40%, rgba(212, 175, 55, 0) 70%);
+      background: radial-gradient(circle, #fff 0%, rgba(230,202,101,0.8) 40%, transparent 100%);
       border-radius: 50%;
-      pointer-events: none;
-      z-index: 6; 
-      animation: floatUpCC linear infinite;
-      filter: drop-shadow(0 0 4px rgba(243, 229, 171, 0.6));
       opacity: 0;
-      transition: opacity 0.3s ease;
     }
 
-    .show-particles .cc-particle { opacity: 1; }
-
-    @keyframes floatUpCC {
-      0% { top: 105%; transform: scale(0.3) translateX(0); opacity: 0; }
-      15% { opacity: 0.8; }
-      50% { transform: scale(0.7) translateX(15px); }
-      85% { opacity: 0.6; }
-      100% { top: -10%; transform: scale(1.2) translateX(-15px) opacity: 0; }
+    .show-particles .sparkle-dot {
+      animation: sparkUpward 2.5s infinite ease-out;
     }
 
-    /* STYLE NAVIGASI SAMAR DI POJOK BAWAH LAYAR */
-    .nav-container {
-      display: contents;
+    @keyframes sparkUpward {
+      0% { transform: translateY(110%) translateX(0) scale(0.3); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 0.8; }
+      100% { transform: translateY(-10%) translateX(var(--custom-x, 40px)) scale(0); opacity: 0; }
     }
 
-    .btn-nav-arrow {
+    /* ==========================================================================
+       LAYAR OVERLAY PEMBUKA (START PRESENTATION)
+       ========================================================================== */
+    .intro-overlay {
       position: fixed;
-      bottom: 25px;
-      background: none;
-      border: none;
-      color: #d4af37;
-      font-size: 3.5rem;
-      font-weight: bold;
-      cursor: pointer;
+      inset: 0;
+      background: #090705;
+      z-index: 999;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      transition: all 0.3s ease;
-      user-select: none;
-      z-index: 100;
-      opacity: 0.35;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-      padding: 10px 20px;
+      gap: 30px;
     }
 
-    /* Panah Kiri di Pojok Kiri Bawah */
-    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] {
-      left: 25px;
+    .intro-title {
+      color: #e6ca65;
+      font-family: 'Georgia', serif;
+      font-size: 40px;
+      text-align: center;
+      letter-spacing: 3px;
+      line-height: 1.5;
+      text-shadow: 0 0 20px rgba(212,175,55,0.3);
     }
 
-    /* Panah Kanan di Pojok Kanan Bawah */
-    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
-      right: 25px;
+    .start-btn {
+      background: linear-gradient(135deg, #b8860b, #e6ca65, #996515);
+      color: #000;
+      padding: 15px 50px;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      border: 2px solid #fff;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 15px 30px rgba(212,175,55,0.3);
+      transition: all 0.3s;
     }
 
-    .btn-nav-arrow:hover {
-      color: #f3e5ab;
-      opacity: 0.9;
-      transform: scale(1.1);
-      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
-    }
-
-    /* ANIMASI MASUK KARTU UTAMA */
-    .purnawiyata-card.active {
-      animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-    @keyframes cardEntrance {
-      0% { opacity: 0; transform: scale(0.97) translateY(40px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    /* Responsif Layar Hp / Mobile */
-    @media (max-width: 950px) {
-      body { overflow-y: auto; }
-      .main-container { height: auto; padding-bottom: 80px; }
-      .purnawiyata-card { height: auto; min-height: initial; }
-      .card-content-wrapper { flex-direction: column; }
-      .column-left { width: 100%; clip-path: none; padding: 30px; }
-      .photo-frame { height: 320px; max-width: 260px; margin: 0 auto; }
-      .absen-label { margin-right: 0; width: 100%; max-width: 260px; }
-      
-      .column-center { 
-        text-align: center; 
-        padding: 30px 20px 40px 20px; 
-        align-items: center; 
-      }
-      
-      .logo-wrapper {
-        justify-content: center;
-      }
-      
-      .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
-        height: auto; 
-        min-height: inherit;
-        justify-content: center; 
-      }
-      
-      .name-container { min-height: 70px; margin-bottom: 10px; }
-      #siswa-nama { font-size: 1.8rem; }
-      
-      .column-right { height: 320px; width: 100%; }
-      .image-reveal-wrapper {
-        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
-        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
-      }
-      
-      /* Penyesuaian tata letak tombol samar di perangkat mobile agar tetap di pojok bawah */
-      .btn-nav-arrow {
-        bottom: 15px;
-        font-size: 2.8rem;
-      }
-      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] {
-        left: 15px;
-      }
-      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
-        right: 15px;
-      }
+    .start-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(212,175,55,0.5);
     }
   </style>
 </head>
 <body>
 
-  <audio id="bg-music" loop>
-    <source src="musik-purnawiyata.mp3" type="audio/mpeg">
-  </audio>
+  <div id="particleCanvas"></div>
 
-  <div id="music-overlay" onclick="startPresentation()">
-    <div class="overlay-card">
-      <h2>Selamat & Sukses</h2>
-      <p>Persiapan Purnawiyata Ke-III SMP Islam Az-Zahro</p>
-      <button class="btn-start">Mulai Presentasi</button>
+  <div class="intro-overlay" id="introOverlay">
+    <div class="intro-title">
+      PURNAWIYATA ANGKATAN KE-III<br>
+      <span style="font-size: 24px; color: #8c8273; font-family: sans-serif; tracking: 5px;">SMP ISLAM AZ-ZAHRO</span>
     </div>
+    <button class="start-btn" onclick="startPresentation()">Mulai Kilas Balik</button>
   </div>
 
-  <main class="main-container">
-    <div class="purnawiyata-card" id="student-card">
-      
-      <div class="card-content-wrapper">
-        
-        <div class="column-left">
-          <div class="photo-frame">
-            <img id="siswa-foto" src="" alt="Foto Profil Siswa">
-          </div>
-          <div class="absen-label" id="siswa-absen-box">
-            No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
-          </div>
+  <div class="presentation-container" id="revealContainer">
+    
+    <div class="corner-ornament top-left"></div>
+    <div class="corner-ornament top-right"></div>
+    <div class="corner-ornament bottom-left"></div>
+    <div class="corner-ornament bottom-right"></div>
+
+    <div class="left-column">
+      <div class="photo-frame-container">
+        <div class="photo-frame">
+          <img id="studentPhoto" src="" alt="Foto Profil Siswa">
         </div>
-
-        <div class="column-center">
-          <div class="brand-header">
-            <div class="logo-wrapper">
-              <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
-              <img class="school-logo logo-ppss" src="https://azzahrolocare.github.io/media/logo/PPSS-Az-Zahro.png" alt="Logo PPSS Az-Zahro">
-            </div>
-            <header class="header-title">SELAMAT & SUKSES</header>
-          </div>
-          
-          <div class="identity-box">
-            <div class="name-container">
-              <h1 id="siswa-nama">-</h1>
-            </div>
-            
-            <div class="ttl-container">
-              <p id="siswa-ttl"></p>
-            </div>
-            
-            <div class="ortu-container">
-              <div class="sub-detail" id="siswa-ortu"></div>
-            </div>
-            
-            <div class="nis-container">
-              <div class="nis-box" id="siswa-nis-box"></div>
-            </div>
-
-            <div class="wish-container">
-              <div class="wish-box" id="siswa-wish-box">
-                Cita-cita: <span id="siswa-citacita">-</span>
-              </div>
-            </div>
-          </div>
-
-          <footer class="footer-title">
-            PURNAWIYATA KE-III<br>
-            <span>SMP ISLAM AZ-ZAHRO</span>
-          </footer>
-        </div>
-
-        <div class="column-right" id="column-cc">
-          <div class="image-reveal-wrapper">
-            <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-            <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
-          </div>
-        </div>
-
+        <div class="photo-label">Profil Kelulusan</div>
       </div>
     </div>
 
-    <div class="nav-container">
-      <button class="btn-nav-arrow" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
-      <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
-    </div>
-  </main>
+    <div class="center-column">
+      
+      <div class="school-header">
+        <h3>Kilas Balik Siswa</h3>
+        <h2>Kelas IX SMP Islam Az-Zahro</h2>
+        <div class="divider"></div>
+      </div>
 
-  <script {="true"}>
+      <div class="data-display-box">
+        <div class="data-row">
+          <span class="data-label">Nama Lengkap Siswa</span>
+          <div class="data-value student-name" id="valNama"></div>
+        </div>
+        
+        <div class="data-row">
+          <span class="data-label">Tempat & Tanggal Lahir</span>
+          <div class="data-value" id="valTtl"></div>
+        </div>
+        
+        <div class="data-row">
+          <span class="data-label">Orang Tua / Wali</span>
+          <div class="data-value" id="valOrtu"></div>
+        </div>
+
+        <div class="nis-nisn-box" id="valNisBox"></div>
+      </div>
+
+      <div class="control-panel">
+        <button class="nav-btn" onclick="prevStudent()">&#10094;</button>
+        <div class="counter-display" id="counterDisplay">0 / 0</div>
+        <button class="nav-btn" onclick="nextStudent()">&#10095;</button>
+      </div>
+
+    </div>
+
+    <div class="right-column">
+      <div class="wish-container" id="elWishBox">
+        <div class="wish-frame">
+          <div class="magical-particles-spark" id="sparkleWadah"></div>
+          <img id="wishPhoto" src="" alt="Foto Cita-Cita Siswa">
+        </div>
+        <div class="photo-label" id="valCitaCita">Cita-Cita</div>
+      </div>
+    </div>
+
+  </div>
+
+  <audio id="bgMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+  <script>
+    // Penampung Data Utama
     let studentsData = [];
     let currentIndex = 0;
-    let typingTimeouts = []; 
-    const bgMusic = document.getElementById('bg-music');
-    const overlay = document.getElementById('music-overlay');
+    let typingTimers = []; // Melacak proses ketik aktif agar tidak tumpang tindih
 
-    // Fungsi Pembantu padding angka nol di depan (e.g. 3 menjadi 03)
-    function padZero(num) {
-      return num < 10 ? '0' + num : num;
-    }
+    // Elemen DOM Teks Kontrol
+    const overlay = document.getElementById('introOverlay');
+    const bgMusic = document.getElementById('bgMusic');
+    const ccContainer = document.getElementById('revealContainer');
+    
+    const elNama = document.getElementById('valNama');
+    const elTtl = document.getElementById('valTtl');
+    const elOrtu = document.getElementById('valOrtu');
+    const elNisBox = document.getElementById('valNisBox');
+    const elCitaCita = document.getElementById('valCitaCita');
+    
+    const imgProfil = document.getElementById('studentPhoto');
+    const imgCitaCita = document.getElementById('wishPhoto');
+    const elWishBox = document.getElementById('elWishBox');
+    const textCounter = document.getElementById('counterDisplay');
 
-    // Perbaikan Logika Mengetik Agar Spasi Terbaca Akurat
-    function typeEffect(element, fullText, speed, onComplete) {
-      element.textContent = ""; 
-      element.classList.add('typing-cursor');
-      let i = 0;
-      
-      function type() {
-        if (i < fullText.length) {
-          element.textContent += fullText.charAt(i);
-          i++;
-          let timer = setTimeout(type, speed);
-          typingTimeouts.push(timer);
-        } else {
-          element.classList.remove('typing-cursor');
-          if (onComplete) onComplete();
-        }
-      }
-      type();
-    }
-
-    // Generator partikel luar
-    function createGlobalParticles() {
-      const particleCount = 35;
-      for (let i = 0; i < particleCount; i++) {
-        let particle = document.createElement('div');
-        particle.className = 'particle';
-        let size = Math.random() * 6 + 2;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left = Math.random() * 100 + 'vw';
-        let duration = Math.random() * 8 + 5;
-        particle.style.animationDuration = duration + 's';
-        let delay = Math.random() * 5;
-        particle.style.animationDelay = delay + 's';
-        document.body.appendChild(particle);
-      }
-    }
-
-    // Generator partikel emas mengapung di kolom cita-cita
-    function createCitaCitaParticles() {
-      const ccContainer = document.getElementById('column-cc');
-      const ccParticleCount = 20; 
-      
-      for (let i = 0; i < ccParticleCount; i++) {
+    // 1. Memuat Efek Hiasan Partikel Latar Belakang & Sparkle
+    function createBackgroundParticles() {
+      const canvas = document.getElementById('particleCanvas');
+      for (let i = 0; i < 25; i++) {
         let p = document.createElement('div');
-        p.className = 'cc-particle';
-        let size = Math.random() * 5 + 3;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        p.style.left = Math.random() * 100 + '%';
-        let duration = Math.random() * 3 + 4;
-        p.style.animationDuration = duration + 's';
-        let delay = Math.random() * 7;
-        p.style.animationDelay = '-' + delay + 's';
-        ccContainer.appendChild(p);
+        p.classList.add('particle');
+        p.style.width = p.style.height = Math.random() * 6 + 3 + 'px';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = Math.random() * 8 + 6 + 's';
+        p.style.animationDelay = Math.random() * 5 + 's';
+        canvas.appendChild(p);
       }
     }
 
-    async function loadStudentsData() {
-      try {
-        const response = await fetch('data-siswa.json');
-        studentsData = await response.json();
-        if(studentsData.length > 0) {
-          renderStudent(0);
+    function createSparkles() {
+      const wadah = document.getElementById('sparkleWadah');
+      wadah.innerHTML = '';
+      for(let i=0; i<15; i++) {
+        let dot = document.createElement('div');
+        dot.classList.add('sparkle-dot');
+        dot.style.width = dot.style.height = Math.random() * 14 + 6 + 'px';
+        dot.style.left = Math.random() * 90 + '%';
+        dot.style.setProperty('--custom-x', (Math.random() * 120 - 60) + 'px');
+        dot.style.animationDelay = (Math.random() * 2) + 's';
+        dot.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+        wadah.appendChild(dot);
+      }
+    }
+
+    // 2. Simulasi Pengambilan Data Terintegrasi Database (Gunakan format JSON Anda)
+    function loadStudentsData() {
+      studentsData = [
+        {
+          "nama": "ADITYA EKA SAPUTRA",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "29 September 2010",
+          "nis": "043",
+          "nisn": "0109531186",
+          "jk": "L",
+          "orang_tua": "Bpk. Abdul Mahfud Anwar",
+          "cita_cita": "Pengusaha",
+          "foto_profil_url": "https://i.ibb.co.com/hJG3RBrT/Adit.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/N43wCKs/Adit.webp"
+        },
+        {
+          "nama": "AHMAD HABIBI MAULANA",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "28 April 2008",
+          "nis": "044",
+          "nisn": "0082114134",
+          "jk": "L",
+          "orang_tua": "Bpk. Asmuni",
+          "cita_cita": "TNI AD",
+          "foto_profil_url": "https://i.ibb.co.com/jkYGNmQJ/Habibi.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/DgC2TFNx/Habibi.webp"
+        },
+        {
+          "nama": "ANDHIKA BAGUS RAMADHAN",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "21 Agustus 2011",
+          "nis": "045",
+          "nisn": "3113634149",
+          "jk": "L",
+          "orang_tua": "Ibu. Jumliya",
+          "cita_cita": "Mekanik",
+          "foto_profil_url": "https://i.ibb.co.com/v6QVt7c0/Dika.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/FqVjFcfs/Dika.webp"
+        },
+        {
+          "nama": "ARIN HISFUALAH",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "28 Mei 2012",
+          "nis": "046",
+          "nisn": "0127682320",
+          "jk": "L",
+          "orang_tua": "Bpk. Safi'i",
+          "cita_cita": "Tentara",
+          "foto_profil_url": "https://i.ibb.co.com/jCyCfCS/Arin.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/hxjgkRgR/Arin.webp"
+        },
+        {
+          "nama": "AVITA HELMIYATIN",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "19 Juni 2011",
+          "nis": "047",
+          "nisn": "0112483701",
+          "jk": "P",
+          "orang_tua": "Bpk. Diman Agus Sukardi",
+          "cita_cita": "Pengusaha",
+          "foto_profil_url": "https://i.ibb.co.com/8nCkbQQw/Avita.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/KpQTQNYs/Avita.webp"
+        },
+        {
+          "nama": "DANDI",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "01 Februari 2012",
+          "nis": "048",
+          "nisn": "0124159506",
+          "jk": "L",
+          "orang_tua": "Bpk. Asmun",
+          "cita_cita": "Arsitek",
+          "foto_profil_url": "https://i.ibb.co.com/Vp0wm0Py/Dandi.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/HTGLnvng/Dandi.webp"
+        },
+        {
+          "nama": "DEVITA MASURO",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "05 Desember 2010",
+          "nis": "049",
+          "nisn": "0104776302",
+          "jk": "P",
+          "orang_tua": "Bpk. Surahwi",
+          "cita_cita": "Dokter",
+          "foto_profil_url": "https://i.ibb.co.com/zhNKmkJ1/Devi.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/tn8JMck/Devi.webp"
+        },
+        {
+          "nama": "DIMAS ARIF MAULANA",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "11 Desember 2010",
+          "nis": "050",
+          "nisn": "0107204403",
+          "jk": "L",
+          "orang_tua": "Bpk. Ahdul Salim",
+          "cita_cita": "Pemain Sepak Bola",
+          "foto_profil_url": "https://i.ibb.co.com/gLbDfYtV/Alan.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/b5S3RJwt/Alan.webp"
+        },
+        {
+          "nama": "FANIA RAHMAWATI",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "02 Juli 2010",
+          "nis": "051",
+          "nisn": "0102655649",
+          "jk": "P",
+          "orang_tua": "Ibu. Mina",
+          "cita_cita": "Dokter",
+          "foto_profil_url": "https://i.ibb.co.com/7tmcpcXL/Fania.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/mCTnWpFW/Fania.webp"
+        },
+        {
+          "nama": "KHOIRUL ANWAR",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "07 November 2011",
+          "nis": "052",
+          "nisn": "0101792722",
+          "jk": "L",
+          "orang_tua": "Bpk. Samsuri",
+          "cita_cita": "Tentara",
+          "foto_profil_url": "https://i.ibb.co.com/SXfgcfxn/Khoir.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/R46YPjsK/Khoir.webp"
+        },
+        {
+          "nama": "KIKI STIFANI",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "14 Oktober 2010",
+          "nis": "053",
+          "nisn": "0108990601",
+          "jk": "P",
+          "orang_tua": "Ibu. Yuliani",
+          "cita_cita": "Dokter",
+          "foto_profil_url": "https://i.ibb.co.com/Y7KfGTmJ/Kiki.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/99hmv7mQ/Kiki.webp"
+        },
+        {
+          "nama": "LAILA NUR FILA SYAFA",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "22 Mei 2011",
+          "nis": "054",
+          "nisn": "0114950342",
+          "jk": "P",
+          "orang_tua": "Bpk. Muhammad Sholihin",
+          "cita_cita": "CEO",
+          "foto_profil_url": "https://i.ibb.co.com/QgNvMcp/Fila.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/7tXnFqsn/Fila.webp"
+        },
+        {
+          "nama": "MOHAMMAD FATTHUNUR FAIZIN",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "12 Juli 2011",
+          "nis": "055",
+          "nisn": "0117508351",
+          "jk": "L",
+          "orang_tua": "Bpk. Mohammad Lukman",
+          "cita_cita": "Pengusaha",
+          "foto_profil_url": "https://i.ibb.co.com/DDJ4Bpz6/Faiz.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/6JJm9RrG/Faiz.webp"
+        },
+        {
+          "nama": "MOHAMMAD FERIANTO",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "15 Februari 2010",
+          "nis": "056",
+          "nisn": "0102633447",
+          "jk": "L",
+          "orang_tua": "Bpk. Angwari",
+          "cita_cita": "Polisi",
+          "foto_profil_url": "https://i.ibb.co.com/PvKkNQ4D/Feri.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/b5KdKgQf/Ferianto.webp"
+        },
+        {
+          "nama": "MUHAMMAD ROIHAN",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "11 Agustus 2009",
+          "nis": "057",
+          "nisn": "0094134364",
+          "jk": "L",
+          "orang_tua": "Bpk. Muhammad Saidiman",
+          "cita_cita": "Arsitek",
+          "foto_profil_url": "https://i.ibb.co.com/7xMQs8fh/Roihan.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/x8Gfb12T/Roihan.webp"
+        },
+        {
+          "nama": "MUKHLAS",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "22 Desember 2008",
+          "nis": "058",
+          "nisn": "0081874393",
+          "jk": "L",
+          "orang_tua": "Bpk. Kusnadi",
+          "cita_cita": "Pemain Sepak Bola",
+          "foto_profil_url": "https://i.ibb.co.com/svXcqfw1/Muhklas.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/rK5Ky6ty/Muhklas.webp"
+        },
+        {
+          "nama": "MUKHLIS",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "22 Desember 2008",
+          "nis": "059",
+          "nisn": "0082165609",
+          "jk": "L",
+          "orang_tua": "Bpk. Kusnadi",
+          "cita_cita": "Operator Sound System",
+          "foto_profil_url": "https://i.ibb.co.com/4RCWQ1fP/Mukhlis.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/WNjSsFyT/Muhklis.webp"
+        },
+        {
+          "nama": "NASIVATUL BALGIS BAKHIRA",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "04 Januari 2011",
+          "nis": "060",
+          "nisn": "0115851571",
+          "jk": "P",
+          "orang_tua": "Bpk. Moh. Nabawi",
+          "cita_cita": "Dosen",
+          "foto_profil_url": "https://i.ibb.co.com/GwSZ4vC/Siva.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/nsm4r81t/Siva.webp"
+        },
+        {
+          "nama": "NUR FADILAH ANGGRAINI",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "20 Mei 2010",
+          "nis": "061",
+          "nisn": "0103189776",
+          "jk": "P",
+          "orang_tua": "Bpk. Fathor Rozi",
+          "cita_cita": "Dokter",
+          "foto_profil_url": "https://i.ibb.co.com/HDzWqvF9/Dila.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/wFNsFyMb/Dila.webp"
+        },
+        {
+          "nama": "RIFZIKA DJAMILATUS SUBHAN",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "17 Juni 2010",
+          "nis": "062",
+          "nisn": "0102533380",
+          "jk": "P",
+          "orang_tua": "Bpk. Muhammad Subhan",
+          "cita_cita": "CEO",
+          "foto_profil_url": "https://i.ibb.co.com/tpVVmG6c/Rifzika.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/DfTTwmfJ/Rifzika.webp"
+        },
+        {
+          "nama": "RINA KHOMARIYAH",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "09 Desember 2011",
+          "nis": "063",
+          "nisn": "3114305251",
+          "jk": "P",
+          "orang_tua": "Bpk. Sanidi",
+          "cita_cita": "Hakim",
+          "foto_profil_url": "https://i.ibb.co.com/93y11Gpv/Rina.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/gMVK00B3/Rina.webp"
+        },
+        {
+          "nama": "RINI SAMSIYAH",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "09 Desember 2011",
+          "nis": "064",
+          "nisn": "3118153763",
+          "jk": "P",
+          "orang_tua": "Bpk. Sanidi",
+          "cita_cita": "Ilustrator",
+          "foto_profil_url": "https://i.ibb.co.com/qYH8XHqk/Rini.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/DHQsZKj8/Rini.webp"
+        },
+        {
+          "nama": "RISKA MAULIDIA",
+          "tempat_lahir": "Probolinggo",
+          "tanggal_lahir": "08 Februari 2011",
+          "nis": "065",
+          "nisn": "3119713408",
+          "jk": "P",
+          "orang_tua": "Ibu. Siti Sholeha",
+          "cita_cita": "Pengusaha",
+          "foto_profil_url": "https://i.ibb.co.com/xSqG5WLk/Riska.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/ymR0f3M4/Riska.webp"
+        },
+        {
+          "nama": "SILVI IZZATUL MAULIDAH",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "16 Juli 2011",
+          "nis": "066",
+          "nisn": "3115006209",
+          "jk": "P",
+          "orang_tua": "Bpk. Misyadi",
+          "cita_cita": "Dosen",
+          "foto_profil_url": "https://i.ibb.co.com/1tBnCJ9S/Silvi.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/VWg4xC05/Silvi.webp"
+        },
+        {
+          "nama": "SITTI LAINI",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "21 Mei 2010",
+          "nis": "067",
+          "nisn": "0104373040",
+          "jk": "P",
+          "orang_tua": "Bpk. Sunardi",
+          "cita_cita": "Dokter",
+          "foto_profil_url": "https://i.ibb.co.com/Fcb6MPG/Laini.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/m5FxqcGN/Laini.webp"
+        },
+        {
+          "nama": "SOFIYA LATIFAH",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "12 September 2010",
+          "nis": "068",
+          "nisn": "0108117463",
+          "jk": "P",
+          "orang_tua": "Bpk. Busadi",
+          "cita_cita": "Dokter",
+          "foto_profil_url": "https://i.ibb.co.com/1YRSrqrv/Latifah.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/JR0b467F/Latifah.webp"
+        },
+        {
+          "nama": "TRY ANGGUN NUR FADILAH",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "30 Desember 2010",
+          "nis": "069",
+          "nisn": "0107080615",
+          "jk": "P",
+          "orang_tua": "Bpk. Misnawi",
+          "cita_cita": "Dokter",
+          "foto_profil_url": "https://i.ibb.co.com/3ysQpWrs/Anggun.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/xK1V1vJk/Anggun.webp"
+        },
+        {
+          "nama": "UMMI SOFIA SA'ADA",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "15 Januari 2011",
+          "nis": "070",
+          "nisn": "0116540904",
+          "jk": "P",
+          "orang_tua": "Bpk. Rudi Hartono",
+          "cita_cita": "CEO",
+          "foto_profil_url": "https://i.ibb.co.com/p6D6VR0q/Saada.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/j9CMVL3X/Saada.webp"
+        },
+        {
+          "nama": "WITA",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "23 Juni 2010",
+          "nis": "071",
+          "nisn": "0104779685",
+          "jk": "P",
+          "orang_tua": "Bpk. Motip",
+          "cita_cita": "Perawat",
+          "foto_profil_url": "https://i.ibb.co.com/5WF7dVqp/Wita.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/hRXLBTLv/Wita.webp"
+        },
+        {
+          "nama": "YUSI YULIANA DEWI",
+          "tempat_lahir": "Bondowoso",
+          "tanggal_lahir": "03 April 2010",
+          "nis": "072",
+          "nisn": "0102912322",
+          "jk": "P",
+          "orang_tua": "Bpk. Sapi'a",
+          "cita_cita": "Dokter",
+          "foto_profil_url": "https://i.ibb.co.com/F4xwsMLf/Yuli.webp",
+          "foto_cita_cita_url": "https://i.ibb.co.com/9kpzxqgN/Yuli.webp"
         }
-      } catch (error) {
-        console.error("Gagal memuat file data-siswa.json:", error);
+      ];
+      
+      if(studentsData.length > 0) {
+        renderStudent(currentIndex);
       }
     }
 
+    // 3. Efek Pengetikan Mesin Tik (Typewriter Effect Engine)
+    function clearAllTimers() {
+      typingTimers.forEach(t => clearTimeout(t));
+      typingTimers = [];
+    }
+
+    function typeEffect(element, text, speed, callback) {
+      let i = 0;
+      element.innerHTML = '';
+      
+      let cursorSpan = document.createElement('span');
+      cursorSpan.classList.add('cursor');
+      element.appendChild(cursorSpan);
+
+      function typing() {
+        if (i < text.length) {
+          cursorSpan.insertAdjacentText('beforebegin', text.charAt(i));
+          i++;
+          let timer = setTimeout(typing, speed);
+          typingTimers.push(timer);
+        } else {
+          cursorSpan.remove();
+          if (callback) callback();
+        }
+      }
+      typing();
+    }
+
+    // 4. Render Utama Identitas Siswa Berdasarkan Index Aktif
     function renderStudent(index) {
-      // Bersihkan antrean ketik sebelumnya
-      typingTimeouts.forEach(clearTimeout);
-      typingTimeouts = [];
+      clearAllTimers();
+      createSparkles();
 
-      const card = document.getElementById('student-card');
-      const student = studentsData[index];
-      
-      const elNama = document.getElementById('siswa-nama');
-      const elTtl = document.getElementById('siswa-ttl');
-      const elOrtu = document.getElementById('siswa-ortu');
-      const elNisBox = document.getElementById('siswa-nis-box');
-      const elWishBox = document.getElementById('siswa-wish-box');
-      const elCitaCita = document.getElementById('siswa-citacita');
-      
-      const elNumAbsen = document.getElementById('num-absen');
-      const elTotalAbsen = document.getElementById('total-absen');
-
-      const fotoElement = document.getElementById('siswa-foto');
-      const fotoBw = document.getElementById('foto-citacita-bw');
-      const fotoColor = document.getElementById('foto-citacita-color');
-      const ccContainer = document.getElementById('column-cc');
-
-      // Reset Kartu & Hilangkan State Instan
-      card.classList.remove('active');
-      ccContainer.classList.remove('reveal-active', 'show-particles');
+      // Reset Animasi Kontainer Visual Samping
+      ccContainer.classList.remove('reveal-active');
       elWishBox.classList.remove('fade-in-visible');
-      void card.offsetWidth; 
-      card.classList.add('active');
+      ccContainer.classList.remove('show-particles');
 
-      // Perbarui Teks Nomor Absen Secara Dinamis di Bawah Foto
-      elNumAbsen.innerText = padZero(index + 1);
-      elTotalAbsen.innerText = padZero(studentsData.length);
+      const data = studentsData[index];
 
-      // Kosongkan Text Kolom Tengah
-      elNama.textContent = "";
-      elTtl.textContent = "";
-      elOrtu.textContent = "";
-      elNisBox.innerHTML = "";
-      elCitaCita.innerText = student.cita_cita || "-";
+      // Update Teks Counter Halaman bawah
+      textCounter.innerText = `${index + 1} / ${studentsData.length}`;
 
-      // String Data
-      const textNama = student.nama;
-      const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
-      const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
-      const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
+      // Memuat Media Foto Terkait Dari Properti JSON (foto_profil_url & foto_cita_cita_url)
+      imgProfil.src = data.foto_profil_url || "";
+      imgCitaCita.src = data.foto_cita_cita_url || "";
       
-      // Murni hanya menampilkan NIS dan NISN tanpa no urut lagi
-      const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
+      // Bersihkan Nilai Box Teks Lama
+      elNama.innerHTML = '';
+      elTtl.innerHTML = '';
+      elOrtu.innerHTML = '';
+      elNisBox.innerHTML = '';
+      elCitaCita.innerText = data.cita_cita || "Cita-Cita";
 
-      // Ambil Gambar Profil Utama
-      fotoElement.style.opacity = '0';
-      const separator = student.foto_url.includes('?') ? '&' : '?';
-      const timestamp = 't=' + new Date().getTime();
-      fotoElement.src = student.foto_url + separator + timestamp;
-      fotoElement.onload = () => fotoElement.style.opacity = '1';
+      // Komponen String Data
+      let textNama = data.nama || "";
+      let textTtl = `${data.tempat_lahir || ""}, ${data.tanggal_lahir || ""}`;
+      let textOrtu = data.orang_tua || "";
+      let textNisNisn = `NIS: ${data.nis || "-"}  |  NISN: ${data.nisn || "-"}`;
 
-      // Sinkronisasi Gambar Cita-Cita (Double Layer)
-      fotoBw.style.opacity = '0';
-      const urlFotoCitaCitaRaw = student.foto_citacita_url || student.foto_url;
-      const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
-      const finalCCUrl = urlFotoCitaCitaRaw + separatorCC + timestamp;
-      
-      fotoBw.src = finalCCUrl;
-      fotoColor.src = finalCCUrl;
-
-      // Saat gambar siap, tampilkan versi Hitam Putih (BW) terlebih dahulu
-      fotoBw.onload = () => {
-        fotoBw.style.opacity = '1';
-      };
-
-      // ==========================================
-      // ALUR EKSEKUSI PENGETIKAN BERANTAI
-      // ==========================================
-      
-      // 1. Ketik Nama
+      // Memulai Sekuensial Pengetikan Berantai Elemen
+      // 1. Ketik Nama Lengkap
       typeEffect(elNama, textNama, 40, () => {
         
         // 2. Ketik TTL
@@ -799,8 +1061,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       loadStudentsData();
-      createGlobalParticles();
-      createCitaCitaParticles(); 
+      createBackgroundParticles();
     });
   </script>
 </body>
