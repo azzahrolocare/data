@@ -75,6 +75,57 @@
     }
     .btn-start:hover { transform: scale(1.05); }
 
+    /* KONTROL MUSIK & AUDIO VISUALIZER (BARU) */
+    .music-control-container {
+      position: fixed;
+      top: 25px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 500;
+      background: rgba(26, 21, 14, 0.8);
+      padding: 10px 20px;
+      border-radius: 30px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-music-toggle {
+      background: none;
+      border: none;
+      color: #d4af37;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      width: 35px;
+      height: 35px;
+    }
+
+    .btn-music-toggle:hover {
+      color: #f3e5ab;
+      transform: scale(1.1);
+    }
+
+    .audio-visualizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      width: 60px;
+      height: 30px;
+    }
+
+    .visualizer-bar {
+      flex: 1;
+      background: linear-gradient(to top, #a67c1e, #f3e5ab);
+      height: 3px;
+      border-radius: 2px 2px 0 0;
+      transition: height 0.05s ease;
+    }
+
     /* KONTANER UTAMA (Diberbesar untuk meminimalkan ruang kosong di samping) */
     .main-container {
       display: flex;
@@ -512,14 +563,33 @@
       .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
         right: 15px;
       }
+      .music-control-container {
+        top: 15px;
+        right: 15px;
+        padding: 5px 12px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <audio id="bg-music" loop>
-    <source src="musik-purnawiyata.mp3" type="audio/mpeg">
+  <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
+    <source src="https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3" type="audio/mpeg">
   </audio>
+
+  <div class="music-control-container">
+    <div class="audio-visualizer" id="visualizer">
+      <div class="visualizer-bar"></div>
+      <div class="visualizer-bar"></div>
+      <div class="visualizer-bar"></div>
+      <div class="visualizer-bar"></div>
+      <div class="visualizer-bar"></div>
+    </div>
+    <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
+      <svg id="icon-pause" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
+      <svg id="icon-play" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+  </div>
 
   <div id="music-overlay" onclick="startPresentation()">
     <div class="overlay-card">
@@ -604,6 +674,10 @@
     let typingTimeouts = []; 
     const bgMusic = document.getElementById('bg-music');
     const overlay = document.getElementById('music-overlay');
+    
+    // Web Audio API Context untuk Gelombang Musik Interaktif
+    let audioCtx, analyser, bufferLength, dataArray;
+    let visualizerAnimationId;
 
     // Fungsi Pembantu padding angka nol di depan
     function padZero(num) {
@@ -790,8 +864,83 @@
       renderStudent(currentIndex);
     }
 
+    // Fungsi menginisialisasi sistem gelombang musik interaktif
+    function initVisualizer() {
+      if (audioCtx) return; 
+      
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      
+      const source = audioCtx.createMediaElementSource(bgMusic);
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      
+      analyser.fftSize = 32; 
+      bufferLength = analyser.frequencyBinCount;
+      dataArray = new Uint8Array(bufferLength);
+      
+      animateVisualizer();
+    }
+
+    // Loop animasi pergerakan gelombang musik berdasarkan frekuensi audio asli
+    function animateVisualizer() {
+      visualizerAnimationId = requestAnimationFrame(animateVisualizer);
+      
+      if (bgMusic.paused) {
+        // Jika dipause, perlahan turunkan tinggi bar ke default minimal (3px)
+        const bars = document.querySelectorAll('.visualizer-bar');
+        bars.forEach(bar => {
+          bar.style.height = '3px';
+        });
+        return;
+      }
+      
+      analyser.getByteFrequencyData(dataArray);
+      const bars = document.querySelectorAll('.visualizer-bar');
+      
+      for (let i = 0; i < bars.length; i++) {
+        // Ambil data frekuensi audio dan petakan ke ukuran tinggi bar (maksimal 30px)
+        let dataIndex = Math.floor(i * (bufferLength / bars.length));
+        let value = dataArray[dataIndex];
+        let percent = value / 255;
+        let height = (percent * 27) + 3; 
+        bars[i].style.height = height + 'px';
+      }
+    }
+
+    // Fungsi kontrol Play/Pause Musik
+    function toggleMusic() {
+      const iconPlay = document.getElementById('icon-play');
+      const iconPause = document.getElementById('icon-pause');
+      const musicBtn = document.getElementById('music-btn');
+      
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      if (bgMusic.paused) {
+        bgMusic.play().then(() => {
+          iconPlay.style.display = 'none';
+          iconPause.style.display = 'block';
+          musicBtn.setAttribute('aria-label', 'Pause Musik');
+        }).catch(error => console.log("Gagal memutar musik:", error));
+      } else {
+        bgMusic.pause();
+        iconPlay.style.display = 'block';
+        iconPause.style.display = 'none';
+        musicBtn.setAttribute('aria-label', 'Putar Musik');
+      }
+    }
+
     function startPresentation() {
       overlay.style.display = 'none';
+      
+      // Inisialisasi visualizer audio saat interaksi user pertama kali dimulai
+      initVisualizer();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      
       bgMusic.play().catch(error => console.log("Musik tertahan browser:", error));
     }
 
