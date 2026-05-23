@@ -6,7 +6,7 @@
   <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
   <style>
     /* ==========================================================================
-       STYLE / CSS (Tema Luxury Gold & Animasi Modern)
+       STYLE / CSS (Tema Luxury Gold, 3-Column Layout & Ukuran Jumbo)
        ========================================================================== */
     * {
       margin: 0;
@@ -24,6 +24,7 @@
       min-height: 100vh;
       overflow: hidden;
       position: relative;
+      padding: 20px;
     }
 
     /* Efek Partikel Latar Belakang */
@@ -36,17 +37,9 @@
     }
 
     @keyframes floatParticles {
-      0% {
-        transform: translateY(100vh) scale(0.3);
-        opacity: 0;
-      }
-      50% {
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(-10vh) scale(1.2);
-        opacity: 0;
-      }
+      0% { transform: translateY(100vh) scale(0.3); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
     }
 
     /* Overlay Interaksi Awal untuk Mengaktifkan Musik */
@@ -68,10 +61,7 @@
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
     }
-    .overlay-card h2 {
-      color: #d4af37;
-      margin-bottom: 10px;
-    }
+    .overlay-card h2 { color: #d4af37; margin-bottom: 10px; }
     .btn-start {
       margin-top: 20px;
       padding: 12px 30px;
@@ -84,31 +74,30 @@
     }
     .btn-start:hover { transform: scale(1.05); }
 
-    /* Kontainer Utama & Kartu Purnawiyata */
+    /* Kontainer Utama & Kartu Diperbesar Jauh Lebih Luas */
     .main-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      max-width: 1000px;
-      padding: 20px;
+      max-width: 1250px; /* Diperbesar agar memanfaatkan space kosong */
       z-index: 10;
     }
 
-    /* KARTU UTAMA: Menggunakan pseudo-element untuk efek garis emas bergerak */
+    /* KARTU JUMBO: Efek garis emas bergerak */
     .purnawiyata-card {
       display: flex;
       width: 100%;
+      min-height: 520px; /* Ditambah tingginya agar lebih megah */
       background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
-      border-radius: 15px;
+      border-radius: 20px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
       opacity: 0;
       transform: translateY(30px);
     }
 
-    /* Efek Garis Bercahaya & Bergerak Mengelilingi Kartu */
     .purnawiyata-card::before {
       content: '';
       position: absolute;
@@ -118,25 +107,26 @@
       z-index: 1;
     }
 
-    /* Lapisan dalam agar konten tidak tertutup garis bergerak */
+    /* Lapisan dalam pembungkus struktur 3 KOLOM */
     .card-content-wrapper {
       display: flex;
       width: calc(100% - 6px);
       height: calc(100% - 6px);
       margin: 3px;
       background: inherit;
-      border-radius: 12px;
+      border-radius: 17px;
       overflow: hidden;
       z-index: 2;
-      width: 100%;
     }
 
-    @keyframes borderRotate {
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
-    /* Bagian Kiri (Tempat Foto Profil) */
-    .left-side {
+    /* ==========================================================================
+       STRUKTUR 3 KOLOM (KIRI - TENGAH - KANAN)
+       ========================================================================== */
+
+    /* KOLOM 1: Sisi Kiri (Tempat Foto Profil Siswa) */
+    .column-left {
       flex: 1;
       display: flex;
       justify-content: center;
@@ -144,16 +134,15 @@
       background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
       padding: 40px;
       position: relative;
-      clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
-      z-index: 5;
+      clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
     }
 
     .photo-frame {
       width: 100%;
-      max-width: 250px;
-      height: 350px;
+      max-width: 260px;
+      height: 370px;
       border: 5px solid #fff;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
       border-radius: 8px;
       overflow: hidden;
       background: #333;
@@ -168,52 +157,23 @@
       transition: opacity 0.3s ease-in-out;
     }
 
-    /* Efek Shadow Hitam & Emas Statis Menutupi Bagian Bawah Foto */
+    /* Efek bayangan hitam lembut di bagian bawah foto utama */
     .photo-frame::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 40%;
-      background: linear-gradient(to top, rgba(15, 12, 8, 1) 0%, rgba(212, 175, 55, 0.4) 30%, rgba(0,0,0,0) 100%);
+      bottom: 0; left: 0; width: 100%; height: 35%;
+      background: linear-gradient(to top, rgba(15, 12, 8, 0.9) 0%, rgba(0,0,0,0) 100%);
       pointer-events: none;
     }
 
-    /* Bagian Kanan (Tempat Identitas & Foto Cita-cita Besar) */
-    .right-side {
-      flex: 1.5;
-      padding: 40px 30px;
+    /* KOLOM 2: Sisi Tengah (Khusus Teks Biodata - Bersih & Lega) */
+    .column-center {
+      flex: 1.4;
+      padding: 50px 30px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       color: #ffffff;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* FOTO CITA-CITA BESAR: Diperbesar ukurannya & dipotong pinggirannya agar menyatu dengan background kartu */
-    #foto-citacita {
-      position: absolute;
-      top: -10%;
-      right: -10%;
-      width: 110%; /* Diperbesar agar hampir memenuhi area kanan */
-      height: 120%;
-      object-fit: cover;
-      opacity: 0; /* Diatur lewat JS dengan transisi halus */
-      mix-blend-mode: screen;
-      filter: grayscale(15%) brightness(60%);
-      pointer-events: none;
-      z-index: 1; /* Berada di bawah text biodata */
-      
-      /* CSS MASKING: Membuat pinggiran foto memudar transparan secara melingkar */
-      -webkit-mask-image: radial-gradient(circle at 60% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
-      mask-image: radial-gradient(circle at 60% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
-      
-      transition: opacity 0.6s ease-in-out;
-    }
-
-    /* Memastikan teks berada di atas foto cita-cita besar agar tidak terhalang */
-    .header-title, .identity-box, .footer-title {
-      position: relative;
-      z-index: 2; 
     }
 
     .header-title {
@@ -225,58 +185,52 @@
     }
 
     .identity-box {
-      margin: 20px 0;
+      margin: 25px 0;
     }
 
     #siswa-nama {
-      font-size: 2.3rem;
+      font-size: 2.5rem; /* Ukuran nama diperbesar biar tegas */
       font-weight: 800;
       color: #fff;
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       border-bottom: 2px solid #d4af37;
       padding-bottom: 5px;
       display: inline-block;
     }
 
     #siswa-ttl {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: #e0e0e0;
       font-weight: 500;
     }
 
     .sub-detail {
-      font-size: 1.3rem;
-      margin-top: 10px;
+      font-size: 1.35rem;
+      margin-top: 12px;
       font-style: italic;
       color: #f3e5ab;
     }
 
     .nis-box {
-      margin-top: 10px;
-      font-size: 0.95rem;
+      margin-top: 12px;
+      font-size: 1rem;
       color: #b3b3b3;
     }
-    .nis-box strong {
-      color: #d4af37;
-    }
+    .nis-box strong { color: #d4af37; }
 
-    /* Styling Cita-cita */
     .wish-box {
-      margin-top: 15px;
-      font-size: 1.1rem;
+      margin-top: 20px;
+      font-size: 1.15rem;
       color: #ffffff;
-      background: rgba(212, 175, 55, 0.1);
-      padding: 8px 15px;
-      border-left: 3px solid #d4af37;
+      background: rgba(212, 175, 55, 0.15);
+      padding: 10px 18px;
+      border-left: 4px solid #d4af37;
       display: inline-block;
       border-radius: 0 5px 5px 0;
     }
-    .wish-box span {
-      color: #f3e5ab;
-      font-weight: bold;
-    }
+    .wish-box span { color: #f3e5ab; font-weight: bold; }
 
     .footer-title {
       font-size: 1.4rem;
@@ -285,22 +239,45 @@
       color: #ffffff;
       line-height: 1.3;
     }
-    .footer-title span {
-      color: #d4af37;
-      font-size: 1.6rem;
-      font-weight: 800;
+    .footer-title span { color: #d4af37; font-size: 1.6rem; font-weight: 800; }
+
+    /* KOLOM 3: Sisi Kanan (Khusus Foto Cita-cita Besar dengan Efek Edge Fading) */
+    .column-right {
+      flex: 1.1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+
+    #foto-citacita {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0; /* Dikontrol via JS */
+      mix-blend-mode: lighten;
+      filter: grayscale(10%) brightness(75%) contrast(105%);
+      pointer-events: none;
+      
+      /* GRADIENT MASKING: Menyamarkan pinggiran kiri gambar agar menyatu mulus ke warna background tengah */
+      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      
+      transition: opacity 0.6s ease-in-out;
     }
 
     /* Tombol Navigasi */
     .navigation-box {
-      margin-top: 25px;
+      margin-top: 30px;
       width: 100%;
       display: flex;
       justify-content: flex-end;
     }
 
     .btn-nav {
-      padding: 12px 35px;
+      padding: 12px 40px;
       background: #1a150e;
       color: #d4af37;
       border: 2px solid #d4af37;
@@ -317,71 +294,40 @@
       box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
     }
 
-    /* Animasi Masuk Utama */
+    /* ==========================================================================
+       ANIMASI MASUK
+       ========================================================================== */
     .purnawiyata-card.active {
       animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
 
-    /* Animasi Teks masuk bergerak samar dari KIRI */
     .purnawiyata-card.active .animate-text {
-      animation: textEntranceLeft 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.4s both;
+      animation: textEntranceLeft 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.3s both;
     }
 
     @keyframes cardEntrance {
-      0% {
-        opacity: 0;
-        transform: scale(0.95) translateY(40px);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
+      0% { opacity: 0; transform: scale(0.97) translateY(40px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* Keyframes Efek Gerak Samar dari Kiri */
     @keyframes textEntranceLeft {
-      0% {
-        opacity: 0;
-        transform: translateX(-40px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      0% { opacity: 0; transform: translateX(-30px); }
+      100% { opacity: 1; transform: translateX(0); }
     }
 
-    /* Responsif Ponsel / Mobile */
-    @media (max-width: 768px) {
-      .card-content-wrapper {
-        flex-direction: column;
-      }
-      .left-side {
-        clip-path: none;
-        padding: 30px;
-      }
-      .right-side {
-        text-align: center;
-        padding: 30px 20px;
-      }
+    /* Responsif Layar Hp / Mobile */
+    @media (max-width: 900px) {
+      .card-content-wrapper { flex-direction: column; }
+      .column-left { clip-path: none; padding: 30px; }
+      .column-center { text-align: center; padding: 30px 20px; }
+      .column-right { height: 300px; width: 100%; }
       #foto-citacita {
-        width: 120%;
-        height: 70%;
-        top: 30%;
-        right: -10%;
-        -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
-        mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
       }
-      #siswa-nama {
-        font-size: 1.8rem;
-      }
-      .navigation-box {
-        justify-content: center;
-      }
-      .wish-box {
-        border-left: none;
-        border-top: 2px solid #d4af37;
-        border-radius: 5px;
-      }
+      #siswa-nama { font-size: 2rem; }
+      .navigation-box { justify-content: center; }
+      .wish-box { border-left: none; border-top: 3px solid #d4af37; border-radius: 5px; }
     }
   </style>
 </head>
@@ -404,22 +350,17 @@
   <main class="main-container">
     <div class="purnawiyata-card" id="student-card">
       
-      <!-- Wrapper Konten Utama agar terpisah dari Border Glow -->
       <div class="card-content-wrapper">
         
-        <!-- Sisi Kiri: Kotak / Tempat Foto Profil -->
-        <div class="left-side">
+        <!-- KOLOM 1: Sisi Kiri (Foto Profil Utama) -->
+        <div class="column-left">
           <div class="photo-frame">
-            <img id="siswa-foto" src="" alt="Foto Siswa">
+            <img id="siswa-foto" src="" alt="Foto Profil Siswa">
           </div>
         </div>
 
-        <!-- Sisi Kanan: Tempat Identitas & Foto Cita-cita Besar -->
-        <div class="right-side">
-          
-          <!-- Foto Cita-cita Besar (Dengan Efek Masking di Pinggirannya) -->
-          <img id="foto-citacita" src="" alt="Foto Cita-cita">
-
+        <!-- KOLOM 2: Sisi Tengah (Biodata Teks Lengkap) -->
+        <div class="column-center">
           <header class="header-title">SELAMAT & SUKSES</header>
           
           <div class="identity-box">
@@ -445,10 +386,17 @@
             <span>SMP ISLAM AZ-ZAHRO</span>
           </footer>
         </div>
+
+        <!-- KOLOM 3: Sisi Kanan (Foto Cita-cita Besar Mandiri) -->
+        <div class="column-right">
+          <img id="foto-citacita" src="" alt="Foto Visual Cita-cita">
+        </div>
+
       </div>
 
     </div>
 
+    <!-- Tombol Navigasi -->
     <div class="navigation-box">
       <button class="btn-nav" onclick="nextStudent()">Selanjutnya ❯</button>
     </div>
@@ -460,30 +408,23 @@
     const bgMusic = document.getElementById('bg-music');
     const overlay = document.getElementById('music-overlay');
 
-    // Fungsi membuat partikel emas melayang di background secara acak
     function createParticles() {
-      const particleCount = 30; // Jumlah partikel yang melayang
+      const particleCount = 35;
       for (let i = 0; i < particleCount; i++) {
         let particle = document.createElement('div');
         particle.className = 'particle';
-        
-        // Atur posisi, ukuran, kecepatan acak
         let size = Math.random() * 6 + 2;
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
         particle.style.left = Math.random() * 100 + 'vw';
-        
         let duration = Math.random() * 8 + 5;
         particle.style.animationDuration = duration + 's';
-        
         let delay = Math.random() * 5;
         particle.style.animationDelay = delay + 's';
-        
         document.body.appendChild(particle);
       }
     }
 
-    // Mengambil data eksternal JSON
     async function loadStudentsData() {
       try {
         const response = await fetch('data-siswa.json');
@@ -496,66 +437,54 @@
       }
     }
 
-    // Mengisi data ke HTML & mereset animasi masuk dengan perbaikan pemuatan foto
     function renderStudent(index) {
       const card = document.getElementById('student-card');
       const student = studentsData[index];
       const fotoElement = document.getElementById('siswa-foto');
       const fotoCitaCitaElement = document.getElementById('foto-citacita');
 
-      // 1. Reset Animasi CSS Kartu dan Teks
       card.classList.remove('active');
-      void card.offsetWidth; // Trigger reflow agar CSS animasi terulang dari awal
+      void card.offsetWidth; 
       card.classList.add('active');
 
-      // 2. Terapkan Data Teks Siswa
       document.getElementById('siswa-nama').innerText = student.nama;
       document.getElementById('siswa-ttl').innerText = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       document.getElementById('siswa-nis').innerText = student.nis;
       document.getElementById('siswa-nisn').innerText = student.nisn;
       document.getElementById('siswa-citacita').innerText = student.cita_cita || "-";
 
-      // Logika Jenis Kelamin (L/P) untuk nama orang tua
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       document.getElementById('siswa-ortu').innerText = `${hubunganOrtu} ${student.orang_tua}`;
 
-      // 3. Solusi Foto Macet & Load Gambar (Foto Profil & Foto Cita-Cita)
       fotoElement.style.opacity = '0';
       fotoCitaCitaElement.style.opacity = '0';
       
-      // Ambil pemisah URL unik bypass cache
       const separator = student.foto_url.includes('?') ? '&' : '?';
       const timestamp = 't=' + new Date().getTime();
       const urlFotoProfil = student.foto_url + separator + timestamp;
       
-      // Menentukan URL Foto Cita-cita
       const urlFotoCitaCitaRaw = student.foto_citacita_url || student.foto_url;
       const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
       const urlFotoCitaCita = urlFotoCitaCitaRaw + separatorCC + timestamp;
       
-      // Set sumber gambar baru
       fotoElement.src = urlFotoProfil;
       fotoCitaCitaElement.src = urlFotoCitaCita;
 
-      // Munculkan kembali foto profil setelah selesai dimuat
       fotoElement.onload = function() {
         fotoElement.style.opacity = '1';
       };
 
-      // Munculkan kembali foto cita-cita besar (opacity diset ke 0.35 agar bagian tengahnya lebih hidup/kontras)
       fotoCitaCitaElement.onload = function() {
-        fotoCitaCitaElement.style.opacity = '0.35';
+        fotoCitaCitaElement.style.opacity = '0.55'; /* Opacity dinaikkan ke 0.55 agar gambar terlihat jelas dan hidup di kolom kanan */
       };
     }
 
-    // Logika tombol selanjutnya
     function nextStudent() {
       if (studentsData.length === 0) return;
       currentIndex = (currentIndex + 1) % studentsData.length;
       renderStudent(currentIndex);
     }
 
-    // Fungsi klik awal untuk menyalakan musik & menyembunyikan overlay
     function startPresentation() {
       overlay.style.display = 'none';
       bgMusic.play().catch(error => console.log("Musik tertahan sistem browser:", error));
@@ -563,7 +492,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       loadStudentsData();
-      createParticles(); // Jalankan efek partikel saat web siap
+      createParticles();
     });
   </script>
 </body>
