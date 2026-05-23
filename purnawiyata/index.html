@@ -206,6 +206,13 @@
       flex-shrink: 0;
     }
 
+    /* Pembungkus dua logo berdampingan */
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
     .school-logo {
       width: 75px;
       height: auto;
@@ -469,6 +476,10 @@
         align-items: center; 
       }
       
+      .logo-wrapper {
+        justify-content: center;
+      }
+      
       .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
         height: auto; 
         min-height: inherit;
@@ -528,7 +539,10 @@
 
         <div class="column-center">
           <div class="brand-header">
-            <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
+            <div class="logo-wrapper">
+              <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
+              <img class="school-logo" src="https://azzahrolocare.github.io/media/logo/PPSS-Az-Zahro.png" alt="Logo PPSS Az-Zahro">
+            </div>
             <header class="header-title">SELAMAT & SUKSES</header>
           </div>
           
