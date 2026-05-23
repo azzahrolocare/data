@@ -131,14 +131,12 @@
       width: 320px;
       flex-shrink: 0;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
       padding: 40px;
       position: relative;
       clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
-      gap: 20px;
     }
 
     .photo-frame {
@@ -166,26 +164,6 @@
       bottom: 0; left: 0; width: 100%; height: 35%;
       background: linear-gradient(to top, rgba(15, 12, 8, 0.9) 0%, rgba(0,0,0,0) 100%);
       pointer-events: none;
-    }
-
-    /* GAYA BARU: Label Nomor Urut Absensi di bawah foto */
-    .absen-label {
-      background: rgba(15, 12, 8, 0.85);
-      color: #f3e5ab;
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      text-align: center;
-      width: 90%;
-      margin-right: 25px; /* Kompensasi miring clip-path kolom kiri */
-      text-transform: uppercase;
-    }
-    .absen-label span {
-      color: #ffffff;
     }
 
     /* KOLOM 2: Sisi Tengah */
@@ -230,7 +208,7 @@
     }
 
     .name-container {
-      height: 95px;
+      height: 90px;
       display: flex;
       align-items: center;
       position: relative;
@@ -240,11 +218,10 @@
       font-size: 2.5rem;
       font-weight: 800;
       color: #fff;
-      letter-spacing: 0.05em;
+      letter-spacing: 1px;
       text-transform: uppercase;
       padding-bottom: 8px;
-      line-height: 1.2;
-      white-space: normal;
+      line-height: 1.1;
       word-wrap: break-word;
       width: 100%;
       position: relative;
@@ -281,22 +258,10 @@
     .ortu-container { height: 30px; display: flex; align-items: center; }
     .sub-detail { font-size: 1.4rem; font-style: italic; color: #f3e5ab; }
 
-    .nis-container { height: 35px; display: flex; align-items: center; }
-    
-    .nis-box { 
-      font-size: 1.15rem; 
-      color: #ffffff !important; 
-      font-weight: 700; 
-      letter-spacing: 0.5px;
-      text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
-      background: rgba(255, 255, 255, 0.08);
-      padding: 3px 12px;
-      border-radius: 4px;
-      border: 1px solid rgba(212, 175, 55, 0.2);
-    }
+    .nis-container { height: 30px; display: flex; align-items: center; }
+    .nis-box { font-size: 1.05rem; color: #b3b3b3; }
 
     .wish-container { height: 60px; display: flex; align-items: center; margin-top: 15px; }
-    
     .wish-box {
       font-size: 1.2rem;
       color: #ffffff;
@@ -305,9 +270,11 @@
       border-left: 4px solid #d4af37;
       border-radius: 0 5px 5px 0;
       opacity: 0; 
+      transform: translateX(-15px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
       width: auto;
     }
-    .wish-box.fade-in-visible { opacity: 1; } 
+    .wish-box.fade-in-visible { opacity: 1; transform: translateX(0); }
     .wish-box span { color: #f3e5ab; font-weight: bold; }
 
     .footer-title {
@@ -359,7 +326,7 @@
       position: absolute;
       top: 0; left: 0;
       opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      transition: opacity 0.5s ease-in-out;
       z-index: 2;
     }
 
@@ -371,10 +338,13 @@
       top: 0; left: 0;
       z-index: 3;
       opacity: 0;
+      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+      transition: opacity 0.4s ease, clip-path 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .reveal-active .img-reveal-color {
-      opacity: 1; 
+      opacity: 1;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     }
 
     .cc-particle {
@@ -386,7 +356,7 @@
       animation: floatUpCC linear infinite;
       filter: drop-shadow(0 0 4px rgba(243, 229, 171, 0.6));
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.5s ease;
     }
 
     .show-particles .cc-particle { opacity: 1; }
@@ -396,10 +366,12 @@
       15% { opacity: 0.8; }
       50% { transform: scale(0.7) translateX(15px); }
       85% { opacity: 0.6; }
-      100% { top: -10%; transform: scale(1.2) translateX(-15px) opacity: 0; }
+      100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
     }
 
-    /* KEMBALI KE SEMULA: STYLE NAVIGASI KANAN BAWAH */
+    /* ==========================================================================
+       STYLE NAVIGASI GLOBAL (Perbaikan agar tidak pecah di HP)
+       ========================================================================== */
     .nav-container {
       position: absolute;
       bottom: 25px;
@@ -452,7 +424,6 @@
       .card-content-wrapper { flex-direction: column; }
       .column-left { width: 100%; clip-path: none; padding: 30px; }
       .photo-frame { height: 320px; max-width: 260px; margin: 0 auto; }
-      .absen-label { margin-right: 0; width: 100%; max-width: 260px; }
       
       .column-center { 
         text-align: center; 
@@ -475,6 +446,7 @@
         mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
       }
       
+      /* Navigasi Melayang Statis di Bawah Layar Mobile */
       .nav-container {
         position: fixed;
         bottom: 15px;
@@ -513,14 +485,10 @@
       
       <div class="card-content-wrapper">
         
-        <!-- KOLOM 1: Sisi Kiri (Foto & No. Absen) -->
+        <!-- KOLOM 1: Sisi Kiri -->
         <div class="column-left">
           <div class="photo-frame">
             <img id="siswa-foto" src="" alt="Foto Profil Siswa">
-          </div>
-          <!-- PENEMPATAN BARU: Informasi Absensi di Bawah Foto -->
-          <div class="absen-label" id="siswa-absen-box">
-            No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
           </div>
         </div>
 
@@ -566,7 +534,7 @@
           <div class="image-reveal-wrapper">
             <!-- Foto Hitam Putih (Base) -->
             <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-            <!-- Foto Berwarna (Akan langsung ganti tanpa wipe) -->
+            <!-- Foto Berwarna (Akan disapu/di-wipe keluar) -->
             <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
           </div>
         </div>
@@ -574,24 +542,19 @@
       </div>
     </div>
 
-    <!-- KONTROLLER NAVIGASI PINDAH HALAMAN (KEMBALI KE POSISI SEMULA) -->
+    <!-- KONTROLLER NAVIGASI PINDAH HALAMAN (Dikelompokkan secara Global) -->
     <div class="nav-container">
       <button class="btn-nav-arrow" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
       <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
     </div>
   </main>
 
-  <script {="true"}>
+  <script>
     let studentsData = [];
     let currentIndex = 0;
     let typingTimeouts = []; 
     const bgMusic = document.getElementById('bg-music');
     const overlay = document.getElementById('music-overlay');
-
-    // Fungsi Pembantu padding angka nol di depan (e.g. 3 menjadi 03)
-    function padZero(num) {
-      return num < 10 ? '0' + num : num;
-    }
 
     // Fungsi Utama Efek Mengetik Berantai
     function typeEffect(element, fullText, speed, onComplete) {
@@ -678,26 +641,19 @@
       const elWishBox = document.getElementById('siswa-wish-box');
       const elCitaCita = document.getElementById('siswa-citacita');
       
-      const elNumAbsen = document.getElementById('num-absen');
-      const elTotalAbsen = document.getElementById('total-absen');
-
       const fotoElement = document.getElementById('siswa-foto');
       const fotoBw = document.getElementById('foto-citacita-bw');
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Reset Kartu & Hilangkan State Instan
+      // Reset Kartu & Hilangkan State Transisi Menyapu Warna
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
       elWishBox.classList.remove('fade-in-visible');
       void card.offsetWidth; 
       card.classList.add('active');
 
-      // Perbarui Teks Nomor Absen Secara Dinamis di Bawah Foto
-      elNumAbsen.innerText = padZero(index + 1);
-      elTotalAbsen.innerText = padZero(studentsData.length);
-
-      // Kosongkan Text Kolom Tengah
+      // Kosongkan Text
       elNama.innerText = "";
       elTtl.innerText = "";
       elOrtu.innerText = "";
@@ -709,8 +665,6 @@
       const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
-      
-      // Murni hanya menampilkan NIS dan NISN tanpa no urut lagi
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
       // Ambil Gambar Profil Utama
@@ -753,10 +707,14 @@
             
             typeEffect(nisSpan, textNisNisn, 25, () => {
               
-              // 5. SELESAI KETIK: Langsung aktifkan foto berwarna & kotak cita-cita (Instan)
+              // 5. SELESAI KETIK: Eksekusi Efek Menghapus Hitam-Putih Menjadi Berwarna Asli
               ccContainer.classList.add('reveal-active');
-              elWishBox.classList.add('fade-in-visible');
-              ccContainer.classList.add('show-particles');
+              
+              // Tampilkan kotak teks Cita-Cita & Partikel emas pelan-pelan
+              setTimeout(() => {
+                elWishBox.classList.add('fade-in-visible');
+                ccContainer.classList.add('show-particles');
+              }, 400);
               
             });
           });
