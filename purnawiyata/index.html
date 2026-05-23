@@ -126,7 +126,7 @@
     @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
     /* ==========================================================================
-       STRUKTUR 3 KOLOM KUNCI (LAYOUT ANTI-GERSANG / BERGERAK)
+       STRUKTUR 3 KOLOM KUNCI (LAYOUT ANTI-BERGERAK)
        ========================================================================== */
 
     /* KOLOM 1: Sisi Kiri (Ukuran Lebar Dikunci Permanen) */
@@ -157,8 +157,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      opacity: 1; /* Foto profil kiri langsung aktif penuh */
     }
 
     .photo-frame::after {
@@ -175,7 +174,7 @@
       padding: 40px 45px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* Menjaga jarak atas dan bawah konsisten */
+      justify-content: space-between; 
       color: #ffffff;
       overflow: hidden;
     }
@@ -212,7 +211,7 @@
     }
 
     .name-container {
-      height: 90px; /* Tinggi dikunci agar nama panjang/pendek 2 baris tidak menggeser komponen bawah */
+      height: 90px; /* Tinggi dikunci agar nama panjang/pendek tidak menggeser komponen lain */
       display: flex;
       align-items: center;
       position: relative;
@@ -301,10 +300,10 @@
 
 
     /* ==========================================================================
-       KOLOM 3: Sisi Kanan (Efek Foto Menghapus Hitam-Putih Jadi Berwarna)
+       KOLOM 3: Sisi Kanan (Efek Foto Memudar Dari Hitam-Putih Ke Asli)
        ========================================================================== */
     .column-right {
-      width: 440px; /* Lebar dikunci permanen */
+      width: 440px; 
       flex-shrink: 0;
       position: relative;
       overflow: hidden; 
@@ -324,7 +323,7 @@
       pointer-events: none;
     }
 
-    /* WADAH UTAMA FOTO CITA-CITA (Sistem Tumpuk Lapisan Warna) */
+    /* WADAH UTAMA FOTO CITA-CITA (Sistem Transisi Opacity Berlapis) */
     .image-reveal-wrapper {
       position: relative;
       width: 100%;
@@ -335,7 +334,7 @@
       mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
     }
 
-    /* FOTO 1: Lapisan Dasar (Selalu Hitam Putih) */
+    /* FOTO 1: Lapisan Dasar Hitam Putih (Langsung muncul di awal) */
     .img-base-bw {
       width: 100%;
       height: 100%;
@@ -343,12 +342,12 @@
       filter: grayscale(100%) brightness(0.7) contrast(1.1);
       position: absolute;
       top: 0; left: 0;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
+      opacity: 1; /* Langsung ada sejak awal */
       z-index: 2;
+      transition: opacity 0.8s ease-in-out;
     }
 
-    /* FOTO 2: Lapisan Atas Berwarna (Dipotong Menggunakan Clip-Path untuk Efek Menyapu) */
+    /* FOTO 2: Lapisan Atas Berwarna (Mulai dari Transparan/0, lalu Memudar Naik ke 1) */
     .img-reveal-color {
       width: 100%;
       height: 100%;
@@ -356,17 +355,13 @@
       position: absolute;
       top: 0; left: 0;
       z-index: 3;
-      opacity: 0;
-      
-      /* Efek transisi kliping menyapu dari kiri ke kanan (awal: terpotong habis di kiri) */
-      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-      transition: opacity 0.4s ease, clip-path 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0; /* Tersembunyi di awal */
+      transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1); /* Efek memudar halus selama 2 detik */
     }
 
-    /* Ketika Teks Selesai Diketik, Jalankan Animasi Menghapus / Menjadikan Berwarna */
+    /* Ketika Teks Selesai Diketik, Jalankan Efek Memudar Menjadi Berwarna Jelas */
     .reveal-active .img-reveal-color {
-      opacity: 1;
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Menyapu penuh hingga terlihat semua */
+      opacity: 1; /* Memudar naik menutupi lapisan hitam putih */
     }
 
     /* PARTIKEL KHUSUS EMAS: Mengalir di depan foto cita-cita */
@@ -392,9 +387,7 @@
       100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
     }
 
-    /* ==========================================================================
-       STYLE UTK TOMBOL NAVIGASI KIRI & KANAN
-       ========================================================================== */
+    /* STYLE NAVIGASI PANAH */
     .btn-nav-arrow {
       position: absolute;
       bottom: 30px;
@@ -526,12 +519,12 @@
           </footer>
         </div>
 
-        <!-- KOLOM 3: Sisi Kanan (Double Layer Ringan Efek Kupas Menyapu) -->
+        <!-- KOLOM 3: Sisi Kanan (Double Layer Ringan Efek Memudar Halus) -->
         <div class="column-right" id="column-cc">
           <div class="image-reveal-wrapper">
-            <!-- Foto Hitam Putih (Base) -->
+            <!-- Foto Hitam Putih (Base - Selalu Muncul Sejak Awal) -->
             <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-            <!-- Foto Berwarna (Akan disapu/di-wipe keluar) -->
+            <!-- Foto Berwarna (Akan memudar naik secara perlahan) -->
             <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
           </div>
           <button class="btn-nav-arrow btn-right" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
@@ -639,14 +632,14 @@
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Reset Kartu & Hilangkan State Transisi Menyapu Warna
+      // Reset Kartu & Hilangkan Efek Transisi Warna Terlebih Dahulu
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
       elWishBox.classList.remove('fade-in-visible');
       void card.offsetWidth; 
       card.classList.add('active');
 
-      // Kosongkan Text (Layout tidak bergeser karena di-lock ukurannya di CSS)
+      // Kosongkan Text (Layout tidak bergoyang karena ukuran dikunci CSS)
       elNama.innerText = "";
       elTtl.innerText = "";
       elOrtu.innerText = "";
@@ -660,26 +653,19 @@
       const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
-      // Ambil Gambar Profil Utama
-      fotoElement.style.opacity = '0';
+      // Ambil Gambar Profil Utama (Langsung Tampil)
       const separator = student.foto_url.includes('?') ? '&' : '?';
       const timestamp = 't=' + new Date().getTime();
       fotoElement.src = student.foto_url + separator + timestamp;
-      fotoElement.onload = () => fotoElement.style.opacity = '1';
 
       // Sinkronisasi Gambar Cita-Cita (Double Layer)
-      fotoBw.style.opacity = '0';
       const urlFotoCitaCitaRaw = student.foto_citacita_url || student.foto_url;
       const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
       const finalCCUrl = urlFotoCitaCitaRaw + separatorCC + timestamp;
       
+      // Pasang gambar ke layer hitam-putih dan layer warna bersamaan
       fotoBw.src = finalCCUrl;
       fotoColor.src = finalCCUrl;
-
-      // Saat gambar siap, tampilkan versi Hitam Putih (BW) terlebih dahulu
-      fotoBw.onload = () => {
-        fotoBw.style.opacity = '1';
-      };
 
       // ==========================================
       // ALUR EKSEKUSI PENGETIKAN BERANTAI
@@ -700,14 +686,14 @@
             
             typeEffect(nisSpan, textNisNisn, 25, () => {
               
-              // 5. SELESAI KETIK: Eksekusi Efek Menghapus Hitam-Putih Menjadi Berwarna Asli
-              ccContainer.classList.add('reveal-active'); // Mengubah Clip-Path foto warna (Menyapu)
+              // 5. SELESAI KETIK: Lapisan foto warna memudar masuk menghaluskan versi BW
+              ccContainer.classList.add('reveal-active'); 
               
-              // Tampilkan kotak teks Cita-Cita & Partikel emas pelan-pelan
+              // Munculkan kotak tulisan Cita-Cita & Partikel emas perlahan
               setTimeout(() => {
                 elWishBox.classList.add('fade-in-visible');
                 ccContainer.classList.add('show-particles');
-              }, 400); // Dijeda sedikit agar efek sapuan warna berjalan lebih dulu
+              }, 300);
               
             });
           });
