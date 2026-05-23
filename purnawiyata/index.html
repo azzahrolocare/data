@@ -24,7 +24,7 @@
       min-height: 100vh;
       overflow: hidden;
       position: relative;
-      padding: 15px;
+      padding: 20px;
     }
 
     /* Efek Partikel Latar Belakang Utama */
@@ -75,7 +75,7 @@
     }
     .btn-start:hover { transform: scale(1.05); }
 
-    /* KONTANER UTAMA */
+    /* KONTANER UTAMA (Disesuaikan agar seimbang di tengah vertikal) */
     .main-container {
       display: flex;
       flex-direction: column;
@@ -83,7 +83,8 @@
       justify-content: center;
       width: 100%;
       max-width: 1380px; 
-      height: 92vh; 
+      min-height: 90vh; 
+      margin: auto 0;
       z-index: 10;
       position: relative;
     }
@@ -220,7 +221,7 @@
       filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
     }
 
-    /* UKURAN KHUSUS LOGO PPSS (Bisa diubah angkanya di sini jika kurang besar/kecil) */
+    /* UKURAN KHUSUS LOGO PPSS */
     .school-logo.logo-ppss {
       width: 150px; 
     }
@@ -411,7 +412,7 @@
       15% { opacity: 0.8; }
       50% { transform: scale(0.7) translateX(15px); }
       85% { opacity: 0.6; }
-      100% { top: -10%; transform: scale(1.2) translateX(-15px) opacity: 0; }
+      100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
     }
 
     /* STYLE NAVIGASI SAMAR DI POJOK BAWAH LAYAR */
@@ -468,7 +469,7 @@
     /* Responsif Layar Hp / Mobile */
     @media (max-width: 950px) {
       body { overflow-y: auto; }
-      .main-container { height: auto; padding-bottom: 80px; }
+      .main-container { height: auto; padding-bottom: 80px; margin: 0; }
       .purnawiyata-card { height: auto; min-height: initial; }
       .card-content-wrapper { flex-direction: column; }
       .column-left { width: 100%; clip-path: none; padding: 30px; }
@@ -597,14 +598,14 @@
     </div>
   </main>
 
-  <script {="true"}>
+  <script>
     let studentsData = [];
     let currentIndex = 0;
     let typingTimeouts = []; 
     const bgMusic = document.getElementById('bg-music');
     const overlay = document.getElementById('music-overlay');
 
-    // Fungsi Pembantu padding angka nol di depan (e.g. 3 menjadi 03)
+    // Fungsi Pembantu padding angka nol di depan
     function padZero(num) {
       return num < 10 ? '0' + num : num;
     }
@@ -729,14 +730,14 @@
       // Murni hanya menampilkan NIS dan NISN tanpa no urut lagi
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
-      // Ambil Gambar Profil Utama (Disesuaikan dengan kunci JSON: foto_profil_url)
+      // Ambil Gambar Profil Utama
       fotoElement.style.opacity = '0';
       const separator = student.foto_profil_url.includes('?') ? '&' : '?';
       const timestamp = 't=' + new Date().getTime();
       fotoElement.src = student.foto_profil_url + separator + timestamp;
       fotoElement.onload = () => fotoElement.style.opacity = '1';
 
-      // Sinkronisasi Gambar Cita-Cita Double Layer (Disesuaikan dengan kunci JSON: foto_cita_cita_url)
+      // Sinkronisasi Gambar Cita-Cita Double Layer
       fotoBw.style.opacity = '0';
       const urlFotoCitaCitaRaw = student.foto_cita_cita_url || student.foto_profil_url;
       const separatorCC = urlFotoCitaCitaRaw.includes('?') ? '&' : '?';
