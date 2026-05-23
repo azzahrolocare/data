@@ -75,54 +75,48 @@
     }
     .btn-start:hover { transform: scale(1.05); }
 
-    /* TOMBOL KONTROL MUSIK POJOK ATAS */
+    /* WIDGET MUSIK TERPADU (TOMBOL PAUSE SEJAJAR DENGAN BAR SPECTRUM) */
     .music-control-container {
-      position: fixed;
-      top: 25px;
-      right: 25px;
-      z-index: 500;
-      background: rgba(26, 21, 14, 0.8);
-      padding: 5px;
-      border-radius: 50%;
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
+      gap: 12px;
+      background: rgba(15, 12, 8, 0.6);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      margin-right: 25px; /* Kompensasi miring clip-path kolom kiri */
       justify-content: center;
     }
 
     .btn-music-toggle {
       background: none;
       border: none;
-      color: #d4af37;
-      font-size: 1.5rem;
+      color: #f3e5ab;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      width: 40px;
-      height: 40px;
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
     }
 
     .btn-music-toggle:hover {
-      color: #f3e5ab;
+      color: #ffffff;
       transform: scale(1.1);
     }
 
-    /* FREQUENCY BAR SPECTRUM BARU (KECIL-KECIL TAPI PANJANG DI BAWAH FOTO CITA-CITA) */
+    /* FREQUENCY BAR SPECTRUM KECIL-KECIL TAPI PANJANG */
     .audio-visualizer {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
       display: flex;
       align-items: flex-end;
       justify-content: center;
       gap: 1px; /* Rapat kecil-kecil */
-      width: 85%; /* Membentang panjang */
-      height: 45px; /* Batas tinggi maksimal */
-      z-index: 20;
+      flex: 1;
+      height: 24px; /* Batas tinggi maksimal agar pas sejajar tombol */
       pointer-events: none;
     }
 
@@ -188,7 +182,7 @@
 
     @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
-    /* KOLOM 1: Sisi Kiri */
+    /* KOLOM 1: Sisi Kiri (Memuat Foto Profil Utama dan Widget Musik Terpadu) */
     .column-left {
       width: 340px;
       flex-shrink: 0;
@@ -200,12 +194,12 @@
       padding: 40px;
       position: relative;
       clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
-      gap: 20px;
+      gap: 15px;
     }
 
     .photo-frame {
       width: 100%;
-      height: 400px; 
+      height: 380px; 
       border: 6px solid #fff;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       border-radius: 12px;
@@ -250,7 +244,7 @@
       color: #ffffff;
     }
 
-    /* KOLOM 2: Sisi Tengah (Dibuat fleksibel mengisi ruang tengah yang luas) */
+    /* KOLOM 2: Sisi Tengah */
     .column-center {
       flex: 1;
       padding: 40px 50px;
@@ -536,6 +530,7 @@
       .column-left { width: 100%; clip-path: none; padding: 30px; }
       .photo-frame { height: 320px; max-width: 260px; margin: 0 auto; }
       .absen-label { margin-right: 0; width: 100%; max-width: 260px; }
+      .music-control-container { margin-right: 0; width: 100%; max-width: 260px; }
       
       .column-center { 
         text-align: center; 
@@ -573,15 +568,6 @@
       .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
         right: 15px;
       }
-      .music-control-container {
-        top: 15px;
-        right: 15px;
-      }
-      .audio-visualizer {
-        bottom: 15px;
-        width: 90%;
-        height: 35px;
-      }
     }
   </style>
 </head>
@@ -590,13 +576,6 @@
   <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
     <source src="https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3" type="audio/mpeg">
   </audio>
-
-  <div class="music-control-container">
-    <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
-      <svg id="icon-pause" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
-      <svg id="icon-play" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
-    </button>
-  </div>
 
   <div id="music-overlay" onclick="startPresentation()">
     <div class="overlay-card">
@@ -615,6 +594,23 @@
           <div class="photo-frame">
             <img id="siswa-foto" src="" alt="Foto Profil Siswa">
           </div>
+
+          <div class="music-control-container">
+            <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
+              <svg id="icon-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
+              <svg id="icon-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+
+            <div class="audio-visualizer" id="visualizer">
+              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+            </div>
+          </div>
+
           <div class="absen-label" id="siswa-absen-box">
             No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
           </div>
@@ -663,15 +659,6 @@
           <div class="image-reveal-wrapper">
             <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
             <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
-          </div>
-          
-          <div class="audio-visualizer" id="visualizer">
-            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
           </div>
         </div>
 
@@ -891,7 +878,7 @@
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
       
-      analyser.fftSize = 64;  // Ditambah untuk menangani bar spectrum yang lebih banyak (30 bar)
+      analyser.fftSize = 64;  // Menangani bar spectrum yang banyak (30 bar)
       bufferLength = analyser.frequencyBinCount;
       dataArray = new Uint8Array(bufferLength);
       
@@ -919,7 +906,7 @@
         let dataIndex = Math.floor(i * (bufferLength / bars.length));
         let value = dataArray[dataIndex];
         let percent = value / 255;
-        let height = (percent * 43) + 2; // Batas max 45px, min 2px
+        let height = (percent * 22) + 2; // Batas max 24px, min 2px agar pas sejajar tombol
         bars[i].style.height = height + 'px';
       }
     }
