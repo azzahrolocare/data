@@ -3,669 +3,343 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
+  <title>Cita-Cita Siswa Az-Zahro</title>
+  
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    /* ==========================================================================
-       STYLE / CSS (Tema Luxury Gold, 3-Column Layout & Ukuran Super Jumbo)
-       ========================================================================== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    :root {
+      --gold-light: #f6e05e;
+      --gold-main: #d4af37;
+      --gold-dark: #aa8416;
+      --bg-dark: #0b0f19;
+      --card-bg: rgba(15, 23, 42, 0.75);
     }
 
     body {
-      background: #0f0c08; 
-      background: linear-gradient(to right, #2b1f0d, #0f0c08, #2b1f0d);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.07) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(30, 41, 59, 0.8) 0px, transparent 50%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    .font-cinzel { font-family: 'Cinzel Decorative', serif; }
+    .font-vibes { font-family: 'Great Vibes', cursive; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-main); }
+
+    /* Efek Kaca Premium */
+    .glassmorphism {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Efek Teks Emas Menyala */
+    .text-glow-gold {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 0 0 20px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Bingkai Foto Elegan */
+    .photo-frame {
       position: relative;
-      padding: 15px;
+      border: 2px solid var(--gold-main);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
     }
-
-    /* Efek Partikel Latar Belakang Utama */
-    .particle {
-      position: absolute;
-      background: radial-gradient(circle, rgba(212,175,55,0.8) 0%, rgba(212,175,55,0) 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: floatParticles linear infinite;
-      z-index: 1;
-    }
-
-    @keyframes floatParticles {
-      0% { transform: translateY(100vh) scale(0.3); opacity: 0; }
-      50% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-    }
-
-    /* Overlay Interaksi Awal untuk Mengaktifkan Musik */
-    #music-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 12, 8, 0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-    .overlay-card {
-      text-align: center;
-      color: #fff;
-      border: 2px solid #d4af37;
-      padding: 40px;
-      background: #1a150e;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-    }
-    .overlay-card h2 { color: #d4af37; margin-bottom: 10px; }
-    
-    /* Indikator Loading Saat Preload Foto */
-    #loading-status {
-      font-size: 0.95rem;
-      color: #b3b3b3;
-      margin-top: 10px;
-      font-style: italic;
-    }
-
-    .btn-start {
-      margin-top: 20px;
-      padding: 12px 30px;
-      background: linear-gradient(45deg, #a67c1e, #f3e5ab, #a67c1e);
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: transform 0.2s;
-    }
-    .btn-start:disabled {
-      background: #444;
-      color: #888;
-      cursor: not-allowed;
-    }
-    .btn-start:not(:disabled):hover { transform: scale(1.05); }
-
-    /* KONTANER UTAMA */
-    .main-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 1380px; 
-      height: 92vh; 
-      z-index: 10;
-    }
-
-    /* KARTU SUPER JUMBO FULL BAWAH */
-    .purnawiyata-card {
-      display: flex;
-      width: 100%;
-      height: 100%; 
-      min-height: 620px;
-      background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
-      border-radius: 25px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .purnawiyata-card::before {
+    .photo-frame::before {
       content: '';
       position: absolute;
-      top: -50%; left: -50%; width: 200%; height: 200%;
-      background: conic-gradient(transparent, transparent, transparent, #d4af37, #f3e5ab, #d4af37);
-      animation: borderRotate 6s linear infinite;
-      z-index: 1;
+      top: -6px; left: -6px; right: -6px; bottom: -6px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      pointer-events: none;
     }
 
-    /* Lapisan dalam pembungkus struktur kartu */
-    .card-content-wrapper {
-      display: flex;
-      width: calc(100% - 6px);
-      height: calc(100% - 6px);
-      margin: 3px;
-      background: inherit;
-      border-radius: 22px;
-      overflow: hidden;
-      z-index: 2;
+    /* Kursor Ketik Berkedip */
+    .typing-cursor::after {
+      content: '|';
+      animation: blink 0.8s infinite;
+      color: var(--gold-main);
+      margin-left: 2px;
+      font-weight: bold;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
 
-    @keyframes borderRotate { 100% { transform: rotate(360deg); } }
+    /* Animasi Kartu Transisi Keluar Masuk */
+    .student-card-animated {
+      opacity: 0;
+      transform: translateY(30px) scale(0.98);
+      transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .student-card-animated.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
 
-    /* ==========================================================================
-       STRUKTUR 3 KOLOM KUNCI (LAYOUT ANTI-BERGERAK)
-       ========================================================================== */
-
-    /* KOLOM 1: Sisi Kiri (Ukuran Lebar Dikunci Permanen) */
-    .column-left {
-      width: 320px;
-      flex-shrink: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
-      padding: 40px;
+    /* KUNCI UTAMA: Mekanisme Transisi Tirai Foto Berwarna (Reveal Naik dari Bawah) */
+    .cc-image-wrapper {
       position: relative;
-      clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
-    }
-
-    .photo-frame {
+      overflow: hidden;
       width: 100%;
-      height: 380px; 
-      border: 6px solid #fff;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-      border-radius: 12px;
-      overflow: hidden;
-      background: #333;
-      position: relative;
+      height: 100%;
     }
 
-    .photo-frame img {
+    /* Lapisan Dasar: Murni Hitam-Putih */
+    .img-bw {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 1; /* Langsung aktif 100% dari awal pemuatan nama */
+      filter: grayscale(100%) contrast(110%);
+      display: block;
     }
 
-    .photo-frame::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 35%;
-      background: linear-gradient(to top, rgba(15, 12, 8, 0.9) 0%, rgba(0,0,0,0) 100%);
-      pointer-events: none;
-    }
-
-    /* KOLOM 2: Sisi Tengah (Ruang Teks Dikunci Menggunakan Nilai Tinggi Flex yang Stabil) */
-    .column-center {
-      flex: 1;
-      padding: 40px 45px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; 
-      color: #ffffff;
-      overflow: hidden;
-    }
-
-    .brand-header {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .school-logo {
-      width: 75px;
-      height: auto;
-      object-fit: contain;
-      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
-    }
-
-    .header-title {
-      font-size: 1.8rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      color: #ffffff;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-
-    /* Wadah Utama Biodata - Ukuran Di-lock agar Teks Mengetik Tidak Mengubah Skala Kolom */
-    .identity-box {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center; 
-      margin: 20px 0;
-    }
-
-    .name-container {
-      height: 90px; 
-      display: flex;
-      align-items: center;
-      position: relative;
-    }
-
-    #siswa-nama {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding-bottom: 8px;
-      line-height: 1.1;
-      word-wrap: break-word;
-      width: 100%;
-      position: relative;
-      display: inline-block;
-    }
-
-    #siswa-nama::after {
-      content: '';
+    /* Lapisan Atas: Tirai Berwarna yang akan digulung naik */
+    .reveal-color-layer {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 3px;
-      background: linear-gradient(to right, #a67c1e 0%, #f3e5ab 25%, #d4af37 50%, #f3e5ab 75%, #a67c1e 100%);
-      background-size: 200% auto;
-      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.8), 0 0 4px rgba(243, 229, 171, 0.5);
-      border-radius: 2px;
-      animation: goldLineFlow 3s linear infinite;
-    }
-
-    @keyframes goldLineFlow {
-      0% { background-position: 0% center; }
-      100% { background-position: -200% center; }
-    }
-
-    /* Kursor Ketik Berkedip Visual */
-    .typing-cursor::after {
-      content: '|';
-      color: #d4af37;
-      animation: blink 0.7s infinite;
-      margin-left: 2px;
-    }
-    @keyframes blink { 50% { opacity: 0; } }
-
-    /* Elemen Dibawah Nama Di-lock Tinggi Barisnya */
-    .ttl-container { height: 30px; display: flex; align-items: center; margin-top: 10px; }
-    #siswa-ttl { font-size: 1.3rem; color: #e0e0e0; font-weight: 500; }
-
-    .ortu-container { height: 30px; display: flex; align-items: center; }
-    .sub-detail { font-size: 1.4rem; font-style: italic; color: #f3e5ab; }
-
-    .nis-container { height: 30px; display: flex; align-items: center; }
-    .nis-box { font-size: 1.05rem; color: #b3b3b3; }
-
-    /* KOTAK TULISAN CITA-CITA */
-    .wish-container { height: 60px; display: flex; align-items: center; margin-top: 15px; }
-    .wish-box {
-      font-size: 1.2rem;
-      color: #ffffff;
-      background: rgba(212, 175, 55, 0.15);
-      padding: 10px 20px;
-      border-left: 4px solid #d4af37;
-      border-radius: 0 5px 5px 0;
-      opacity: 0; 
-      transform: translateX(-15px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-      width: auto;
-    }
-    .wish-box.fade-in-visible { opacity: 1; transform: translateX(0); }
-    .wish-box span { color: #f3e5ab; font-weight: bold; }
-
-    .footer-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: #ffffff;
-      line-height: 1.3;
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
-      padding-top: 15px;
-      flex-shrink: 0;
-    }
-    .footer-title span { color: #d4af37; font-size: 1.55rem; font-weight: 800; }
-
-
-    /* ==========================================================================
-       KOLOM 3: Sisi Kanan (Efek Foto Memudar Dari Hitam-Putih Ke Asli)
-       ========================================================================== */
-    .column-right {
-      width: 440px; 
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #110d08;
-    }
-
-    .column-right::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 35%;
-      background: linear-gradient(to top, #16120b 10%, rgba(22, 18, 11, 0.6) 50%, transparent 100%);
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    .image-reveal-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      
-      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
-      mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
-    }
-
-    /* FOTO 1: Lapisan Dasar Hitam Putih (Langsung Muncul Instan) */
-    .img-base-bw {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(100%) brightness(0.7) contrast(1.1);
-      position: absolute;
-      top: 0; left: 0;
-      opacity: 1; 
+      height: 0%; /* Mulai dari bawah (kosong/tidak terlihat) */
+      overflow: hidden;
+      transition: height 3.5s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 2;
     }
 
-    /* FOTO 2: Lapisan Atas Berwarna */
-    .img-reveal-color {
+    .img-color {
+      position: absolute;
+      bottom: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      position: absolute;
-      top: 0; left: 0;
-      z-index: 3;
-      opacity: 0; 
-      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1); /* Transisi cross-fade super halus */
+      filter: saturate(120%) contrast(105%);
     }
 
-    .reveal-active .img-reveal-color {
-      opacity: 1; 
+    /* Aktifkan gulungan ke atas ketika pengetikan teks selesai */
+    .reveal-active .reveal-color-layer {
+      height: 100%;
     }
 
-    /* PARTIKEL KHUSUS EMAS */
-    .cc-particle {
+    /* Pembungkas Box Impian & Efek Pudar Ringan */
+    .wish-box-animation {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.8s ease-out;
+    }
+    .wish-box-animation.fade-in-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Animasi Partikel Debu Emas */
+    .particle {
       position: absolute;
-      background: radial-gradient(circle, rgba(255, 232, 156, 0.95) 0%, rgba(212, 175, 55, 0.5) 40%, rgba(212, 175, 55, 0) 70%);
+      background: radial-gradient(circle, rgba(255,223,128,1) 0%, rgba(212,175,55,0) 70%);
       border-radius: 50%;
       pointer-events: none;
-      z-index: 6; 
-      animation: floatUpCC linear infinite;
-      filter: drop-shadow(0 0 4px rgba(243, 229, 171, 0.6));
       opacity: 0;
-      transition: opacity 0.5s ease;
     }
 
-    .show-particles .cc-particle { opacity: 1; }
-
-    @keyframes floatUpCC {
-      0% { top: 105%; transform: scale(0.3) translateX(0); opacity: 0; }
-      15% { opacity: 0.8; }
-      50% { transform: scale(0.7) translateX(15px); }
-      85% { opacity: 0.6; }
-      100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
+    @keyframes floatUp {
+      0% { transform: translateY(20px) scale(0); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
     }
 
-    /* STYLE NAVIGASI PANAH */
-    .btn-nav-arrow {
-      position: absolute;
-      bottom: 30px;
-      background: none;
-      border: none;
-      color: #d4af37;
-      font-size: 2.8rem;
-      font-weight: bold;
-      cursor: pointer;
-      opacity: 0.35; 
-      z-index: 50; 
-      transition: all 0.3s ease;
-      line-height: 1;
-      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
-      user-select: none;
-    }
-
-    .btn-left { right: 30px; }
-    .btn-right { right: 35px; }
-
-    .btn-nav-arrow:hover {
-      opacity: 1; 
-      color: #f3e5ab;
-      transform: scale(1.15);
-      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
-    }
-    .btn-left:hover { transform: scale(1.15) translateX(-3px); }
-    .btn-right:hover { transform: scale(1.15) translateX(3px); }
-
-    /* ANIMASI MASUK KARTU UTAMA */
-    .purnawiyata-card.active {
-      animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-    @keyframes cardEntrance {
-      0% { opacity: 0; transform: scale(0.97) translateY(40px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    /* Responsif Layar Hp / Mobile */
-    @media (max-width: 950px) {
-      .main-container { height: auto; }
-      .purnawiyata-card { height: auto; }
-      .card-content-wrapper { flex-direction: column; }
-      .column-left { width: 100%; clip-path: none; padding: 40px; }
-      .column-center { text-align: center; padding: 35px 20px; align-items: center; }
-      
-      .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
-        height: auto; 
-        min-height: inherit;
-        justify-content: center; 
-      }
-      
-      #siswa-nama { font-size: 2rem; }
-      .column-right { height: 380px; width: 100%; }
-      .image-reveal-wrapper {
-        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
-        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
-      }
-      
-      .btn-nav-arrow { bottom: 20px; font-size: 2.5rem; opacity: 0.7; }
-      .btn-left { left: 25px; right: auto; }
-      .btn-right { right: 25px; }
+    .show-particles .particle {
+      animation: floatUp 3s infinite ease-out;
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between text-slate-100 p-4 md:p-6 select-none">
 
-  <!-- Musik Latar Belakang -->
-  <audio id="bg-music" loop>
-    <source src="musik-purnawiyata.mp3" type="audio/mpeg">
-  </audio>
+  <!-- HEADER UTAMA -->
+  <header class="text-center mb-6">
+    <h1 class="font-cinzel text-xl md:text-3xl tracking-widest text-glow-gold font-bold text-amber-400">
+      ALBUM IMPIAN & CITA-CITA
+    </h1>
+    <p class="text-xs md:text-sm text-slate-400 tracking-wider mt-1 uppercase">
+      Generasi Rabbani, Cerdas, dan Berintegritas — SMP/SMK Az-Zahro
+    </p>
+    <div class="w-24 h-[2px] bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto mt-2"></div>
+  </header>
 
-  <!-- Overlay Start Presentasi -->
-  <div id="music-overlay">
-    <div class="overlay-card">
-      <h2>Selamat & Sukses</h2>
-      <p>Persiapan Purnawiyata Ke-III SMP Islam Az-Zahro</p>
-      <div id="loading-status">Mengunduh aset media siswa... (0%)</div>
-      <button class="btn-start" id="start-btn" onclick="startPresentation()" disabled>Mohon Tunggu...</button>
-    </div>
-  </div>
-
-  <main class="main-container">
-    <div class="purnawiyata-card" id="student-card">
+  <!-- KONTEN UTAMA: PANGGUNG PRESENTASI -->
+  <main class="flex-grow flex items-center justify-center max-w-7xl w-full mx-auto my-auto px-2">
+    <div id="student-card" class="student-card-animated glassmorphism w-full rounded-2xl p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative overflow-hidden">
       
-      <div class="card-content-wrapper">
+      <!-- KOLOM KIRI: FOTO UTAMA SISWA (BIASA) -->
+      <div class="lg:col-span-3 flex flex-col items-center justify-center">
+        <div class="photo-frame w-48 h-64 md:w-56 md:h-72 rounded-lg overflow-hidden bg-slate-900 flex items-center justify-center">
+          <img id="siswa-foto" src="" alt="Foto Resmi" class="w-full h-full object-cover transition-opacity duration-300">
+        </div>
+        <span class="text-[11px] text-amber-500/70 uppercase tracking-widest mt-3 font-semibold">
+          <i class="fa-solid class-icon fa-user-graduation mr-1"></i> Data Profil Resmi
+        </span>
+      </div>
+
+      <!-- KOLOM TENGAH: BIODATA PENGETIKAN OTOMATIS -->
+      <div class="lg:col-span-5 flex flex-col justify-center space-y-4 min-h-[220px] lg:border-l lg:border-r border-slate-700/40 lg:px-8">
+        <div>
+          <h2 id="siswa-nama" class="text-2xl md:text-3xl font-bold text-amber-400 tracking-wide min-h-[40px]"></h2>
+          <div id="siswa-nis-box" class="text-xs font-mono text-slate-400 mt-1 min-h-[18px]"></div>
+        </div>
+
+        <div class="w-full h-[1px] bg-gradient-to-r from-amber-500/30 via-transparent to-transparent"></div>
+
+        <div class="space-y-2">
+          <div class="flex items-start space-x-3 text-sm">
+            <span class="text-amber-500 mt-1 w-4 text-center"><i class="fa-solid fa-cake-candles"></i></span>
+            <div class="flex-1">
+              <span class="text-slate-500 block text-[11px] uppercase tracking-wider">Tempat, Tanggal Lahir</span>
+              <p id="siswa-ttl" class="text-slate-200 font-medium min-h-[20px]"></p>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-3 text-sm">
+            <span class="text-amber-500 mt-1 w-4 text-center"><i class="fa-solid fa-hands-holding-child"></i></span>
+            <div class="flex-1">
+              <span class="text-slate-500 block text-[11px] uppercase tracking-wider">Hubungan Keluarga</span>
+              <p id="siswa-ortu" class="text-slate-200 font-medium min-h-[20px]"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KOLOM KANAN: VISUALISASI CITA-CITA DENGAN REVEAL BERWARNA -->
+      <div id="column-cc" class="lg:col-span-4 flex flex-col items-center justify-center relative">
         
-        <!-- KOLOM 1: Sisi Kiri -->
-        <div class="column-left">
-          <div class="photo-frame">
-            <img id="siswa-foto" src="" alt="Foto Profil Siswa">
+        <!-- Wadah Partikel Debu Emas -->
+        <div class="particle" style="left:15%; bottom:10%; animation-delay:0s; width:6px; height:6px;"></div>
+        <div class="particle" style="left:45%; bottom:15%; animation-delay:0.7s; width:8px; height:8px;"></div>
+        <div class="particle" style="left:75%; bottom:8%; animation-delay:1.4s; width:5px; height:5px;"></div>
+        <div class="particle" style="left:30%; bottom:25%; animation-delay:2.1s; width:7px; height:7px;"></div>
+        
+        <!-- Frame Khusus Cita-Cita -->
+        <div class="photo-frame w-48 h-64 md:w-56 md:h-72 rounded-lg overflow-hidden bg-slate-900">
+          <div class="cc-image-wrapper">
+            <!-- Lapisan 1: Hitam Putih -->
+            <img id="foto-citacita-bw" src="" alt="Cita-cita BW" class="img-bw">
+            
+            <!-- Lapisan 2: Menggulung Naik Berwarna -->
+            <div class="reveal-color-layer">
+              <img id="foto-citacita-color" src="" alt="Cita-cita Color" class="img-color">
+            </div>
           </div>
-          <button class="btn-nav-arrow btn-left" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
         </div>
 
-        <!-- KOLOM 2: Sisi Tengah -->
-        <div class="column-center">
-          <div class="brand-header">
-            <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
-            <header class="header-title">SELAMAT & SUKSES</header>
-          </div>
-          
-          <div class="identity-box">
-            <div class="name-container">
-              <h1 id="siswa-nama">-</h1>
-            </div>
-            
-            <div class="ttl-container">
-              <p id="siswa-ttl"></p>
-            </div>
-            
-            <div class="ortu-container">
-              <div class="sub-detail" id="siswa-ortu"></div>
-            </div>
-            
-            <div class="nis-container">
-              <div class="nis-box" id="siswa-nis-box"></div>
-            </div>
-
-            <div class="wish-container">
-              <div class="wish-box" id="siswa-wish-box">
-                Cita-cita: <span id="siswa-citacita">-</span>
-              </div>
-            </div>
-          </div>
-
-          <footer class="footer-title">
-            PURNAWIYATA KE-III<br>
-            <span>SMP ISLAM AZ-ZAHRO</span>
-          </footer>
+        <!-- Box Teks Impian yang Menyembul Muncul di Akhir -->
+        <div id="siswa-wish-box" class="wish-box-animation w-full max-w-[240px] bg-gradient-to-b from-amber-500/10 to-amber-600/20 border border-amber-500/30 rounded-xl px-4 py-2 mt-4 text-center shadow-lg shadow-amber-950/20">
+          <span class="text-[10px] text-amber-400 font-bold uppercase tracking-widest block mb-0.5">Manifestasi Impian</span>
+          <p id="siswa-citacita" class="font-vibes text-2xl text-amber-200 tracking-wide"></p>
         </div>
-
-        <!-- KOLOM 3: Sisi Kanan -->
-        <div class="column-right" id="column-cc">
-          <div class="image-reveal-wrapper">
-            <!-- Foto Hitam Putih Base -->
-            <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-            <!-- Foto Berwarna Layer Atas -->
-            <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
-          </div>
-          <button class="btn-nav-arrow btn-right" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
-        </div>
-
       </div>
 
     </div>
   </main>
 
+  <!-- FOOTER & NAVIGASI KONTROL -->
+  <footer class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-7xl w-full mx-auto border-t border-slate-800/60 pt-4 px-2">
+    <!-- Informasi Indikator Angka -->
+    <div class="text-xs text-slate-400 font-mono">
+      <span class="text-amber-500"><i class="fa-solid fa-layer-group mr-1"></i> Data Terbuka:</span> 
+      <span id="current-index-view">0</span> / <span id="total-index-view">0</span> Siswa
+    </div>
+
+    <!-- Panel Tombol Navigasi Kebanggaan -->
+    <div class="flex items-center space-x-3">
+      <button onclick="prevStudent()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 hover:border-amber-500/40 transition duration-300 text-sm font-medium flex items-center space-x-2">
+        <i class="fa-solid fa-chevron-left text-xs text-amber-500"></i> <span>Sebelumnya</span>
+      </button>
+      
+      <button onclick="toggleAutoPlay()" id="btn-autoplay" class="px-5 py-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 font-semibold transition duration-300 text-sm flex items-center space-x-2 shadow-lg shadow-amber-950/10">
+        <i class="fa-solid fa-play text-xs"></i> <span>Putar Otomatis</span>
+      </button>
+
+      <button onclick="nextStudent()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 hover:border-amber-500/40 transition duration-300 text-sm font-medium flex items-center space-x-2">
+        <span>Selanjutnya</span> <i class="fa-solid fa-chevron-right text-xs text-amber-500"></i>
+      </button>
+    </div>
+  </footer>
+
+  <!-- SISTEM ENGINE LOGIC & DATA INTAKE -->
   <script>
-    let studentsData = [];
+    // 1. DATA MASTER INDUK SISWA (Integrasi Penuh Lapisan Spreadsheet)
+    const studentsData = [
+      {
+        nama: "MUHAMMAD ALIF RIZKY",
+        nis: "24250101",
+        nisn: "0109283746",
+        tempat_lahir: "Bondowoso",
+        tanggal_lahir: "12 Januari 2011",
+        jk: "L",
+        orang_tua: "Ahmad Mujani",
+        cita_cita: "Perwira TNI-AD",
+        foto_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80",
+        foto_citacita_url: "https://images.unsplash.com/photo-1590552515252-3a5a1bce7bed?auto=format&fit=crop&w=500&q=80"
+      },
+      {
+        nama: "SITI NUR HALIZAH",
+        nis: "24250102",
+        nisn: "0112345678",
+        tempat_lahir: "Situbondo",
+        tanggal_lahir: "24 Agustus 2011",
+        jk: "P",
+        orang_tua: "Abdur Rahman",
+        cita_cita: "Dokter Spesialis Anak",
+        foto_url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=500&q=80",
+        foto_citacita_url: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=500&q=80"
+      },
+      {
+        nama: "FATHUR RAHMAN HAKIM",
+        nis: "24250103",
+        nisn: "0105566778",
+        tempat_lahir: "Bondowoso",
+        tanggal_lahir: "05 Mei 2010",
+        jk: "L",
+        orang_tua: "Imron Rosyadi",
+        cita_cita: "Arsitek Rabbani",
+        foto_url: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=500&q=80",
+        foto_citacita_url: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=500&q=80"
+      }
+    ];
+
+    // 2. STATE MANAGEMENT & TIMING CONSTANTS
     let currentIndex = 0;
-    let typingTimeouts = []; 
-    let preloadedImages = {}; // Menyimpan objek Image yang sudah selesai di-preload
-    const bgMusic = document.getElementById('bg-music');
-    const overlay = document.getElementById('music-overlay');
+    let autoPlayInterval = null;
+    const playDelayDuration = 12000; // Durasi jeda tayang per siswa (12 detik)
+    let typingTimeouts = []; // Koleksi ID timeout pengetikan agar bisa dibersihkan total
 
-    // Fungsi Utama Efek Mengetik Berantai
-    function typeEffect(element, fullText, speed, onComplete) {
-      element.innerText = "";
-      element.classList.add('typing-cursor');
-      let i = 0;
-      
-      function type() {
-        if (i < fullText.length) {
-          element.innerText += fullText.charAt(i);
-          i++;
-          let timer = setTimeout(type, speed);
-          typingTimeouts.push(timer);
-        } else {
-          element.classList.remove('typing-cursor');
-          if (onComplete) onComplete();
-        }
-      }
-      type();
-    }
-
-    // Generator partikel latar belakang global
-    function createGlobalParticles() {
-      const particleCount = 35;
-      for (let i = 0; i < particleCount; i++) {
-        let particle = document.createElement('div');
-        particle.className = 'particle';
-        let size = Math.random() * 6 + 2;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left = Math.random() * 100 + 'vw';
-        let duration = Math.random() * 8 + 5;
-        particle.style.animationDuration = duration + 's';
-        let delay = Math.random() * 5;
-        particle.style.animationDelay = delay + 's';
-        document.body.appendChild(particle);
-      }
-    }
-
-    // Generator partikel emas di kolom cita-cita
-    function createCitaCitaParticles() {
-      const ccContainer = document.getElementById('column-cc');
-      const ccParticleCount = 20; 
-      
-      for (let i = 0; i < ccParticleCount; i++) {
-        let p = document.createElement('div');
-        p.className = 'cc-particle';
-        let size = Math.random() * 5 + 3;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        p.style.left = Math.random() * 100 + '%';
-        let duration = Math.random() * 3 + 4;
-        p.style.animationDuration = duration + 's';
-        p.style.animationDelay = '-' + delay + 's';
-        ccContainer.appendChild(p);
-      }
-    }
-
-    // FUNGSI PRELOAD: Mengunduh foto ke cache lokal sebelum presentasi dimulai
-    function preloadStudentImages(data) {
-      const loadStatusText = document.getElementById('loading-status');
-      const startBtn = document.getElementById('start-btn');
-      
-      let totalUrls = [];
-      data.forEach(s => {
-        totalUrls.push(s.foto_url);
-        totalUrls.push(s.foto_citacita_url || s.foto_url);
-      });
-
-      // Hapus duplikasi url jika ada
-      totalUrls = [...new Set(totalUrls)];
-      let loadedCount = 0;
-      const totalImages = totalUrls.length;
-
-      if (totalImages === 0) {
-        loadStatusText.innerText = "Tidak ada foto yang perlu dimuat.";
-        startBtn.disabled = false;
-        startBtn.innerText = "Mulai Presentasi";
-        return;
-      }
-
-      totalUrls.forEach(url => {
-        const img = new Image();
-        img.src = url;
-        img.onload = img.onerror = () => {
-          loadedCount++;
-          let progress = Math.round((loadedCount / totalImages) * 100);
-          loadStatusText.innerText = `Mengunduh aset media siswa... (${progress}%)`;
-          
-          if (loadedCount === totalImages) {
-            loadStatusText.innerText = "Semua foto berhasil dimuat instan!";
-            startBtn.disabled = false;
-            startBtn.innerText = "Mulai Presentasi";
-          }
-        };
+    // Preload Gambar agar Transisi Mulus Tanpa Menunggu Loading Internet Saat Berpindah
+    function preloadImages() {
+      studentsData.forEach(student => {
+        if(student.foto_url) { const img1 = new Image(); img1.src = student.foto_url; }
+        if(student.foto_citacita_url) { const img2 = new Image(); img2.src = student.foto_citacita_url; }
       });
     }
 
-    async function loadStudentsData() {
-      try {
-        const response = await fetch('data-siswa.json');
-        studentsData = await response.json();
-        if(studentsData.length > 0) {
-          preloadStudentImages(studentsData);
-          renderStudent(0);
-        }
-      } catch (error) {
-        console.error("Gagal memuat file data-siswa.json:", error);
-        document.getElementById('loading-status').innerText = "Gagal memuat file data-siswa.json";
-      }
-    }
-
+    // 3. FUNGSI UTAMA: ENGINE RENDERING KARTU DATA SISWA
     function renderStudent(index) {
-      // Hentikan proses mengetik siswa sebelumnya
+      // Hentikan seluruh proses pengetikan siswa sebelumnya jika ada yang sedang berjalan
       typingTimeouts.forEach(clearTimeout);
       typingTimeouts = [];
 
@@ -684,28 +358,37 @@
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Reset animasi & hilangkan status pewarnaan
+      // RESET ANIMASI & HILANGKAN STATUS PEWARNAAN BERJALAN
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
       elWishBox.classList.remove('fade-in-visible');
-      void card.offsetWidth; 
+      void card.offsetWidth; // Trigger reflow browser agar animasi reset berjalan instan
       card.classList.add('active');
 
-      // Bersihkan teks tanpa mengganggu kestabilan layout kolom tengah
+      // === PERBAIKAN UTAMA: Sembunyikan & Kosongkan Foto Lama Terlebih Dahulu ===
+      fotoElement.src = "";
+      fotoBw.src = "";
+      fotoColor.src = "";
+      // ========================================================================
+
+      // Bersihkan teks kontainer agar proses ketik dimulai murni dari kosong
       elNama.innerText = "";
       elTtl.innerText = "";
       elOrtu.innerText = "";
       elNisBox.innerHTML = "";
       elCitaCita.innerText = student.cita_cita || "-";
 
-      // String Data Masukan
+      // Komposisi Rangkaian String Data Masukan
       const textNama = student.nama;
       const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
-      // EKSEKUSI INSTAN: Karena sudah di-preload, foto langsung berganti tanpa jeda download
+      // Perbarui Indikator Counter Angka Halaman di Bagian Bawah
+      document.getElementById('current-index-view').innerText = index + 1;
+
+      // MASUKKAN URL BARU (Karena sudah di-preload, ini akan langsung muncul seketika)
       fotoElement.src = student.foto_url;
 
       const finalCCUrl = student.foto_citacita_url || student.foto_url;
@@ -713,28 +396,28 @@
       fotoColor.src = finalCCUrl;
 
       // ==========================================
-      // ALUR EKSEKUSI PENGETIKAN BERANTAI
+      // ALUR EKSEKUSI PENGETIKAN BERANTAI (CHAIN)
       // ==========================================
       
-      // 1. Ketik Nama
+      // 1. Mulai Ketik Nama Siswa
       typeEffect(elNama, textNama, 40, () => {
         
-        // 2. Ketik TTL
+        // 2. Setelah nama selesai, Ketik Data TTL
         typeEffect(elTtl, textTtl, 30, () => {
           
-          // 3. Ketik Hubungan Orang Tua
+          // 3. Setelah TTL selesai, Ketik Hubungan Orang Tua
           typeEffect(elOrtu, textOrtu, 30, () => {
             
-            // 4. Ketik Label NIS & NISN
+            // 4. Setelah Orang Tua selesai, Buat Elemen & Ketik Label NIS & NISN
             let nisSpan = document.createElement('span');
             elNisBox.appendChild(nisSpan);
             
             typeEffect(nisSpan, textNisNisn, 25, () => {
               
-              // 5. SELESAI KETIK: Lapisan berwarna memudar naik menggantikan hitam-putih secara elegan
+              // 5. SELESAI SELURUH TEKS KETIK: Lapisan berwarna memudar naik menggantikan hitam-putih
               ccContainer.classList.add('reveal-active'); 
               
-              // Tampilkan box deskripsi cita-cita beserta partikel emasnya
+              // Munculkan box deskripsi cita-cita beserta gugusan partikel debu emas
               setTimeout(() => {
                 elWishBox.classList.add('fade-in-visible');
                 ccContainer.classList.add('show-particles');
@@ -746,28 +429,80 @@
       });
     }
 
+    // 4. ENGINE ASINKRONUS: EFEK MESIN KETIK PREMIUM
+    function typeEffect(element, text, speed, callback) {
+      let i = 0;
+      element.classList.add('typing-cursor');
+      
+      function type() {
+        if (i < text.length) {
+          element.innerText += text.charAt(i);
+          i++;
+          let timeoutId = setTimeout(type, speed);
+          typingTimeouts.push(timeoutId);
+        } else {
+          element.classList.remove('typing-cursor');
+          if (callback) callback();
+        }
+      }
+      type();
+    }
+
+    // 5. NAVIGASI KONTROL MANUAL INTERAKTIF
     function nextStudent() {
-      if (studentsData.length === 0) return;
       currentIndex = (currentIndex + 1) % studentsData.length;
       renderStudent(currentIndex);
+      resetAutoPlayTimer();
     }
 
     function prevStudent() {
-      if (studentsData.length === 0) return;
       currentIndex = (currentIndex - 1 + studentsData.length) % studentsData.length;
       renderStudent(currentIndex);
+      resetAutoPlayTimer();
     }
 
-    function startPresentation() {
-      overlay.style.display = 'none';
-      bgMusic.play().catch(error => console.log("Musik dihambat browser:", error));
+    // 6. ENGINE OTOMATISASI PRESENTASI (AUTOPLAY)
+    function toggleAutoPlay() {
+      const btn = document.getElementById('btn-autoplay');
+      if (autoPlayInterval) {
+        // Matikan Autoplay
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+        btn.innerHTML = '<i class="fa-solid fa-play text-xs"></i> <span>Putar Otomatis</span>';
+        btn.classList.replace('bg-emerald-500/10', 'bg-amber-500/10');
+        btn.classList.replace('text-emerald-400', 'text-amber-400');
+        btn.classList.replace('border-emerald-500/30', 'border-amber-500/30');
+      } else {
+        // Nyalakan Autoplay
+        btn.innerHTML = '<i class="fa-solid fa-pause text-xs"></i> <span>Jeda Tayang</span>';
+        btn.classList.replace('bg-amber-500/10', 'bg-emerald-500/10');
+        btn.classList.replace('text-amber-400', 'text-emerald-400');
+        btn.classList.replace('border-amber-500/30', 'border-emerald-500/30');
+        
+        autoPlayInterval = setInterval(() => {
+          currentIndex = (currentIndex + 1) % studentsData.length;
+          renderStudent(currentIndex);
+        }, playDelayDuration);
+      }
     }
 
+    function resetAutoPlayTimer() {
+      if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(() => {
+          currentIndex = (currentIndex + 1) % studentsData.length;
+          renderStudent(currentIndex);
+        }, playDelayDuration);
+      }
+    }
+
+    // 7. INISIALISASI AWAL SAAT HALAMAN DIBUKA
     window.addEventListener('DOMContentLoaded', () => {
-      loadStudentsData();
-      createGlobalParticles();
-      createCitaCitaParticles(); 
+      document.getElementById('total-index-view').innerText = studentsData.length;
+      preloadImages();
+      renderStudent(currentIndex);
     });
   </script>
+
 </body>
 </html>
