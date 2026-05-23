@@ -130,7 +130,7 @@
       opacity: 0.85;
     }
 
-    /* KONTANER UTAMA (Diberbesar untuk meminimalkan ruang kosong di samping) */
+    /* KONTANER UTAMA */
     .main-container {
       display: flex;
       flex-direction: column;
@@ -182,7 +182,7 @@
 
     @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
-    /* KOLOM 1: Sisi Kiri (Memuat Foto Profil Utama dan Widget Musik Terpadu) */
+    /* KOLOM 1: Sisi Kiri (Memuat Foto Profil Utama, No Absen, dan Widget Musik) */
     .column-left {
       width: 340px;
       flex-shrink: 0;
@@ -224,7 +224,7 @@
       pointer-events: none;
     }
 
-    /* GAYA BARU: Label Nomor Urut Absensi di bawah foto */
+    /* Label Nomor Urut Absensi */
     .absen-label {
       background: rgba(15, 12, 8, 0.85);
       color: #f3e5ab;
@@ -557,7 +557,6 @@
         mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
       }
       
-      /* Penyesuaian tata letak tombol samar di perangkat mobile agar tetap di pojok bawah */
       .btn-nav-arrow {
         bottom: 15px;
         font-size: 2.8rem;
@@ -595,6 +594,10 @@
             <img id="siswa-foto" src="" alt="Foto Profil Siswa">
           </div>
 
+          <div class="absen-label" id="siswa-absen-box">
+            No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
+          </div>
+
           <div class="music-control-container">
             <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
               <svg id="icon-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
@@ -609,10 +612,6 @@
               <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
               <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
             </div>
-          </div>
-
-          <div class="absen-label" id="siswa-absen-box">
-            No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
           </div>
         </div>
 
@@ -682,12 +681,10 @@
     let audioCtx, analyser, bufferLength, dataArray;
     let visualizerAnimationId;
 
-    // Fungsi Pembantu padding angka nol di depan
     function padZero(num) {
       return num < 10 ? '0' + num : num;
     }
 
-    // Perbaikan Logika Mengetik Agar Spasi Terbaca Akurat
     function typeEffect(element, fullText, speed, onComplete) {
       element.textContent = ""; 
       element.classList.add('typing-cursor');
@@ -707,7 +704,6 @@
       type();
     }
 
-    // Generator partikel luar
     function createGlobalParticles() {
       const particleCount = 35;
       for (let i = 0; i < particleCount; i++) {
@@ -725,7 +721,6 @@
       }
     }
 
-    // Generator partikel emas mengapung di kolom cita-cita
     function createCitaCitaParticles() {
       const ccContainer = document.getElementById('column-cc');
       const ccParticleCount = 20; 
@@ -758,7 +753,6 @@
     }
 
     function renderStudent(index) {
-      // Bersihkan antrean ketik sebelumnya
       typingTimeouts.forEach(clearTimeout);
       typingTimeouts = [];
 
@@ -780,75 +774,48 @@
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Reset Kartu & Hilangkan State Instan
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
       elWishBox.classList.remove('fade-in-visible');
       void card.offsetWidth; 
       card.classList.add('active');
 
-      // Perbarui Teks Nomor Absen Secara Dinamis di Bawah Foto
       elNumAbsen.innerText = padZero(index + 1);
       elTotalAbsen.innerText = padZero(studentsData.length);
 
-      // Kosongkan Text Kolom Tengah
       elNama.textContent = "";
       elTtl.textContent = "";
       elOrtu.textContent = "";
       elNisBox.innerHTML = "";
       elCitaCita.innerText = student.cita_cita || "-";
 
-      // String Data
       const textNama = student.nama;
       const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
-      
-      // Murni hanya menampilkan NIS dan NISN tanpa no urut lagi
       const textNisNisn = `NIS: ${student.nis} | NISN: ${student.nisn}`;
 
-      // Ambil Gambar Profil Utama (Timestamp Dihapus Agar Load Cepat via Cache)
       fotoElement.style.opacity = '0';
-      const finalFotoUrl = student.foto_profil_url;
-      fotoElement.src = finalFotoUrl;
+      fotoElement.src = student.foto_profil_url;
       fotoElement.onload = () => fotoElement.style.opacity = '1';
 
-      // Sinkronisasi Gambar Cita-Cita Double Layer (Timestamp Dihapus Agar Load Cepat via Cache)
       fotoBw.style.opacity = '0';
       const finalCCUrl = student.foto_cita_cita_url || student.foto_profil_url;
       
       fotoBw.src = finalCCUrl;
       fotoColor.src = finalCCUrl;
+      fotoBw.onload = () => { fotoBw.style.opacity = '1'; };
 
-      // Saat gambar siap, tampilkan versi Hitam Putih (BW) terlebih dahulu
-      fotoBw.onload = () => {
-        fotoBw.style.opacity = '1';
-      };
-
-      // ==========================================
-      // ALUR EKSEKUSI PENGETIKAN BERANTAI
-      // ==========================================
-      
-      // 1. Ketik Nama
+      // Efek Ketik Berantai
       typeEffect(elNama, textNama, 40, () => {
-        
-        // 2. Ketik TTL
         typeEffect(elTtl, textTtl, 30, () => {
-          
-          // 3. Ketik Hubungan Orang Tua
           typeEffect(elOrtu, textOrtu, 30, () => {
-            
-            // 4. Ketik Label NIS & NISN
             let nisSpan = document.createElement('span');
             elNisBox.appendChild(nisSpan);
-            
             typeEffect(nisSpan, textNisNisn, 25, () => {
-              
-              // 5. SELESAI KETIK: Langsung aktifkan foto berwarna & kotak cita-cita (Instan)
               ccContainer.classList.add('reveal-active');
               elWishBox.classList.add('fade-in-visible');
               ccContainer.classList.add('show-particles');
-              
             });
           });
         });
@@ -867,7 +834,6 @@
       renderStudent(currentIndex);
     }
 
-    // Fungsi menginisialisasi sistem gelombang musik interaktif Spectrum
     function initVisualizer() {
       if (audioCtx) return; 
       
@@ -878,40 +844,32 @@
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
       
-      analyser.fftSize = 64;  // Menangani bar spectrum yang banyak (30 bar)
+      analyser.fftSize = 64; 
       bufferLength = analyser.frequencyBinCount;
       dataArray = new Uint8Array(bufferLength);
       
       animateVisualizer();
     }
 
-    // Loop animasi pergerakan gelombang musik berdasarkan frekuensi audio asli (Spectrum)
     function animateVisualizer() {
       visualizerAnimationId = requestAnimationFrame(animateVisualizer);
-      
       const bars = document.querySelectorAll('.visualizer-bar');
       
       if (bgMusic.paused) {
-        // Jika dipause, perlahan turunkan tinggi bar ke default minimal (2px)
-        bars.forEach(bar => {
-          bar.style.height = '2px';
-        });
+        bars.forEach(bar => { bar.style.height = '2px'; });
         return;
       }
       
       analyser.getByteFrequencyData(dataArray);
-      
       for (let i = 0; i < bars.length; i++) {
-        // Pemetaan data frekuensi ke 30 bar kecil secara presisi
         let dataIndex = Math.floor(i * (bufferLength / bars.length));
         let value = dataArray[dataIndex];
         let percent = value / 255;
-        let height = (percent * 22) + 2; // Batas max 24px, min 2px agar pas sejajar tombol
+        let height = (percent * 22) + 2; 
         bars[i].style.height = height + 'px';
       }
     }
 
-    // Fungsi kontrol Play/Pause Musik
     function toggleMusic() {
       const iconPlay = document.getElementById('icon-play');
       const iconPause = document.getElementById('icon-pause');
@@ -937,13 +895,10 @@
 
     function startPresentation() {
       overlay.style.display = 'none';
-      
-      // Inisialisasi visualizer audio saat interaksi user pertama kali dimulai
       initVisualizer();
       if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
-      
       bgMusic.play().catch(error => console.log("Musik tertahan browser:", error));
     }
 
