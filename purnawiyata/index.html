@@ -75,20 +75,20 @@
     }
     .btn-start:hover { transform: scale(1.05); }
 
-    /* KONTROL MUSIK & AUDIO VISUALIZER (BARU) */
+    /* TOMBOL KONTROL MUSIK POJOK ATAS */
     .music-control-container {
       position: fixed;
       top: 25px;
       right: 25px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
       z-index: 500;
       background: rgba(26, 21, 14, 0.8);
-      padding: 10px 20px;
-      border-radius: 30px;
+      padding: 5px;
+      border-radius: 50%;
       border: 1px solid rgba(212, 175, 55, 0.3);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-music-toggle {
@@ -101,8 +101,8 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      width: 35px;
-      height: 35px;
+      width: 40px;
+      height: 40px;
     }
 
     .btn-music-toggle:hover {
@@ -110,20 +110,30 @@
       transform: scale(1.1);
     }
 
+    /* FREQUENCY BAR SPECTRUM BARU (KECIL-KECIL TAPI PANJANG DI BAWAH FOTO CITA-CITA) */
     .audio-visualizer {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       align-items: flex-end;
-      gap: 3px;
-      width: 60px;
-      height: 30px;
+      justify-content: center;
+      gap: 1px; /* Rapat kecil-kecil */
+      width: 85%; /* Membentang panjang */
+      height: 45px; /* Batas tinggi maksimal */
+      z-index: 20;
+      pointer-events: none;
     }
 
     .visualizer-bar {
       flex: 1;
-      background: linear-gradient(to top, #a67c1e, #f3e5ab);
-      height: 3px;
-      border-radius: 2px 2px 0 0;
-      transition: height 0.05s ease;
+      max-width: 2px; /* Tipis kecil-kecil */
+      background: linear-gradient(to top, #a67c1e, #f3e5ab, #ffffff);
+      height: 2px;
+      border-radius: 1px 1px 0 0;
+      transition: height 0.04s ease;
+      opacity: 0.85;
     }
 
     /* KONTANER UTAMA (Diberbesar untuk meminimalkan ruang kosong di samping) */
@@ -566,7 +576,11 @@
       .music-control-container {
         top: 15px;
         right: 15px;
-        padding: 5px 12px;
+      }
+      .audio-visualizer {
+        bottom: 15px;
+        width: 90%;
+        height: 35px;
       }
     }
   </style>
@@ -578,13 +592,6 @@
   </audio>
 
   <div class="music-control-container">
-    <div class="audio-visualizer" id="visualizer">
-      <div class="visualizer-bar"></div>
-      <div class="visualizer-bar"></div>
-      <div class="visualizer-bar"></div>
-      <div class="visualizer-bar"></div>
-      <div class="visualizer-bar"></div>
-    </div>
     <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
       <svg id="icon-pause" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
       <svg id="icon-play" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
@@ -656,6 +663,15 @@
           <div class="image-reveal-wrapper">
             <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
             <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
+          </div>
+          
+          <div class="audio-visualizer" id="visualizer">
+            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
           </div>
         </div>
 
@@ -864,7 +880,7 @@
       renderStudent(currentIndex);
     }
 
-    // Fungsi menginisialisasi sistem gelombang musik interaktif
+    // Fungsi menginisialisasi sistem gelombang musik interaktif Spectrum
     function initVisualizer() {
       if (audioCtx) return; 
       
@@ -875,35 +891,35 @@
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
       
-      analyser.fftSize = 32; 
+      analyser.fftSize = 64;  // Ditambah untuk menangani bar spectrum yang lebih banyak (30 bar)
       bufferLength = analyser.frequencyBinCount;
       dataArray = new Uint8Array(bufferLength);
       
       animateVisualizer();
     }
 
-    // Loop animasi pergerakan gelombang musik berdasarkan frekuensi audio asli
+    // Loop animasi pergerakan gelombang musik berdasarkan frekuensi audio asli (Spectrum)
     function animateVisualizer() {
       visualizerAnimationId = requestAnimationFrame(animateVisualizer);
       
+      const bars = document.querySelectorAll('.visualizer-bar');
+      
       if (bgMusic.paused) {
-        // Jika dipause, perlahan turunkan tinggi bar ke default minimal (3px)
-        const bars = document.querySelectorAll('.visualizer-bar');
+        // Jika dipause, perlahan turunkan tinggi bar ke default minimal (2px)
         bars.forEach(bar => {
-          bar.style.height = '3px';
+          bar.style.height = '2px';
         });
         return;
       }
       
       analyser.getByteFrequencyData(dataArray);
-      const bars = document.querySelectorAll('.visualizer-bar');
       
       for (let i = 0; i < bars.length; i++) {
-        // Ambil data frekuensi audio dan petakan ke ukuran tinggi bar (maksimal 30px)
+        // Pemetaan data frekuensi ke 30 bar kecil secara presisi
         let dataIndex = Math.floor(i * (bufferLength / bars.length));
         let value = dataArray[dataIndex];
         let percent = value / 255;
-        let height = (percent * 27) + 3; 
+        let height = (percent * 43) + 2; // Batas max 45px, min 2px
         bars[i].style.height = height + 'px';
       }
     }
