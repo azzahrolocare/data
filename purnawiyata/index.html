@@ -82,15 +82,15 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 1px; /* Rapat kecil-kecil */
+      gap: 1px; 
       flex: 1;
-      height: 24px; /* Batas tinggi maksimal agar pas sejajar tombol */
+      height: 24px; 
       pointer-events: none;
     }
 
     .visualizer-bar {
       flex: 1;
-      max-width: 2px; /* Tipis kecil-kecil */
+      max-width: 2px; 
       background: linear-gradient(to top, #a67c1e, #f3e5ab, #ffffff);
       height: 2px;
       border-radius: 1px 1px 0 0;
@@ -205,7 +205,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       text-align: center;
       width: 90%;
-      margin-right: 25px; /* Kompensasi miring clip-path kolom kiri */
+      margin-right: 25px; 
       text-transform: uppercase;
     }
     .absen-label span {
@@ -264,58 +264,73 @@
       justify-content: center; 
       margin: 20px 0;
       position: relative; 
-      perspective: 1000px; /* Perspektif 3D panggung ditingkatkan */
+      perspective: 1000px; 
     }
 
     /* ==========================================================================
-       PERBAIKAN UTAMA: MEMBUAT SOROTAN LAMPU MENYATU ALAMI TANPA KOTAK KAKU
+       MODIFIKASI DEKORASI BATAS ATAS WADAH LAMPU AGAR MENYATU ALAMI
        ========================================================================== */
     .spotlight-container {
       position: absolute;
-      top: -20px;
+      top: 0;
       left: -20px;
       width: calc(100% + 40px);
-      height: calc(100% + 40px);
+      height: 100%;
       pointer-events: none;
       overflow: hidden;
       z-index: 0;
-      /* Topeng Masking Gradasi melingkar & memudar di tepi kanan-kiri-bawah wadah */
-      -webkit-mask-image: linear-gradient(to bottom, #fff 60%, rgba(255,255,255,0.4) 85%, transparent 100%),
+      /* Topeng ganda agar meredup halus di batas bawah dan kanan-kiri */
+      -webkit-mask-image: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.3) 80%, transparent 100%),
                           linear-gradient(to right, transparent 0%, #fff 15%, #fff 85%, transparent 100%);
-      mask-image: linear-gradient(to bottom, #fff 60%, rgba(255,255,255,0.4) 85%, transparent 100%),
+      mask-image: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.3) 80%, transparent 100%),
                   linear-gradient(to right, transparent 0%, #fff 15%, #fff 85%, transparent 100%);
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
     }
 
-    /* Bohlam/Titik lampu pendar atas dibuat lebih lembut buram tepinya */
+    /* BARU: Ornamen Pelindung / Sasis Dudukan Rel Lampu Fisik di Batas Paling Atas */
+    .spotlight-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 5%;
+      width: 90%;
+      height: 6px;
+      /* Diberi warna abu metalik panggung dengan gradasi emas mewah tipis */
+      background: linear-gradient(to right, #1f1a12, #554422, #a67c1e, #554422, #1f1a12);
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 2px 12px rgba(212, 175, 55, 0.4), 0 0 20px rgba(0, 0, 0, 0.9);
+      z-index: 5;
+    }
+
+    /* Bohlam Fisik diposisikan nempel pas di bawah rel pelindung atas */
     .spotlight-source {
       position: absolute;
-      top: 10px;
-      width: 40px;
-      height: 14px;
-      background: #ffffff;
+      top: 4px; /* Menempel tepat di bawah sasis rel */
+      width: 42px;
+      height: 12px;
+      background: linear-gradient(to bottom, #ffffff, #f3e5ab);
       border-radius: 50%;
-      box-shadow: 0 0 25px 10px #f3e5ab, 0 0 50px 25px rgba(212, 175, 55, 0.5);
-      z-index: 3;
-      filter: blur(1px);
+      /* Semburan cahaya internal bohlam */
+      box-shadow: 0 0 25px 12px #f3e5ab, 0 0 50px 25px rgba(212, 175, 55, 0.4);
+      z-index: 4;
+      filter: blur(0.5px);
     }
     .source-1 { left: 12%; }
     .source-2 { left: 37%; }
     .source-3 { right: 37%; }
     .source-4 { right: 12%; }
 
-    /* Berkas Cahaya Sorot Mengkerucut (3D Beam dengan Transparansi Ekstra Lambat) */
+    /* Berkas Cahaya Sorot Mengkerucut (3D Beam) */
     .spotlight {
       position: absolute;
-      top: 12px;
+      top: 6px;
       width: 350px;
       height: 130%;
-      /* Gradasi radial diubah agar memudar sangat halus ke samping (0% ke 40% ke 100%) */
-      background: radial-gradient(ellipse at top, rgba(255, 246, 212, 0.25) 0%, rgba(212, 175, 55, 0.06) 35%, rgba(212, 175, 55, 0.01) 55%, transparent 75%);
+      background: radial-gradient(ellipse at top, rgba(255, 246, 212, 0.22) 0%, rgba(212, 175, 55, 0.05) 35%, rgba(212, 175, 55, 0.01) 55%, transparent 75%);
       clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
       transform-origin: top center;
-      filter: blur(12px); /* Blur dinaikkan dari 5px ke 12px agar tidak bergaris lurus tajam */
+      filter: blur(12px); 
       mix-blend-mode: screen; 
     }
 
@@ -359,7 +374,7 @@
       100% { transform: translateY(-30px) translateX(30px) scale(0.9); opacity: 0; }
     }
 
-    /* Pastikan seluruh konten identitas berada di atas lapisan sorotan lampu */
+    /* Konten Identitas Utama */
     .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container {
       position: relative;
       z-index: 2;
@@ -538,7 +553,7 @@
       100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
     }
 
-    /* STYLE NAVIGASI SAMAR DI POJOK BAWAH LAYAR */
+    /* NAVIGASI POJOK BAWAH LAYAR */
     .nav-container {
       display: contents;
     }
@@ -563,15 +578,8 @@
       padding: 10px 20px;
     }
 
-    /* Panah Kiri di Pojok Kiri Bawah */
-    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] {
-      left: 25px;
-    }
-
-    /* Panah Kanan di Pojok Kanan Bawah */
-    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
-      right: 25px;
-    }
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 25px; }
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 25px; }
 
     .btn-nav-arrow:hover {
       color: #f3e5ab;
@@ -606,10 +614,7 @@
         align-items: center; 
       }
       
-      .logo-wrapper {
-        justify-content: center;
-      }
-      
+      .logo-wrapper { justify-content: center; }
       .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
         height: auto; 
         min-height: inherit;
@@ -625,16 +630,9 @@
         mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
       }
       
-      .btn-nav-arrow {
-        bottom: 15px;
-        font-size: 2.8rem;
-      }
-      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] {
-        left: 15px;
-      }
-      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
-        right: 15px;
-      }
+      .btn-nav-arrow { bottom: 15px; font-size: 2.8rem; }
+      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 15px; }
+      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 15px; }
     }
   </style>
 </head>
@@ -749,7 +747,6 @@
     let typingTimeouts = []; 
     const bgMusic = document.getElementById('bg-music');
     
-    // Web Audio API Context untuk Gelombang Musik Interaktif
     let audioCtx, analyser, bufferLength, dataArray;
     let visualizerAnimationId;
 
@@ -793,7 +790,6 @@
       }
     }
 
-    // Fungsi Membuat Debu Gemerlap Melayang khusus di dalam area sorotan lampu
     function createSpotlightDust() {
       const zone = document.getElementById('identity-spotlight-zone');
       const dustCount = 15;
@@ -899,7 +895,6 @@
       fotoColor.src = finalCCUrl;
       fotoBw.onload = () => { fotoBw.style.opacity = '1'; };
 
-      // Efek Ketik Berantai
       typeEffect(elNama, textNama, 40, () => {
         typeEffect(elTtl, textTtl, 30, () => {
           typeEffect(elOrtu, textOrtu, 30, () => {
@@ -996,7 +991,6 @@
       }
     }
 
-    // Mendengarkan tombol remote IFP (Keyboard Events) secara global
     window.addEventListener('keydown', (event) => {
       switch(event.key) {
         case 'ArrowRight':
@@ -1010,7 +1004,6 @@
       }
     });
 
-    // Otomatis berjalan saat halaman dimuat (Izin terbawa dari opening.html)
     window.addEventListener('DOMContentLoaded', () => {
       createGlobalParticles();
       createSpotlightDust(); 
@@ -1024,7 +1017,7 @@
       }
 
       bgMusic.play().catch(error => {
-        console.log("Audio otomatis berjalan lancar berkat interaksi halaman sebelumnya.", error);
+        console.log("Audio otomatis berjalan lancar.", error);
       });
     });
   </script>
