@@ -6,7 +6,7 @@
   <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
   <style>
     /* ==========================================================================
-       STYLE / CSS (Tema Luxury Gold, 3-Column Layout & Ukuran Super Jumbo)
+       STYLE UMUM & STRUKTUR HALAMAN
        ========================================================================== */
     * {
       margin: 0;
@@ -18,16 +18,150 @@
     body {
       background: #0f0c08; 
       background: linear-gradient(to right, #2b1f0d, #0f0c08, #2b1f0d);
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
       overflow: hidden;
       position: relative;
+    }
+
+    /* Tampilan Konten Utama (Prosesi Siswa) disembunyikan di awal */
+    #main-gallery-content {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      min-height: 100vh;
       padding: 20px;
     }
 
-    /* Efek Partikel Latar Belakang Utama */
+    /* ==========================================================================
+       STYLE DARI FILE: opening.html
+       ========================================================================== */
+    #opening-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: #0f0c08;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    #particle-canvas {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1;
+      display: none;
+      pointer-events: none;
+    }
+
+    .video-wrapper {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+    }
+
+    #video-bg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: none;
+      cursor: pointer;
+    }
+
+    .overlay-dark {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 12, 8, 0.35);
+      z-index: 3;
+      display: none;
+      pointer-events: none;
+    }
+
+    .interface-container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      color: #fff;
+    }
+
+    .card-start {
+      border: 2px solid #d4af37;
+      padding: 40px;
+      background: rgba(26, 21, 14, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+    }
+
+    .card-start h1 {
+      color: #d4af37;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      font-size: 2rem;
+    }
+
+    .card-start p {
+      color: #e0e0e0;
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+    }
+
+    .btn-gold {
+      padding: 15px 40px;
+      background: linear-gradient(45deg, #a67c1e, #f3e5ab, #a67c1e);
+      border: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      color: #0f0c08;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-gold:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(243, 229, 171, 0.6);
+    }
+
+    /* Perbaikan Tombol Panah: Hanya panah saja yang samar tanpa lingkaran */
+    .btn-skip {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      background: none;
+      border: none;
+      color: #f3e5ab;
+      cursor: pointer;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      font-size: 3.5rem;
+      font-weight: bold;
+      opacity: 0.35; /* Membuat panah menjadi samar secara default */
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-skip:hover {
+      opacity: 0.95; /* Menjadi jelas saat disentuh mouse */
+      color: #ffffff;
+      transform: scale(1.15) translateX(5px);
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    }
+
+    /* ==========================================================================
+       STYLE DARI FILE: prosesi siswa.html
+       ========================================================================== */
     .particle {
       position: absolute;
       background: radial-gradient(circle, rgba(212,175,55,0.8) 0%, rgba(212,175,55,0) 70%);
@@ -43,7 +177,6 @@
       100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
     }
 
-    /* WIDGET MUSIK TERPADU (TOMBOL PAUSE SEJAJAR DENGAN BAR SPECTRUM) */
     .music-control-container {
       display: flex;
       align-items: center;
@@ -54,7 +187,7 @@
       border: 1px solid rgba(255, 255, 255, 0.15);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       width: 90%;
-      margin-right: 25px; /* Kompensasi miring clip-path kolom kiri */
+      margin-right: 25px;
       justify-content: center;
     }
 
@@ -77,20 +210,19 @@
       transform: scale(1.1);
     }
 
-    /* FREQUENCY BAR SPECTRUM KECIL-KECIL TAPI PANJANG */
     .audio-visualizer {
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 1px; /* Rapat kecil-kecil */
+      gap: 1px; 
       flex: 1;
-      height: 24px; /* Batas tinggi maksimal agar pas sejajar tombol */
+      height: 24px; 
       pointer-events: none;
     }
 
     .visualizer-bar {
       flex: 1;
-      max-width: 2px; /* Tipis kecil-kecil */
+      max-width: 2px; 
       background: linear-gradient(to top, #a67c1e, #f3e5ab, #ffffff);
       height: 2px;
       border-radius: 1px 1px 0 0;
@@ -98,7 +230,6 @@
       opacity: 0.85;
     }
 
-    /* KONTANER UTAMA */
     .main-container {
       display: flex;
       flex-direction: column;
@@ -112,7 +243,6 @@
       position: relative;
     }
 
-    /* KARTU SUPER JUMBO FULL BAWAH */
     .purnawiyata-card {
       display: flex;
       width: 100%;
@@ -136,7 +266,6 @@
       z-index: 1;
     }
 
-    /* Lapisan dalam pembungkus struktur kartu */
     .card-content-wrapper {
       display: flex;
       width: calc(100% - 6px);
@@ -150,7 +279,6 @@
 
     @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
-    /* KOLOM 1: Sisi Kiri (Memuat Foto Profil Utama, No Absen, dan Widget Musik) */
     .column-left {
       width: 340px;
       flex-shrink: 0;
@@ -192,7 +320,6 @@
       pointer-events: none;
     }
 
-    /* Label Nomor Urut Absensi */
     .absen-label {
       background: rgba(15, 12, 8, 0.85);
       color: #f3e5ab;
@@ -205,14 +332,11 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       text-align: center;
       width: 90%;
-      margin-right: 25px; /* Kompensasi miring clip-path kolom kiri */
+      margin-right: 25px; 
       text-transform: uppercase;
     }
-    .absen-label span {
-      color: #ffffff;
-    }
+    .absen-label span { color: #ffffff; }
 
-    /* KOLOM 2: Sisi Tengah */
     .column-center {
       flex: 1;
       padding: 40px 50px;
@@ -230,7 +354,6 @@
       flex-shrink: 0;
     }
 
-    /* Pembungkus dua logo berdampingan */
     .logo-wrapper {
       display: flex;
       align-items: center;
@@ -244,10 +367,7 @@
       filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
     }
 
-    /* UKURAN KHUSUS LOGO PPSS */
-    .school-logo.logo-ppss {
-      width: 150px; 
-    }
+    .school-logo.logo-ppss { width: 150px; }
 
     .header-title {
       font-size: 2rem;
@@ -263,6 +383,103 @@
       flex-direction: column;
       justify-content: center; 
       margin: 20px 0;
+      position: relative; 
+      perspective: 1000px; 
+    }
+
+    .spotlight-container {
+      position: absolute;
+      top: 0; left: -20px;
+      width: calc(100% + 40px);
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+      -webkit-mask-image: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.3) 80%, transparent 100%),
+                          linear-gradient(to right, transparent 0%, #fff 15%, #fff 85%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.3) 80%, transparent 100%),
+                  linear-gradient(to right, transparent 0%, #fff 15%, #fff 85%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .spotlight-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 5%; width: 90%; height: 6px;
+      background: linear-gradient(to right, #1f1a12, #554422, #a67c1e, #554422, #1f1a12);
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 2px 12px rgba(212, 175, 55, 0.4), 0 0 20px rgba(0, 0, 0, 0.9);
+      z-index: 5;
+    }
+
+    .spotlight-source {
+      position: absolute;
+      top: 4px;
+      width: 42px; height: 12px;
+      background: linear-gradient(to bottom, #ffffff, #f3e5ab);
+      border-radius: 50%;
+      box-shadow: 0 0 25px 12px #f3e5ab, 0 0 50px 25px rgba(212, 175, 55, 0.4);
+      z-index: 4;
+      filter: blur(0.5px);
+    }
+    .source-1 { left: 12%; }
+    .source-2 { left: 37%; }
+    .source-3 { right: 37%; }
+    .source-4 { right: 12%; }
+
+    .spotlight {
+      position: absolute;
+      top: 6px;
+      width: 350px; height: 130%;
+      background: radial-gradient(ellipse at top, rgba(255, 246, 212, 0.22) 0%, rgba(212, 175, 55, 0.05) 35%, rgba(212, 175, 55, 0.01) 55%, transparent 75%);
+      clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+      transform-origin: top center;
+      filter: blur(12px); 
+      mix-blend-mode: screen; 
+    }
+
+    .spotlight-1 { left: -8%; animation: stageSwing1 8s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate; }
+    .spotlight-2 { left: 22%; animation: stageSwing2 11s cubic-bezier(0.39, 0.575, 0.565, 1) infinite alternate; }
+    .spotlight-3 { right: 22%; animation: stageSwing3 9s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate; }
+    .spotlight-4 { right: -8%; animation: stageSwing4 7s cubic-bezier(0.39, 0.575, 0.565, 1) infinite alternate; }
+
+    @keyframes stageSwing1 {
+      0% { transform: rotateX(15deg) rotateZ(-20deg) scaleX(0.85); opacity: 0.4; }
+      100% { transform: rotateX(25deg) rotateZ(6deg) scaleX(1.15); opacity: 0.85; }
+    }
+    @keyframes stageSwing2 {
+      0% { transform: rotateX(20deg) rotateZ(10deg) scaleX(1.15); opacity: 0.75; }
+      100% { transform: rotateX(10deg) rotateZ(-12deg) scaleX(0.75); opacity: 0.35; }
+    }
+    @keyframes stageSwing3 {
+      0% { transform: rotateX(10deg) rotateZ(-12deg) scaleX(0.75); opacity: 0.35; }
+      100% { transform: rotateX(25deg) rotateZ(14deg) scaleX(1.15); opacity: 0.85; }
+    }
+    @keyframes stageSwing4 {
+      0% { transform: rotateX(25deg) rotateZ(16deg) scaleX(1.05); opacity: 0.85; }
+      100% { transform: rotateX(15deg) rotateZ(-8deg) scaleX(0.85); opacity: 0.4; }
+    }
+
+    .spotlight-dust {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 6px 2px #fff;
+      pointer-events: none;
+      animation: ambientDust linear infinite;
+      opacity: 0;
+    }
+    @keyframes ambientDust {
+      0% { transform: translateY(350px) translateX(0) scale(0.2); opacity: 0; }
+      20% { opacity: 0.5; }
+      80% { opacity: 0.3; }
+      100% { transform: translateY(-30px) translateX(30px) scale(0.9); opacity: 0; }
+    }
+
+    .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container {
+      position: relative;
+      z-index: 2;
     }
 
     .name-container {
@@ -361,7 +578,6 @@
     }
     .footer-title span { color: #d4af37; font-size: 1.65rem; font-weight: 800; }
 
-    /* KOLOM 3: Sisi Kanan */
     .column-right {
       width: 480px;
       flex-shrink: 0;
@@ -412,9 +628,7 @@
       opacity: 0;
     }
 
-    .reveal-active .img-reveal-color {
-      opacity: 1; 
-    }
+    .reveal-active .img-reveal-color { opacity: 1; }
 
     .cc-particle {
       position: absolute;
@@ -438,11 +652,9 @@
       100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
     }
 
-    /* STYLE NAVIGASI SAMAR DI POJOK BAWAH LAYAR */
-    .nav-container {
-      display: contents;
-    }
+    .nav-container { display: contents; }
 
+    /* Desain Tombol Navigasi Bawah Galeri Utama */
     .btn-nav-arrow {
       position: fixed;
       bottom: 25px;
@@ -463,15 +675,8 @@
       padding: 10px 20px;
     }
 
-    /* Panah Kiri di Pojok Kiri Bawah */
-    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] {
-      left: 25px;
-    }
-
-    /* Panah Kanan di Pojok Kanan Bawah */
-    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
-      right: 25px;
-    }
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 25px; }
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 25px; }
 
     .btn-nav-arrow:hover {
       color: #f3e5ab;
@@ -480,7 +685,6 @@
       text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
     }
 
-    /* ANIMASI MASUK KARTU UTAMA */
     .purnawiyata-card.active {
       animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
@@ -492,6 +696,7 @@
     /* Responsif Layar Hp / Mobile */
     @media (max-width: 950px) {
       body { overflow-y: auto; }
+      #main-gallery-content { padding-bottom: 80px; }
       .main-container { height: auto; padding-bottom: 80px; margin: 0; }
       .purnawiyata-card { height: auto; min-height: initial; }
       .card-content-wrapper { flex-direction: column; }
@@ -506,10 +711,7 @@
         align-items: center; 
       }
       
-      .logo-wrapper {
-        justify-content: center;
-      }
-      
+      .logo-wrapper { justify-content: center; }
       .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
         height: auto; 
         min-height: inherit;
@@ -525,122 +727,286 @@
         mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
       }
       
-      .btn-nav-arrow {
-        bottom: 15px;
-        font-size: 2.8rem;
-      }
-      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] {
-        left: 15px;
-      }
-      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] {
-        right: 15px;
-      }
+      .btn-skip { bottom: 20px; right: 20px; font-size: 2.8rem; }
+      .btn-nav-arrow { bottom: 15px; font-size: 2.8rem; }
+      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 15px; }
+      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 15px; }
     }
   </style>
 </head>
 <body>
 
+  <div id="opening-container">
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="video-wrapper">
+      <video id="video-bg" playsinline loop onclick="togglePlayPause()">
+        <source src="https://azzahrolocare.github.io/data/purnawiyata/files/opening3.mp4" type="video/mp4">
+        Browser tidak mendukung video HTML5.
+      </video>
+    </div>
+
+    <div class="overlay-dark" id="overlay-dark"></div>
+
+    <div class="interface-container" id="start-interface">
+      <div class="card-start">
+        <h1>SELAMAT & SUKSES</h1>
+        <p>Purnawiyata Ke-III SMP Islam Az-Zahro</p>
+        <button class="btn-gold" onclick="mulaiVideoSinematik()">Putar Video Pembuka</button>
+      </div>
+    </div>
+
+    <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()" title="Masuk Ke Galeri Siswa">❯</button>
+  </div>
+
+
   <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
     <source src="https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3" type="audio/mpeg">
   </audio>
 
-  <main class="main-container">
-    <div class="purnawiyata-card" id="student-card">
-      
-      <div class="card-content-wrapper">
+  <div id="main-gallery-content">
+    <main class="main-container">
+      <div class="purnawiyata-card" id="student-card">
         
-        <div class="column-left">
-          <div class="photo-frame">
-            <img id="siswa-foto" src="" alt="Foto Profil Siswa">
-          </div>
-
-          <div class="absen-label" id="siswa-absen-box">
-            No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
-          </div>
-
-          <div class="music-control-container">
-            <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
-              <svg id="icon-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
-              <svg id="icon-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-
-            <div class="audio-visualizer" id="visualizer">
-              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-              <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="column-center">
-          <div class="brand-header">
-            <div class="logo-wrapper">
-              <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
-              <img class="school-logo logo-ppss" src="https://azzahrolocare.github.io/media/logo/PPSS-Az-Zahro.png" alt="Logo PPSS Az-Zahro">
-            </div>
-            <header class="header-title">SELAMAT & SUKSES</header>
-          </div>
+        <div class="card-content-wrapper">
           
-          <div class="identity-box">
-            <div class="name-container">
-              <h1 id="siswa-nama">-</h1>
-            </div>
-            
-            <div class="ttl-container">
-              <p id="siswa-ttl"></p>
-            </div>
-            
-            <div class="ortu-container">
-              <div class="sub-detail" id="siswa-ortu"></div>
-            </div>
-            
-            <div class="nis-container">
-              <div class="nis-box" id="siswa-nis-box"></div>
+          <div class="column-left">
+            <div class="photo-frame">
+              <img id="siswa-foto" src="" alt="Foto Profil Siswa">
             </div>
 
-            <div class="wish-container">
-              <div class="wish-box" id="siswa-wish-box">
-                Cita-cita: <span id="siswa-citacita">-</span>
+            <div class="absen-label" id="siswa-absen-box">
+              No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
+            </div>
+
+            <div class="music-control-container">
+              <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
+                <svg id="icon-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
+                <svg id="icon-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+
+              <div class="audio-visualizer" id="visualizer">
+                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
               </div>
             </div>
           </div>
 
-          <footer class="footer-title">
-            PURNAWIYATA KE-III<br>
-            <span>SMP ISLAM AZ-ZAHRO</span><br>
-            <small style="font-size: 1.1rem; letter-spacing: 1px; color: #e0e0e0; font-weight: 500; display: inline-block; margin-top: 4px;">Tahun Pelajaran 2025/2026</small>
-          </footer>
-        </div>
+          <div class="column-center">
+            <div class="brand-header">
+              <div class="logo-wrapper">
+                <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
+                <img class="school-logo logo-ppss" src="https://azzahrolocare.github.io/media/logo/PPSS-Az-Zahro.png" alt="Logo PPSS Az-Zahro">
+              </div>
+              <header class="header-title">SELAMAT & SUKSES</header>
+            </div>
+            
+            <div class="identity-box">
+              <div class="spotlight-container" id="identity-spotlight-zone">
+                <div class="spotlight-source source-1"></div>
+                <div class="spotlight-source source-2"></div>
+                <div class="spotlight-source source-3"></div>
+                <div class="spotlight-source source-4"></div>
+                
+                <div class="spotlight spotlight-1"></div>
+                <div class="spotlight spotlight-2"></div>
+                <div class="spotlight spotlight-3"></div>
+                <div class="spotlight spotlight-4"></div>
+              </div>
 
-        <div class="column-right" id="column-cc">
-          <div class="image-reveal-wrapper">
-            <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-            <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
+              <div class="name-container">
+                <h1 id="siswa-nama">-</h1>
+              </div>
+              
+              <div class="ttl-container">
+                <p id="siswa-ttl"></p>
+              </div>
+              
+              <div class="ortu-container">
+                <div class="sub-detail" id="siswa-ortu"></div>
+              </div>
+              
+              <div class="nis-container">
+                <div class="nis-box" id="siswa-nis-box"></div>
+              </div>
+
+              <div class="wish-container">
+                <div class="wish-box" id="siswa-wish-box">
+                  Cita-cita: <span id="siswa-citacita">-</span>
+                </div>
+              </div>
+            </div>
+
+            <footer class="footer-title">
+              PURNAWIYATA KE-III<br>
+              <span>SMP ISLAM AZ-ZAHRO</span><br>
+              <small style="font-size: 1.1rem; letter-spacing: 1px; color: #e0e0e0; font-weight: 500; display: inline-block; margin-top: 4px;">Tahun Pelajaran 2025/2026</small>
+            </footer>
           </div>
+
+          <div class="column-right" id="column-cc">
+            <div class="image-reveal-wrapper">
+              <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
+              <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
+            </div>
+          </div>
+
         </div>
-
       </div>
-    </div>
 
-    <div class="nav-container">
-      <button class="btn-nav-arrow" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
-      <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
-    </div>
-  </main>
+      <div class="nav-container">
+        <button class="btn-nav-arrow" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
+        <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
+      </div>
+    </main>
+  </div>
 
   <script>
+    // Selektor Opening
+    const video = document.getElementById('video-bg');
+    const startInterface = document.getElementById('start-interface');
+    const overlayDark = document.getElementById('overlay-dark');
+    const btnSkip = document.getElementById('btn-skip');
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    const openingContainer = document.getElementById('opening-container');
+    const mainGalleryContent = document.getElementById('main-gallery-content');
+
+    // Variabel Global Galeri Siswa
     let studentsData = [];
     let currentIndex = 0;
     let typingTimeouts = []; 
     const bgMusic = document.getElementById('bg-music');
     
-    // Web Audio API Context untuk Gelombang Musik Interaktif
     let audioCtx, analyser, bufferLength, dataArray;
     let visualizerAnimationId;
 
+    /* --- SISTEM PARTIKEL GOLD (OPENING) --- */
+    let particlesArray = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * -1 - 0.5; 
+        this.alpha = Math.random() * 0.5 + 0.3;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.y < 0) {
+          this.y = canvas.height;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = '#d4af37';
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#f3e5ab';
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function initParticles() {
+      resizeCanvas();
+      particlesArray = [];
+      for (let i = 0; i < 70; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+      }
+      requestAnimationFrame(animateParticles);
+    }
+
+    // Fungsi memutar video pembuka pertama kali
+    function mulaiVideoSinematik() {
+      startInterface.style.display = 'none';
+      video.style.display = 'block';
+      overlayDark.style.display = 'block';
+      btnSkip.style.display = 'flex'; 
+      canvas.style.display = 'block';
+      
+      initParticles();
+      animateParticles();
+
+      // Otomatis Layar Penuh
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      }
+
+      video.muted = false; 
+      video.play().catch(error => {
+        console.log("Gagal memutar video: ", error);
+        menujuGaleriUtama();
+      });
+
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+      } catch(e) { console.log(e); }
+    }
+
+    function togglePlayPause() {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    /* --- TRANSISI UTAMA: DARI OPENING MENUJU PROSESI SISWA --- */
+    function menujuGaleriUtama() {
+      // Hentikan video pembuka jika masih berjalan
+      video.pause();
+      
+      // Sembunyikan kontainer opening secara total
+      openingContainer.style.display = 'none';
+      
+      // Tampilkan kontainer galeri utama
+      mainGalleryContent.style.display = 'flex';
+
+      // Jalankan inisialisasi visual panggung
+      createGlobalParticles();
+      createSpotlightDust(); 
+      createCitaCitaParticles(); 
+      
+      // Muat Data Siswa & Putar Musik Utama
+      loadStudentsData();
+      initVisualizer();
+
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      bgMusic.play().catch(error => {
+        console.log("Musik tertahan sistem kebijakan browser.", error);
+      });
+    }
+
+    /* --- SISTEM PANGGUNG GALERI UTAMA --- */
     function padZero(num) {
       return num < 10 ? '0' + num : num;
     }
@@ -681,6 +1047,22 @@
       }
     }
 
+    function createSpotlightDust() {
+      const zone = document.getElementById('identity-spotlight-zone');
+      const dustCount = 15;
+      for (let i = 0; i < dustCount; i++) {
+        let dust = document.createElement('div');
+        dust.className = 'spotlight-dust';
+        let size = Math.random() * 3 + 1.5;
+        dust.style.width = size + 'px';
+        dust.style.height = size + 'px';
+        dust.style.left = (Math.random() * 80 + 10) + '%';
+        dust.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        dust.style.animationDelay = '-' + (Math.random() * 5) + 's';
+        zone.appendChild(dust);
+      }
+    }
+
     function createCitaCitaParticles() {
       const ccContainer = document.getElementById('column-cc');
       const ccParticleCount = 20; 
@@ -702,11 +1084,6 @@
 
     async function loadStudentsData() {
       try {
-        // Otomatis picu ulang mode Fullscreen jika sempat keluar saat transisi halaman
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen().catch(() => {});
-        }
-
         const response = await fetch('data-siswa.json');
         studentsData = await response.json();
         if(studentsData.length > 0) {
@@ -771,7 +1148,6 @@
       fotoColor.src = finalCCUrl;
       fotoBw.onload = () => { fotoBw.style.opacity = '1'; };
 
-      // Efek Ketik Berantai
       typeEffect(elNama, textNama, 40, () => {
         typeEffect(elTtl, textTtl, 30, () => {
           typeEffect(elOrtu, textOrtu, 30, () => {
@@ -790,31 +1166,23 @@
     function nextStudent() {
       if (studentsData.length === 0) return;
       currentIndex = (currentIndex + 1) % studentsData.length;
-      
-      // Reset musik agar memutar dari awal
-      if (!bgMusic.paused) {
-        bgMusic.currentTime = 0;
-      }
-      
+      if (!bgMusic.paused) { bgMusic.currentTime = 0; }
       renderStudent(currentIndex);
     }
 
     function prevStudent() {
       if (studentsData.length === 0) return;
       currentIndex = (currentIndex - 1 + studentsData.length) % studentsData.length;
-      
-      // Reset musik agar memutar dari awal
-      if (!bgMusic.paused) {
-        bgMusic.currentTime = 0;
-      }
-      
+      if (!bgMusic.paused) { bgMusic.currentTime = 0; }
       renderStudent(currentIndex);
     }
 
     function initVisualizer() {
-      if (audioCtx) return; 
+      if (audioCtx && analyser) return; 
       
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if(!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
       analyser = audioCtx.createAnalyser();
       
       const source = audioCtx.createMediaElementSource(bgMusic);
@@ -870,36 +1238,20 @@
       }
     }
 
-    // Mendengarkan tombol remote IFP (Keyboard Events) secara global
+    // Navigasi Keyboard global
     window.addEventListener('keydown', (event) => {
-      switch(event.key) {
-        case 'ArrowRight':
-        case 'PageDown':
-          nextStudent();
-          break;
-        case 'ArrowLeft':
-        case 'PageUp':
-          prevStudent();
-          break;
+      if(mainGalleryContent.style.display === 'flex') {
+        switch(event.key) {
+          case 'ArrowRight':
+          case 'PageDown':
+            nextStudent();
+            break;
+          case 'ArrowLeft':
+          case 'PageUp':
+            prevStudent();
+            break;
+        }
       }
-    });
-
-    // Otomatis berjalan saat halaman dimuat (Izin terbawa dari opening.html)
-    window.addEventListener('DOMContentLoaded', () => {
-      createGlobalParticles();
-      createCitaCitaParticles(); 
-      
-      // Jalankan data utama dan musik secara otomatis tanpa overlay klik
-      loadStudentsData();
-      initVisualizer();
-
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-
-      bgMusic.play().catch(error => {
-        console.log("Audio otomatis berjalan lancar berkat interaksi halaman sebelumnya.", error);
-      });
     });
   </script>
 </body>
