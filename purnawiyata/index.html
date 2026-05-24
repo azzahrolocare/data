@@ -234,7 +234,7 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 1400px; /* Dipersempit sedikit agar pas proporsi layar wide IFP */
+      max-width: 1400px;
       height: 100%;
       z-index: 10;
       position: relative;
@@ -243,8 +243,8 @@
     .purnawiyata-card {
       display: flex;
       width: 100%;
-      height: 82vh; /* Menggunakan VH agar fleksibel mengikuti tinggi layar panel */
-      max-height: 720px; /* Pembatas maksimal agar layout tidak melar */
+      height: 82vh; 
+      max-height: 720px; 
       background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
       border-radius: 25px;
       overflow: hidden;
@@ -282,7 +282,7 @@
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* Membuat jarak item atas ke bawah merata */
+      justify-content: space-between;
       align-items: center;
       background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
       padding: 30px;
@@ -293,7 +293,7 @@
 
     .photo-frame {
       width: 100%;
-      flex: 1; /* Biarkan frame foto mengambil sisa ruang vertikal secara fleksibel */
+      flex: 1;
       max-height: 340px;
       border: 6px solid #fff;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
@@ -331,7 +331,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       text-align: center;
       width: 100%;
-      margin-right: 15px; /* Disesuaikan dengan kemiringan clip-path */
+      margin-right: 15px;
       text-transform: uppercase;
     }
     .absen-label span { color: #ffffff; }
@@ -390,7 +390,7 @@
       margin: 10px 0;
       position: relative; 
       perspective: 1000px; 
-      gap: 12px; /* Memberikan konsistensi jarak antar baris teks */
+      gap: 12px;
     }
 
     .spotlight-container {
@@ -496,7 +496,7 @@
     }
 
     #siswa-nama {
-      font-size: 2.3rem; /* Diperkecil sedikit agar nama panjang tidak pecah baris terlalu banyak */
+      font-size: 2.3rem; 
       font-weight: 800;
       color: #fff;
       letter-spacing: 0.5px;
@@ -584,7 +584,7 @@
 
     /* Kolom Kanan: Ilustrasi Cita-Cita */
     .column-right {
-      width: 400px; /* Dipersempit agar proporsional di layar landscape lebar */
+      width: 400px; 
       flex-shrink: 0;
       position: relative;
       overflow: hidden; 
@@ -945,7 +945,6 @@
       requestAnimationFrame(animateParticles);
     }
 
-    // Fungsi memutar video pembuka pertama kali
     function mulaiVideoSinematik() {
       startInterface.style.display = 'none';
       video.style.display = 'block';
@@ -956,7 +955,6 @@
       initParticles();
       animateParticles();
 
-      // Otomatis Layar Penuh
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch(err => console.log(err));
       }
@@ -1073,8 +1071,9 @@
         p.style.height = size + 'px';
         p.style.left = Math.random() * 100 + '%';
         let duration = Math.random() * 3 + 4;
+        let delay = Math.random() * 5; // Perbaikan: Didefinisikan dengan aman agar tidak memicu blank screen
         p.style.animationDuration = duration + 's';
-        p.style.animationDelay = '-' + delay + 's'; // Diperbaiki dari bug original (delay -> '0s' fallback atau buat logic aman)
+        p.style.animationDelay = '-' + delay + 's'; 
         ccContainer.appendChild(p);
       }
     }
