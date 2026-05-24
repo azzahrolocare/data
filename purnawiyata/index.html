@@ -23,13 +23,12 @@
       position: relative;
     }
 
-    /* Tampilan Konten Utama (Prosesi Siswa) disembunyikan di awal */
     #main-gallery-content {
       display: none;
       justify-content: center;
       align-items: center;
       width: 100%;
-      height: 100vh; /* Mengunci tinggi agar pas dengan layar IFP */
+      height: 100vh; 
       padding: 20px;
     }
 
@@ -159,7 +158,7 @@
     }
 
     /* ==========================================================================
-       STYLE UTAMA: PROSESI / GALERI SISWA (DIOPTIMALKAN UNTUK IFP & LAYAR BESAR)
+       STYLE UTAMA: PROSESI / GALERI SISWA (DIOPTIMALKAN & BEBAS OVERLAP)
        ========================================================================== */
     .particle {
       position: absolute;
@@ -243,8 +242,8 @@
     .purnawiyata-card {
       display: flex;
       width: 100%;
-      height: 82vh; 
-      max-height: 720px; 
+      /* Perbaikan: Menggunakan min-height dan menghilangkan batasan kaku tinggi agar teks tidak luber */
+      min-height: 80vh; 
       background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
       border-radius: 25px;
       overflow: hidden;
@@ -288,13 +287,12 @@
       padding: 30px;
       position: relative;
       clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
-      gap: 15px;
+      gap: 20px;
     }
 
     .photo-frame {
       width: 100%;
-      flex: 1;
-      max-height: 340px;
+      height: 340px;
       border: 6px solid #fff;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       border-radius: 12px;
@@ -345,6 +343,7 @@
       justify-content: space-between;
       color: #ffffff;
       overflow: hidden;
+      gap: 15px; /* Memberi jarak konsisten antar baris besar */
     }
 
     .brand-header {
@@ -382,15 +381,14 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
+    /* Perbaikan: Mengubah susunan box agar dinamis mengikuti panjang teks */
     .identity-box {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center; 
-      margin: 10px 0;
       position: relative; 
-      perspective: 1000px; 
-      gap: 12px;
+      gap: 15px; /* Jarak aman antar item data agar tidak saling menimpa */
     }
 
     .spotlight-container {
@@ -486,21 +484,20 @@
     .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container {
       position: relative;
       z-index: 2;
+      height: auto; /* Perbaikan: Menghilangkan height statis pemicu tabrakan */
     }
 
     .name-container {
-      min-height: 80px;
       display: flex;
       align-items: center;
       position: relative;
     }
 
     #siswa-nama {
-      font-size: 2.3rem; 
+      font-size: 2.2rem; /* Menyesuaikan ukuran font agar aman */
       font-weight: 800;
       color: #fff;
       letter-spacing: 0.5px;
-      word-spacing: 4px;
       text-transform: uppercase;
       padding-bottom: 8px;
       line-height: 1.2;
@@ -535,13 +532,8 @@
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    .ttl-container { height: 30px; display: flex; align-items: center; }
     #siswa-ttl { font-size: 1.25rem; color: #e0e0e0; font-weight: 500; }
-
-    .ortu-container { height: 30px; display: flex; align-items: center; }
     .sub-detail { font-size: 1.3rem; font-style: italic; color: #f3e5ab; }
-
-    .nis-container { height: 35px; display: flex; align-items: center; }
     
     .nis-box { 
       font-size: 1.1rem; 
@@ -553,9 +545,8 @@
       padding: 4px 14px;
       border-radius: 4px;
       border: 1px solid rgba(212, 175, 55, 0.2);
+      display: inline-block;
     }
-
-    .wish-container { height: 55px; display: flex; align-items: center; }
     
     .wish-box {
       font-size: 1.15rem;
@@ -565,7 +556,7 @@
       border-left: 4px solid #d4af37;
       border-radius: 0 5px 5px 0;
       opacity: 0; 
-      width: auto;
+      width: fit-content;
     }
     .wish-box.fade-in-visible { opacity: 1; } 
     .wish-box span { color: #f3e5ab; font-weight: bold; }
@@ -659,7 +650,6 @@
 
     .nav-container { display: contents; }
 
-    /* Desain Tombol Navigasi Bawah Galeri Utama */
     .btn-nav-arrow {
       position: fixed;
       bottom: 25px;
@@ -717,14 +707,9 @@
       }
       
       .logo-wrapper { justify-content: center; }
-      .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
-        height: auto; 
-        min-height: inherit;
-        justify-content: center; 
-      }
-      
-      .name-container { min-height: 70px; margin-bottom: 10px; }
+      .identity-box { justify-content: center; align-items: center; }
       #siswa-nama { font-size: 1.8rem; }
+      .wish-box { width: auto; }
       
       .column-right { height: 320px; width: 100%; }
       .image-reveal-wrapper {
@@ -763,7 +748,6 @@
 
     <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()" title="Masuk Ke Galeri Siswa">❯</button>
   </div>
-
 
   <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
     <source src="https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3" type="audio/mpeg">
@@ -871,7 +855,6 @@
   </div>
 
   <script>
-    // Selektor Opening
     const video = document.getElementById('video-bg');
     const startInterface = document.getElementById('start-interface');
     const overlayDark = document.getElementById('overlay-dark');
@@ -881,7 +864,6 @@
     const openingContainer = document.getElementById('opening-container');
     const mainGalleryContent = document.getElementById('main-gallery-content');
 
-    // Variabel Global Galeri Siswa
     let studentsData = [];
     let currentIndex = 0;
     let typingTimeouts = []; 
@@ -890,7 +872,6 @@
     let audioCtx, analyser, bufferLength, dataArray;
     let visualizerAnimationId;
 
-    /* --- SISTEM PARTIKEL GOLD (OPENING) --- */
     let particlesArray = [];
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -980,7 +961,6 @@
       }
     }
 
-    /* --- TRANSISI UTAMA: DARI OPENING MENUJU PROSESI SISWA --- */
     function menujuGaleriUtama() {
       video.pause();
       openingContainer.style.display = 'none';
@@ -998,11 +978,10 @@
       }
 
       bgMusic.play().catch(error => {
-        console.log("Musik tertahan sistem kebijakan browser.", error);
+        console.log("Musik tertahan.", error);
       });
     }
 
-    /* --- SISTEM PANGGUNG GALERI UTAMA --- */
     function padZero(num) {
       return num < 10 ? '0' + num : num;
     }
@@ -1071,7 +1050,7 @@
         p.style.height = size + 'px';
         p.style.left = Math.random() * 100 + '%';
         let duration = Math.random() * 3 + 4;
-        let delay = Math.random() * 5; // Perbaikan: Didefinisikan dengan aman agar tidak memicu blank screen
+        let delay = Math.random() * 5;
         p.style.animationDuration = duration + 's';
         p.style.animationDelay = '-' + delay + 's'; 
         ccContainer.appendChild(p);
@@ -1234,7 +1213,6 @@
       }
     }
 
-    // Navigasi Keyboard global (Mendukung Remote IFP / Presentasi)
     window.addEventListener('keydown', (event) => {
       if (openingContainer.style.display !== 'none') {
         if (startInterface.style.display === 'none') {
