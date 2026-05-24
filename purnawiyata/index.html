@@ -1,4 +1,10 @@
-<style>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
+  <style>
     /* ==========================================================================
        STYLE UMUM & STRUKTUR HALAMAN
        ========================================================================== */
@@ -129,7 +135,7 @@
       position: fixed;
       bottom: 40px;
       right: 40px;
-      background: rgba(15, 12, 8, 0.5); /* Tambah latar belakang agar mudah ditekan di IFP */
+      background: rgba(15, 12, 8, 0.5);
       border-radius: 50%;
       width: 70px;
       height: 70px;
@@ -142,7 +148,7 @@
       z-index: 20;
       font-size: 3rem;
       font-weight: bold;
-      opacity: 0.7; /* Naikkan opacity agar terlihat jelas di layar besar */
+      opacity: 0.7;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
       transition: all 0.3s ease;
       user-select: none;
@@ -249,7 +255,7 @@
       border-radius: 25px;
       overflow: hidden;
       position: relative;
-      border: 4px solid #d4af37; /* Menggantikan conic gradient yang merusak tampilan IFP */
+      border: 4px solid #d4af37;
       box-shadow: 0 0 30px rgba(212, 175, 55, 0.25), 0 25px 60px rgba(0, 0, 0, 0.8);
       opacity: 0;
       transform: translateY(30px);
@@ -395,7 +401,6 @@
       z-index: 0;
     }
 
-    /* Efek fade bottom spotlight menggunakan overlay linear-gradient standar (Sangat Ringan bagi IFP) */
     .spotlight-container::after {
       content: '';
       position: absolute;
@@ -600,7 +605,6 @@
       pointer-events: none;
     }
 
-    /* FIX BLEND EFECT KOLOM KANAN: Mengganti mask-image dengan overlay gradasi murni kiri-ke-kanan */
     .image-reveal-wrapper {
       position: relative;
       width: 100%;
@@ -659,16 +663,15 @@
       15% { opacity: 0.8; }
       50% { transform: scale(0.7) translateX(15px); }
       85% { opacity: 0.6; }
-      100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
+      100% { top: -10%; transform: scale(1.2) translateX(-15px) opacity: 0; }
     }
 
     .nav-container { display: contents; }
 
-    /* Tombol Navigasi Bawah Galeri Utama khusus Sentuhan Panel IFP */
     .btn-nav-arrow {
       position: fixed;
       bottom: 25px;
-      background: rgba(15, 12, 8, 0.6); /* Beri background agar luas penampang sentuh pas di jari */
+      background: rgba(15, 12, 8, 0.6); 
       border: 1px solid rgba(212, 175, 55, 0.3);
       border-radius: 50%;
       width: 75px;
@@ -683,7 +686,7 @@
       transition: all 0.3s ease;
       user-select: none;
       z-index: 100;
-      opacity: 0.7; /* Nilai default dinaikkan agar mudah dilihat operator dari jauh */
+      opacity: 0.7; 
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
     }
 
@@ -745,3 +748,707 @@
       .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 15px; }
     }
   </style>
+</head>
+<body>
+
+  <div id="opening-container">
+    <canvas id="particle-canvas"></canvas>
+    
+    <div class="video-wrapper">
+      <video id="video-bg" playsinline src="assets/Opening.mp4"></video>
+    </div>
+
+    <div class="overlay-dark" id="video-overlay"></div>
+
+    <div class="interface-container" id="start-interface">
+      <div class="card-start">
+        <h1>PURNAWIYATA KE-III</h1>
+        <p>SMP ISLAM AZ-ZAHRO</p>
+        <button class="btn-gold" id="btn-start" onclick="mulaiProsesiOpening()">MULAI ACARA</button>
+      </div>
+    </div>
+
+    <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()" aria-label="Lewati Video dan Masuk Ke Galeri">➔</button>
+  </div>
+
+  <audio id="bg-music" loop src="assets/instrumental.mp3"></audio>
+
+  <div id="main-gallery-content">
+    <div class="main-container">
+      <div class="purnawiyata-card id="purnawiyata-card">
+        <div class="card-content-wrapper">
+          
+          <div class="column-left">
+            <div class="photo-frame">
+              <img id="siswa-foto" src="" alt="Foto Formal Siswa">
+            </div>
+            
+            <div class="absen-label">
+              ABSENSI NO. <span id="siswa-absen">-</span>
+            </div>
+
+            <div class="music-control-container">
+              <button class="btn-music-toggle" id="music-toggle-btn" onclick="toggleMusicPlayback()" aria-label="Pause Musik">
+                <svg id="icon-play" style="display:none;" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="icon-pause" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              </button>
+              <div class="audio-visualizer" id="visualizer-container">
+                </div>
+            </div>
+          </div>
+
+          <div class="column-center">
+            <div class="brand-header">
+              <div class="logo-wrapper">
+                <img class="school-logo" src="assets/logo az zahro.png" alt="Logo Lembaga Az-Zahro">
+                <img class="logo-ppss" src="assets/logo ppss.png" alt="Logo PPSS">
+              </div>
+              <h2 class="header-title">PURNAWIYATA KE-III</h2>
+            </div>
+
+            <div class="identity-box">
+              <div class="spotlight-container" id="spotlight-box">
+                <div class="spotlight-source source-1"></div>
+                <div class="spotlight-source source-2"></div>
+                <div class="spotlight-source source-3"></div>
+                <div class="spotlight-source source-4"></div>
+                <div class="spotlight spotlight-1"></div>
+                <div class="spotlight spotlight-2"></div>
+                <div class="spotlight spotlight-3"></div>
+                <div class="spotlight spotlight-4"></div>
+              </div>
+
+              <div class="name-container">
+                <h1 id="siswa-nama" class="typing-cursor"></h1>
+              </div>
+              
+              <div class="ttl-container">
+                <p id="siswa-ttl"></p>
+              </div>
+              
+              <div class="ortu-container">
+                <p class="sub-detail" id="siswa-ortu"></p>
+              </div>
+              
+              <div class="nis-container">
+                <div class="nis-box">NIS / NISN: <span id="siswa-nis">-</span></div>
+              </div>
+
+              <div class="wish-container">
+                <div class="wish-box" id="wish-box">Cita-Cita: <span id="siswa-cita">-</span></div>
+              </div>
+            </div>
+
+            <div class="footer-title">
+              SMP ISLAM AZ-ZAHRO <br>
+              <span>TAHUN PELAJARAN 2025-2026</span>
+            </div>
+          </div>
+
+          <div class="column-right" id="right-column-reveal">
+            <div class="image-reveal-wrapper">
+              <img class="img-base-bw" id="siswa-foto-cita-bw" src="" alt="Foto Impian Hitam Putih">
+              <img class="img-reveal-color" id="siswa-foto-cita-color" src="" alt="Foto Impian Berwarna">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-container">
+      <button class="btn-nav-arrow" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
+      <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       DATA DATABASE SISWA (JSON ARRAY)
+       ========================================================================== */
+    const daftarSiswa = [
+      {
+        absen: "01",
+        nama: "ACHMAD DAFI ABIDIN",
+        nis: "212207001 / 3077651034",
+        ttl: "Gresik, 08 Juli 2007",
+        ortu: "Putra dari Bpk. Mas'ud & Ibu Mar'atush Sholihah",
+        cita: "TENTARA / TNI AD",
+        fotoFormal: "photo/01 ACHMAD DAFI ABIDIN.jpg",
+        fotoCita: "photo/01 ACHMAD DAFI ABIDIN C.jpg"
+      },
+      {
+        absen: "02",
+        nama: "AHMAD DANISH DARMAWAN",
+        nis: "212207002 / 3105437817",
+        ttl: "Gresik, 21 Januari 2010",
+        ortu: "Putra dari Bpk. Dedik Darmawan & Ibu Ika Sugianti",
+        cita: "PENGUSAHA SUKSES",
+        fotoFormal: "photo/02 AHMAD DANISH DARMAWAN.jpg",
+        fotoCita: "photo/02 AHMAD DANISH DARMAWAN C.jpg"
+      },
+      {
+        absen: "03",
+        nama: "AHMAD FAHREZI ARDIANSYAH",
+        nis: "222308035 / 3103407949",
+        ttl: "Gresik, 16 Maret 2010",
+        ortu: "Putra dari Bpk. Sunarto & Ibu Lilik Fauziah",
+        cita: "PROGRAMMER / IT DEVELOPER",
+        fotoFormal: "photo/03 AHMAD FAHREZI ARDIANSYAH.jpg",
+        fotoCita: "photo/03 AHMAD FAHREZI ARDIANSYAH C.jpg"
+      },
+      {
+        absen: "04",
+        nama: "ALFINA RAHMAWATI",
+        nis: "212207003 / 3109315025",
+        ttl: "Gresik, 21 Mei 2010",
+        ortu: "Putri dari Bpk. Mat Alim & Ibu Ismawati",
+        cita: "GURU / DOSEN",
+        fotoFormal: "photo/04 ALFINA RAHMAWATI.jpg",
+        fotoCita: "photo/04 ALFINA RAHMAWATI C.jpg"
+      },
+      {
+        absen: "05",
+        nama: "ALIYAH AGUSTIN",
+        nis: "212207004 / 3104118001",
+        ttl: "Gresik, 14 Agustus 2010",
+        ortu: "Putri dari Bpk. Askuri (Alm) & Ibu Suciati",
+        cita: "DOKTER SPESIALISAN",
+        fotoFormal: "photo/05 ALIYAH AGUSTIN.jpg",
+        fotoCita: "photo/05 ALIYAH AGUSTIN C.jpg"
+      },
+      {
+        absen: "06",
+        nama: "DEWI AYU LESTARI",
+        nis: "212207006 / 3102434547",
+        ttl: "Gresik, 23 Maret 2010",
+        ortu: "Putri dari Bpk. Mat Khoiri & Ibu Nur Hayati",
+        cita: "PENGUSAHA KULINER",
+        fotoFormal: "photo/06 DEWI AYU LESTARI.jpg",
+        fotoCita: "photo/06 DEWI AYU LESTARI C.jpg"
+      },
+      {
+        absen: "07",
+        nama: "DIAN SALSABILA",
+        nis: "212207007 / 3103233965",
+        ttl: "Gresik, 17 Januari 2010",
+        ortu: "Putri dari Bpk. Syafi'i & Ibu Mar'ah",
+        cita: "GURU PROFESIONAL",
+        fotoFormal: "photo/07 DIAN SALSABILA.jpg",
+        fotoCita: "photo/07 DIAN SALSABILA C.jpg"
+      },
+      {
+        absen: "08",
+        nama: "DWI AGUSTINA INDRIYANI",
+        nis: "212207008 / 3108668478",
+        ttl: "Gresik, 16 Agustus 2010",
+        ortu: "Putri dari Bpk. Ngatiman & Ibu Supatmi",
+        cita: "POLWAN / KEPOLISIAN RI",
+        fotoFormal: "photo/08 DWI AGUSTINA INDRIYANI.jpg",
+        fotoCita: "photo/08 DWI AGUSTINA INDRIYANI C.jpg"
+      },
+      {
+        absen: "09",
+        nama: "FIKRI ADITYA",
+        nis: "212207009 / 3101264359",
+        ttl: "Gresik, 18 April 2010",
+        ortu: "Putra dari Bpk. Poniman & Ibu Sunarti",
+        cita: "ARSITEK BERSERTIFIKAT",
+        fotoFormal: "photo/09 FIKRI ADITYA.jpg",
+        fotoCita: "photo/09 FIKRI ADITYA C.jpg"
+      },
+      {
+        absen: "10",
+        nama: "I'ANATUT THOLIBIN",
+        nis: "212207011 / 3097105260",
+        ttl: "Gresik, 01 November 2009",
+        ortu: "Putra dari Bpk. Sadi & Ibu Mujayanah",
+        cita: "PENGUSAHA MUDA",
+        fotoFormal: "photo/10 I'ANATUT THOLIBIN.jpg",
+        fotoCita: "photo/10 I'ANATUT THOLIBIN C.jpg"
+      },
+      {
+        absen: "11",
+        nama: "INTAN NUR AINI",
+        nis: "212207012 / 3108990664",
+        ttl: "Gresik, 21 Juni 2010",
+        ortu: "Putri dari Bpk. Nurhadi & Ibu Masruroh",
+        cita: "DOKTER ANAK",
+        fotoFormal: "photo/11 INTAN NUR AINI.jpg",
+        fotoCita: "photo/11 INTAN NUR AINI C.jpg"
+      },
+      {
+        absen: "12",
+        nama: "KHOIRUN NISA'",
+        nis: "212207013 / 3103856228",
+        ttl: "Gresik, 18 Mei 2010",
+        ortu: "Putri dari Bpk. Nur Kholis & Ibu Sutiani",
+        cita: "PENGUSAHA SUKSES",
+        fotoFormal: "photo/12 KHOIRUN NISA'.jpg",
+        fotoCita: "photo/12 KHOIRUN NISA' C.jpg"
+      },
+      {
+        absen: "13",
+        nama: "M. AFRIZA SYAHDAN NOER",
+        nis: "212207018 / 3103138813",
+        ttl: "Gresik, 20 April 2010",
+        ortu: "Putra dari Bpk. Muhammad Noer & Ibu Juma'ati",
+        cita: "PEMAIN SEPAK BOLA PROFESIONAL",
+        fotoFormal: "photo/13 M. AFRIZA SYAHDAN NOER.jpg",
+        fotoCita: "photo/13 M. AFRIZA SYAHDAN NOER C.jpg"
+      },
+      {
+        absen: "14",
+        nama: "M. RIFQI ARDIANSYAH",
+        nis: "212207019 / 3102434533",
+        ttl: "Gresik, 07 Maret 2010",
+        ortu: "Putra dari Bpk. Zainul Arifin & Ibu Masrifah",
+        cita: "TENTARA / TNI AD",
+        fotoFormal: "photo/14 M. RIFQI ARDIANSYAH.jpg",
+        fotoCita: "photo/14 M. RIFQI ARDIANSYAH C.jpg"
+      },
+      {
+        absen: "15",
+        nama: "MOH. RIFALDI",
+        nis: "212207014 / 3106579040",
+        ttl: "Gresik, 25 Februari 2010",
+        ortu: "Putra dari Bpk. Kasan & Ibu Rusmini",
+        cita: "PENGUSAHA SUKSES",
+        fotoFormal: "photo/15 MOH. RIFALDI.jpg",
+        fotoCita: "photo/15 MOH. RIFALDI C.jpg"
+      },
+      {
+        absen: "16",
+        nama: "MUCHAMMAD ALIF RACHMAN",
+        nis: "212207015 / 3107086083",
+        ttl: "Surabaya, 14 Februari 2010",
+        ortu: "Putra dari Bpk. Miftachul Rachman & Ibu Ida Sulistyowati",
+        cita: "PENGUSAHA SUKSES",
+        fotoFormal: "photo/16 MUCHAMMAD ALIF RACHMAN.jpg",
+        fotoCita: "photo/16 MUCHAMMAD ALIF RACHMAN C.jpg"
+      },
+      {
+        absen: "17",
+        nama: "MUCHAMMAD FAZA MUBAROK",
+        nis: "212207016 / 3101830607",
+        ttl: "Gresik, 23 Mei 2010",
+        ortu: "Putra dari Bpk. Nurul Mubarok & Ibu Lilik Ismawati",
+        cita: "TENTARA / TNI AD",
+        fotoFormal: "photo/17 MUCHAMMAD FAZA MUBAROK.jpg",
+        fotoCita: "photo/17 MUCHAMMAD FAZA MUBAROK C.jpg"
+      },
+      {
+        absen: "18",
+        nama: "MUHAMMAD ALDO DESTIAN",
+        nis: "212207017 / 3097155097",
+        ttl: "Gresik, 30 Desember 2009",
+        ortu: "Putra dari Bpk. Sugianto & Ibu Suwarti",
+        cita: "TENTARA / TNI AD",
+        fotoFormal: "photo/18 MUHAMMAD ALDO DESTIAN.jpg",
+        fotoCita: "photo/18 MUHAMMAD ALDO DESTIAN C.jpg"
+      },
+      {
+        absen: "19",
+        nama: "NUR SITI AISYAH",
+        nis: "212207020 / 3097223746",
+        ttl: "Gresik, 16 Oktober 2009",
+        ortu: "Putri dari Bpk. Lasiman & Ibu Musri'ah",
+        cita: "GURU / DAKWAH USTADZAH",
+        fotoFormal: "photo/19 NUR SITI AISYAH.jpg",
+        fotoCita: "photo/19 NUR SITI AISYAH C.jpg"
+      },
+      {
+        absen: "20",
+        nama: "REVALINA EKA RAMADHANI",
+        nis: "212207021 / 3105634509",
+        ttl: "Gresik, 08 September 2010",
+        ortu: "Putri dari Bpk. Eko Sujarwo & Ibu Sulastri",
+        cita: "POLWAN / KEPOLISIAN RI",
+        fotoFormal: "photo/20 REVALINA EKA RAMADHANI.jpg",
+        fotoCita: "photo/20 REVALINA EKA RAMADHANI C.jpg"
+      },
+      {
+        absen: "21",
+        nama: "SITI NUR HALIZAH",
+        nis: "212207022 / 3102434529",
+        ttl: "Gresik, 06 Januari 2010",
+        ortu: "Putri dari Bpk. Ali & Ibu Suti'ah",
+        cita: "DOKTER / MEDIS",
+        fotoFormal: "photo/21 SITI NUR HALIZAH.jpg",
+        fotoCita: "photo/21 SITI NUR HALIZAH C.jpg"
+      },
+      {
+        absen: "22",
+        nama: "ZASKIA DINA AMALIA",
+        nis: "212207023 / 3102434538",
+        ttl: "Gresik, 16 Maret 2010",
+        ortu: "Putri dari Bpk. Khusnul Amali & Ibu Ismawati",
+        cita: "POLWAN / KEPOLISIAN RI",
+        fotoFormal: "photo/22 ZASKIA DINA AMALIA.jpg",
+        fotoCita: "photo/22 ZASKIA DINA AMALIA C.jpg"
+      }
+    ];
+
+    /* ==========================================================================
+       MANAJEMEN STATE GLOBAL & VARIABEL ELEMEN
+       ========================================================================== */
+    let indeksSekarang = 0;
+    let textTypingTimeout = null;
+    let wishBoxRevealTimeout = null;
+    let imageRevealTimeout = null;
+    let particleInterval = null;
+    let ccParticleInterval = null;
+    let dustInterval = null;
+
+    // Mapping Node Element DOM
+    const openingContainer = document.getElementById('opening-container');
+    const mainGalleryContent = document.getElementById('main-gallery-content');
+    const startInterface = document.getElementById('start-interface');
+    const videoBg = document.getElementById('video-bg');
+    const videoOverlay = document.getElementById('video-overlay');
+    const btnSkip = document.getElementById('btn-skip');
+    const bgMusic = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-toggle-btn');
+    const iconPlay = document.getElementById('icon-play');
+    const iconPause = document.getElementById('icon-pause');
+    const visualizerContainer = document.getElementById('visualizer-container');
+
+    /* ==========================================================================
+       ALUR PROSESI OPENING (KONTROL VIDEO & PARTIKEL AMBIENT)
+       ========================================================================== */
+    function mulaiProsesiOpening() {
+      startInterface.style.display = 'none';
+      
+      // Mengaktifkan simulasi partikel emas halus di opening
+      const openingCanvas = document.getElementById('particle-canvas');
+      openingCanvas.style.display = 'block';
+      inisialisasiPartikelOpening(openingCanvas);
+
+      videoBg.style.display = 'block';
+      videoOverlay.style.display = 'block';
+      btnSkip.style.display = 'flex';
+
+      videoBg.play().catch(error => {
+        console.log("Autoplay video diblokir browser, dialihkan manual:", error);
+        menujuGaleriUtama();
+      });
+
+      // Jika video selesai berputar otomatis masuk ke panggung galeri utama
+      videoBg.onended = () => { menujuGaleriUtama(); };
+    }
+
+    function inisialisasiPartikelOpening(canvas) {
+      const ctx = canvas.getContext('2d');
+      let partikelArray = [];
+      
+      function setUkuranLayar() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      setUkuranLayar();
+      window.addEventListener('resize', setUkuranLayar);
+
+      class PartikelEmas {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height + canvas.height;
+          this.size = Math.random() * 3 + 1;
+          this.speedY = Math.random() * 1.5 + 0.5;
+          this.speedX = Math.random() * 0.6 - 0.3;
+          this.opacity = Math.random() * 0.5 + 0.2;
+        }
+        update() {
+          this.y -= this.speedY;
+          this.x += this.speedX;
+          if (this.y < -10) {
+            this.y = canvas.height + 10;
+            this.x = Math.random() * canvas.width;
+          }
+        }
+        draw() {
+          ctx.save();
+          ctx.globalAlpha = this.opacity;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = '#f3e5ab';
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = '#d4af37';
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      for (let i = 0; i < 60; i++) {
+        partikelArray.push(new PartikelEmas());
+      }
+
+      function animasiPartikelLoop() {
+        if (openingContainer.style.display === 'none') return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < partikelArray.length; i++) {
+          partikelArray[i].update();
+          partikelArray[i].draw();
+        }
+        requestAnimationFrame(animasiPartikelLoop);
+      }
+      animasiPartikelLoop();
+    }
+
+    function menujuGaleriUtama() {
+      // Menghentikan putaran video & menghilangkan container opening
+      videoBg.pause();
+      openingContainer.style.style = 'none'; // Cadangan safetynet
+      openingContainer.remove(); 
+
+      // Memunculkan Panggung Utama Prosesi
+      mainGalleryContent.style.display = 'flex';
+      
+      // Memutar lagu instrumental panggung utama
+      bgMusic.play().then(() => {
+        membangunBarVisualizerMuzik();
+      }).catch(err => console.log("Izin audio diblokir, menunggu interaksi user.", err));
+
+      // Menyalakan generator efek atmosfer panggung utama
+      mulaiAtmosferPartikelUtama();
+      mulaiPartikelDustSpotlight();
+      
+      // Memuat data siswa pertama (Absen 01)
+      tampilkanSiswaSecaraValid(indeksSekarang);
+    }
+
+    /* ==========================================================================
+       GENERATOR PARTIKEL AMBIENT (ATMOSFER PANGGUNG)
+       ========================================================================== */
+    function mulaiAtmosferPartikelUtama() {
+      particleInterval = setInterval(() => {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 12 + 4;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}vw`;
+        
+        const duration = Math.random() * 4 + 5;
+        particle.style.animationDuration = `${duration}s`;
+        
+        mainGalleryContent.appendChild(particle);
+        setTimeout(() => { particle.remove(); }, duration * 1000);
+      }, 350);
+    }
+
+    function mulaiPartikelDustSpotlight() {
+      const spotlightBox = document.getElementById('spotlight-box');
+      dustInterval = setInterval(() => {
+        if(!spotlightBox) return;
+        const dust = document.createElement('div');
+        dust.classList.add('spotlight-dust');
+        
+        const size = Math.random() * 3 + 1.5;
+        dust.style.width = `${size}px`;
+        dust.style.height = `${size}px`;
+        dust.style.left = `${Math.random() * 90 + 5}%`;
+        
+        const duration = Math.random() * 3 + 4;
+        dust.style.animationDuration = `${duration}s`;
+        
+        spotlightBox.appendChild(dust);
+        setTimeout(() => { dust.remove(); }, duration * 1000);
+      }, 400);
+    }
+
+    function generateCitaCitaParticles() {
+      const rightColumn = document.getElementById('right-column-reveal');
+      // Bersihkan interval partikel cita-cita lama jika ada
+      if (ccParticleInterval) clearInterval(ccParticleInterval);
+      
+      rightColumn.classList.add('show-particles');
+      
+      ccParticleInterval = setInterval(() => {
+        const ccPart = document.createElement('div');
+        ccPart.classList.add('cc-particle');
+        
+        const size = Math.random() * 16 + 6;
+        ccPart.style.width = `${size}px`;
+        ccPart.style.height = `${size}px`;
+        ccPart.style.left = `${Math.random() * 80 + 10}%`;
+        
+        const duration = Math.random() * 3 + 3;
+        ccPart.style.animationDuration = `${duration}s`;
+        
+        rightColumn.appendChild(ccPart);
+        setTimeout(() => { ccPart.remove(); }, duration * 1000);
+      }, 250);
+    }
+
+    /* ==========================================================================
+       KONTROL NAVIGASI DAN RENDER DATA SISWA
+       ========================================================================== */
+    function tampilkanSiswaSecaraValid(indeks) {
+      // Bersihkan seluruh antrean animasi/timeout sebelumnya agar tidak tumpang tindih
+      clearTimeout(textTypingTimeout);
+      clearTimeout(wishBoxRevealTimeout);
+      clearTimeout(imageRevealTimeout);
+      if (ccParticleInterval) clearInterval(ccParticleInterval);
+
+      const data = daftarSiswa[indeks];
+      const card = document.querySelector('.purnawiyata-card');
+      const rightCol = document.getElementById('right-column-reveal');
+      const wishBox = document.getElementById('wish-box');
+      
+      // Reset state animasi awal
+      card.classList.remove('active');
+      rightCol.classList.remove('reveal-active', 'show-particles');
+      wishBox.classList.remove('fade-in-visible');
+      void card.offsetWidth; // Trigger reflow CSS
+      card.classList.add('active');
+
+      // Memasukkan data tekstual statis
+      document.getElementById('siswa-absen').textContent = data.absen;
+      document.getElementById('siswa-ttl').textContent = data.ttl;
+      document.getElementById('siswa-ortu').textContent = data.ortu;
+      document.getElementById('siswa-nis').textContent = data.nis;
+      document.getElementById('siswa-cita').textContent = data.cita;
+
+      // Optimasi pre-load render gambar formal & impian
+      const imgFormal = document.getElementById('siswa-foto');
+      const imgCitaBw = document.getElementById('siswa-foto-cita-bw');
+      const imgCitaColor = document.getElementById('siswa-foto-cita-color');
+
+      imgFormal.style.opacity = '0';
+      imgCitaBw.style.opacity = '0';
+      imgCitaColor.style.opacity = '0';
+
+      imgFormal.src = data.fotoFormal;
+      imgCitaBw.src = data.fotoCita;
+      imgCitaColor.src = data.fotoCita;
+
+      imgFormal.onload = () => { imgFormal.style.opacity = '1'; };
+      imgCitaBw.onload = () => { imgCitaBw.style.opacity = '1'; };
+
+      // Efek Mengetik Otomatis (Typing Effect) Khusus Nama Siswa
+      const targetNamaElement = document.getElementById('siswa-nama');
+      targetNamaElement.textContent = '';
+      targetNamaElement.classList.add('typing-cursor');
+      
+      let charIdx = 0;
+      function jalankanEfekKetik() {
+        if (charIdx < data.nama.length) {
+          targetNamaElement.textContent += data.nama.charAt(charIdx);
+          charIdx++;
+          textTypingTimeout = setTimeout(jalankanEfekKetik, 60); // Kecepatan ketik ideal
+        } else {
+          targetNamaElement.classList.remove('typing-cursor');
+          
+          // Setelah nama selesai diketik, munculkan kotak cita-cita (Delay 400ms)
+          wishBoxRevealTimeout = setTimeout(() => {
+            wishBox.classList.add('fade-in-visible');
+            
+            // Setelah kotak cita-cita muncul, buka warna foto impian/cita-cita (Delay 600ms)
+            imageRevealTimeout = setTimeout(() => {
+              rightCol.classList.add('reveal-active');
+              generateCitaCitaParticles();
+            }, 600);
+
+          }, 400);
+        }
+      }
+      
+      // Berikan delay awal 500ms sebelum teks nama mulai diketik
+      setTimeout(jalankanEfekKetik, 500);
+    }
+
+    function nextStudent() {
+      indeksSekarang = (indeksSekarang + 1) % daftarSiswa.length;
+      tampilkanSiswaSecaraValid(indeksSekarang);
+    }
+
+    function prevStudent() {
+      indeksSekarang = (indeksSekarang - 1 + daftarSiswa.length) % daftarSiswa.length;
+      tampilkanSiswaSecaraValid(indeksSekarang);
+    }
+
+    /* ==========================================================================
+       MANAJEMEN BACKSOUND MUSIK & AUDIO VISUALIZER
+       ========================================================================== */
+    function toggleMusicPlayback() {
+      if (bgMusic.paused) {
+        bgMusic.play().then(() => {
+          iconPlay.style.display = 'none';
+          iconPause.style.display = 'block';
+          musicBtn.setAttribute('aria-label', 'Pause Musik');
+        }).catch(err => console.log("Gagal memutar audio:", err));
+      } else {
+        bgMusic.pause();
+        iconPlay.style.display = 'block';
+        iconPause.style.display = 'none';
+        musicBtn.setAttribute('aria-label', 'Putar Musik');
+      }
+    }
+
+    function membangunBarVisualizerMuzik() {
+      visualizerContainer.innerHTML = '';
+      const jumlahBar = 15; // Jumlah batang visualizer proporsional
+      const barElements = [];
+
+      for (let i = 0; i < jumlahBar; i++) {
+        const bar = document.createElement('div');
+        bar.classList.add('visualizer-bar');
+        visualizerContainer.appendChild(bar);
+        barElements.push(bar);
+      }
+
+      function loopSimulasiVisualizer() {
+        if (!bgMusic.paused) {
+          barElements.forEach(bar => {
+            // Membuat kalkulasi tinggi acak naik-turun agar terkesan real-time mengikuti irama
+            const tinggiAcak = Math.floor(Math.random() * 20) + 4;
+            bar.style.height = `${tinggiAcak}px`;
+          });
+        } else {
+          barElements.forEach(bar => { bar.style.height = '2px'; });
+        }
+        requestAnimationFrame(loopSimulasiVisualizer);
+      }
+      loopSimulasiVisualizer();
+    }
+
+    /* ==========================================================================
+       NAVIGASI KEYBOARD GLOBAL (Mendukung Remote Presentasi / Pointer IFP)
+       ========================================================================== */
+    window.addEventListener('keydown', (event) => {
+      const openingContainerValid = document.getElementById('opening-container');
+      
+      // 1. KONDISI JIKA MASIH DI HALAMAN OPENING
+      if (openingContainerValid) {
+        if (startInterface.style.display === 'none') {
+          switch(event.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+            case 'PageDown':
+            case 'Enter':
+              menujuGaleriUtama();
+              break;
+          }
+        }
+      } 
+      // 2. KONDISI JIKA SUDAH MASUK KEDALAM GALERI UTAMA
+      else if (mainGalleryContent.style.display === 'flex') {
+        switch(event.key) {
+          case 'ArrowRight':
+          case 'ArrowDown':
+          case 'PageDown':
+          case ' ': // Spacebar / Tombol besar remote klik next
+            nextStudent();
+            break;
+          case 'ArrowLeft':
+          case 'ArrowUp':
+          case 'PageUp':
+            prevStudent();
+            break;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
