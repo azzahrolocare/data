@@ -64,7 +64,7 @@
             100% { opacity: 1; }
         }
         .animate-stutter {
-            animation: stutter 1.5s infinite linear;
+            animation: stutter 1s infinite linear;
         }
     </style>
 </head>
@@ -150,14 +150,14 @@
                 <span class="text-emerald-deep font-semibold text-sm tracking-wider uppercase bg-emerald-light/60 px-3 py-1.5 rounded-md">Tahun Ajaran 2025/2026</span>
                 <h2 class="mt-4 text-3xl md:text-4xl font-serif-custom font-bold text-gray-900">Lembar Gosok Kelulusan Digital</h2>
                 <div class="w-16 h-1 bg-gold-accent mx-auto mt-4 rounded-full"></div>
-                <p class="mt-4 text-gray-600">Sistem memuat 3 siswa secara acak. Klik gosok sebanyak 15 kali pada kotak abu-abu. Siswa yang selesai digosok otomatis pindah ke barisan paling atas!</p>
+                <p class="mt-4 text-gray-600">Sistem memuat 3 siswa secara acak. Klik gosok sekali pada kotak abu-abu untuk memulai sinkronisasi kelulusan dengan efek loading jaringan lambat. Siswa yang selesai digosok otomatis pindah ke barisan paling atas!</p>
             </div>
 
             <div id="section-loading" class="hidden my-8 p-8 bg-white rounded-2xl border border-gray-200 shadow-sm text-center">
                 <div class="inline-block animate-stutter text-emerald-deep mb-3">
                     <i data-lucide="refresh-cw" class="w-10 h-10 animate-spin"></i>
                 </div>
-                <p class="text-sm font-mono font-bold text-gray-600 animate-pulse">MEMUAT DATA DATA SISWA BARU... BEBAN JARINGAN TINGGI...</p>
+                <p class="text-sm font-mono font-bold text-gray-600 animate-pulse">MEMUAT 3 DATA SISWA SECARA ACAK... SERVER SIBUK...</p>
                 <div class="w-48 h-2 bg-gray-200 mx-auto mt-3 rounded-full overflow-hidden">
                     <div class="h-full bg-emerald-deep animate-pulse w-2/3"></div>
                 </div>
@@ -476,9 +476,9 @@
 
         let currentActiveStudents = [];
         let completedNISList = [];
-        let isGlobalScratching = false;
+        let processingNIS = null; 
 
-        // Fungsi mengacak array (Fisher-Yates Shuffle)
+        // Fungsi acak array (Fisher-Yates Shuffle)
         function shuffleArray(array) {
             let shuffled = [...array];
             for (let i = shuffled.length - 1; i > 0; i--) {
@@ -488,48 +488,43 @@
             return shuffled;
         }
 
-        // Fungsi memuat batch 3 siswa baru dengan efek loading ngendat-ngendat
+        // Muat 3 siswa baru dengan efek loading ngendat-ngendat di section utama
         function loadNextBatch() {
             const grid = document.getElementById('student-grid');
             const loader = document.getElementById('section-loading');
             
             grid.innerHTML = '';
             loader.classList.remove('hidden');
+            processingNIS = null;
 
-            // Simulasi loading tersendat-sendat (Total 2.3 detik)
+            // Efek memuat data siswa baru tersendat-sendat (2.3 detik)
             setTimeout(() => {
-                // Skenario acak siswa baru yang belum tuntas jika memungkinkan
                 let filtered = studentsData.filter(s => !completedNISList.includes(s.nis));
                 if (filtered.length < 3) {
-                    filtered = studentsData; // reset jika sudah habis terpilih
+                    filtered = studentsData; 
                 }
                 
                 let randomThree = shuffleArray(filtered).slice(0, 3);
                 currentActiveStudents = randomThree;
                 
-                // Urutkan tampilan awal (Selesai berada di atas)
                 sortAndRender();
-                
                 loader.classList.add('hidden');
             }, 2300);
         }
 
-        // Fungsi menyusun posisi kartu (Siswa lulus diletakkan di baris atas)
+        // Fungsi render data kartu dengan prioritas yang sudah selesai berada di paling atas
         function sortAndRender() {
             const grid = document.getElementById('student-grid');
             grid.innerHTML = '';
 
-            // Pisahkan yang berstatus sudah selesai (Lulus) dan yang belum digosok
             let completedCards = [];
             let activeCards = [];
 
             currentActiveStudents.forEach(student => {
-                const storageKey = `scratch_step_${student.nis}`;
-                let currentStep = parseInt(localStorage.getItem(storageKey)) || 0;
+                let currentProgress = parseInt(localStorage.getItem(`progress_${student.nis}`)) || 0;
+                let cardHTML = createCardTemplate(student, currentProgress);
 
-                let cardHTML = createCardTemplate(student, currentStep);
-
-                if (currentStep >= 15) {
+                if (currentProgress >= 100) {
                     completedCards.push(cardHTML);
                     if (!completedNISList.includes(student.nis)) {
                         completedNISList.push(student.nis);
@@ -539,7 +534,7 @@
                 }
             });
 
-            // Gabungkan: kartu selesai diletakkan terlebih dahulu (paling atas)
+            // Urutan digabung: yang sudah LULUS otomatis berada paling atas
             const finalBatch = [...completedCards, ...activeCards];
             finalBatch.forEach(html => {
                 grid.insertAdjacentHTML('beforeend', html);
@@ -547,38 +542,37 @@
             lucide.createIcons();
         }
 
-        function createCardTemplate(student, currentStep) {
+        function createCardTemplate(student, progress) {
             let scratchAreaHTML = '';
 
-            if (currentStep === 0) {
+            if (progress === 0) {
                 scratchAreaHTML = `
-                    <div id="scratch-box-${student.nis}" onclick="triggerScratch('${student.nis}', '${student.nama}')" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center cursor-pointer select-none border border-gray-300 shadow-inner group">
-                        <span class="text-gray-700 font-bold group-hover:scale-105 transition-transform">GOSOK DI SINI</span>
-                        <span class="text-[10px] text-gray-500">Klik 15 kali secara berkala</span>
+                    <div id="scratch-box-${student.nis}" onclick="startScratchProgress('${student.nis}')" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center cursor-pointer select-none border border-gray-300 shadow-inner group transition-all">
+                        <span class="text-gray-700 font-bold group-hover:scale-105 transition-transform">KLIK UNTUK GOSOK</span>
+                        <span class="text-[10px] text-gray-500">Proses pemuatan dramatis & tersendat</span>
                     </div>
                 `;
-            } else if (currentStep > 0 && currentStep < 15) {
-                let progress = Math.round((currentStep / 15) * 100);
+            } else if (progress > 0 && progress < 100) {
                 scratchAreaHTML = `
-                    <div id="scratch-box-${student.nis}" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center border border-gray-300 shadow-inner">
-                        <span class="text-emerald-deep font-black text-xl animate-pulse">${progress}%</span>
-                        <span class="text-[10px] text-gray-600 font-medium flex items-center gap-1">
-                            <i data-lucide="loader" class="w-3 h-3 animate-spin text-red-500"></i> Sinkronisasi Data (${currentStep}/15)
+                    <div id="scratch-box-${student.nis}" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center border border-gray-300 shadow-inner animate-stutter bg-yellow-50">
+                        <span class="text-emerald-deep font-black text-2xl">${progress}%</span>
+                        <span class="text-[10px] text-red-600 font-bold flex items-center gap-1">
+                            <i data-lucide="refresh-cw" class="w-3 h-3 animate-spin"></i> Jaringan Lambat / Sinkronisasi...
                         </span>
                     </div>
                 `;
             } else {
                 scratchAreaHTML = `
-                    <div class="bg-emerald-soft border-2 border-emerald-medium p-3 rounded-xl text-center shadow-sm animate-fade-in">
+                    <div class="bg-emerald-soft border-2 border-emerald-medium p-3 rounded-xl text-center shadow-sm">
                         <span class="block text-emerald-deep text-xs font-black uppercase tracking-wider">KETERANGAN</span>
-                        <span class="block text-emerald-medium text-lg font-serif-custom font-bold">LULUS</span>
+                        <span class="block text-emerald-medium text-lg font-serif-custom font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-deep to-emerald-medium">LULUS</span>
                         <span class="text-[9px] text-gray-400 block mt-0.5">Selamat & Sukses Nilai Rabbani Baik</span>
                     </div>
                 `;
             }
 
             return `
-                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 flex flex-col justify-between hover:shadow-xl transition-all duration-300 student-card">
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 flex flex-col justify-between hover:shadow-xl transition-all duration-300">
                     <div class="flex items-center gap-4 mb-4">
                         <img src="${student.foto_profil_url}" alt="${student.nama}" onerror="this.src='https://via.placeholder.com/150'" class="w-16 h-16 rounded-xl object-cover border-2 border-emerald-deep/20 shadow-sm">
                         <div class="flex-1 min-w-0">
@@ -600,40 +594,46 @@
             `;
         }
 
-        // Fungsi Trigger klik gosokan dengan efek macet/loading buatan lambat
-        function triggerScratch(nis, name) {
-            if (isGlobalScratching) return; // Mengunci klik saat loading buatan berjalan
-            isGlobalScratching = true;
+        // Fungsi Otomatisasi Loop Progress Tersendat-sendat dari 0% hingga 100% tanpa stuck
+        function startScratchProgress(nis) {
+            if (processingNIS !== null) return; 
+            processingNIS = nis;
 
-            const storageKey = `scratch_step_${nis}`;
-            let currentStep = parseInt(localStorage.getItem(storageKey)) || 0;
-            currentStep++;
+            let currentProgress = 0;
 
-            localStorage.setItem(storageKey, currentStep);
+            function runGlitchLoop() {
+                let steps = [7, 13, 21, 33, 41, 42, 43, 58, 69, 74, 88, 94, 100];
+                let nextTarget = steps.find(s => s > currentProgress);
 
-            // Memperbarui tampilan indikator loading internal kartu
-            sortAndRender();
+                if (!nextTarget) nextTarget = 100;
+                currentProgress = nextTarget;
 
-            // Efek macet / loading lambat buatan per klik (Durasi acak 600ms - 1.4s)
-            let randomLag = Math.floor(Math.random() * 800) + 600;
-            
-            // Tambahkan glitch visual instan
-            const targetBox = document.getElementById(`scratch-box-${nis}`);
-            if (targetBox) targetBox.classList.add('animate-stutter', 'bg-red-100');
-
-            setTimeout(() => {
-                isGlobalScratching = false;
-                // Re-render setelah jeda macet selesai untuk memperbarui status atau membuka kunci klik selanjutnya
+                localStorage.setItem(`progress_${nis}`, currentProgress);
                 sortAndRender();
-            }, randomLag);
+
+                if (currentProgress < 100) {
+                    // Penjedaan jeda acak ngendat-ngendat buatan (antara 300ms s.d 1.1 detik)
+                    let randomLagDuration = Math.floor(Math.random() * 800) + 300;
+                    
+                    // Efek macet total dramatis sengaja di persentase tertentu
+                    if (currentProgress === 41 || currentProgress === 74 || currentProgress === 88) {
+                        randomLagDuration = 1500; 
+                    }
+
+                    setTimeout(runGlitchLoop, randomLagDuration);
+                } else {
+                    processingNIS = null;
+                    sortAndRender();
+                }
+            }
+
+            runGlitchLoop();
         }
 
-        // Inisialisasi Mula-mula Saat Dom Siap
+        // Mulai memuat saat halaman dibuka pertama kali
         window.addEventListener('DOMContentLoaded', () => {
-            // Bersihkan sisa data gosok lama agar dimulai dari awal
-            studentsData.forEach(s => localStorage.removeItem(`scratch_step_${s.nis}`));
+            studentsData.forEach(s => localStorage.removeItem(`progress_${s.nis}`));
             
-            // Muat 3 siswa acak pertama
             let randomThree = shuffleArray(studentsData).slice(0, 3);
             currentActiveStudents = randomThree;
             sortAndRender();
@@ -641,7 +641,7 @@
             lucide.createIcons();
         });
 
-        // Mobile Menu Toggle
+        // Toggle Menu Mobile
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -657,7 +657,6 @@
             lucide.createIcons();
         });
 
-        // Mock Handle Contact Form Submit
         function handleFormSubmit(event) {
             event.preventDefault();
             const form = document.getElementById('contact-form');
@@ -668,7 +667,6 @@
             setTimeout(() => { alertBox.classList.add('hidden'); }, 8000);
         }
 
-        // Animasi Navbar on Scroll
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
             if (window.scrollY > 50) {
