@@ -263,10 +263,11 @@
       flex-direction: column;
       justify-content: center; 
       margin: 20px 0;
-      position: relative; /* Menjadi acuan koordinat sorotan lampu */
+      position: relative; 
+      perspective: 800px; /* Memberikan efek ruang 3D agar berkas lampu lebih hidup */
     }
 
-    /* EFEK SOROTAN LAMPU BERGERAK (MOVING SPOTLIGHTS) */
+    /* MODIFIKASI TOTAL: WIDGET SOROTAN LAMPU PANGGUNG MEWAH (3D SPOTLIGHTS) */
     .spotlight-container {
       position: absolute;
       top: 0;
@@ -278,37 +279,73 @@
       z-index: 0;
     }
 
+    /* Bohlam/Titik lampu pendar atas */
+    .spotlight-source {
+      position: absolute;
+      top: -10px;
+      width: 30px;
+      height: 12px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 30px 15px #f3e5ab, 0 0 60px 30px rgba(212, 175, 55, 0.6);
+      z-index: 3;
+    }
+    .source-1 { left: 10%; }
+    .source-2 { left: 35%; }
+    .source-3 { right: 35%; }
+    .source-4 { right: 10%; }
+
+    /* Berkas Cahaya Sorot Mengkerucut (3D Beam) */
     .spotlight {
       position: absolute;
-      top: -20%;
-      width: 250px;
-      height: 150%;
-      background: radial-gradient(ellipse at top, rgba(243, 229, 171, 0.18) 0%, rgba(212, 175, 55, 0.04) 40%, transparent 70%);
-      clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%);
+      top: -5%;
+      width: 320px;
+      height: 140%;
+      background: radial-gradient(ellipse at top, rgba(255, 244, 200, 0.28) 0%, rgba(212, 175, 55, 0.08) 35%, rgba(212, 175, 55, 0.01) 60%, transparent 80%);
+      clip-path: polygon(48% 0, 52% 0, 100% 100%, 0 100%);
       transform-origin: top center;
-      filter: blur(8px);
+      filter: blur(5px);
+      mix-blend-mode: screen; /* Membuat tabrakan antar cahaya bersinar menyatu */
     }
 
-    .spotlight-1 { left: 5%; animation: swingSpotlight1 7s ease-in-out infinite alternate; }
-    .spotlight-2 { left: 30%; animation: swingSpotlight2 9s ease-in-out infinite alternate; }
-    .spotlight-3 { right: 30%; animation: swingSpotlight3 8s ease-in-out infinite alternate; }
-    .spotlight-4 { right: 5%; animation: swingSpotlight4 6s ease-in-out infinite alternate; }
+    /* Pola Ayunan Bersilangan Dinamis (Cross-Sweeping) */
+    .spotlight-1 { left: -5%; transform: rotateX(20deg) rotateY(10deg); animation: stageSwing1 8s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate; }
+    .spotlight-2 { left: 20%; transform: rotateX(15deg) rotateY(-5deg); animation: stageSwing2 11s cubic-bezier(0.39, 0.575, 0.565, 1) infinite alternate; }
+    .spotlight-3 { right: 20%; transform: rotateX(15deg) rotateY(5deg); animation: stageSwing3 9s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate; }
+    .spotlight-4 { right: -5%; transform: rotateX(20deg) rotateY(-10deg); animation: stageSwing4 7s cubic-bezier(0.39, 0.575, 0.565, 1) infinite alternate; }
 
-    @keyframes swingSpotlight1 {
-      0% { transform: rotate(-15deg); opacity: 0.4; }
-      100% { transform: rotate(10deg); opacity: 0.9; }
+    @keyframes stageSwing1 {
+      0% { transform: rotateX(15deg) rotateZ(-22deg) scaleX(0.9); opacity: 0.5; }
+      100% { transform: rotateX(25deg) rotateZ(8deg) scaleX(1.2); opacity: 0.9; }
     }
-    @keyframes swingSpotlight2 {
-      0% { transform: rotate(8deg); opacity: 0.8; }
-      100% { transform: rotate(-12deg); opacity: 0.3; }
+    @keyframes stageSwing2 {
+      0% { transform: rotateX(20deg) rotateZ(12deg) scaleX(1.2); opacity: 0.8; }
+      100% { transform: rotateX(10deg) rotateZ(-15deg) scaleX(0.8); opacity: 0.4; }
     }
-    @keyframes swingSpotlight3 {
-      0% { transform: rotate(-10deg); opacity: 0.3; }
-      100% { transform: rotate(15deg); opacity: 0.8; }
+    @keyframes stageSwing3 {
+      0% { transform: rotateX(10deg) rotateZ(-14deg) scaleX(0.8); opacity: 0.4; }
+      100% { transform: rotateX(25deg) rotateZ(16deg) scaleX(1.2); opacity: 0.9; }
     }
-    @keyframes swingSpotlight4 {
-      0% { transform: rotate(12deg); opacity: 0.9; }
-      100% { transform: rotate(-8deg); opacity: 0.4; }
+    @keyframes stageSwing4 {
+      0% { transform: rotateX(25deg) rotateZ(18deg) scaleX(1.1); opacity: 0.9; }
+      100% { transform: rotateX(15deg) rotateZ(-10deg) scaleX(0.9); opacity: 0.5; }
+    }
+
+    /* Efek Debu Gemerlap Khusus di Dalam Sorotan */
+    .spotlight-dust {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 6px 2px #fff;
+      pointer-events: none;
+      animation: ambientDust linear infinite;
+      opacity: 0;
+    }
+    @keyframes ambientDust {
+      0% { transform: translateY(350px) translateX(0) scale(0.2); opacity: 0; }
+      20% { opacity: 0.6; }
+      80% { opacity: 0.4; }
+      100% { transform: translateY(-50px) translateX(40px) scale(1); opacity: 0; }
     }
 
     /* Pastikan seluruh konten identitas berada di atas lapisan sorotan lampu */
@@ -637,7 +674,12 @@
           </div>
           
           <div class="identity-box">
-            <div class="spotlight-container">
+            <div class="spotlight-container" id="identity-spotlight-zone">
+              <div class="spotlight-source source-1"></div>
+              <div class="spotlight-source source-2"></div>
+              <div class="spotlight-source source-3"></div>
+              <div class="spotlight-source source-4"></div>
+              
               <div class="spotlight spotlight-1"></div>
               <div class="spotlight spotlight-2"></div>
               <div class="spotlight spotlight-3"></div>
@@ -740,6 +782,23 @@
       }
     }
 
+    // FUNGSI BARU: Membuat Debu Gemerlap Melayang khusus di dalam area sorotan lampu
+    function createSpotlightDust() {
+      const zone = document.getElementById('identity-spotlight-zone');
+      const dustCount = 15;
+      for (let i = 0; i < dustCount; i++) {
+        let dust = document.createElement('div');
+        dust.className = 'spotlight-dust';
+        let size = Math.random() * 3 + 1.5;
+        dust.style.width = size + 'px';
+        dust.style.height = size + 'px';
+        dust.style.left = (Math.random() * 80 + 10) + '%';
+        dust.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        dust.style.animationDelay = '-' + (Math.random() * 5) + 's';
+        zone.appendChild(dust);
+      }
+    }
+
     function createCitaCitaParticles() {
       const ccContainer = document.getElementById('column-cc');
       const ccParticleCount = 20; 
@@ -761,7 +820,6 @@
 
     async function loadStudentsData() {
       try {
-        // Otomatis picu ulang mode Fullscreen jika sempat keluar saat transisi halaman
         if (document.documentElement.requestFullscreen) {
           document.documentElement.requestFullscreen().catch(() => {});
         }
@@ -850,7 +908,6 @@
       if (studentsData.length === 0) return;
       currentIndex = (currentIndex + 1) % studentsData.length;
       
-      // Reset musik agar memutar dari awal
       if (!bgMusic.paused) {
         bgMusic.currentTime = 0;
       }
@@ -862,7 +919,6 @@
       if (studentsData.length === 0) return;
       currentIndex = (currentIndex - 1 + studentsData.length) % studentsData.length;
       
-      // Reset musik agar memutar dari awal
       if (!bgMusic.paused) {
         bgMusic.currentTime = 0;
       }
@@ -946,9 +1002,9 @@
     // Otomatis berjalan saat halaman dimuat (Izin terbawa dari opening.html)
     window.addEventListener('DOMContentLoaded', () => {
       createGlobalParticles();
+      createSpotlightDust(); // Menjalankan partikel debu sorotan panggung
       createCitaCitaParticles(); 
       
-      // Jalankan data utama dan musik secara otomatis tanpa overlay klik
       loadStudentsData();
       initVisualizer();
 
