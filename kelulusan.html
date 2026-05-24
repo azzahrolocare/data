@@ -53,6 +53,19 @@
         .scratch-bg {
             background-image: repeating-linear-gradient(45deg, #ccc 0px, #ccc 10px, #bbb 10px, #bbb 20px);
         }
+        @keyframes stutter {
+            0% { opacity: 0.3; transform: scale(0.98); }
+            30% { opacity: 1; transform: scale(1); }
+            35% { opacity: 0.4; }
+            45% { opacity: 0.9; }
+            70% { opacity: 0.2; }
+            85% { opacity: 1; }
+            90% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .animate-stutter {
+            animation: stutter 1.5s infinite linear;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased selection:bg-emerald-deep selection:text-white">
@@ -137,18 +150,27 @@
                 <span class="text-emerald-deep font-semibold text-sm tracking-wider uppercase bg-emerald-light/60 px-3 py-1.5 rounded-md">Tahun Ajaran 2025/2026</span>
                 <h2 class="mt-4 text-3xl md:text-4xl font-serif-custom font-bold text-gray-900">Lembar Gosok Kelulusan Digital</h2>
                 <div class="w-16 h-1 bg-gold-accent mx-auto mt-4 rounded-full"></div>
-                <p class="mt-4 text-gray-600">Silakan cari nama Anda, lalu ikuti instruksi **klik/gosok sebanyak 15 kali** pada kotak abu-abu yang tersedia untuk memunculkan SK penetapan kelulusan resmi.</p>
+                <p class="mt-4 text-gray-600">Sistem memuat 3 siswa secara acak. Klik gosok sebanyak 15 kali pada kotak abu-abu. Siswa yang selesai digosok otomatis pindah ke barisan paling atas!</p>
             </div>
 
-            <div class="max-w-md mx-auto mb-10 relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                    <i data-lucide="search" class="w-5 h-5"></i>
+            <div id="section-loading" class="hidden my-8 p-8 bg-white rounded-2xl border border-gray-200 shadow-sm text-center">
+                <div class="inline-block animate-stutter text-emerald-deep mb-3">
+                    <i data-lucide="refresh-cw" class="w-10 h-10 animate-spin"></i>
                 </div>
-                <input type="text" id="search-student" oninput="filterStudents()" placeholder="Ketik nama siswa untuk mencari..." class="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-deep focus:border-transparent text-sm shadow-sm">
+                <p class="text-sm font-mono font-bold text-gray-600 animate-pulse">MEMUAT DATA DATA SISWA BARU... BEBAN JARINGAN TINGGI...</p>
+                <div class="w-48 h-2 bg-gray-200 mx-auto mt-3 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-deep animate-pulse w-2/3"></div>
+                </div>
             </div>
 
             <div id="student-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 </div>
+
+            <div class="mt-12 text-center">
+                <button onclick="loadNextBatch()" class="px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl shadow-md transition-all duration-300">
+                    Acak & Muat 3 Siswa Lainnya
+                </button>
+            </div>
         </div>
     </section>
 
@@ -419,7 +441,6 @@
     </footer>
 
     <script>
-        // Data Master Siswa dari JSON hulu
         const studentsData = [
           {"nama": "ADITYA EKA SAPUTRA", "tempat_lahir": "Bondowoso", "tanggal_lahir": "29 September 2010", "nis": "043", "nisn": "0109531186", "jk": "L", "orang_tua": "Bpk. Abdul Mahfud Anwar", "foto_profil_url": "https://i.ibb.co.com/hJG3RBrT/Adit.webp"},
           {"nama": "AHMAD HABIBI MAULANA", "tempat_lahir": "Bondowoso", "tanggal_lahir": "28 April 2008", "nis": "044", "nisn": "0082114134", "jk": "L", "orang_tua": "Bpk. Asmuni", "foto_profil_url": "https://i.ibb.co.com/jkYGNmQJ/Habibi.webp"},
@@ -431,7 +452,7 @@
           {"nama": "DIMAS ARIF MAULANA", "tempat_lahir": "Bondowoso", "tanggal_lahir": "11 Desember 2010", "nis": "050", "nisn": "0107204403", "jk": "L", "orang_tua": "Bpk. Ahdul Salim", "foto_profil_url": "https://i.ibb.co.com/gLbDfYtV/Alan.webp"},
           {"nama": "FANIA RAHMAWATI", "tempat_lahir": "Bondowoso", "tanggal_lahir": "02 Juli 2010", "nis": "051", "nisn": "0102655649", "jk": "P", "orang_tua": "Ibu. Mina", "foto_profil_url": "https://i.ibb.co.com/7tmcpcXL/Fania.webp"},
           {"nama": "KHOIRUL ANWAR", "tempat_lahir": "Bondowoso", "tanggal_lahir": "07 November 2011", "nis": "052", "nisn": "0101792722", "jk": "L", "orang_tua": "Bpk. Samsuri", "foto_profil_url": "https://i.ibb.co.com/SXfgcfxn/Khoir.webp"},
-          {"nama": "KIKI STIFANI", "tempat_lahir": "Bondowoso", "tanggal_wider": "", "tanggal_lahir": "14 Oktober 2010", "nis": "053", "nisn": "0108990601", "jk": "P", "orang_tua": "Ibu. Yuliani", "foto_profil_url": "https://i.ibb.co.com/Y7KfGTmJ/Kiki.webp"},
+          {"nama": "KIKI STIFANI", "tempat_lahir": "Bondowoso", "tanggal_lahir": "14 Oktober 2010", "nis": "053", "nisn": "0108990601", "jk": "P", "orang_tua": "Ibu. Yuliani", "foto_profil_url": "https://i.ibb.co.com/Y7KfGTmJ/Kiki.webp"},
           {"nama": "LAILA NUR FILA SYAFA", "tempat_lahir": "Bondowoso", "tanggal_lahir": "22 Mei 2011", "nis": "054", "nisn": "0114950342", "jk": "P", "orang_tua": "Bpk. Muhammad Sholihin", "foto_profil_url": "https://i.ibb.co.com/QgNvMcp/Fila.webp"},
           {"nama": "MOHAMMAD FATTHUNUR FAIZIN", "tempat_lahir": "Bondowoso", "tanggal_lahir": "12 Juli 2011", "nis": "055", "nisn": "0117508351", "jk": "L", "orang_tua": "Bpk. Mohammad Lukman", "foto_profil_url": "https://i.ibb.co.com/DDJ4Bpz6/Faiz.webp"},
           {"nama": "MOHAMMAD FERIANTO", "tempat_lahir": "Bondowoso", "tanggal_lahir": "15 Februari 2010", "nis": "056", "nisn": "0102633447", "jk": "L", "orang_tua": "Bpk. Angwari", "foto_profil_url": "https://i.ibb.co.com/PvKkNQ4D/Feri.webp"},
@@ -453,47 +474,111 @@
           {"nama": "YUSI YULIANA DEWI", "tempat_lahir": "Bondowoso", "tanggal_lahir": "03 April 2010", "nis": "072", "nisn": "0102912322", "jk": "P", "orang_tua": "Bpk. Sapi'a", "foto_profil_url": "https://i.ibb.co.com/F4xwsMLf/Yuli.webp"}
         ];
 
-        // Daftar nama target Prank
-        const prankTargets = ["NUR FADILAH ANGGRAINI", "SILVI IZZATUL MAULIDAH", "WITA"];
+        let currentActiveStudents = [];
+        let completedNISList = [];
+        let isGlobalScratching = false;
 
-        // Fungsi Render Kartu Siswa
-        function renderStudents(data) {
+        // Fungsi mengacak array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Fungsi memuat batch 3 siswa baru dengan efek loading ngendat-ngendat
+        function loadNextBatch() {
+            const grid = document.getElementById('student-grid');
+            const loader = document.getElementById('section-loading');
+            
+            grid.innerHTML = '';
+            loader.classList.remove('hidden');
+
+            // Simulasi loading tersendat-sendat (Total 2.3 detik)
+            setTimeout(() => {
+                // Skenario acak siswa baru yang belum tuntas jika memungkinkan
+                let filtered = studentsData.filter(s => !completedNISList.includes(s.nis));
+                if (filtered.length < 3) {
+                    filtered = studentsData; // reset jika sudah habis terpilih
+                }
+                
+                let randomThree = shuffleArray(filtered).slice(0, 3);
+                currentActiveStudents = randomThree;
+                
+                // Urutkan tampilan awal (Selesai berada di atas)
+                sortAndRender();
+                
+                loader.classList.add('hidden');
+            }, 2300);
+        }
+
+        // Fungsi menyusun posisi kartu (Siswa lulus diletakkan di baris atas)
+        function sortAndRender() {
             const grid = document.getElementById('student-grid');
             grid.innerHTML = '';
 
-            data.forEach(student => {
-                // Ambil state gosok dari localStorage per siswa agar presisi
+            // Pisahkan yang berstatus sudah selesai (Lulus) dan yang belum digosok
+            let completedCards = [];
+            let activeCards = [];
+
+            currentActiveStudents.forEach(student => {
                 const storageKey = `scratch_step_${student.nis}`;
                 let currentStep = parseInt(localStorage.getItem(storageKey)) || 0;
 
-                // Tentukan template tampilan dalam zona gosok sesuai tahapan klik
-                let scratchAreaHTML = '';
-                
-                if (currentStep === 0) {
-                    scratchAreaHTML = `
-                        <div id="scratch-box-${student.nis}" onclick="triggerScratch('${student.nis}', '${student.nama}')" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center cursor-pointer select-none border border-gray-300 shadow-inner group">
-                            <span class="text-gray-700 font-bold group-hover:scale-105 transition-transform">GOSOK DI SINI</span>
-                            <span class="text-[10px] text-gray-500">Klik 15 kali secara berkala</span>
-                        </div>
-                    `;
-                } else if (currentStep > 0 && currentStep < 15) {
-                    let progress = Math.round((currentStep / 15) * 100);
-                    scratchAreaHTML = `
-                        <div id="scratch-box-${student.nis}" onclick="triggerScratch('${student.nis}', '${student.nama}')" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center cursor-pointer select-none border border-gray-300 shadow-inner">
-                            <span class="text-emerald-deep font-black text-xl">${progress}%</span>
-                            <span class="text-[10px] text-gray-600 font-medium">Menggosok... (${currentStep}/15)</span>
-                        </div>
-                    `;
+                let cardHTML = createCardTemplate(student, currentStep);
+
+                if (currentStep >= 15) {
+                    completedCards.push(cardHTML);
+                    if (!completedNISList.includes(student.nis)) {
+                        completedNISList.push(student.nis);
+                    }
                 } else {
-                    // Jika sudah selesai 15 gosokan (Step Berdasarkan Logika Prank)
-                    scratchAreaHTML = getFinalStatusHTML(student.nama);
+                    activeCards.push(cardHTML);
                 }
+            });
 
-                const card = document.createElement('div');
-                card.className = "bg-white rounded-2xl shadow-md border border-gray-100 p-5 flex flex-col justify-between hover:shadow-xl transition-all duration-300 student-card";
-                card.setAttribute('data-name', student.nama.toLowerCase());
+            // Gabungkan: kartu selesai diletakkan terlebih dahulu (paling atas)
+            const finalBatch = [...completedCards, ...activeCards];
+            finalBatch.forEach(html => {
+                grid.insertAdjacentHTML('beforeend', html);
+            });
+            lucide.createIcons();
+        }
 
-                card.innerHTML = `
+        function createCardTemplate(student, currentStep) {
+            let scratchAreaHTML = '';
+
+            if (currentStep === 0) {
+                scratchAreaHTML = `
+                    <div id="scratch-box-${student.nis}" onclick="triggerScratch('${student.nis}', '${student.nama}')" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center cursor-pointer select-none border border-gray-300 shadow-inner group">
+                        <span class="text-gray-700 font-bold group-hover:scale-105 transition-transform">GOSOK DI SINI</span>
+                        <span class="text-[10px] text-gray-500">Klik 15 kali secara berkala</span>
+                    </div>
+                `;
+            } else if (currentStep > 0 && currentStep < 15) {
+                let progress = Math.round((currentStep / 15) * 100);
+                scratchAreaHTML = `
+                    <div id="scratch-box-${student.nis}" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center border border-gray-300 shadow-inner">
+                        <span class="text-emerald-deep font-black text-xl animate-pulse">${progress}%</span>
+                        <span class="text-[10px] text-gray-600 font-medium flex items-center gap-1">
+                            <i data-lucide="loader" class="w-3 h-3 animate-spin text-red-500"></i> Sinkronisasi Data (${currentStep}/15)
+                        </span>
+                    </div>
+                `;
+            } else {
+                scratchAreaHTML = `
+                    <div class="bg-emerald-soft border-2 border-emerald-medium p-3 rounded-xl text-center shadow-sm animate-fade-in">
+                        <span class="block text-emerald-deep text-xs font-black uppercase tracking-wider">KETERANGAN</span>
+                        <span class="block text-emerald-medium text-lg font-serif-custom font-bold">LULUS</span>
+                        <span class="text-[9px] text-gray-400 block mt-0.5">Selamat & Sukses Nilai Rabbani Baik</span>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 flex flex-col justify-between hover:shadow-xl transition-all duration-300 student-card">
                     <div class="flex items-center gap-4 mb-4">
                         <img src="${student.foto_profil_url}" alt="${student.nama}" onerror="this.src='https://via.placeholder.com/150'" class="w-16 h-16 rounded-xl object-cover border-2 border-emerald-deep/20 shadow-sm">
                         <div class="flex-1 min-w-0">
@@ -511,118 +596,48 @@
                     <div id="wrapper-scratch-${student.nis}">
                         ${scratchAreaHTML}
                     </div>
-                `;
-                grid.appendChild(card);
-            });
+                </div>
+            `;
         }
 
-        // Logika Pengkondisian Status Kelulusan (Termasuk Skenario Prank 3 Fase)
-        function getFinalStatusHTML(name) {
-            const isPrank = prankTargets.includes(name.toUpperCase());
-            
-            if (!isPrank) {
-                // Siswa Normal -> Langsung LULUS UTAS
-                return `
-                    <div class="bg-emerald-soft border-2 border-emerald-medium p-3 rounded-xl text-center shadow-sm animate-fade-in">
-                        <span class="block text-emerald-deep text-xs font-black uppercase tracking-wider">KETERANGAN</span>
-                        <span class="block text-emerald-medium text-lg font-serif-custom font-bold">LULUS</span>
-                        <span class="text-[9px] text-gray-400 block mt-0.5">Selamat & Sukses Nilai Rabbani Baik</span>
-                    </div>
-                `;
-            } else {
-                // Target Prank -> Cek Fase Menggunakan State Counter Prank Khusus
-                const prankPhaseKey = `prank_phase_${name.replace(/\s+/g, '_')}`;
-                let phase = parseInt(localStorage.getItem(prankPhasePhaseKey)) || 1;
-
-                if (phase === 1) {
-                    return `
-                        <div class="bg-red-50 border-2 border-red-500 p-3 rounded-xl text-center shadow-sm relative group">
-                            <span class="block text-red-700 text-xs font-black uppercase tracking-wider">KETERANGAN</span>
-                            <span class="block text-red-600 text-sm font-bold">ERROR: NILAI BELUM DIKETAHUI</span>
-                            <button onclick="resetPrank('${name}', '${prankPhaseKey}', 2)" class="mt-2 w-full text-[9px] bg-red-600 hover:bg-red-700 text-white py-1 rounded font-bold transition-all">Gosok Ulang Lembar</button>
-                        </div>
-                    `;
-                } else if (phase === 2) {
-                    return `
-                        <div class="bg-amber-50 border-2 border-amber-500 p-3 rounded-xl text-center shadow-sm">
-                            <span class="block text-amber-800 text-xs font-black uppercase tracking-wider">KETERANGAN</span>
-                            <span class="block text-amber-700 text-[11px] font-bold leading-tight">SILAKAN PERBAIKI NILAI INFORMATIKA & SBK</span>
-                            <button onclick="resetPrank('${name}', '${prankPhaseKey}', 3)" class="mt-2 w-full text-[9px] bg-amber-600 hover:bg-amber-700 text-white py-1 rounded font-bold transition-all">Gosok Ulang Terakhir</button>
-                        </div>
-                    `;
-                } else {
-                    // Fase 3 -> Akhirnya LULUS
-                    return `
-                        <div class="bg-gradient-to-r from-emerald-medium to-emerald-deep p-3 rounded-xl text-center shadow-md border border-gold-accent animate-pulse">
-                            <span class="block text-gold-accent text-xs font-black uppercase tracking-wider">KETERANGAN AKHIR</span>
-                            <span class="block text-white text-xl font-serif-custom font-extrabold">LULUS</span>
-                            <span class="text-[9px] text-yellow-200 block mt-0.5">Prank Selesai! Selamat Berjuang Di Jenjang SMA</span>
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        // Fungsi Trigger Klik Gosokan
+        // Fungsi Trigger klik gosokan dengan efek macet/loading buatan lambat
         function triggerScratch(nis, name) {
+            if (isGlobalScratching) return; // Mengunci klik saat loading buatan berjalan
+            isGlobalScratching = true;
+
             const storageKey = `scratch_step_${nis}`;
             let currentStep = parseInt(localStorage.getItem(storageKey)) || 0;
             currentStep++;
 
             localStorage.setItem(storageKey, currentStep);
 
-            const container = document.getElementById(`wrapper-scratch-${nis}`);
-            if (currentStep < 15) {
-                let progress = Math.round((currentStep / 15) * 100);
-                container.innerHTML = `
-                    <div id="scratch-box-${nis}" onclick="triggerScratch('${nis}', '${name}')" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center cursor-pointer select-none border border-gray-300 shadow-inner">
-                        <span class="text-emerald-deep font-black text-xl">${progress}%</span>
-                        <span class="text-[10px] text-gray-600 font-medium">Menggosok... (${currentStep}/15)</span>
-                    </div>
-                `;
-            } else {
-                // Tepat di klik ke-15, tampilkan hasil terminasi
-                container.innerHTML = getFinalStatusHTML(name);
-            }
-        }
+            // Memperbarui tampilan indikator loading internal kartu
+            sortAndRender();
 
-        // Fungsi Reset Khusus untuk Alur Siklus Prank
-        function resetPrank(name, phaseKey, nextPhase) {
-            // Cari data siswa berdasarkan nama
-            const student = studentsData.find(s => s.nama.toUpperCase() === name.toUpperCase());
-            if (student) {
-                localStorage.setItem(`scratch_step_${student.nis}`, 0);
-                localStorage.setItem(phaseKey, nextPhase);
-                
-                // Me-render ulang wadah komponen regional
-                const container = document.getElementById(`wrapper-scratch-${student.nis}`);
-                container.innerHTML = `
-                    <div id="scratch-box-${student.picture}" onclick="triggerScratch('${student.nis}', '${student.nama}')" class="scratch-bg h-24 rounded-xl flex flex-col items-center justify-center cursor-pointer select-none border border-gray-300 shadow-inner group">
-                        <span class="text-gray-700 font-bold group-hover:scale-105 transition-transform">GOSOK ULANG KEMBALI</span>
-                        <span class="text-[10px] text-gray-500">Klik 15 kali lagi</span>
-                    </div>
-                `;
-            }
-        }
-
-        // Filter Pencarian Realtime
-        function filterStudents() {
-            const val = document.getElementById('search-student').value.toLowerCase();
-            const cards = document.getElementsByClassName('student-card');
+            // Efek macet / loading lambat buatan per klik (Durasi acak 600ms - 1.4s)
+            let randomLag = Math.floor(Math.random() * 800) + 600;
             
-            for (let card of cards) {
-                const name = card.getAttribute('data-name');
-                if (name.includes(val)) {
-                    card.style.display = "flex";
-                } else {
-                    card.style.display = "none";
-                }
-            }
+            // Tambahkan glitch visual instan
+            const targetBox = document.getElementById(`scratch-box-${nis}`);
+            if (targetBox) targetBox.classList.add('animate-stutter', 'bg-red-100');
+
+            setTimeout(() => {
+                isGlobalScratching = false;
+                // Re-render setelah jeda macet selesai untuk memperbarui status atau membuka kunci klik selanjutnya
+                sortAndRender();
+            }, randomLag);
         }
 
         // Inisialisasi Mula-mula Saat Dom Siap
         window.addEventListener('DOMContentLoaded', () => {
-            renderStudents(studentsData);
+            // Bersihkan sisa data gosok lama agar dimulai dari awal
+            studentsData.forEach(s => localStorage.removeItem(`scratch_step_${s.nis}`));
+            
+            // Muat 3 siswa acak pertama
+            let randomThree = shuffleArray(studentsData).slice(0, 3);
+            currentActiveStudents = randomThree;
+            sortAndRender();
+            
             lucide.createIcons();
         });
 
