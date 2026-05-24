@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opening Purnawiyata Ke-III SMP Islam Az-Zahro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0f0c08;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Video Background Fullscreen */
+    #video-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: 1;
+      display: none; /* Sembunyikan sebelum diklik */
+    }
+
+    /* Overlay gelap di atas video */
+    .overlay-dark {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 12, 8, 0.55);
+      z-index: 2;
+      display: none;
+    }
+
+    /* Kontainer Tombol */
+    .interface-container {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      color: #fff;
+    }
+
+    .card-start {
+      border: 2px solid #d4af37;
+      padding: 40px;
+      background: rgba(26, 21, 14, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+    }
+
+    .card-start h1 {
+      color: #d4af37;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      font-size: 2rem;
+    }
+
+    .card-start p {
+      color: #e0e0e0;
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+    }
+
+    .btn-gold {
+      padding: 15px 40px;
+      background: linear-gradient(45deg, #a67c1e, #f3e5ab, #a67c1e);
+      border: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      color: #0f0c08;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-gold:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(243, 229, 171, 0.6);
+    }
+
+    /* Tombol Lewati / Masuk ke Galeri Utama */
+    .btn-skip {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 12px 25px;
+      background: rgba(15, 12, 8, 0.75);
+      border: 1px solid #d4af37;
+      color: #f3e5ab;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+      z-index: 4;
+      display: none;
+      transition: all 0.3s;
+    }
+
+    .btn-skip:hover {
+      background: #d4af37;
+      color: #0f0c08;
+    }
+  </style>
+</head>
+<body>
+
+  <video id="video-bg" playsinline>
+    <source src="opening.mp4" type="video/mp4">
+    Browser tidak mendukung video HTML5.
+  </video>
+
+  <div class="overlay-dark" id="overlay-dark"></div>
+
+  <div class="interface-container" id="start-interface">
+    <div class="card-start">
+      <h1>SELAMAT & SUKSES</h1>
+      <p>Purnawiyata Ke-III SMP Islam Az-Zahro</p>
+      <button class="btn-gold" onclick="mulaiVideoSinematik()">Putar Video Pembuka</button>
+    </div>
+  </div>
+
+  <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()">Masuk Ke Galeri Siswa ❯</button>
+
+  <script>
+    const video = document.getElementById('video-bg');
+    const startInterface = document.getElementById('start-interface');
+    const overlayDark = document.getElementById('overlay-dark');
+    const btnSkip = document.getElementById('btn-skip');
+
+    function mulaiVideoSinematik() {
+      startInterface.style.display = 'none';
+      video.style.display = 'block';
+      overlayDark.style.display = 'block';
+      btnSkip.style.display = 'block';
+
+      // Otomatis Layar Penuh (Fullscreen)
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      }
+
+      video.muted = false; // Video bersuara aktif
+      video.play().catch(error => {
+        console.log("Gagal memutar video: ", error);
+        menujuGaleriUtama();
+      });
+    }
+
+    // Jika video selesai berputar, langsung alihkan ke index.html
+    video.onended = function() {
+      menujuGaleriUtama();
+    };
+
+    function menujuGaleriUtama() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
