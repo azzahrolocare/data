@@ -482,19 +482,17 @@
       100% { transform: translateY(-30px) translateX(30px) scale(0.9); opacity: 0; }
     }
 
-    /* ==========================================================================
-       BARU: CSS TRANSISI SMOOTH FADE IN BERURUTAN (SUBSTITUSI TYPING EFFECT)
-       ========================================================================== */
+    /* EFEK TRANSISI BARU: MUNCUL HALUS BERURUTAN (FADE-IN SMOOTH) */
     .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container {
       position: relative;
       z-index: 2;
       opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(12px);
+      transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    /* Trigger Class yang diberikan via JS secara berkala */
-    .show-fade {
+    /* Class pemicu yang ditambahkan bertahap lewat JavaScript */
+    .fade-in-visible {
       opacity: 1;
       transform: translateY(0);
     }
@@ -540,7 +538,7 @@
       100% { background-position: -200% center; }
     }
 
-    /* Mengubah efek kedip cursor karena pengetikan sudah ditiadakan */
+    /* Efek kursor ketik dinonaktifkan karena telah diganti fade-in */
     .typing-cursor::after {
       display: none;
     }
@@ -565,7 +563,7 @@
       border: 1px solid rgba(212, 175, 55, 0.2);
     }
 
-    .wish-container { height: 65px; display: flex; align-items: center; margin-top: 15px; transition: opacity 0.6s ease, transform 0.6s ease; }
+    .wish-container { height: 65px; display: flex; align-items: center; margin-top: 15px; }
     
     .wish-box {
       font-size: 1.3rem;
@@ -638,7 +636,7 @@
       top: 0; left: 0;
       z-index: 3;
       opacity: 0;
-      transition: opacity 0.6s ease; /* Tambahkan transisi halus saat memunculkan warna */
+      transition: opacity 0.6s ease;
     }
 
     .reveal-active .img-reveal-color { opacity: 1; }
@@ -892,7 +890,7 @@
     // Variabel Global Galeri Siswa
     let studentsData = [];
     let currentIndex = 0;
-    let fadeTimeouts = []; // Mengganti typingTimeouts untuk melacak delay kemunculan teks
+    let fadeTimeouts = []; // Mengganti nama array penampung agar sesuai dengan fungsi baru
     const bgMusic = document.getElementById('bg-music');
     
     let audioCtx, analyser, bufferLength, dataArray;
@@ -1024,11 +1022,11 @@
       return num < 10 ? '0' + num : num;
     }
 
-    /* --- REPLACEMENT: MEKANISME SEQUENTIAL FADE IN --- */
+    // BARU: FUNGSI PEMICU STRUKTUR ANTRIAN PENAMPAKAN TEKS SECARA BERTAHAP
     function sequentialFadeIn(containers) {
-      containers.forEach((item, index) => {
+      containers.forEach((item) => {
         let timer = setTimeout(() => {
-          item.el.classList.add('show-fade');
+          item.el.classList.add('fade-in-visible');
           if (item.callback) item.callback();
         }, item.delay);
         fadeTimeouts.push(timer);
@@ -1081,6 +1079,7 @@
         p.style.left = Math.random() * 100 + '%';
         let duration = Math.random() * 3 + 4;
         p.style.animationDuration = duration + 's';
+        let delay = Math.random() * 7;
         p.style.animationDelay = '-' + delay + 's';
         ccContainer.appendChild(p);
       }
@@ -1099,21 +1098,21 @@
     }
 
     function renderStudent(index) {
-      // Bersihkan seluruh task timeout yang tersisa
+      // Reset semua task penampung interval/timeout fade agar tidak bentrok saat ganti slide
       fadeTimeouts.forEach(clearTimeout);
       fadeTimeouts = [];
 
       const card = document.getElementById('student-card');
       const student = studentsData[index];
       
-      // Ambil elemen pembungkus container (untuk manipulasi class fade in)
+      // Ambil seluruh elemen pembungkus luar kontainer teks
       const cNama = document.getElementById('cont-nama');
       const cTtl = document.getElementById('cont-ttl');
       const cOrtu = document.getElementById('cont-ortu');
       const cNis = document.getElementById('cont-nis');
       const cWish = document.getElementById('cont-wish');
 
-      // Ambil elemen text di dalamnya
+      // Ambil elemen teks internal
       const elNama = document.getElementById('siswa-nama');
       const elTtl = document.getElementById('siswa-ttl');
       const elOrtu = document.getElementById('siswa-ortu');
@@ -1128,15 +1127,15 @@
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Reset semua class animasi/transisi visual panggung ke keadaan dasar awal
+      // Kembalikan status visual panggung ke default
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
       
-      cNama.classList.remove('show-fade');
-      cTtl.classList.remove('show-fade');
-      cOrtu.classList.remove('show-fade');
-      cNis.classList.remove('show-fade');
-      cWish.classList.remove('show-fade');
+      cNama.classList.remove('fade-in-visible');
+      cTtl.classList.remove('fade-in-visible');
+      cOrtu.classList.remove('fade-in-visible');
+      cNis.classList.remove('fade-in-visible');
+      cWish.classList.remove('fade-in-visible');
 
       void card.offsetWidth; 
       card.classList.add('active');
@@ -1144,24 +1143,24 @@
       elNumAbsen.innerText = padZero(index + 1);
       elTotalAbsen.innerText = padZero(studentsData.length);
 
-      // Suntik data teks mentah secara langsung tanpa dicicil (efek mengetik dihapus)
+      // Racik teks mentah langsung masuk ke dalam DOM
       const textNama = student.nama;
       const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       const textOrtu = `${hubunganOrtu} ${student.orang_tua}`;
-      
+
       elNama.textContent = textNama;
       elTtl.textContent = textTtl;
       elOrtu.textContent = textOrtu;
       elNisBox.textContent = `NIS: ${student.nis} | NISN: ${student.nisn}`;
       elCitaCita.innerText = student.cita_cita || "-";
 
-      // Manajemen pemuatan gambar foto profil siswa utama
+      // Gambar Profil Utama
       fotoElement.style.opacity = '0';
       fotoElement.src = student.foto_profil_url;
       fotoElement.onload = () => fotoElement.style.opacity = '1';
 
-      // Manajemen pemuatan gambar kolase cita-cita sisi kanan panggung
+      // Gambar Kolase Cita-cita Samping Kanan
       fotoBw.style.opacity = '0';
       const finalCCUrl = student.foto_cita_cita_url || student.foto_profil_url;
       
@@ -1169,17 +1168,17 @@
       fotoColor.src = finalCCUrl;
       fotoBw.onload = () => { fotoBw.style.opacity = '1'; };
 
-      // Menjalankan struktur antrean penampakan data secara halus berurutan ke bawah
+      // Menjalankan efek berurutan ke bawah secara berkala dan halus
       sequentialFadeIn([
-        { el: cNama, delay: 200 },
-        { el: cTtl, delay: 500 },
-        { el: cOrtu, delay: 800 },
-        { el: cNis, delay: 1100 },
+        { el: cNama, delay: 150 },
+        { el: cTtl, delay: 450 },
+        { el: cOrtu, delay: 750 },
+        { el: cNis, delay: 1050 },
         { 
           el: cWish, 
-          delay: 1400, 
+          delay: 1350, 
           callback: () => {
-            // Trigger warna gambar cita-cita dan partikel saat baris terakhir muncul
+            // Berikan warna dan luncurkan partikel cita-cita di ujung akhir transisi teks
             ccContainer.classList.add('reveal-active');
             ccContainer.classList.add('show-particles');
           }
