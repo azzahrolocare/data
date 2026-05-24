@@ -169,12 +169,15 @@
       pointer-events: none;
       animation: floatParticles linear infinite;
       z-index: 1;
+      /* Optimasi IFP: Paksa render GPU untuk menghindari kedipan */
+      transform: translateZ(0);
+      will-change: transform, opacity;
     }
 
     @keyframes floatParticles {
-      0% { transform: translateY(100vh) scale(0.3); opacity: 0; }
+      0% { transform: translateY(100vh) scale(0.3) translateZ(0); opacity: 0; }
       50% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+      100% { transform: translateY(-10vh) scale(1.2) translateZ(0); opacity: 0; }
     }
 
     .music-control-container {
@@ -228,6 +231,7 @@
       border-radius: 1px 1px 0 0;
       transition: height 0.04s ease;
       opacity: 0.85;
+      will-change: height;
     }
 
     .main-container {
@@ -254,7 +258,8 @@
       position: relative;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(30px) translateZ(0);
+      will-change: transform, opacity;
     }
 
     .purnawiyata-card::before {
@@ -264,6 +269,7 @@
       background: conic-gradient(transparent, transparent, transparent, #d4af37, #f3e5ab, #d4af37);
       animation: borderRotate 6s linear infinite;
       z-index: 1;
+      will-change: transform;
     }
 
     .card-content-wrapper {
@@ -440,8 +446,11 @@
       background: radial-gradient(ellipse at top, rgba(255, 246, 212, 0.22) 0%, rgba(212, 175, 55, 0.05) 35%, rgba(212, 175, 55, 0.01) 55%, transparent 75%);
       clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
       transform-origin: top center;
-      filter: blur(12px); 
+      /* Optimasi IFP: Pengurangan radius blur agar transisi swing tidak patah-patah */
+      filter: blur(6px); 
       mix-blend-mode: screen; 
+      transform: translateZ(0);
+      will-change: transform;
     }
 
     .spotlight-1 { left: -8%; animation: stageSwing1 8s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate; }
@@ -450,20 +459,20 @@
     .spotlight-4 { right: -8%; animation: stageSwing4 7s cubic-bezier(0.39, 0.575, 0.565, 1) infinite alternate; }
 
     @keyframes stageSwing1 {
-      0% { transform: rotateX(15deg) rotateZ(-20deg) scaleX(0.85); opacity: 0.4; }
-      100% { transform: rotateX(25deg) rotateZ(6deg) scaleX(1.15); opacity: 0.85; }
+      0% { transform: rotateX(15deg) rotateZ(-20deg) scaleX(0.85) translateZ(0); opacity: 0.4; }
+      100% { transform: rotateX(25deg) rotateZ(6deg) scaleX(1.15) translateZ(0); opacity: 0.85; }
     }
     @keyframes stageSwing2 {
-      0% { transform: rotateX(20deg) rotateZ(10deg) scaleX(1.15); opacity: 0.75; }
-      100% { transform: rotateX(10deg) rotateZ(-12deg) scaleX(0.75); opacity: 0.35; }
+      0% { transform: rotateX(20deg) rotateZ(10deg) scaleX(1.15) translateZ(0); opacity: 0.75; }
+      100% { transform: rotateX(10deg) rotateZ(-12deg) scaleX(0.75) translateZ(0); opacity: 0.35; }
     }
     @keyframes stageSwing3 {
-      0% { transform: rotateX(10deg) rotateZ(-12deg) scaleX(0.75); opacity: 0.35; }
-      100% { transform: rotateX(25deg) rotateZ(14deg) scaleX(1.15); opacity: 0.85; }
+      0% { transform: rotateX(10deg) rotateZ(-12deg) scaleX(0.75) translateZ(0); opacity: 0.35; }
+      100% { transform: rotateX(25deg) rotateZ(14deg) scaleX(1.15) translateZ(0); opacity: 0.85; }
     }
     @keyframes stageSwing4 {
-      0% { transform: rotateX(25deg) rotateZ(16deg) scaleX(1.05); opacity: 0.85; }
-      100% { transform: rotateX(15deg) rotateZ(-8deg) scaleX(0.85); opacity: 0.4; }
+      0% { transform: rotateX(25deg) rotateZ(16deg) scaleX(1.05) translateZ(0); opacity: 0.85; }
+      100% { transform: rotateX(15deg) rotateZ(-8deg) scaleX(0.85) translateZ(0); opacity: 0.4; }
     }
 
     .spotlight-dust {
@@ -474,12 +483,14 @@
       pointer-events: none;
       animation: ambientDust linear infinite;
       opacity: 0;
+      transform: translateZ(0);
+      will-change: transform, opacity;
     }
     @keyframes ambientDust {
-      0% { transform: translateY(350px) translateX(0) scale(0.2); opacity: 0; }
+      0% { transform: translateY(350px) translateX(0) scale(0.2) translateZ(0); opacity: 0; }
       20% { opacity: 0.5; }
       80% { opacity: 0.3; }
-      100% { transform: translateY(-30px) translateX(30px) scale(0.9); opacity: 0; }
+      100% { transform: translateY(-30px) translateX(30px) scale(0.9) translateZ(0); opacity: 0; }
     }
 
     /* EFEK TRANSISI BARU: MUNCUL HALUS BERURUTAN (FADE-IN SMOOTH) */
@@ -487,14 +498,15 @@
       position: relative;
       z-index: 2;
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(12px) translateZ(0);
       transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform, opacity;
     }
 
     /* Class pemicu yang ditambahkan bertahap lewat JavaScript */
     .fade-in-visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) translateZ(0);
     }
 
     .name-container {
@@ -651,16 +663,18 @@
       filter: drop-shadow(0 0 4px rgba(243, 229, 171, 0.6));
       opacity: 0;
       transition: opacity 0.3s ease;
+      transform: translateZ(0);
+      will-change: transform, opacity;
     }
 
     .show-particles .cc-particle { opacity: 1; }
 
     @keyframes floatUpCC {
-      0% { top: 105%; transform: scale(0.3) translateX(0); opacity: 0; }
+      0% { top: 105%; transform: scale(0.3) translateX(0) translateZ(0); opacity: 0; }
       15% { opacity: 0.8; }
-      50% { transform: scale(0.7) translateX(15px); }
+      50% { transform: scale(0.7) translateX(15px) translateZ(0); }
       85% { opacity: 0.6; }
-      100% { top: -10%; transform: scale(1.2) translateX(-15px); opacity: 0; }
+      100% { top: -10%; transform: scale(1.2) translateX(-15px) translateZ(0); opacity: 0; }
     }
 
     .nav-container { display: contents; }
@@ -700,8 +714,8 @@
       animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
     @keyframes cardEntrance {
-      0% { opacity: 0; transform: scale(0.97) translateY(40px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
+      0% { opacity: 0; transform: scale(0.97) translateY(40px) translateZ(0); }
+      100% { opacity: 1; transform: scale(1) translateY(0) translateZ(0); }
     }
 
     /* Responsif Layar Hp / Mobile */
@@ -890,7 +904,7 @@
     // Variabel Global Galeri Siswa
     let studentsData = [];
     let currentIndex = 0;
-    let fadeTimeouts = []; // Mengganti nama array penampung agar sesuai dengan fungsi baru
+    let fadeTimeouts = []; 
     const bgMusic = document.getElementById('bg-music');
     
     let audioCtx, analyser, bufferLength, dataArray;
@@ -937,7 +951,8 @@
     function initParticles() {
       resizeCanvas();
       particlesArray = [];
-      for (let i = 0; i < 70; i++) {
+      // Optimasi IFP: Dibatasi 45 partikel di halaman awal agar meringankan beban render
+      for (let i = 0; i < 45; i++) {
         particlesArray.push(new Particle());
       }
     }
@@ -990,13 +1005,8 @@
 
     /* --- TRANSISI UTAMA: DARI OPENING MENUJU PROSESI SISWA --- */
     function menujuGaleriUtama() {
-      // Hentikan video pembuka jika masih berjalan
       video.pause();
-      
-      // Sembunyikan kontainer opening secara total
       openingContainer.style.display = 'none';
-      
-      // Tampilkan kontainer galeri utama
       mainGalleryContent.style.display = 'flex';
 
       // Jalankan inisialisasi visual panggung
@@ -1022,7 +1032,7 @@
       return num < 10 ? '0' + num : num;
     }
 
-    // BARU: FUNGSI PEMICU STRUKTUR ANTRIAN PENAMPAKAN TEKS SECARA BERTAHAP
+    // FUNGSI PEMICU STRUKTUR ANTRIAN PENAMPAKAN TEKS SECARA BERTAHAP
     function sequentialFadeIn(containers) {
       containers.forEach((item) => {
         let timer = setTimeout(() => {
@@ -1034,15 +1044,16 @@
     }
 
     function createGlobalParticles() {
-      const particleCount = 35;
+      // Optimasi IFP: Dikurangi menjadi 15 partikel mengambang agar tidak lag saat ganti slide
+      const particleCount = 15;
       for (let i = 0; i < particleCount; i++) {
         let particle = document.createElement('div');
         particle.className = 'particle';
-        let size = Math.random() * 6 + 2;
+        let size = Math.random() * 5 + 2;
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
         particle.style.left = Math.random() * 100 + 'vw';
-        let duration = Math.random() * 8 + 5;
+        let duration = Math.random() * 8 + 6;
         particle.style.animationDuration = duration + 's';
         let delay = Math.random() * 5;
         particle.style.animationDelay = delay + 's';
@@ -1052,7 +1063,8 @@
 
     function createSpotlightDust() {
       const zone = document.getElementById('identity-spotlight-zone');
-      const dustCount = 15;
+      // Optimasi IFP: Debu panggung tengah dikurangi menjadi 6 objek saja
+      const dustCount = 6;
       for (let i = 0; i < dustCount; i++) {
         let dust = document.createElement('div');
         dust.className = 'spotlight-dust';
@@ -1068,18 +1080,19 @@
 
     function createCitaCitaParticles() {
       const ccContainer = document.getElementById('column-cc');
-      const ccParticleCount = 20; 
+      // Optimasi IFP: Partikel bagian kanan dikurangi menjadi 8 objek
+      const ccParticleCount = 8; 
       
       for (let i = 0; i < ccParticleCount; i++) {
         let p = document.createElement('div');
         p.className = 'cc-particle';
-        let size = Math.random() * 5 + 3;
+        let size = Math.random() * 4 + 3;
         p.style.width = size + 'px';
         p.style.height = size + 'px';
         p.style.left = Math.random() * 100 + '%';
         let duration = Math.random() * 3 + 4;
         p.style.animationDuration = duration + 's';
-        let delay = Math.random() * 7;
+        let delay = Math.random() * 6;
         p.style.animationDelay = '-' + delay + 's';
         ccContainer.appendChild(p);
       }
@@ -1098,21 +1111,18 @@
     }
 
     function renderStudent(index) {
-      // Reset semua task penampung interval/timeout fade agar tidak bentrok saat ganti slide
       fadeTimeouts.forEach(clearTimeout);
       fadeTimeouts = [];
 
       const card = document.getElementById('student-card');
       const student = studentsData[index];
       
-      // Ambil seluruh elemen pembungkus luar kontainer teks
       const cNama = document.getElementById('cont-nama');
       const cTtl = document.getElementById('cont-ttl');
       const cOrtu = document.getElementById('cont-ortu');
       const cNis = document.getElementById('cont-nis');
       const cWish = document.getElementById('cont-wish');
 
-      // Ambil elemen teks internal
       const elNama = document.getElementById('siswa-nama');
       const elTtl = document.getElementById('siswa-ttl');
       const elOrtu = document.getElementById('siswa-ortu');
@@ -1127,7 +1137,6 @@
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
-      // Kembalikan status visual panggung ke default
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
       
@@ -1143,7 +1152,6 @@
       elNumAbsen.innerText = padZero(index + 1);
       elTotalAbsen.innerText = padZero(studentsData.length);
 
-      // Racik teks mentah langsung masuk ke dalam DOM
       const textNama = student.nama;
       const textTtl = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
@@ -1168,17 +1176,16 @@
       fotoColor.src = finalCCUrl;
       fotoBw.onload = () => { fotoBw.style.opacity = '1'; };
 
-      // Menjalankan efek berurutan ke bawah secara berkala dan halus
+      // Penampakan berurutan halus (Sequential Fade)
       sequentialFadeIn([
-        { el: cNama, delay: 150 },
-        { el: cTtl, delay: 450 },
-        { el: cOrtu, delay: 750 },
-        { el: cNis, delay: 1050 },
+        { el: cNama, delay: 100 },
+        { el: cTtl, delay: 350 },
+        { el: cOrtu, delay: 600 },
+        { el: cNis, delay: 850 },
         { 
           el: cWish, 
-          delay: 1350, 
+          delay: 1100, 
           callback: () => {
-            // Berikan warna dan luncurkan partikel cita-cita di ujung akhir transisi teks
             ccContainer.classList.add('reveal-active');
             ccContainer.classList.add('show-particles');
           }
@@ -1263,21 +1270,18 @@
 
     // Navigasi Keyboard global (Mendukung Remote IFP / Presentasi)
     window.addEventListener('keydown', (event) => {
-      // 1. KONDISI JIKA MASIH DI HALAMAN OPENING
       if (openingContainer.style.display !== 'none') {
-        // Jika tombol start sudah disembunyikan (artinya video sedang berjalan)
         if (startInterface.style.display === 'none') {
           switch(event.key) {
             case 'ArrowRight':
             case 'ArrowDown':
             case 'PageDown':
-            case 'Enter': // Mendukung tombol enter/ok pada beberapa jenis remote panel
+            case 'Enter': 
               menujuGaleriUtama();
               break;
           }
         }
       } 
-      // 2. KONDISI JIKA SUDAH MASUK KEDALAM GALERI UTAMA
       else if (mainGalleryContent.style.display === 'flex') {
         switch(event.key) {
           case 'ArrowRight':
