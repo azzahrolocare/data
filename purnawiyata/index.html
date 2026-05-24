@@ -23,12 +23,13 @@
       position: relative;
     }
 
+    /* Tampilan Konten Utama (Prosesi Siswa) disembunyikan di awal */
     #main-gallery-content {
       display: none;
       justify-content: center;
       align-items: center;
       width: 100%;
-      height: 100vh; 
+      min-height: 100vh;
       padding: 20px;
     }
 
@@ -130,6 +131,7 @@
       box-shadow: 0 0 20px rgba(243, 229, 171, 0.6);
     }
 
+    /* Perbaikan Tombol Panah: Hanya panah saja yang samar tanpa lingkaran */
     .btn-skip {
       position: fixed;
       bottom: 40px;
@@ -144,21 +146,21 @@
       z-index: 20;
       font-size: 3.5rem;
       font-weight: bold;
-      opacity: 0.35;
+      opacity: 0.35; /* Membuat panah menjadi samar secara default */
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
       transition: all 0.3s ease;
       user-select: none;
     }
 
     .btn-skip:hover {
-      opacity: 0.95;
+      opacity: 0.95; /* Menjadi jelas saat disentuh mouse */
       color: #ffffff;
       transform: scale(1.15) translateX(5px);
       text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
     }
 
     /* ==========================================================================
-       STYLE UTAMA: PROSESI / GALERI SISWA (DIOPTIMALKAN & BEBAS OVERLAP)
+       STYLE DARI FILE: prosesi siswa.html
        ========================================================================== */
     .particle {
       position: absolute;
@@ -180,11 +182,12 @@
       align-items: center;
       gap: 12px;
       background: rgba(15, 12, 8, 0.6);
-      padding: 6px 14px;
+      padding: 10px 18px; /* Diperbesar sedikit untuk layar sentuh IFP */
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.15);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      width: 100%;
+      width: 90%;
+      margin-right: 25px;
       justify-content: center;
     }
 
@@ -197,9 +200,14 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      width: 28px;
-      height: 28px;
+      width: 36px; /* Ukuran tombol musik diperbesar untuk IFP */
+      height: 36px;
       flex-shrink: 0;
+    }
+
+    .btn-music-toggle svg {
+      width: 24px;  /* Icon diperbesar agar mudah ditekan di IFP */
+      height: 24px;
     }
 
     .btn-music-toggle:hover {
@@ -233,17 +241,20 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 1400px;
-      height: 100%;
+      max-width: 1600px; 
+      min-height: 90vh; 
+      margin: auto 0;
       z-index: 10;
       position: relative;
     }
 
+    /* MODIFIKASI KHUSUS LAYAR IFP BESAR AGAR TIDAK SCROLLING */
     .purnawiyata-card {
       display: flex;
       width: 100%;
-      /* Perbaikan: Menggunakan min-height dan menghilangkan batasan kaku tinggi agar teks tidak luber */
-      min-height: 80vh; 
+      height: 80vh; /* Tinggi diatur dinamis berbasis layar agar pas di panel IFP */
+      min-height: 650px;
+      max-height: 850px;
       background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
       border-radius: 25px;
       overflow: hidden;
@@ -275,16 +286,15 @@
 
     @keyframes borderRotate { 100% { transform: rotate(360deg); } }
 
-    /* Kolom Kiri: Profil Utama */
     .column-left {
-      width: 320px;
+      width: 360px; /* Diperlebar sedikit agar frame foto seimbang */
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
-      padding: 30px;
+      padding: 40px;
       position: relative;
       clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
       gap: 20px;
@@ -292,7 +302,8 @@
 
     .photo-frame {
       width: 100%;
-      height: 340px;
+      height: 70%; /* Berbasis persentase agar fleksibel mengikuti tinggi card IFP */
+      max-height: 420px;
       border: 6px solid #fff;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       border-radius: 12px;
@@ -320,36 +331,34 @@
     .absen-label {
       background: rgba(15, 12, 8, 0.85);
       color: #f3e5ab;
-      padding: 8px 16px;
+      padding: 10px 16px;
       border-radius: 30px;
-      font-size: 0.95rem;
+      font-size: 1.1rem; /* Ukuran font absen naik sedikit */
       font-weight: 700;
       letter-spacing: 1px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       text-align: center;
-      width: 100%;
-      margin-right: 15px;
+      width: 90%;
+      margin-right: 25px; 
       text-transform: uppercase;
     }
     .absen-label span { color: #ffffff; }
 
-    /* Kolom Tengah: Identitas Siswa */
     .column-center {
       flex: 1;
-      padding: 35px 40px;
+      padding: 40px 50px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       color: #ffffff;
       overflow: hidden;
-      gap: 15px; /* Memberi jarak konsisten antar baris besar */
     }
 
     .brand-header {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
       flex-shrink: 0;
     }
 
@@ -360,35 +369,35 @@
     }
 
     .school-logo {
-      width: 65px;
+      width: 85px; /* Logo sekolah diperbesar untuk layar IFP */
       height: auto;
       object-fit: contain;
       filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
     }
 
     .logo-ppss {
-      width: 150px;
+      width: 195px; /* Logo PPSS diperbesar untuk layar IFP */
       height: auto;
       object-fit: contain;
       filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
     }
 
     .header-title {
-      font-size: 1.8rem;
+      font-size: 2.3rem; /* Ukuran judul diperbesar */
       font-weight: 900;
       letter-spacing: 3px;
       color: #ffffff;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
-    /* Perbaikan: Mengubah susunan box agar dinamis mengikuti panjang teks */
     .identity-box {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center; 
+      margin: 20px 0;
       position: relative; 
-      gap: 15px; /* Jarak aman antar item data agar tidak saling menimpa */
+      perspective: 1000px; 
     }
 
     .spotlight-container {
@@ -484,23 +493,26 @@
     .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container {
       position: relative;
       z-index: 2;
-      height: auto; /* Perbaikan: Menghilangkan height statis pemicu tabrakan */
     }
 
     .name-container {
+      min-height: 120px;
+      height: auto;
       display: flex;
       align-items: center;
       position: relative;
+      padding-bottom: 15px;
     }
 
     #siswa-nama {
-      font-size: 2.2rem; /* Menyesuaikan ukuran font agar aman */
+      font-size: 3.4rem; /* Diperbesar signifikan agar megah di panggung IFP */
       font-weight: 800;
       color: #fff;
       letter-spacing: 0.5px;
+      word-spacing: 4px;
       text-transform: uppercase;
       padding-bottom: 8px;
-      line-height: 1.2;
+      line-height: 1.3;
       white-space: pre-wrap;
       word-wrap: break-word;
       width: 100%;
@@ -532,50 +544,55 @@
     }
     @keyframes blink { 50% { opacity: 0; } }
 
-    #siswa-ttl { font-size: 1.25rem; color: #e0e0e0; font-weight: 500; }
-    .sub-detail { font-size: 1.3rem; font-style: italic; color: #f3e5ab; }
+    .ttl-container { height: 35px; display: flex; align-items: center; margin-top: 15px; }
+    #siswa-ttl { font-size: 1.6rem; color: #e0e0e0; font-weight: 500; }
+
+    .ortu-container { height: 35px; display: flex; align-items: center; margin-top: 5px; }
+    .sub-detail { font-size: 1.7rem; font-style: italic; color: #f3e5ab; }
+
+    .nis-container { height: 45px; display: flex; align-items: center; margin-top: 5px; }
     
     .nis-box { 
-      font-size: 1.1rem; 
+      font-size: 1.35rem;  /* Skala NIS dinaikkan agar lebih jelas dilihat audiens belakang */
       color: #ffffff !important; 
       font-weight: 700; 
       letter-spacing: 0.5px;
       text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
       background: rgba(255, 255, 255, 0.08);
-      padding: 4px 14px;
+      padding: 6px 16px;
       border-radius: 4px;
       border: 1px solid rgba(212, 175, 55, 0.2);
-      display: inline-block;
     }
+
+    .wish-container { height: 75px; display: flex; align-items: center; margin-top: 20px; }
     
     .wish-box {
-      font-size: 1.15rem;
+      font-size: 1.5rem; /* Ukuran box cita-cita diperbesar */
       color: #ffffff;
       background: rgba(212, 175, 55, 0.15);
-      padding: 8px 18px;
-      border-left: 4px solid #d4af37;
+      padding: 12px 26px;
+      border-left: 5px solid #d4af37;
       border-radius: 0 5px 5px 0;
       opacity: 0; 
-      width: fit-content;
+      width: auto;
     }
     .wish-box.fade-in-visible { opacity: 1; } 
     .wish-box span { color: #f3e5ab; font-weight: bold; }
 
     .footer-title {
-      font-size: 1.2rem;
+      font-size: 1.55rem;
       font-weight: 700;
       letter-spacing: 2px;
       color: #ffffff;
       line-height: 1.3;
       border-top: 1px solid rgba(212, 175, 55, 0.2);
-      padding-top: 10px;
+      padding-top: 15px;
       flex-shrink: 0;
     }
-    .footer-title span { color: #d4af37; font-size: 1.4rem; font-weight: 800; }
+    .footer-title span { color: #d4af37; font-size: 1.85rem; font-weight: 800; }
 
-    /* Kolom Kanan: Ilustrasi Cita-Cita */
     .column-right {
-      width: 400px; 
+      width: 520px; /* Diperlebar agar gambar cita-cita tampak lebih sinematik dan jelas */
       flex-shrink: 0;
       position: relative;
       overflow: hidden; 
@@ -650,13 +667,17 @@
 
     .nav-container { display: contents; }
 
+    /* TOMBOL NAVIGASI DIOPTIMALKAN UNTUK SENTUHAN LAYAR PANEL IFP */
     .btn-nav-arrow {
       position: fixed;
-      bottom: 25px;
-      background: none;
-      border: none;
+      bottom: 35px;
+      background: rgba(15, 12, 8, 0.4); /* Memberikan background samar agar lebih mudah dibidik jari */
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 50%;
+      width: 80px;  /* Membuat tombol melingkar besar agar touch-friendly */
+      height: 80px;
       color: #d4af37;
-      font-size: 3.5rem;
+      font-size: 4rem;
       font-weight: bold;
       cursor: pointer;
       display: flex;
@@ -665,19 +686,19 @@
       transition: all 0.3s ease;
       user-select: none;
       z-index: 100;
-      opacity: 0.35;
+      opacity: 0.5; /* Ditingkatkan dari 0.35 agar lebih terlihat jelas di panggung */
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-      padding: 10px 20px;
     }
 
-    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 25px; }
-    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 25px; }
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 40px; padding-right: 8px; }
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 40px; padding-left: 8px; }
 
     .btn-nav-arrow:hover {
       color: #f3e5ab;
-      opacity: 0.9;
+      opacity: 0.95;
       transform: scale(1.1);
-      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+      background: rgba(26, 21, 14, 0.8);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
     }
 
     .purnawiyata-card.active {
@@ -688,17 +709,19 @@
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* Responsif Layar Hp / Mobile */
+    /* Responsif Layar Hp / Mobile (Tetap Dipertahankan Agar Tidak Rusak) */
     @media (max-width: 950px) {
       body { overflow-y: auto; }
-      #main-gallery-content { padding-bottom: 80px; height: auto; }
+      #main-gallery-content { padding-bottom: 80px; }
       .main-container { height: auto; padding-bottom: 80px; margin: 0; }
       .purnawiyata-card { height: auto; min-height: initial; max-height: none; }
       .card-content-wrapper { flex-direction: column; }
       .column-left { width: 100%; clip-path: none; padding: 30px; }
       .photo-frame { height: 320px; max-width: 260px; margin: 0 auto; }
       .absen-label { margin-right: 0; width: 100%; max-width: 260px; }
-      .music-control-container { margin-right: 0; width: 100%; max-width: 260px; }
+      .music-control-container { margin-right: 0; width: 100%; max-width: 260px; padding: 6px 14px; }
+      .btn-music-toggle { width: 28px; height: 28px; }
+      .btn-music-toggle svg { width: 18px; height: 18px; }
       
       .column-center { 
         text-align: center; 
@@ -707,9 +730,24 @@
       }
       
       .logo-wrapper { justify-content: center; }
-      .identity-box { justify-content: center; align-items: center; }
+      .school-logo { width: 75px; }
+      .logo-ppss { width: 175px; }
+      .header-title { font-size: 2rem; }
+      
+      .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
+        height: auto; 
+        min-height: inherit;
+        justify-content: center; 
+      }
+      
+      .name-container { min-height: 70px; margin-bottom: 10px; }
       #siswa-nama { font-size: 1.8rem; }
-      .wish-box { width: auto; }
+      #siswa-ttl { font-size: 1.4rem; }
+      .sub-detail { font-size: 1.5rem; }
+      .nis-box { font-size: 1.2rem; padding: 4px 14px; }
+      .wish-box { font-size: 1.3rem; padding: 10px 22px; border-left: 4px solid #d4af37; }
+      .footer-title { font-size: 1.45rem; }
+      .footer-title span { font-size: 1.65rem; }
       
       .column-right { height: 320px; width: 100%; }
       .image-reveal-wrapper {
@@ -718,9 +756,9 @@
       }
       
       .btn-skip { bottom: 20px; right: 20px; font-size: 2.8rem; }
-      .btn-nav-arrow { bottom: 15px; font-size: 2.8rem; }
-      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 15px; }
-      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 15px; }
+      .btn-nav-arrow { bottom: 15px; font-size: 2.8rem; width: auto; height: auto; background: none; border: none; opacity: 0.35; }
+      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 15px; padding-right: 0; }
+      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 15px; padding-left: 0; }
     }
   </style>
 </head>
@@ -748,6 +786,7 @@
 
     <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()" title="Masuk Ke Galeri Siswa">❯</button>
   </div>
+
 
   <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
     <source src="https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3" type="audio/mpeg">
@@ -855,6 +894,7 @@
   </div>
 
   <script>
+    // Selektor Opening
     const video = document.getElementById('video-bg');
     const startInterface = document.getElementById('start-interface');
     const overlayDark = document.getElementById('overlay-dark');
@@ -864,6 +904,7 @@
     const openingContainer = document.getElementById('opening-container');
     const mainGalleryContent = document.getElementById('main-gallery-content');
 
+    // Variabel Global Galeri Siswa
     let studentsData = [];
     let currentIndex = 0;
     let typingTimeouts = []; 
@@ -872,6 +913,7 @@
     let audioCtx, analyser, bufferLength, dataArray;
     let visualizerAnimationId;
 
+    /* --- SISTEM PARTIKEL GOLD (OPENING) --- */
     let particlesArray = [];
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -926,6 +968,7 @@
       requestAnimationFrame(animateParticles);
     }
 
+    // Fungsi memutar video pembuka pertama kali
     function mulaiVideoSinematik() {
       startInterface.style.display = 'none';
       video.style.display = 'block';
@@ -936,6 +979,7 @@
       initParticles();
       animateParticles();
 
+      // Otomatis Layar Penuh
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch(err => console.log(err));
       }
@@ -961,15 +1005,23 @@
       }
     }
 
+    /* --- TRANSISI UTAMA: DARI OPENING MENUJU PROSESI SISWA --- */
     function menujuGaleriUtama() {
+      // Hentikan video pembuka jika masih berjalan
       video.pause();
+      
+      // Sembunyikan kontainer opening secara total
       openingContainer.style.display = 'none';
+      
+      // Tampilkan kontainer galeri utama
       mainGalleryContent.style.display = 'flex';
 
+      // Jalankan inisialisasi visual panggung
       createGlobalParticles();
       createSpotlightDust(); 
       createCitaCitaParticles(); 
       
+      // Muat Data Siswa & Putar Musik Utama
       loadStudentsData();
       initVisualizer();
 
@@ -978,10 +1030,11 @@
       }
 
       bgMusic.play().catch(error => {
-        console.log("Musik tertahan.", error);
+        console.log("Musik tertahan sistem kebijakan browser.", error);
       });
     }
 
+    /* --- SISTEM PANGGUNG GALERI UTAMA --- */
     function padZero(num) {
       return num < 10 ? '0' + num : num;
     }
@@ -1050,9 +1103,9 @@
         p.style.height = size + 'px';
         p.style.left = Math.random() * 100 + '%';
         let duration = Math.random() * 3 + 4;
-        let delay = Math.random() * 5;
         p.style.animationDuration = duration + 's';
-        p.style.animationDelay = '-' + delay + 's'; 
+        let delay = Math.random() * 7;
+        p.style.animationDelay = '-' + delay + 's';
         ccContainer.appendChild(p);
       }
     }
@@ -1213,19 +1266,23 @@
       }
     }
 
+    // Navigasi Keyboard global (Mendukung Remote IFP / Presentasi)
     window.addEventListener('keydown', (event) => {
+      // 1. KONDISI JIKA MASIH DI HALAMAN OPENING
       if (openingContainer.style.display !== 'none') {
+        // Jika tombol start sudah disembunyikan (artinya video sedang berjalan)
         if (startInterface.style.display === 'none') {
           switch(event.key) {
             case 'ArrowRight':
             case 'ArrowDown':
             case 'PageDown':
-            case 'Enter': 
+            case 'Enter': // Mendukung tombol enter/ok pada beberapa jenis remote panel
               menujuGaleriUtama();
               break;
           }
         }
       } 
+      // 2. KONDISI JIKA SUDAH MASUK KEDALAM GALERI UTAMA
       else if (mainGalleryContent.style.display === 'flex') {
         switch(event.key) {
           case 'ArrowRight':
