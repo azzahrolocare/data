@@ -22,34 +22,56 @@
       position: relative;
     }
 
-    /* Video Background Fullscreen */
-    #video-bg {
+    /* Background Canvas untuk Partikel Gold */
+    #particle-canvas {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-      transform: translate(-50%, -50%);
-      object-fit: cover;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
-      display: none; /* Sembunyikan sebelum diklik */
+      display: none; /* Muncul setelah tombol start diklik */
+      pointer-events: none; /* Agar tidak menghalangi klik pada video */
     }
 
-    /* Overlay gelap di atas video */
+    /* Container Utama Pembungkus Video */
+    .video-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+    }
+
+    /* Video Player - Mengikuti ukuran asli tanpa nge-zoom */
+    #video-bg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain; /* Memastikan video tidak terpotong/ngezoom */
+      display: none;
+      cursor: pointer;
+    }
+
+    /* Overlay gelap tipis di atas video */
     .overlay-dark {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 12, 8, 0.55);
-      z-index: 2;
+      background: rgba(15, 12, 8, 0.35);
+      z-index: 3;
       display: none;
+      pointer-events: none; /* Agar klik tembus ke video di bawahnya */
     }
 
-    /* Kontainer Tombol */
+    /* Kontainer Tombol Start */
     .interface-container {
       position: relative;
-      z-index: 3;
+      z-index: 10;
       text-align: center;
       color: #fff;
     }
@@ -95,35 +117,43 @@
       box-shadow: 0 0 20px rgba(243, 229, 171, 0.6);
     }
 
-    /* Tombol Lewati / Masuk ke Galeri Utama */
+    /* Tombol Navigasi Panah Samar (Minimalis) */
     .btn-skip {
       position: fixed;
       bottom: 30px;
       right: 30px;
-      padding: 12px 25px;
-      background: rgba(15, 12, 8, 0.75);
-      border: 1px solid #d4af37;
-      color: #f3e5ab;
+      width: 50px;
+      height: 50px;
+      background: rgba(212, 175, 55, 0.15); /* Sangat samar */
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: rgba(243, 229, 171, 0.6);
       cursor: pointer;
-      border-radius: 5px;
-      font-weight: bold;
-      z-index: 4;
+      border-radius: 50%;
       display: none;
-      transition: all 0.3s;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
     }
 
     .btn-skip:hover {
-      background: #d4af37;
-      color: #0f0c08;
+      background: rgba(212, 175, 55, 0.4);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
     }
   </style>
 </head>
 <body>
 
-  <video id="video-bg" playsinline>
-    <source src="https://azzahrolocare.github.io/data/purnawiyata/files/opening3.mp4" type="video/mp4">
-    Browser tidak mendukung video HTML5.
-  </video>
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="video-wrapper">
+    <video id="video-bg" playsinline loop onclick="togglePlayPause()">
+      <source src="https://azzahrolocare.github.io/data/purnawiyata/files/opening3.mp4" type="video/mp4">
+      Browser tidak mendukung video HTML5.
+    </video>
+  </div>
 
   <div class="overlay-dark" id="overlay-dark"></div>
 
@@ -135,36 +165,104 @@
     </div>
   </div>
 
-  <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()">Masuk Ke Galeri Siswa ❯</button>
+  <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()" title="Masuk Ke Galeri Siswa">❯</button>
 
   <script>
     const video = document.getElementById('video-bg');
     const startInterface = document.getElementById('start-interface');
     const overlayDark = document.getElementById('overlay-dark');
     const btnSkip = document.getElementById('btn-skip');
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
 
+    // Pengaturan Sistem Partikel Gold
+    let particlesArray = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * -1 - 0.5; // Bergerak perlahan ke atas
+        this.alpha = Math.random() * 0.5 + 0.3;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.y < 0) {
+          this.y = canvas.height;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        // Warna Gradasi Emas Luxury
+        ctx.fillStyle = '#d4af37';
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#f3e5ab';
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function initParticles() {
+      resizeCanvas();
+      particlesArray = [];
+      for (let i = 0; i < 70; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+      }
+      requestAnimationFrame(animateParticles);
+    }
+
+    // Fungsi memutar video pertama kali
     function mulaiVideoSinematik() {
       startInterface.style.display = 'none';
       video.style.display = 'block';
       overlayDark.style.display = 'block';
-      btnSkip.style.display = 'block';
+      btnSkip.style.display = 'flex'; // Menggunakan flex untuk center icon panah
+      canvas.style.display = 'block';
+      
+      // Jalankan animasi partikel di sisa ruang kosong
+      initParticles();
+      animateParticles();
 
       // Otomatis Layar Penuh (Fullscreen)
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch(err => console.log(err));
       }
 
-      video.muted = false; // Video bersuara aktif
+      video.muted = false; 
       video.play().catch(error => {
         console.log("Gagal memutar video: ", error);
         menujuGaleriUtama();
       });
     }
 
-    // Jika video selesai berputar, langsung alihkan ke index.html
-    video.onended = function() {
-      menujuGaleriUtama();
-    };
+    // Fungsi Klik Layar untuk Play dan Pause (Tanpa memunculkan logo kontrol bawaan browser)
+    function togglePlayPause() {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
 
     function menujuGaleriUtama() {
       window.location.href = "index.html";
