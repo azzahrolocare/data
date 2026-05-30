@@ -114,7 +114,7 @@
     }
 
     /* ==========================================================================
-       STYLE: TOUCH SCANNER DENGAN SIMBOL KUSTOM EMAS
+       STYLE: TOUCH SCANNER DENGAN SIMBOL KUSTOM EMAS (ZOOM IN OPTIMIZED)
        ========================================================================== */
     .scanner-container {
       position: relative;
@@ -151,13 +151,13 @@
       fill: none;
       stroke: url(#gold-gradient);
       stroke-width: 5;
-      stroke-dasharray: 528; /* 2 * PI * r (r=84) -> 2 * 3.14159 * 84 ≈ 528 */
+      stroke-dasharray: 528; /* 2 * PI * r (r=84) */
       stroke-dashoffset: 528;
       stroke-linecap: round;
       transition: stroke-dashoffset 0.05s linear;
     }
 
-    /* Wadah Utama Logo / Gambar Kustom */
+    /* Wadah Utama Logo */
     .scanner-pad {
       width: 160px;
       height: 160px;
@@ -168,15 +168,16 @@
       align-items: center;
       transition: transform 0.2s, box-shadow 0.2s;
       z-index: 2;
-      overflow: hidden;
+      overflow: hidden; /* Memastikan logo yang di-zoom tetap rapi terpotong lingkaran */
     }
 
-    /* Gambar Simbol Telapak Tangan Emas Baru */
+    /* Gambar Simbol Telapak Tangan Emas Baru (Membesar / Zoom-In) */
     .scanner-pad img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.2s, filter 0.3s;
+      transform: scale(1.45); /* Menaikkan skala dasar agar logo tampak lebih besar */
+      transition: transform 0.2s ease-out, filter 0.3s;
       user-select: none;
       -webkit-user-drag: none;
     }
@@ -198,7 +199,9 @@
       box-shadow: 0 0 35px rgba(243, 229, 171, 0.7);
     }
 
+    /* Menyeimbangkan skala logo saat pad mengecil karena ditekan */
     .scanner-container.scanning .scanner-pad img {
+      transform: scale(1.38); 
       filter: brightness(1.25) drop-shadow(0 0 10px rgba(253, 230, 131, 0.5));
     }
 
@@ -830,7 +833,7 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('Service Worker berhasil didaftarkan untuk mode offline.', reg.scope))
+          .then(reg => console.log('Service Worker berhasil didaftarkan.', reg.scope))
           .catch(err => console.error('Gagal mendaftarkan Service Worker:', err));
       });
     }
@@ -852,8 +855,6 @@
     let scanInterval = null;
     const scanDuration = 2000; 
     const scanStep = 30; 
-    
-    // UPDATE NILAI VARIABEL MASKS: Karena lingkaran diubah ke r=84, maxOffset dihitung ulang -> 2 * PI * 84 ≈ 528
     const maxOffset = 528; 
 
     let studentsData = [];
@@ -1099,7 +1100,7 @@
             imgCc.src = finalCCUrl;
             preloadedImages.push(imgCc);
           });
-          console.log("Semua aset foto berhasil diamankan ke RAM internal.");
+          console.log("Aset foto berhasil diamankan ke RAM.");
         }
       } catch (error) {
         console.error("Gagal memuat berkas data-siswa.json:", error);
