@@ -3,6 +3,7 @@ const CACHE_NAME = 'purnawiyata-cache-v1';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './manifest.json',
   './data-siswa.json',
   'https://azzahrolocare.github.io/data/purnawiyata/files/opening3.mp4',
   'https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3',
