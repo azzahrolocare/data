@@ -63,6 +63,24 @@
       display: none; 
     }
 
+    /* Style Khusus Panel Video Countdown */
+    #countdown-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0f0c08;
+      z-index: 50;
+      display: none; /* Muncul hanya setelah scan sukses */
+    }
+
+    #video-countdown {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
     #particle-canvas {
       position: absolute;
       top: 0;
@@ -85,7 +103,7 @@
       display: none; 
     }
 
-    /* Style Awal Interface Pemindaian */
+    /* Antarmuka Pemindaian (Default Terbuka di Awal) */
     #start-interface {
       position: absolute;
       top: 0;
@@ -98,7 +116,7 @@
       justify-content: center;
       align-items: center;
       background: radial-gradient(circle at center, rgba(38,27,12,0.85) 0%, rgba(15,12,8,0.95) 100%);
-      opacity: 0;
+      opacity: 1;
       transition: opacity 0.5s ease;
     }
 
@@ -151,7 +169,6 @@
       transition: fill 0.3s ease, filter 0.3s ease, transform 0.3s ease;
     }
 
-    /* Animasi Denyut Saat Standby */
     @keyframes pulseGlow {
       0% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.15); }
       50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.35); }
@@ -161,7 +178,6 @@
       animation: pulseGlow 2.5s infinite ease-in-out;
     }
 
-    /* Efek Saat Proses Memindai Berlangsung */
     #scanner-area.scanning {
       background: rgba(212, 175, 55, 0.08);
       animation: none;
@@ -249,7 +265,6 @@
       transform: translateY(0);
     }
 
-    /* Ornamen Bingkai Sudut Klasik Modern */
     .card-container::before, .card-container::after {
       content: '';
       position: absolute;
@@ -262,7 +277,6 @@
     .card-container::before { top: 20px; left: 20px; border-right: none; border-bottom: none; }
     .card-container::after { bottom: 20px; right: 20px; border-left: none; border-top: none; }
 
-    /* Pembagian Kolom */
     .column-left {
       width: 32%;
       height: 100%;
@@ -332,7 +346,6 @@
       transition: opacity 0.5s ease;
     }
 
-    /* Animasi Teks Berurutan */
     .fade-in-item {
       opacity: 0;
       transform: translateY(15px);
@@ -345,7 +358,6 @@
       transform: translateY(0);
     }
 
-    /* Manajemen Tipografi */
     .meta-title {
       color: #8c8273;
       font-size: 0.85rem;
@@ -474,7 +486,6 @@
       transform: translateY(0);
     }
 
-    /* Efek Partikel Mengalir di Belakang Foto Cita-cita */
     #cc-particles-container {
       position: absolute;
       top: 0;
@@ -525,7 +536,6 @@
     #total-absen { color: #7c705d; font-size: 1rem; font-weight: 500; }
     #total-absen::before { content: '/ '; }
 
-    /* Audio Visualizer Modern Terintegrasi */
     .visualizer-container {
       position: absolute;
       bottom: 25px;
@@ -543,7 +553,6 @@
       transition: height 0.1s ease;
     }
 
-    /* Kontrol Musik Floating */
     #music-btn {
       position: fixed;
       bottom: 30px;
@@ -575,7 +584,6 @@
       fill: #d4af37;
     }
 
-    /* Partikel Ambient Global */
     .particle {
       position: fixed;
       background: #d4af37;
@@ -607,8 +615,8 @@
   <div id="opening-container">
     <canvas id="particle-canvas"></canvas>
 
-    <div class="video-wrapper" id="countdown-wrapper" style="z-index: 100; background: #0f0c08;">
-      <video id="video-countdown" playsinline muted style="width: 100%; height: 100%; object-fit: contain;">
+    <div id="countdown-wrapper">
+      <video id="video-countdown" playsinline muted>
         <source src="https://azzahrolocare.github.io/data/purnawiyata/files/5_Seconds_Countdown_Timer.mp4" type="video/mp4">
         Browser tidak mendukung video HTML5.
       </video>
@@ -718,7 +726,7 @@
       });
     }
 
-    // Ambil elemen Video Countdown baru beserta pembungkusnya
+    // Ambil referensi elemen Countdown baru
     const videoCountdown = document.getElementById('video-countdown');
     const countdownWrapper = document.getElementById('countdown-wrapper');
 
@@ -754,38 +762,6 @@
 
     let particlesArray = [];
     let ccParticlesInterval;
-
-    // ==========================================================================
-    // LOGIKA PERPUTARAN VIDEO COUNTDOWN DI AWAL HALAMAN
-    // ==========================================================================
-    window.addEventListener('DOMContentLoaded', () => {
-      // Set agar interface pemindaian tidak terlihat saat countdown berputar
-      startInterface.style.opacity = '0';
-
-      // Mulai jalankan video countdown secara otomatis
-      videoCountdown.play().catch(err => {
-        console.log("Autoplay video tertahan oleh browser policy. Dialihkan langsung ke sistem.", err);
-        selesaiCountdown(); // Jalankan fallback jika browser memblokir video
-      });
-
-      // Event ketika durasi video countdown telah selesai diputar 1 kali
-      videoCountdown.addEventListener('ended', () => {
-        selesaiCountdown();
-      });
-    });
-
-    function selesaiCountdown() {
-      // Hilangkan panel video countdown dengan transisi memudar halus
-      countdownWrapper.style.transition = 'opacity 0.5s ease';
-      countdownWrapper.style.opacity = '0';
-      
-      setTimeout(() => {
-        countdownWrapper.style.display = 'none';
-        // Munculkan antarmuka pemindaian sidik jari/telapak tangan utama
-        startInterface.style.opacity = '1';
-      }, 500);
-    }
-    // ==========================================================================
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -835,7 +811,7 @@
         particlesArray[i].update();
         particlesArray[i].draw();
       }
-      requestAnimationFrame(animateParticles);
+      visualizerAnimationId = requestAnimationFrame(animateParticles);
     }
 
     function startScanning(e) {
@@ -869,7 +845,8 @@
           scanSound.pause();
           scanSound.currentTime = 0;
           
-          mulaiVideoSinematik();
+          // PINDAH KE PROSES COUNTDOWN BERIKUTNYA SEBELUM OPENING UTAMA
+          jalankanVideoCountdown();
         } else {
           let currentOffset = maxOffset - (maxOffset * (scanProgress / 100));
           progressBar.style.strokeDashoffset = currentOffset;
@@ -908,8 +885,33 @@
     scannerArea.addEventListener('touchend', stopScanning);
     scannerArea.addEventListener('touchcancel', stopScanning);
 
-    function mulaiVideoSinematik() {
+    // FUNGSI BARU: MEMUTAR COUNTDOWN 5 DETIK SETELAH SCAN BERHASIL
+    function jalankanVideoCountdown() {
+      // Sembunyikan panel scanner
       startInterface.style.display = 'none';
+      
+      // Tampilkan dan mainkan video countdown
+      countdownWrapper.style.display = 'block';
+      
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      }
+
+      videoCountdown.play().catch(err => {
+        console.log("Gagal memutar video countdown otomatis:", err);
+        mulaiVideoSinematik(); // Langsung lompat ke video opening jika terblokir
+      });
+
+      // Begitu video countdown selesai 1x putaran, picu video opening utama
+      videoCountdown.addEventListener('ended', function countdownSelesai() {
+        videoCountdown.removeEventListener('ended', countdownSelesai); // Clear event listener
+        countdownWrapper.style.display = 'none';
+        mulaiVideoSinematik();
+      });
+    }
+
+    // LOGIKA ASLI: MEMUTAR VIDEO OPENING UTAMA
+    function mulaiVideoSinematik() {
       video.style.display = 'block';
       overlayDark.style.display = 'block';
       btnSkip.style.display = 'flex'; 
@@ -917,10 +919,6 @@
       
       initParticles();
       animateParticles();
-
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(err => console.log(err));
-      }
 
       video.muted = false; 
       video.play().catch(error => {
@@ -1170,7 +1168,7 @@
     }
 
     function animateVisualizer() {
-      visualizerAnimationId = requestAnimationFrame(animateVisualizer);
+      requestAnimationFrame(animateVisualizer);
       const bars = document.querySelectorAll('.visualizer-bar');
       
       if (bgMusic.paused) {
