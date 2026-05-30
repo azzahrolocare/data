@@ -17,7 +17,6 @@
 
     body {
       background-color: #0f0c08; 
-      /* Menyederhanakan gradient background untuk menghilangkan kedipan panel GPU */
       background: radial-gradient(circle at center, #261b0c 0%, #0f0c08 100%);
       min-height: 100vh;
       overflow: hidden;
@@ -263,7 +262,7 @@
       box-shadow: 0 15px 35px rgba(0,0,0,0.5);
       border-radius: 12px;
       overflow: hidden;
-      background: #221c13;
+      background: #110d08; /* Diganti ke hitam pekat agar tidak kontras saat memuat */
       position: relative;
     }
 
@@ -271,8 +270,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      opacity: 1; /* Biarkan transisi diatur penuh via JS secara halus */
+      transition: opacity 0.4s ease-in-out;
     }
 
     .absen-label {
@@ -335,7 +334,7 @@
     }
 
     .column-center {
-      padding: 40px 40px; /* Batas aman kiri-kanan */
+      padding: 40px 40px; 
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -399,7 +398,7 @@
       align-items: center;
       padding-bottom: 15px;
       width: 100%;
-      overflow: hidden; /* Mengunci lebar teks nama di dalam kolom tengah */
+      overflow: hidden; 
     }
 
     .ttl-container, .ortu-container, .nis-container, .wish-container {
@@ -423,9 +422,9 @@
       text-transform: uppercase;
       padding-bottom: 8px;
       line-height: 1.2;
-      width: auto; /* Biarkan lebarnya dinamis sesuai teks */
+      width: auto; 
       position: relative;
-      white-space: nowrap; /* Mencegah patah baris prematur sebelum dikalkulasi JS */
+      white-space: nowrap; 
     }
 
     #siswa-nama::after {
@@ -483,7 +482,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #0f0c08;
+      background: #110d08; /* Diselaraskan dengan warna hitam dasar agar transisi aman */
       border-left: 1px solid rgba(212, 175, 55, 0.15);
       z-index: 3;
     }
@@ -510,8 +509,8 @@
       filter: grayscale(100%) brightness(0.5);
       position: absolute;
       top: 0; left: 0;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      opacity: 1; /* Dibuat selalu stabil diatur transisi JS */
+      transition: opacity 0.4s ease-in-out;
       z-index: 2;
     }
 
@@ -648,7 +647,7 @@
           
           <div class="column-left">
             <div class="photo-frame">
-              <img id="siswa-foto" src="" alt="Foto Profil Siswa">
+              <img id="siswa-foto" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Foto Profil Siswa">
             </div>
 
             <div class="absen-label" id="siswa-absen-box">
@@ -714,8 +713,8 @@
             <div id="cc-particles-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 4;"></div>
             
             <div class="image-reveal-wrapper">
-              <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
-              <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
+              <img id="foto-citacita-bw" class="img-base-bw" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Cita-cita Hitam Putih">
+              <img id="foto-citacita-color" class="img-reveal-color" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Cita-cita Berwarna">
             </div>
           </div>
 
@@ -926,35 +925,29 @@
       }
     }
 
-    /* FITUR UTAMA: JAVASCRIPT AUTO-FIT CONTAINER (OPSI 2)
-      Sistem akan mendeteksi lebar tulisan asli (scrollWidth) dibandingkan lebar pembatas (clientWidth).
-      Jika tulisan meluber/melebihi batas aman, ukuran font akan dikurangi secara berkala hingga pas sempurna.
-    */
     function sesuaikanUkuranNamaSiswa() {
       const elNama = document.getElementById('siswa-nama');
       const containerNama = document.getElementById('cont-nama');
       
       if (window.innerWidth > 1200) {
-        // Reset kembali ke ukuran standar dasar awal
         elNama.style.fontSize = '3.2rem';
         elNama.style.whiteSpace = 'nowrap';
         
         let currentSize = 3.2;
-        const minSize = 1.6; // Batas ukuran terkecil agar teks tetap terbaca dengan jelas
+        const minSize = 1.6; 
         
-        // Loop pengecilan font dinamis selama tulisan nama masih meluber melebihi container tengah
         while (elNama.scrollWidth > containerNama.clientWidth && currentSize > minSize) {
           currentSize -= 0.1;
           elNama.style.fontSize = currentSize + 'rem';
         }
 
-        // Jika sudah mentok di ukuran 1.6rem namun masih kepanjangan, izinkan teks patah menjadi 2 baris secara rapi
         if (elNama.scrollWidth > containerNama.clientWidth) {
           elNama.style.whiteSpace = 'normal';
         }
       }
     }
 
+    /* FUNCTION RENDER DENGAN FIX DOUBLE BUFFERING SEAMLESS KHUSUS IFP HISENSE 75" */
     function renderStudent(index) {
       fadeTimeouts.forEach(clearTimeout);
       fadeTimeouts = [];
@@ -984,9 +977,8 @@
       const fotoColor = document.getElementById('foto-citacita-color');
       const ccContainer = document.getElementById('column-cc');
 
+      // Animasi teks di-reset biasa
       card.classList.remove('active');
-      ccContainer.classList.remove('reveal-active');
-      
       cNama.classList.remove('fade-in-visible');
       cTtl.classList.remove('fade-in-visible');
       cOrtu.classList.remove('fade-in-visible');
@@ -999,27 +991,45 @@
       elNumAbsen.innerText = padZero(index + 1);
       elTotalAbsen.innerText = padZero(studentsData.length);
 
-      // Isi konten nama siswa
       elNama.textContent = student.nama;
-
       elTtl.textContent = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
       const hubunganOrtu = student.jk.toUpperCase() === 'P' ? 'Putri dari' : 'Putra dari';
       elOrtu.textContent = `${hubunganOrtu} ${student.orang_tua}`;
       elNisBox.textContent = `NIS: ${student.nis} | NISN: ${student.nisn}`;
       elCitaCita.innerText = student.cita_cita || "-";
 
-      fotoElement.style.opacity = '0';
-      fotoElement.src = student.foto_profil_url;
-      fotoElement.onload = () => fotoElement.style.opacity = '1';
-
-      fotoBw.style.opacity = '0';
-      const finalCCUrl = student.foto_cita_cita_url || student.foto_profil_url;
+      // ==========================================================================
+      // STRATEGI ANTI-KEDIP DAN TRANSPARANSI MULTI-BUFFER UNTUK CHIPSET IFP TV
+      // ==========================================================================
       
-      fotoBw.src = finalCCUrl;
-      fotoColor.src = finalCCUrl;
-      fotoBw.onload = () => { fotoBw.style.opacity = '1'; };
+      // Mengurangi opacity foto profil lama secara halus (bukan langsung 0 instant)
+      fotoElement.style.opacity = '0.3';
+      
+      const imgProfilPreload = new Image();
+      imgProfilPreload.src = student.foto_profil_url;
+      imgProfilPreload.onload = () => {
+        // Ditukar tepat saat file baru sudah terunduh 100% di RAM TV
+        fotoElement.src = student.foto_profil_url;
+        fotoElement.style.opacity = '1';
+      };
 
-      // Jalankan kalkulasi pengecilan nama otomatis tepat sebelum animasi dimulai
+      // Buffer Latar Belakang untuk Foto Cita-Cita (Kolom Kanan)
+      const finalCCUrl = student.foto_cita_cita_url || student.foto_profil_url;
+      const imgCcPreload = new Image();
+      imgCcPreload.src = finalCCUrl;
+      imgCcPreload.onload = () => {
+        // Hapus kelas aktif lama setelah gambar baru siap disuntikkan
+        ccContainer.classList.remove('reveal-active');
+        
+        fotoBw.src = finalCCUrl;
+        fotoColor.src = finalCCUrl;
+        
+        // Trigger transisi visual warna muncul setelah data baru stabil terpasang
+        setTimeout(() => {
+          ccContainer.classList.add('reveal-active');
+        }, 50);
+      };
+
       sesuaikanUkuranNamaSiswa();
 
       sequentialFadeIn([
@@ -1031,7 +1041,6 @@
           el: cWish, 
           delay: 700, 
           callback: () => {
-            ccContainer.classList.add('reveal-active');
             startCcParticles();
           }
         }
@@ -1139,7 +1148,6 @@
       }
     });
 
-    // Melakukan pengecekan ulang ukuran jika jendela di-resize saat galeri aktif
     window.addEventListener('resize', () => {
       if (studentsData.length > 0 && mainGalleryContent.style.display === 'flex') {
         sesuaikanUkuranNamaSiswa();
