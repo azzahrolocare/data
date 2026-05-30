@@ -91,43 +91,134 @@
 
     .card-start {
       border: 2px solid #d4af37;
-      padding: 50px 80px;
+      padding: 40px 60px;
       background: rgba(26, 21, 14, 0.95);
       border-radius: 20px;
       box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .card-start h1 {
       color: #d4af37;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       letter-spacing: 3px;
       font-size: 2.8rem;
     }
 
     .card-start p {
       color: #e0e0e0;
-      margin-bottom: 35px;
+      margin-bottom: 30px;
       font-size: 1.5rem;
     }
 
-    .btn-gold {
-      padding: 18px 50px;
-      background: linear-gradient(45deg, #a67c1e, #f3e5ab, #a67c1e);
-      border: none;
-      font-weight: bold;
-      font-size: 1.4rem;
+    /* ==========================================================================
+       STYLE HAND SCAN INTERACTIVE BUTTON
+       ========================================================================== */
+    .scan-container {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      background: rgba(15, 12, 8, 0.6);
+      border: 3px dashed #d4af37;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
-      border-radius: 40px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-      color: #0f0c08;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+      transition: all 0.3s ease;
     }
 
-    .btn-gold:hover {
+    .scan-container::before {
+      content: '';
+      position: absolute;
+      width: 110%;
+      height: 110%;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: #f3e5ab;
+      border-bottom-color: #f3e5ab;
+      animation: rotateRing 4s linear infinite;
+    }
+
+    .scan-hand-icon {
+      width: 80px;
+      height: 80px;
+      fill: url(#goldGradient);
+      filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+      z-index: 2;
+      transition: transform 0.3s ease;
+      animation: pulseHand 2s ease-in-out infinite;
+    }
+
+    /* Laser Scanner Beam Effect */
+    .scan-beam {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, transparent, #f3e5ab, #d4af37, #f3e5ab, transparent);
+      box-shadow: 0 0 12px #f3e5ab, 0 0 20px #d4af37;
+      z-index: 3;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scan-text {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #f3e5ab;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      animation: blinkText 1.5s ease-in-out infinite;
+    }
+
+    /* Hover & Active Scanner States */
+    .scan-container:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(243, 229, 171, 0.6);
+      border-color: #f3e5ab;
+      box-shadow: 0 0 35px rgba(243, 229, 171, 0.4);
+    }
+
+    .scan-container:hover .scan-hand-icon {
+      animation: none;
+      transform: scale(1.1);
+    }
+
+    .scan-container.scanning .scan-beam {
+      opacity: 1;
+      animation: scanMotion 1.2s linear infinite;
+    }
+
+    .scan-container.scanning {
+      border-style: solid;
+      background: rgba(212, 175, 55, 0.15);
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.6);
+    }
+
+    /* Scanner Animations */
+    @keyframes rotateRing {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulseHand {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.9)); }
+    }
+    @keyframes scanMotion {
+      0% { top: 0%; }
+      50% { top: 100%; }
+      100% { top: 0%; }
+    }
+    @keyframes blinkText {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; text-shadow: 0 0 10px rgba(243, 229, 171, 0.6); }
     }
 
     .btn-skip {
@@ -611,6 +702,16 @@
 </head>
 <body>
 
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a67c1e" />
+        <stop offset="50%" stop-color="#f3e5ab" />
+        <stop offset="100%" stop-color="#a67c1e" />
+      </linearGradient>
+    </defs>
+  </svg>
+
   <div id="opening-container">
     <canvas id="particle-canvas"></canvas>
 
@@ -627,7 +728,14 @@
       <div class="card-start">
         <h1>SELAMAT & SUKSES</h1>
         <p>Purnawiyata Ke-III SMP Islam Az-Zahro</p>
-        <button class="btn-gold" onclick="mulaiVideoSinematik()">Putar Video Pembuka</button>
+        
+        <div class="scan-container" id="hand-scanner" onclick="jalankanProsedurScan()">
+          <div class="scan-beam"></div>
+          <svg class="scan-hand-icon" viewBox="0 0 24 24">
+            <path d="M12,2A1,1 0 0,0 11,3V10.29C10.7,10.11 10.36,10 10,10A1,1 0 0,0 9,11V4A1,1 0 0,0 8,3A1,1 0 0,0 7,4V12.05C6.71,11.94 6.36,11.88 6,11.88A1,1 0 0,0 5,12.88V6A1,1 0 0,0 4,5A1,1 0 0,0 3,6V17A5,5 0 0,0 8,22H16A5,5 0 0,0 21,17V12A1,1 0 0,0 20,11A1,1 0 0,0 19,12V9A1,1 0 0,0 18,8A1,1 0 0,0 17,9V11.41L15,9.41V4A1,1 0 0,0 14,3A1,1 0 0,0 13,4V10.29C12.7,10.11 12.36,10 12,10V2M15,11.41V14H17V12H19V17A3,3 0 0,1 16,20H8A3,3 0 0,1 5,17V13.88H7V15H9V13H11V12.29H13V12.29H15V11.41Z" />
+          </svg>
+        </div>
+        <div class="scan-text" id="scan-status-text">Sentuh untuk memindai</div>
       </div>
     </div>
 
@@ -807,6 +915,23 @@
         particlesArray[i].draw();
       }
       requestAnimationFrame(animateParticles);
+    }
+
+    // FUNGSI ANIMASI SCANNING SEBELUM VIDEO DIMULAI
+    function jalankanProsedurScan() {
+      const scanner = document.getElementById('hand-scanner');
+      const statusText = document.getElementById('scan-status-text');
+      
+      // Kunci klik ganda
+      if (scanner.classList.contains('scanning')) return;
+      
+      scanner.classList.add('scanning');
+      statusText.innerText = "Memproses Sidik Jari...";
+      
+      // Simulasi delay scanning selama 1.5 detik demi estetika panggung
+      setTimeout(() => {
+        mulaiVideoSinematik();
+      }, 1500);
     }
 
     function mulaiVideoSinematik() {
