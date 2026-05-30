@@ -17,6 +17,7 @@
 
     body {
       background-color: #0f0c08; 
+      /* Menyederhanakan gradient background untuk menghilangkan kedipan panel GPU */
       background: radial-gradient(circle at center, #261b0c 0%, #0f0c08 100%);
       min-height: 100vh;
       overflow: hidden;
@@ -334,12 +335,12 @@
     }
 
     .column-center {
-      padding: 40px 40px; /* Dioptimalkan agar memiliki batas aman */
+      padding: 40px 40px; /* Batas aman kiri-kanan */
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       color: #ffffff;
-      overflow: hidden; /* Menghindari teks meluber keluar area kolom tengah */
+      overflow: hidden;
       background: #110d08;
       position: relative;
       z-index: 4;
@@ -398,7 +399,7 @@
       align-items: center;
       padding-bottom: 15px;
       width: 100%;
-      overflow: hidden; /* Mengunci teks nama di dalam container pembatasnya */
+      overflow: hidden; /* Mengunci lebar teks nama di dalam kolom tengah */
     }
 
     .ttl-container, .ortu-container, .nis-container, .wish-container {
@@ -422,10 +423,9 @@
       text-transform: uppercase;
       padding-bottom: 8px;
       line-height: 1.2;
-      width: 100%;
+      width: auto; /* Biarkan lebarnya dinamis sesuai teks */
       position: relative;
-      white-space: normal; /* Diubah ke normal agar teks sangat panjang aman turun ke baris berikutnya jika mentok */
-      word-wrap: break-word;
+      white-space: nowrap; /* Mencegah patah baris prematur sebelum dikalkulasi JS */
     }
 
     #siswa-nama::after {
@@ -596,7 +596,7 @@
       .photo-frame { height: 350px; max-width: 280px; }
       .column-center { padding: 30px 20px; text-align: center; align-items: center; }
       .logo-wrapper { justify-content: center; }
-      #siswa-nama { font-size: 2.2rem !important; } 
+      #siswa-nama { font-size: 2.2rem !important; white-space: normal; } 
       #siswa-ttl { font-size: 1.3rem; }
       .sub-detail { font-size: 1.4rem; }
       .nis-box { font-size: 1.1rem; }
@@ -926,22 +926,31 @@
       }
     }
 
-    /* FITUR DETEKSI AUTO-FIT UKURAN CONTAINER (ANTI-TABRAKAN) */
+    /* FITUR UTAMA: JAVASCRIPT AUTO-FIT CONTAINER (OPSI 2)
+      Sistem akan mendeteksi lebar tulisan asli (scrollWidth) dibandingkan lebar pembatas (clientWidth).
+      Jika tulisan meluber/melebihi batas aman, ukuran font akan dikurangi secara berkala hingga pas sempurna.
+    */
     function sesuaikanUkuranNamaSiswa() {
       const elNama = document.getElementById('siswa-nama');
       const containerNama = document.getElementById('cont-nama');
       
       if (window.innerWidth > 1200) {
-        // Reset dulu ke ukuran maksimal standar dasar emas
+        // Reset kembali ke ukuran standar dasar awal
         elNama.style.fontSize = '3.2rem';
+        elNama.style.whiteSpace = 'nowrap';
         
         let currentSize = 3.2;
-        const minSize = 1.6; // Batas minimal pengecilan agar tulisan tidak terlalu mikro
+        const minSize = 1.6; // Batas ukuran terkecil agar teks tetap terbaca dengan jelas
         
-        // Melakukan loop pengecilan selama teks meluber melewati batas kanan container tengah
+        // Loop pengecilan font dinamis selama tulisan nama masih meluber melebihi container tengah
         while (elNama.scrollWidth > containerNama.clientWidth && currentSize > minSize) {
           currentSize -= 0.1;
           elNama.style.fontSize = currentSize + 'rem';
+        }
+
+        // Jika sudah mentok di ukuran 1.6rem namun masih kepanjangan, izinkan teks patah menjadi 2 baris secara rapi
+        if (elNama.scrollWidth > containerNama.clientWidth) {
+          elNama.style.whiteSpace = 'normal';
         }
       }
     }
@@ -990,7 +999,7 @@
       elNumAbsen.innerText = padZero(index + 1);
       elTotalAbsen.innerText = padZero(studentsData.length);
 
-      // Menerapkan konten teks nama siswa
+      // Isi konten nama siswa
       elNama.textContent = student.nama;
 
       elTtl.textContent = `${student.tempat_lahir}, ${student.tanggal_lahir}`;
@@ -1010,7 +1019,7 @@
       fotoColor.src = finalCCUrl;
       fotoBw.onload = () => { fotoBw.style.opacity = '1'; };
 
-      // Lakukan kalkulasi pengecilan nama tepat sebelum animasi pemunculan dimulai
+      // Jalankan kalkulasi pengecilan nama otomatis tepat sebelum animasi dimulai
       sesuaikanUkuranNamaSiswa();
 
       sequentialFadeIn([
@@ -1130,7 +1139,7 @@
       }
     });
 
-    // Tambahan deteksi resize window untuk kalkulasi ulang text-fitting nama
+    // Melakukan pengecekan ulang ukuran jika jendela di-resize saat galeri aktif
     window.addEventListener('resize', () => {
       if (studentsData.length > 0 && mainGalleryContent.style.display === 'flex') {
         sesuaikanUkuranNamaSiswa();
