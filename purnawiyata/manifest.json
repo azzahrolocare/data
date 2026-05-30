@@ -1,10 +1,10 @@
 {
-  "short_name": "Purnawiyata Ke III",
+  "short_name": "Purnawiyata III",
   "name": "Purnawiyata Ke III SMP Islam Az-Zahro",
   "icons": [
     {
       "src": "https://azzahrolocare.github.io/data/purnawiyata/files/Logo_apk_Purnawiyata_Ke_III.png",
-      "sizes": "512x512",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
@@ -12,12 +12,12 @@
       "src": "https://azzahrolocare.github.io/data/purnawiyata/files/Logo_apk_Purnawiyata_Ke_III.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "./index.html",
-  "background_color": "#0f0c08",
-  "theme_color": "#0f0c08",
+  "start_url": "index.html",
   "display": "standalone",
-  "orientation": "landscape"
+  "orientation": "landscape",
+  "background_color": "#0f0c08",
+  "theme_color": "#0f0c08"
 }
