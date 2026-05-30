@@ -17,7 +17,6 @@
 
     body {
       background-color: #0f0c08; 
-      /* Menyederhanakan gradient background untuk menghilangkan kedipan panel GPU */
       background: radial-gradient(circle at center, #261b0c 0%, #0f0c08 100%);
       min-height: 100vh;
       overflow: hidden;
@@ -166,7 +165,7 @@
       pointer-events: none;
       animation: floatParticles linear infinite;
       z-index: 1;
-      transform: translateZ(0); /* Memaksa akselerasi hardware video card TV */
+      transform: translateZ(0); 
       will-change: transform;
     }
 
@@ -203,7 +202,6 @@
       will-change: transform, opacity;
     }
 
-    /* Bingkai Premium Statis */
     .purnawiyata-card::before {
       content: '';
       position: absolute;
@@ -225,7 +223,6 @@
       z-index: 2;
     }
 
-    /* --- KOLOM KIRI (FOTO PROFIL) --- */
     .column-left {
       display: flex;
       flex-direction: column;
@@ -316,7 +313,6 @@
       will-change: height;
     }
 
-    /* --- KOLOM TENGAH (BIODATA UTAMA SISWA) --- */
     .column-center {
       padding: 40px 50px;
       display: flex;
@@ -451,7 +447,6 @@
     }
     .footer-title span { color: #d4af37; font-size: 1.8rem; font-weight: 800; }
 
-    /* --- KOLOM KANAN (FOTO CITA-CITA + PARTIKEL EMAS SELEKTIF) --- */
     .column-right {
       position: relative;
       overflow: hidden; 
@@ -503,66 +498,67 @@
 
     .reveal-active .img-reveal-color { opacity: 1; }
 
-    /* Gaya Partikel Cita-Cita (Padat & Memudar di Ujung Atas) */
     .cc-particle {
       position: absolute;
-      background: radial-gradient(circle, #ffffff 0%, #f3e5ab 30%, #d4af37 70%, transparent 100%);
+      background: radial-gradient(circle, #f3e5ab 20%, #d4af37 60%, transparent 100%);
       border-radius: 50%;
       pointer-events: none;
       z-index: 5;
-      filter: blur(0.5px);
-      animation: ccFloatUp linear forwards; /* Menggunakan forwards agar status akhir tertahan sebelum dihapus */
+      filter: blur(1px);
+      animation: ccFloatUp linear infinite;
       will-change: transform, opacity;
     }
 
     @keyframes ccFloatUp {
       0% {
-        transform: translate3d(0, 0, 0) scale(0.4);
+        transform: translate3d(0, 0, 0) scale(0.5);
         opacity: 0;
       }
-      15% {
-        opacity: 0.9; /* Cepat muncul bersinar */
+      10% {
+        opacity: 0.8;
       }
-      65% {
-        opacity: 0.8; /* Tetap stabil di tengah area */
+      90% {
+        opacity: 0.8;
       }
       100% {
-        transform: translate3d(0, -100vh, 0) scale(1.4);
-        opacity: 0; /* Pudar sepenuhnya (0) saat menyentuh bagian paling atas */
+        transform: translate3d(0, -120vh, 0) scale(1.5);
+        opacity: 0;
       }
     }
 
-    /* NAVIGASI TOMBOL TOUCHSCREEN */
+    /* NAVIGASI TOMBOL - DIPERBARUI */
     .btn-nav-arrow {
       position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(15, 12, 8, 0.6);
-      border: 2px solid rgba(212, 175, 55, 0.3);
-      border-radius: 50%;
+      bottom: 20px; /* Di ujung bawah */
+      background: none; /* Tanpa latar belakang */
+      border: none; /* Tanpa bingkai */
       color: #d4af37;
-      font-size: 3.5rem;
+      font-size: 5rem; /* Ukuran panah besar */
       font-weight: bold;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 80px;
-      height: 80px;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       user-select: none;
       z-index: 100;
-      opacity: 0.6;
+      opacity: 0.15; /* Sangat samar dan pudar */
+      padding: 10px;
     }
 
-    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 30px; padding-right: 6px; }
-    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 30px; padding-left: 6px; }
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { 
+      left: 20px; /* Di ujung kiri bawah */
+    }
+    
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { 
+      right: 20px; /* Di ujung kanan bawah */
+    }
 
     .btn-nav-arrow:hover {
       color: #f3e5ab;
-      opacity: 1;
-      background: rgba(15, 12, 8, 0.9);
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      opacity: 0.6; /* Sedikit lebih terlihat saat hover */
+      transform: scale(1.1);
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
     }
 
     .purnawiyata-card.active {
@@ -592,9 +588,11 @@
       .footer-title { font-size: 1.2rem; }
       .footer-title span { font-size: 1.5rem; }
       .column-right { height: 350px; width: 100%; border-left: none; border-top: 1px solid rgba(212, 175, 55, 0.2); }
-      .btn-nav-arrow { width: 60px; height: 60px; font-size: 2rem; top: auto; bottom: 20px; transform: none; }
-      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 20px; }
-      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 20px; }
+      
+      /* Tombol navigasi di mobile tetap di bawah, tapi mungkin sedikit disesuaikan ukurannya */
+      .btn-nav-arrow { font-size: 3.5rem; bottom: 10px; }
+      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 10px; }
+      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 10px; }
     }
   </style>
 </head>
@@ -735,7 +733,7 @@
     let visualizerAnimationId;
 
     let particlesArray = [];
-    let ccParticlesInterval; 
+    let ccParticlesInterval;
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -872,44 +870,33 @@
       }
     }
 
-    /* Fungsi Partikel Emas Cita-cita (Jumlah ditambah & transisi pudar atas) */
     function startCcParticles() {
       const container = document.getElementById('cc-particles-container');
       
       if (ccParticlesInterval) clearInterval(ccParticlesInterval);
       
-      // Interval dipersingkat menjadi 65ms agar jumlah partikel keluar lebih padat/banyak
       ccParticlesInterval = setInterval(() => {
         const particle = document.createElement('div');
         particle.className = 'cc-particle';
-        
-        // Ukuran kilau variatif
-        const size = Math.random() * 6 + 2;
+        const size = Math.random() * 5 + 2;
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
-        
-        // Posisi acak horizontal
         particle.style.left = Math.random() * 100 + '%';
         particle.style.top = '100%';
-        
-        // Durasi melayang vertikal
-        const duration = Math.random() * 2.5 + 2.5; 
+        const duration = Math.random() * 3 + 2;
         particle.style.animationDuration = duration + 's';
-        
         container.appendChild(particle);
-        
-        // Otomatis hapus elemen setelah durasi selesai untuk menjaga performa TV/Layar 4K
         setTimeout(() => {
           particle.remove();
         }, duration * 1000);
         
-      }, 65); 
+      }, 150);
     }
 
     function stopCcParticles() {
       if (ccParticlesInterval) clearInterval(ccParticlesInterval);
       const container = document.getElementById('cc-particles-container');
-      container.innerHTML = ''; 
+      container.innerHTML = '';
     }
 
     async function loadStudentsData() {
