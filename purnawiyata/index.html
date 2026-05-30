@@ -890,6 +890,15 @@
     let particlesArray = [];
     let ccParticlesInterval;
 
+    // FUNGSI UNTUK MENYALAKAN FULL SCREEN DI MANA SAJA PADA HALAMAN SCANNER PAD
+    openingContainer.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.log("Gagal mengaktifkan mode layar penuh via klik container:", err);
+        });
+      }
+    });
+
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
