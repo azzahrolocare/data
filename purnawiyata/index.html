@@ -182,7 +182,7 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 2200px; /* Ukuran wadah diringkas agar seimbang di tengah 75" */
+      max-width: 2200px;
       height: 85vh; 
       z-index: 10;
       position: relative;
@@ -203,7 +203,7 @@
       will-change: transform, opacity;
     }
 
-    /* Bingkai Premium Statis (Bebas Glitch Layar Lebar) */
+    /* Bingkai Premium Statis */
     .purnawiyata-card::before {
       content: '';
       position: absolute;
@@ -217,7 +217,6 @@
 
     .card-content-wrapper {
       display: grid;
-      /* Pembagian grid proporsional mengunci elemen agar tidak bertabrakan */
       grid-template-columns: 24% 52% 24%; 
       width: 100%;
       height: 100%;
@@ -263,7 +262,7 @@
       color: #f3e5ab;
       padding: 12px 20px;
       border-radius: 30px;
-      font-size: 1.1rem; /* Penyesuaian ukuran teks agar pas */
+      font-size: 1.1rem;
       font-weight: 700;
       letter-spacing: 1px;
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -330,7 +329,6 @@
       z-index: 4;
     }
 
-    /* Pencahayaan Stage Mewah Menggunakan Efek Gradasi Statis (Mencegah Layar Berkedip) */
     .spotlight-container {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -356,7 +354,7 @@
     .logo-ppss { width: 190px; height: auto; }
 
     .header-title {
-      font-size: 2.2rem; /* Diperkecil agar lebih elegan */
+      font-size: 2.2rem;
       font-weight: 800;
       letter-spacing: 4px;
       color: #ffffff;
@@ -372,7 +370,6 @@
       z-index: 2;
     }
 
-    /* KONTROL AMBANG TRANSISI TEXT FADE-IN */
     .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container {
       position: relative;
       opacity: 0;
@@ -394,7 +391,7 @@
     }
 
     #siswa-nama {
-      font-size: 3.2rem; /* Ukuran tulisan disesuaikan secara proporsional */
+      font-size: 3.2rem;
       font-weight: 800;
       color: #fff;
       letter-spacing: 0.5px;
@@ -454,7 +451,7 @@
     }
     .footer-title span { color: #d4af37; font-size: 1.8rem; font-weight: 800; }
 
-    /* --- KOLOM KANAN (KOLASE VISUAL DENGAN PARTIKEL EMAS) --- */
+    /* --- KOLOM KANAN (FOTO CITA-CITA + PARTIKEL EMAS SELEKTIF) --- */
     .column-right {
       position: relative;
       overflow: hidden; 
@@ -506,32 +503,32 @@
 
     .reveal-active .img-reveal-color { opacity: 1; }
 
-    /* Gaya Partikel Cita-Cita (Gold Melayang Ke Atas) */
+    /* Gaya Partikel Cita-Cita (Padat & Memudar di Ujung Atas) */
     .cc-particle {
       position: absolute;
-      background: radial-gradient(circle, #f3e5ab 20%, #d4af37 60%, transparent 100%);
+      background: radial-gradient(circle, #ffffff 0%, #f3e5ab 30%, #d4af37 70%, transparent 100%);
       border-radius: 50%;
       pointer-events: none;
       z-index: 5;
-      filter: blur(1px);
-      animation: ccFloatUp linear infinite;
+      filter: blur(0.5px);
+      animation: ccFloatUp linear forwards; /* Menggunakan forwards agar status akhir tertahan sebelum dihapus */
       will-change: transform, opacity;
     }
 
     @keyframes ccFloatUp {
       0% {
-        transform: translate3d(0, 0, 0) scale(0.5);
+        transform: translate3d(0, 0, 0) scale(0.4);
         opacity: 0;
       }
-      10% {
-        opacity: 0.8;
+      15% {
+        opacity: 0.9; /* Cepat muncul bersinar */
       }
-      90% {
-        opacity: 0.8;
+      65% {
+        opacity: 0.8; /* Tetap stabil di tengah area */
       }
       100% {
-        transform: translate3d(0, -120vh, 0) scale(1.5);
-        opacity: 0;
+        transform: translate3d(0, -100vh, 0) scale(1.4);
+        opacity: 0; /* Pudar sepenuhnya (0) saat menyentuh bagian paling atas */
       }
     }
 
@@ -738,7 +735,7 @@
     let visualizerAnimationId;
 
     let particlesArray = [];
-    let ccParticlesInterval; // Interval untuk partikel cita-cita
+    let ccParticlesInterval; 
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -875,49 +872,44 @@
       }
     }
 
-    /* Fungsi untuk membuat partikel emas melayang di kolom kanan */
+    /* Fungsi Partikel Emas Cita-cita (Jumlah ditambah & transisi pudar atas) */
     function startCcParticles() {
       const container = document.getElementById('cc-particles-container');
       
-      // Bersihkan interval sebelumnya jika ada
       if (ccParticlesInterval) clearInterval(ccParticlesInterval);
       
-      // Buat partikel baru secara berkala
+      // Interval dipersingkat menjadi 65ms agar jumlah partikel keluar lebih padat/banyak
       ccParticlesInterval = setInterval(() => {
         const particle = document.createElement('div');
         particle.className = 'cc-particle';
         
-        // Ukuran acak
-        const size = Math.random() * 5 + 2;
+        // Ukuran kilau variatif
+        const size = Math.random() * 6 + 2;
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
         
-        // Posisi horizontal acak di dalam wadah
+        // Posisi acak horizontal
         particle.style.left = Math.random() * 100 + '%';
-        
-        // Mulai dari bawah wadah
         particle.style.top = '100%';
         
-        // Durasi animasi acak (kecepatan melayang)
-        const duration = Math.random() * 3 + 2; // Antara 2 hingga 5 detik
+        // Durasi melayang vertikal
+        const duration = Math.random() * 2.5 + 2.5; 
         particle.style.animationDuration = duration + 's';
         
-        // Tambahkan ke wadah
         container.appendChild(particle);
         
-        // Hapus partikel setelah animasi selesai untuk menghemat memori
+        // Otomatis hapus elemen setelah durasi selesai untuk menjaga performa TV/Layar 4K
         setTimeout(() => {
           particle.remove();
         }, duration * 1000);
         
-      }, 150); // Buat partikel baru setiap 150ms
+      }, 65); 
     }
 
-    /* Fungsi untuk menghentikan partikel emas di kolom kanan */
     function stopCcParticles() {
       if (ccParticlesInterval) clearInterval(ccParticlesInterval);
       const container = document.getElementById('cc-particles-container');
-      container.innerHTML = ''; // Bersihkan semua partikel yang ada
+      container.innerHTML = ''; 
     }
 
     async function loadStudentsData() {
@@ -936,7 +928,6 @@
       fadeTimeouts.forEach(clearTimeout);
       fadeTimeouts = [];
       
-      // Hentikan partikel saat memuat data siswa baru
       stopCcParticles();
 
       const card = document.getElementById('student-card');
@@ -1005,7 +996,6 @@
           delay: 700, 
           callback: () => {
             ccContainer.classList.add('reveal-active');
-            // Mulai partikel emas setelah foto cita-cita muncul
             startCcParticles();
           }
         }
