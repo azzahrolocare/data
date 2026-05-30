@@ -741,6 +741,10 @@
     <source src="https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3" type="audio/mpeg">
   </audio>
 
+  <audio id="scan-sound" preload="auto" crossorigin="anonymous">
+    <source src="https://azzahrolocare.github.io/data/purnawiyata/files/HAND_SCAN.mp3" type="audio/mpeg">
+  </audio>
+
   <div id="main-gallery-content">
     <main class="main-container">
       <div class="purnawiyata-card" id="student-card">
@@ -852,6 +856,9 @@
     const progressBar = document.getElementById('progress-bar');
     const scannerText = document.getElementById('scanner-text');
     
+    // Node Audio Efek Scan
+    const scanSound = document.getElementById('scan-sound');
+
     let scanProgress = 0;
     let scanInterval = null;
     const scanDuration = 10000; 
@@ -928,6 +935,19 @@
       scannerArea.classList.add('scanning');
       scannerText.textContent = "Memindai...";
 
+      // AKTIFKAN KONTEKS AUDIO & PUTAR AUDIO SCAN DARI DETIK 0
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      } catch(err) { console.log(err); }
+
+      scanSound.currentTime = 0;
+      scanSound.play().catch(err => console.log("Gagal memutar audio scan:", err));
+
       scanInterval = setInterval(() => {
         scanProgress += (scanStep / scanDuration) * 100;
         
@@ -936,6 +956,10 @@
           clearInterval(scanInterval);
           scanInterval = null;
           progressBar.style.strokeDashoffset = 0;
+          
+          // PINDAH HALAMAN / SUKSES: MATIKAN AUDIO SCAN
+          scanSound.pause();
+          scanSound.currentTime = 0;
           
           mulaiVideoSinematik();
         } else {
@@ -951,7 +975,11 @@
         scanInterval = null;
       }
       scannerArea.classList.remove('scanning');
-      scannerText.textContent = "Sentuh & Tahan Untuk Memulai";
+      scannerText.textContent = "Letakkan Telapak Tangan untuk Autentikasi";
+      
+      // DILEPAS: MATIKAN AUDIO SCAN & RESET KE DETIK AWAL
+      scanSound.pause();
+      scanSound.currentTime = 0;
       
       let resetInterval = setInterval(() => {
         if (scanProgress > 0) {
@@ -992,12 +1020,6 @@
         console.log("Gagal memutar video: ", error);
         menujuGaleriUtama();
       });
-
-      try {
-        if (!audioCtx) {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-      } catch(e) { console.log(e); }
     }
 
     function togglePlayPause() {
