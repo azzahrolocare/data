@@ -7,7 +7,7 @@
   <style>
     /* ==========================================================================
        STYLE UMUM & STRUKTUR HALAMAN (OPTIMALISASI LAYAR STABIL 4K)
-       ========================================================================== */
+       ========================================================================= */
     * {
       margin: 0;
       padding: 0;
@@ -454,7 +454,7 @@
     }
     .footer-title span { color: #d4af37; font-size: 1.8rem; font-weight: 800; }
 
-    /* --- KOLOM KANAN (KOLASE VISUAL) --- */
+    /* --- KOLOM KANAN (KOLASE VISUAL DENGAN PARTIKEL EMAS) --- */
     .column-right {
       position: relative;
       overflow: hidden; 
@@ -505,6 +505,35 @@
     }
 
     .reveal-active .img-reveal-color { opacity: 1; }
+
+    /* Gaya Partikel Cita-Cita (Gold Melayang Ke Atas) */
+    .cc-particle {
+      position: absolute;
+      background: radial-gradient(circle, #f3e5ab 20%, #d4af37 60%, transparent 100%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 5;
+      filter: blur(1px);
+      animation: ccFloatUp linear infinite;
+      will-change: transform, opacity;
+    }
+
+    @keyframes ccFloatUp {
+      0% {
+        transform: translate3d(0, 0, 0) scale(0.5);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate3d(0, -120vh, 0) scale(1.5);
+        opacity: 0;
+      }
+    }
 
     /* NAVIGASI TOMBOL TOUCHSCREEN */
     .btn-nav-arrow {
@@ -672,6 +701,8 @@
           </div>
 
           <div class="column-right" id="column-cc">
+            <div id="cc-particles-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 4;"></div>
+            
             <div class="image-reveal-wrapper">
               <img id="foto-citacita-bw" class="img-base-bw" src="" alt="Cita-cita Hitam Putih">
               <img id="foto-citacita-color" class="img-reveal-color" src="" alt="Cita-cita Berwarna">
@@ -707,6 +738,8 @@
     let visualizerAnimationId;
 
     let particlesArray = [];
+    let ccParticlesInterval; // Interval untuk partikel cita-cita
+
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -842,6 +875,51 @@
       }
     }
 
+    /* Fungsi untuk membuat partikel emas melayang di kolom kanan */
+    function startCcParticles() {
+      const container = document.getElementById('cc-particles-container');
+      
+      // Bersihkan interval sebelumnya jika ada
+      if (ccParticlesInterval) clearInterval(ccParticlesInterval);
+      
+      // Buat partikel baru secara berkala
+      ccParticlesInterval = setInterval(() => {
+        const particle = document.createElement('div');
+        particle.className = 'cc-particle';
+        
+        // Ukuran acak
+        const size = Math.random() * 5 + 2;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        // Posisi horizontal acak di dalam wadah
+        particle.style.left = Math.random() * 100 + '%';
+        
+        // Mulai dari bawah wadah
+        particle.style.top = '100%';
+        
+        // Durasi animasi acak (kecepatan melayang)
+        const duration = Math.random() * 3 + 2; // Antara 2 hingga 5 detik
+        particle.style.animationDuration = duration + 's';
+        
+        // Tambahkan ke wadah
+        container.appendChild(particle);
+        
+        // Hapus partikel setelah animasi selesai untuk menghemat memori
+        setTimeout(() => {
+          particle.remove();
+        }, duration * 1000);
+        
+      }, 150); // Buat partikel baru setiap 150ms
+    }
+
+    /* Fungsi untuk menghentikan partikel emas di kolom kanan */
+    function stopCcParticles() {
+      if (ccParticlesInterval) clearInterval(ccParticlesInterval);
+      const container = document.getElementById('cc-particles-container');
+      container.innerHTML = ''; // Bersihkan semua partikel yang ada
+    }
+
     async function loadStudentsData() {
       try {
         const response = await fetch('data-siswa.json');
@@ -857,6 +935,9 @@
     function renderStudent(index) {
       fadeTimeouts.forEach(clearTimeout);
       fadeTimeouts = [];
+      
+      // Hentikan partikel saat memuat data siswa baru
+      stopCcParticles();
 
       const card = document.getElementById('student-card');
       const student = studentsData[index];
@@ -924,6 +1005,8 @@
           delay: 700, 
           callback: () => {
             ccContainer.classList.add('reveal-active');
+            // Mulai partikel emas setelah foto cita-cita muncul
+            startCcParticles();
           }
         }
       ]);
