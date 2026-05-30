@@ -114,12 +114,12 @@
     }
 
     /* ==========================================================================
-       STYLE BARU: TOUCH / HAND SCANNER INTERACTION
+       STYLE: TOUCH SCANNER DENGAN LOGO CUSTOM WEBP
        ========================================================================== */
     .scanner-container {
       position: relative;
-      width: 140px;
-      height: 140px;
+      width: 160px;
+      height: 160px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -149,16 +149,16 @@
       fill: none;
       stroke: url(#gold-gradient);
       stroke-width: 6;
-      stroke-dasharray: 402; /* 2 * PI * r (r=64) */
-      stroke-dashoffset: 402;
+      stroke-dasharray: 465; /* 2 * PI * r (r=74) -> 2 * 3.14159 * 74 ≈ 465 */
+      stroke-dashoffset: 465;
       stroke-linecap: round;
       transition: stroke-dashoffset 0.05s linear;
     }
 
-    /* Tombol Dalam / Icon Tangan */
+    /* Tombol Tempat Sentuh / Wadah Logo Tangan */
     .scanner-pad {
-      width: 110px;
-      height: 110px;
+      width: 130px;
+      height: 130px;
       background: radial-gradient(circle, #2d2212 0%, #17120a 100%);
       border-radius: 50%;
       display: flex;
@@ -168,16 +168,20 @@
       box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2);
       transition: transform 0.2s, box-shadow 0.2s;
       z-index: 2;
+      overflow: hidden; /* Menjaga logo tetap melingkar rapi */
     }
 
-    .scanner-pad svg {
-      width: 50px;
-      height: 50px;
-      fill: #d4af37;
-      transition: fill 0.3s, transform 0.2s;
+    /* Memasukkan gambar logo-tangan.webp */
+    .scanner-pad img {
+      width: 75px;
+      height: 75px;
+      object-fit: contain;
+      transition: transform 0.2s, filter 0.3s;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
-    /* Efek Berdenyut Sebelum Ditekan */
+    /* Animasi Berdenyut Lembut Sebelum Disentuh */
     .scanner-container:not(.scanning) .scanner-pad {
       animation: pulseGlow 2s infinite ease-in-out;
     }
@@ -188,15 +192,15 @@
       100% { box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(212, 175, 55, 0.2); }
     }
 
-    /* Status Saat Ditekan (Scanning Aktif) */
+    /* Efek Visual Saat Scanning Aktif (Ditekan Lama) */
     .scanner-container.scanning .scanner-pad {
       transform: scale(0.95);
       box-shadow: inset 0 0 30px rgba(243, 229, 171, 0.6), 0 0 20px rgba(243, 229, 171, 0.4);
     }
 
-    .scanner-container.scanning .scanner-pad svg {
-      fill: #f3e5ab;
+    .scanner-container.scanning .scanner-pad img {
       transform: scale(0.9);
+      filter: brightness(1.2) drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
     }
 
     .scanner-instruction {
@@ -210,7 +214,7 @@
     }
 
     /* ==========================================================================
-       STYLE BAWAAN LAINNYA (SAMA SEPERTI SEBELUMNYA)
+       STYLE LAINNYA
        ========================================================================== */
     .btn-skip {
       position: fixed;
@@ -716,13 +720,11 @@
                 <stop offset="100%" stop-color="#a67c1e" />
               </linearGradient>
             </defs>
-            <circle class="scanner-bg-circle" cx="70" cy="70" r="64"></circle>
-            <circle class="scanner-progress-circle" id="progress-bar" cx="70" cy="70" r="64"></circle>
+            <circle class="scanner-bg-circle" cx="80" cy="80" r="74"></circle>
+            <circle class="scanner-progress-circle" id="progress-bar" cx="80" cy="80" r="74"></circle>
           </svg>
           <div class="scanner-pad">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 2A2 2 0 0 0 10 4v7.27l-1.78-.9a2 2 0 0 0-2.65.85l-.12.24a2 2 0 0 0 .75 2.68l4.43 2.53c1.9.95 3.37 2.64 4.1 4.67A1 1 0 0 0 15.68 22h4.55a1 1 0 0 0 .98-.82l1-5.5a4 4 0 0 0-.66-3A3.76 3.76 0 0 0 19 11.23V7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2h-1V4a2 2 0 0 0-2-2z"/>
-            </svg>
+            <img src="https://azzahrolocare.github.io/data/purnawiyata/files/logo-tangan.webp" alt="Logo Tangan Scan" draggable="false">
           </div>
         </div>
         <p class="scanner-instruction" id="scanner-text">Sentuh & Tahan Untuk Memulai</p>
@@ -843,16 +845,17 @@
     const openingContainer = document.getElementById('opening-container');
     const mainGalleryContent = document.getElementById('main-gallery-content');
 
-    // VARIABEL SISTEM SCANNER
     const scannerArea = document.getElementById('scanner-area');
     const progressBar = document.getElementById('progress-bar');
     const scannerText = document.getElementById('scanner-text');
     
     let scanProgress = 0;
     let scanInterval = null;
-    const scanDuration = 2000; // 2 Detik waktu penekanan sampai penuh
-    const scanStep = 30; // Interval pembaruan progress (ms)
-    const maxOffset = 402; // Sesuai stroke-dasharray lingkaran
+    const scanDuration = 2000; 
+    const scanStep = 30; 
+    
+    // UPDATE NILAI VARIABEL MASKS: Karena lingkaran diperbesar, maxOffset diubah ke 465
+    const maxOffset = 465; 
 
     let studentsData = [];
     let preloadedImages = []; 
@@ -917,9 +920,6 @@
       requestAnimationFrame(animateParticles);
     }
 
-    /* ==========================================================================
-       LOGIKA BARU: INTERAKSI HOLD TO SCAN
-       ========================================================================== */
     function startScanning(e) {
       e.preventDefault();
       if (scanInterval) return;
@@ -936,10 +936,8 @@
           scanInterval = null;
           progressBar.style.strokeDashoffset = 0;
           
-          // Trigger ketika loading selesai / sukses penuh
           mulaiVideoSinematik();
         } else {
-          // Update visual lingkaran loading mask
           let currentOffset = maxOffset - (maxOffset * (scanProgress / 100));
           progressBar.style.strokeDashoffset = currentOffset;
         }
@@ -954,10 +952,9 @@
       scannerArea.classList.remove('scanning');
       scannerText.textContent = "Sentuh & Tahan Untuk Memulai";
       
-      // Mengurangi progress secara mulus kembali ke 0 jika dilepas di tengah jalan
       let resetInterval = setInterval(() => {
         if (scanProgress > 0) {
-          scanProgress -= 8; // Kecepatan drop loading saat dilepas
+          scanProgress -= 8; 
           if (scanProgress < 0) scanProgress = 0;
           let currentOffset = maxOffset - (maxOffset * (scanProgress / 100));
           progressBar.style.strokeDashoffset = currentOffset;
@@ -967,7 +964,6 @@
       }, 20);
     }
 
-    // Registrasi Event Listener untuk Mouse & Touchscreen Layar HP / Kiosk
     scannerArea.addEventListener('mousedown', startScanning);
     scannerArea.addEventListener('mouseup', stopScanning);
     scannerArea.addEventListener('mouseleave', stopScanning);
@@ -975,7 +971,6 @@
     scannerArea.addEventListener('touchstart', startScanning, { passive: false });
     scannerArea.addEventListener('touchend', stopScanning);
     scannerArea.addEventListener('touchcancel', stopScanning);
-
 
     function mulaiVideoSinematik() {
       startInterface.style.display = 'none';
@@ -1063,7 +1058,6 @@
 
     function startCcParticles() {
       const container = document.getElementById('cc-particles-container');
-      
       if (ccParticlesInterval) clearInterval(ccParticlesInterval);
       
       ccParticlesInterval = setInterval(() => {
@@ -1080,7 +1074,6 @@
         setTimeout(() => {
           particle.remove();
         }, duration * 1000);
-        
       }, 150);
     }
 
@@ -1139,7 +1132,6 @@
     function renderStudent(index) {
       fadeTimeouts.forEach(clearTimeout);
       fadeTimeouts = [];
-      
       stopCcParticles();
 
       const card = document.getElementById('student-card');
