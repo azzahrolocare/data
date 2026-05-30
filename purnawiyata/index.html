@@ -6,7 +6,7 @@
   <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
   <style>
     /* ==========================================================================
-       STYLE UMUM & STRUKTUR HALAMAN (OPTIMALISASI LAYAR BESAR / 4K)
+       STYLE UMUM & STRUKTUR HALAMAN (OPTIMALISASI IFP 4K 75 INCI)
        ========================================================================== */
     * {
       margin: 0;
@@ -29,7 +29,7 @@
       align-items: center;
       width: 100%;
       height: 100vh;
-      padding: 40px;
+      padding: 50px;
     }
 
     /* ==========================================================================
@@ -89,7 +89,7 @@
 
     .card-start {
       border: 3px solid #d4af37;
-      padding: 50px 80px;
+      padding: 60px 100px;
       background: rgba(26, 21, 14, 0.95);
       border-radius: 20px;
       box-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
@@ -99,21 +99,21 @@
       color: #d4af37;
       margin-bottom: 15px;
       letter-spacing: 3px;
-      font-size: 3rem;
+      font-size: 3.5rem;
     }
 
     .card-start p {
       color: #e0e0e0;
       margin-bottom: 35px;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
 
     .btn-gold {
-      padding: 20px 50px;
+      padding: 20px 60px;
       background: linear-gradient(45deg, #a67c1e, #f3e5ab, #a67c1e);
       border: none;
       font-weight: bold;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       cursor: pointer;
       border-radius: 40px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.5);
@@ -156,7 +156,7 @@
     }
 
     /* ==========================================================================
-       STYLE PROSESI SISWA (SISTEM STABILISASI IFP 4K)
+       STYLE PROSESI SISWA (SISTEM GRID 3 KOLOM SEJAJAR ANTI-BENTROK)
        ========================================================================== */
     .particle {
       position: absolute;
@@ -175,12 +175,117 @@
       100% { transform: translate3d(0, -10vh, 0) scale(1.2); opacity: 0; }
     }
 
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 3600px; /* Diperlebar penuh untuk resolusi mendatar 4K */
+      height: 90vh; 
+      z-index: 10;
+      position: relative;
+    }
+
+    .purnawiyata-card {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+      opacity: 0;
+      transform: translate3d(0, 30px, 0);
+      will-change: transform, opacity;
+    }
+
+    /* Mengganti conic border putar yang bikin lag/glitch koordinat di layar lebar */
+    .purnawiyata-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border: 4px solid #d4af37;
+      border-radius: 30px;
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3), 0 0 30px rgba(212, 175, 55, 0.4);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .card-content-wrapper {
+      display: grid;
+      /* Membagi presisi: Kiri 20%, Tengah 55%, Kanan 25% (Total 100% Mengunci Sempurna) */
+      grid-template-columns: 20% 55% 25%; 
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    /* --- KOLOM KIRI (FOTO PROFIL & NAVIGASI MUSIK) --- */
+    .column-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
+      padding: 50px 30px;
+      position: relative;
+      box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+      z-index: 5;
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 3 / 4; /* Mengunci rasio foto standar panggung */
+      border: 8px solid #fff;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #221c13;
+      position: relative;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; width: 100%; height: 25%;
+      background: linear-gradient(to top, rgba(15, 12, 8, 0.7) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .absen-label {
+      background: rgba(15, 12, 8, 0.9);
+      color: #f3e5ab;
+      padding: 14px 20px;
+      border-radius: 40px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+      text-align: center;
+      width: 100%;
+      text-transform: uppercase;
+    }
+    .absen-label span { color: #ffffff; }
+
     .music-control-container {
       display: flex;
       align-items: center;
       gap: 15px;
-      background: rgba(15, 12, 8, 0.7);
-      padding: 10px 20px;
+      background: rgba(15, 12, 8, 0.85);
+      padding: 12px 20px;
       border-radius: 30px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -202,21 +307,14 @@
       flex-shrink: 0;
     }
 
-    .btn-music-toggle svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    .btn-music-toggle:hover {
-      color: #ffffff;
-      transform: scale(1.1);
-    }
+    .btn-music-toggle svg { width: 26px; height: 26px; }
+    .btn-music-toggle:hover { color: #ffffff; transform: scale(1.1); }
 
     .audio-visualizer {
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 2px; 
+      gap: 3px; 
       flex: 1;
       height: 30px; 
       pointer-events: none;
@@ -224,129 +322,25 @@
 
     .visualizer-bar {
       flex: 1;
-      max-width: 3px; 
+      max-width: 4px; 
       background: linear-gradient(to top, #a67c1e, #f3e5ab, #ffffff);
-      height: 3px;
+      height: 4px;
       border-radius: 2px 2px 0 0;
       transition: height 0.04s ease;
       opacity: 0.85;
       will-change: height;
     }
 
-    .main-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 2400px; /* Diperlebar agar proporsional di layar 4K */
-      height: 85vh; 
-      z-index: 10;
-      position: relative;
-    }
-
-    .purnawiyata-card {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
-      border-radius: 30px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
-      opacity: 0;
-      transform: translate3d(0, 30px, 0);
-      will-change: transform, opacity;
-    }
-
-    /* Mengganti animasi conic-gradient berputar yang memicu lagging/glitch di resolusi 4K */
-    .purnawiyata-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      border: 4px solid #d4af37;
-      border-radius: 30px;
-      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3), 0 0 30px rgba(212, 175, 55, 0.4);
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .card-content-wrapper {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      background: inherit;
-      overflow: hidden;
-      z-index: 2;
-    }
-
-    .column-left {
-      width: 450px; /* Ukuran disesuaikan untuk kesimbangan 4K */
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
-      padding: 50px 40px;
-      position: relative;
-      /* Dihapus clip-path miring untuk menstabilkan render outline gambar pada IFP */
-      gap: 25px;
-      box-shadow: 5px 0 25px rgba(0,0,0,0.5);
-    }
-
-    .photo-frame {
-      width: 100%;
-      height: 70%; /* Menggunakan persentase agar dinamis */
-      border: 8px solid #fff;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
-      border-radius: 16px;
-      overflow: hidden;
-      background: #221c13;
-      position: relative;
-    }
-
-    .photo-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.4s ease-in-out;
-    }
-
-    .photo-frame::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 30%;
-      background: linear-gradient(to top, rgba(15, 12, 8, 0.8) 0%, transparent 100%);
-      pointer-events: none;
-    }
-
-    .absen-label {
-      background: rgba(15, 12, 8, 0.9);
-      color: #f3e5ab;
-      padding: 12px 24px;
-      border-radius: 40px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
-      text-align: center;
-      width: 100%;
-      text-transform: uppercase;
-    }
-    .absen-label span { color: #ffffff; }
-
+    /* --- KOLOM TENGAH (BIODATA UTAMA SISWA) --- */
     .column-center {
-      flex: 1;
-      padding: 50px 60px;
+      padding: 50px 70px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       color: #ffffff;
       overflow: hidden;
-      background: rgba(15, 12, 8, 0.2);
+      background: rgba(15, 12, 8, 0.15);
+      z-index: 4;
     }
 
     .brand-header {
@@ -370,7 +364,7 @@
     }
 
     .logo-ppss {
-      width: 240px;
+      width: 250px;
       height: auto;
       object-fit: contain;
       filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.6));
@@ -393,7 +387,7 @@
       position: relative; 
     }
 
-    /* Struktur Sorotan Lampu Panggung disederhanakan tanpa 3D Blend Mode berat untuk mencegah flickering */
+    /* Spotlight Stage Efek 2D ringkas agar terbebas dari rendering blink-glitch GPU */
     .spotlight-container {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -407,7 +401,6 @@
       position: absolute;
       top: 0; left: 0; width: 100%; height: 4px;
       background: linear-gradient(to right, transparent, #a67c1e, #f3e5ab, #a67c1e, transparent);
-      z-index: 5;
     }
 
     .spotlight {
@@ -416,7 +409,7 @@
       background: radial-gradient(ellipse at top, rgba(255, 246, 212, 0.15) 0%, rgba(212, 175, 55, 0.02) 50%, transparent 75%);
       clip-path: polygon(48% 0, 52% 0, 100% 100%, 0 100%);
       transform-origin: top center;
-      filter: blur(15px); /* Diperhalus untuk resolusi 4K */
+      filter: blur(15px);
       transform: translate3d(0,0,0);
       will-change: transform;
     }
@@ -426,23 +419,10 @@
     .spotlight-3 { right: 25%; animation: stageSwing3 11s ease-in-out infinite alternate; }
     .spotlight-4 { right: -10%; animation: stageSwing4 9s ease-in-out infinite alternate; }
 
-    /* Modifikasi Animasi 2D standar untuk kestabilan Framerate IFP */
-    @keyframes stageSwing1 {
-      0% { transform: translate3d(0,0,0) rotate(-15deg); opacity: 0.3; }
-      100% { transform: translate3d(0,0,0) rotate(5deg); opacity: 0.7; }
-    }
-    @keyframes stageSwing2 {
-      0% { transform: translate3d(0,0,0) rotate(8deg); opacity: 0.6; }
-      100% { transform: translate3d(0,0,0) rotate(-10deg); opacity: 0.3; }
-    }
-    @keyframes stageSwing3 {
-      0% { transform: translate3d(0,0,0) rotate(-8deg); opacity: 0.3; }
-      100% { transform: translate3d(0,0,0) rotate(12deg); opacity: 0.7; }
-    }
-    @keyframes stageSwing4 {
-      0% { transform: translate3d(0,0,0) rotate(12deg); opacity: 0.7; }
-      100% { transform: translate3d(0,0,0) rotate(-5deg); opacity: 0.3; }
-    }
+    @keyframes stageSwing1 { 0% { transform: rotate(-15deg); opacity: 0.3; } 100% { transform: rotate(5deg); opacity: 0.7; } }
+    @keyframes stageSwing2 { 0% { transform: rotate(8deg); opacity: 0.6; } 100% { transform: rotate(-10deg); opacity: 0.3; } }
+    @keyframes stageSwing3 { 0% { transform: rotate(-8deg); opacity: 0.3; } 100% { transform: rotate(12deg); opacity: 0.7; } }
+    @keyframes stageSwing4 { 0% { transform: rotate(12deg); opacity: 0.7; } 100% { transform: rotate(-5deg); opacity: 0.3; } }
 
     .spotlight-dust {
       position: absolute;
@@ -462,12 +442,12 @@
       100% { transform: translate3d(50px, -20px, 0) scale(1); opacity: 0; }
     }
 
-    /* KONTROL TRANSISI SMOOTH ANTI-GLITCH */
+    /* KONTROL AMBANG TRANSISI TEXT FADE-IN */
     .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container {
       position: relative;
       z-index: 2;
       opacity: 0;
-      transform: translate3d(0, 15px, 0);
+      transform: translate3d(0, 20px, 0);
       transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
       will-change: transform, opacity;
     }
@@ -478,20 +458,20 @@
     }
 
     .name-container {
-      min-height: 140px;
+      min-height: 150px;
       display: flex;
       align-items: center;
       padding-bottom: 20px;
     }
 
     #siswa-nama {
-      font-size: 4.5rem; /* Pembesaran Skala Font Khusus Display Besar */
+      font-size: 4.8rem; /* Ukuran Ekstra Besar Khusus Display IFP 75" */
       font-weight: 800;
       color: #fff;
       letter-spacing: 1px;
       text-transform: uppercase;
       padding-bottom: 12px;
-      line-height: 1.3;
+      line-height: 1.2;
       white-space: pre-wrap;
       word-wrap: break-word;
       width: 100%;
@@ -501,67 +481,63 @@
     #siswa-nama::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 4px;
+      bottom: 0; left: 0; width: 100%; height: 5px;
       background: linear-gradient(to right, #a67c1e 0%, #f3e5ab 25%, #d4af37 50%, #f3e5ab 75%, #a67c1e 100%);
       background-size: 200% auto;
-      box-shadow: 0 3px 15px rgba(212, 175, 55, 0.8);
-      border-radius: 2px;
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.8);
+      border-radius: 3px;
       animation: goldLineFlow 4s linear infinite;
     }
 
-    @keyframes goldLineFlow {
-      0% { background-position: 0% center; }
-      100% { background-position: -200% center; }
-    }
+    @keyframes goldLineFlow { 0% { background-position: 0% center; } 100% { background-position: -200% center; } }
 
-    .ttl-container { height: 45px; display: flex; align-items: center; margin-top: 15px; }
-    #siswa-ttl { font-size: 2.2rem; color: #e0e0e0; font-weight: 500; }
+    .ttl-container { height: 50px; display: flex; align-items: center; margin-top: 20px; }
+    #siswa-ttl { font-size: 2.5rem; color: #e5e5e5; font-weight: 500; }
 
-    .ortu-container { height: 45px; display: flex; align-items: center; }
-    .sub-detail { font-size: 2.3rem; font-style: italic; color: #f3e5ab; }
+    .ortu-container { height: 50px; display: flex; align-items: center; }
+    .sub-detail { font-size: 2.6rem; font-style: italic; color: #f3e5ab; }
 
-    .nis-container { height: 55px; display: flex; align-items: center; margin-top: 10px; }
+    .nis-container { height: 60px; display: flex; align-items: center; margin-top: 15px; }
     
     .nis-box { 
-      font-size: 1.8rem; 
+      font-size: 2rem; 
       color: #ffffff !important; 
       font-weight: 700; 
       letter-spacing: 1px;
-      text-shadow: 0px 2px 5px rgba(0,0,0,0.8);
+      text-shadow: 0px 3px 6px rgba(0,0,0,0.8);
       background: rgba(255, 255, 255, 0.08);
-      padding: 6px 20px;
-      border-radius: 6px;
-      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 8px 24px;
+      border-radius: 8px;
+      border: 1px solid rgba(212, 175, 55, 0.35);
     }
 
-    .wish-container { height: 90px; display: flex; align-items: center; margin-top: 25px; }
+    .wish-container { height: 100px; display: flex; align-items: center; margin-top: 30px; }
     
     .wish-box {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #ffffff;
       background: rgba(212, 175, 55, 0.15);
-      padding: 15px 30px;
-      border-left: 6px solid #d4af37;
-      border-radius: 0 8px 8px 0;
+      padding: 18px 35px;
+      border-left: 8px solid #d4af37;
+      border-radius: 0 10px 10px 0;
       width: auto;
     }
     .wish-box span { color: #f3e5ab; font-weight: bold; }
 
     .footer-title {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 700;
       letter-spacing: 3px;
       color: #ffffff;
       line-height: 1.4;
       border-top: 1px solid rgba(212, 175, 55, 0.3);
-      padding-top: 20px;
+      padding-top: 25px;
       flex-shrink: 0;
     }
-    .footer-title span { color: #d4af37; font-size: 2.4rem; font-weight: 800; }
+    .footer-title span { color: #d4af37; font-size: 2.6rem; font-weight: 800; }
 
+    /* --- KOLOM KANAN (KOLASE VISUAL CITA-CITA) --- */
     .column-right {
-      width: 600px; /* Diperlebar proporsional */
-      flex-shrink: 0;
       position: relative;
       overflow: hidden; 
       display: flex;
@@ -569,12 +545,13 @@
       justify-content: center;
       background: #110d08;
       border-left: 1px solid rgba(212, 175, 55, 0.2);
+      z-index: 3;
     }
 
     .column-right::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 30%;
+      bottom: 0; left: 0; width: 100%; height: 35%;
       background: linear-gradient(to top, #16120b 10%, rgba(22, 18, 11, 0.6) 50%, transparent 100%);
       z-index: 10;
       pointer-events: none;
@@ -634,39 +611,39 @@
       100% { transform: translate3d(-20px, -10%, 0) scale(1.2); opacity: 0; }
     }
 
-    /* NAVIGASI TOMBOL SAMPING PANAH BESAR */
+    /* NAVIGASI TOMBOL TOUCHSCREEN PANAH BESAR */
     .btn-nav-arrow {
       position: fixed;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(15, 12, 8, 0.4);
+      background: rgba(15, 12, 8, 0.5);
       border: 2px solid rgba(212, 175, 55, 0.3);
       border-radius: 50%;
       color: #d4af37;
-      font-size: 4rem;
+      font-size: 4.5rem;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
       transition: all 0.3s ease;
       user-select: none;
       z-index: 100;
-      opacity: 0.5;
-      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.9);
+      opacity: 0.6;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
     }
 
-    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 40px; padding-right: 8px;}
-    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 40px; padding-left: 8px;}
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 40px; padding-right: 10px; }
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 40px; padding-left: 10px; }
 
     .btn-nav-arrow:hover {
       color: #f3e5ab;
       opacity: 1;
-      background: rgba(15, 12, 8, 0.8);
+      background: rgba(15, 12, 8, 0.9);
       border-color: #d4af37;
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
     }
 
     .purnawiyata-card.active {
@@ -677,13 +654,13 @@
       100% { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
     }
 
-    /* RESPONSIVE LAYOUT HP */
+    /* RESPONSIVE LAYOUT HP / TABLET */
     @media (max-width: 1200px) {
       body { overflow-y: auto; }
       #main-gallery-content { padding: 20px; height: auto; }
       .main-container { height: auto; padding-bottom: 100px; }
       .purnawiyata-card { height: auto; }
-      .card-content-wrapper { flex-direction: column; }
+      .card-content-wrapper { grid-template-columns: 100%; }
       .column-left { width: 100%; padding: 40px; }
       .photo-frame { height: 400px; max-width: 320px; }
       .column-center { padding: 40px 30px; text-align: center; align-items: center; }
@@ -754,7 +731,6 @@
               </button>
 
               <div class="audio-visualizer" id="visualizer">
-                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
                 <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
                 <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
                 <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
@@ -844,7 +820,6 @@
     let audioCtx, analyser, bufferLength, dataArray;
     let visualizerAnimationId;
 
-    /* --- PARITKEL GOLD OPENING (AKSELERASI GPU) --- */
     let particlesArray = [];
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -883,7 +858,6 @@
     function initParticles() {
       resizeCanvas();
       particlesArray = [];
-      // Mengurangi total partikel di resolusi 4K agar rendering awal sangat enteng
       for (let i = 0; i < 35; i++) {
         particlesArray.push(new Particle());
       }
@@ -950,7 +924,7 @@
       }
 
       bgMusic.play().catch(error => {
-        console.log("Musik tertahan oleh browser policy.", error);
+        console.log("Musik tertahan browser policy.", error);
       });
     }
 
@@ -969,7 +943,7 @@
     }
 
     function createGlobalParticles() {
-      const particleCount = 12; // Diturunkan jumlahnya demi stabilitas IFP
+      const particleCount = 12; 
       for (let i = 0; i < particleCount; i++) {
         let particle = document.createElement('div');
         particle.className = 'particle';
@@ -1150,7 +1124,7 @@
       const bars = document.querySelectorAll('.visualizer-bar');
       
       if (bgMusic.paused) {
-        bars.forEach(bar => { bar.style.height = '3px'; });
+        bars.forEach(bar => { bar.style.height = '4px'; });
         return;
       }
       
@@ -1159,7 +1133,7 @@
         let dataIndex = Math.floor(i * (bufferLength / bars.length));
         let value = dataArray[dataIndex];
         let percent = value / 255;
-        let height = (percent * 24) + 3; 
+        let height = (percent * 24) + 4; 
         bars[i].style.height = height + 'px';
       }
     }
