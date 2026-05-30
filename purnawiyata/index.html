@@ -39,683 +39,812 @@
        ========================================================================== */
     #opening-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: #0f0c08;
       z-index: 9999;
-      background: #0f0c08;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
+    }
+
+    #particle-canvas {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1;
+      display: none;
+      pointer-events: none;
     }
 
     .video-wrapper {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    #video-bg {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: none; 
-    }
-
-    /* Style Khusus Panel Video Countdown */
-    #countdown-wrapper {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #0f0c08;
-      z-index: 50;
-      display: none; /* Muncul hanya setelah scan sukses */
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
     }
 
     #video-countdown {
       width: 100%;
       height: 100%;
       object-fit: contain;
+      display: none;
     }
 
-    #particle-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
+    #video-bg {
       width: 100%;
       height: 100%;
-      z-index: 2;
-      pointer-events: none;
-      display: none; 
-    }
-
-    #overlay-dark {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.25);
-      z-index: 1;
-      display: none; 
-    }
-
-    /* Antarmuka Pemindaian (Default Terbuka di Awal) */
-    #start-interface {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle at center, rgba(38,27,12,0.85) 0%, rgba(15,12,8,0.95) 100%);
-      opacity: 1;
-      transition: opacity 0.5s ease;
-    }
-
-    .scanner-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #scanner-area {
-      position: relative;
-      width: 200px;
-      height: 200px;
+      object-fit: contain;
+      display: none;
       cursor: pointer;
+    }
+
+    .overlay-dark {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 12, 8, 0.35);
+      z-index: 3;
+      display: none;
+      pointer-events: none;
+    }
+
+    .interface-container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      color: #fff;
+    }
+
+    .card-start {
+      border: 2px solid #d4af37;
+      padding: 50px 80px;
+      background: rgba(26, 21, 14, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
       display: flex;
+      flex-direction: column;
       align-items: center;
+    }
+
+    .card-start h1 {
+      color: #d4af37;
+      margin-bottom: 15px;
+      letter-spacing: 3px;
+      font-size: 2.8rem;
+    }
+
+    .card-start p {
+      color: #e0e0e0;
+      margin-bottom: 35px;
+      font-size: 1.5rem;
+    }
+
+    /* ==========================================================================
+       STYLE: TOUCH SCANNER DENGAN SIMBOL KUSTOM EMAS (ZOOM IN OPTIMIZED)
+       ========================================================================== */
+    .scanner-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      display: flex;
       justify-content: center;
-      border-radius: 50%;
-      background: rgba(212, 175, 55, 0.03);
-      box-shadow: 0 0 30px rgba(0,0,0,0.5);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
-      -webkit-user-select: none;
+      align-items: center;
+      cursor: pointer;
       user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
 
-    #scanner-area:active {
-      transform: scale(0.95);
-    }
-
-    #scanner-area svg {
+    /* Lingkaran Progress Menggunakan SVG */
+    .scanner-svg {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       transform: rotate(-90deg);
+      z-index: 3;
+      pointer-events: none;
     }
 
-    #progress-bar {
-      stroke-dasharray: 528;
+    .scanner-bg-circle {
+      fill: none;
+      stroke: rgba(212, 175, 55, 0.1);
+      stroke-width: 4;
+    }
+
+    .scanner-progress-circle {
+      fill: none;
+      stroke: url(#gold-gradient);
+      stroke-width: 5;
+      stroke-dasharray: 528; /* 2 * PI * r (r=84) */
       stroke-dashoffset: 528;
-      transition: stroke-dashoffset 0.03s linear, stroke 0.3s ease;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.05s linear;
     }
 
-    .hand-icon {
-      width: 75px;
-      height: 75px;
-      fill: #d4af37;
-      transition: fill 0.3s ease, filter 0.3s ease, transform 0.3s ease;
-    }
-
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.15); }
-      50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.35); }
-      100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.15); }
-    }
-    #scanner-area {
-      animation: pulseGlow 2.5s infinite ease-in-out;
-    }
-
-    #scanner-area.scanning {
-      background: rgba(212, 175, 55, 0.08);
-      animation: none;
-      box-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
-    }
-
-    #scanner-area.scanning .hand-icon {
-      fill: #fff;
-      filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.8));
-      transform: scale(1.05);
-    }
-
-    #scanner-text {
-      margin-top: 30px;
-      color: #e5c158;
-      font-size: 1.15rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 500;
-      text-align: center;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-      transition: color 0.3s ease;
-      max-width: 80%;
-      line-height: 1.5;
-    }
-
-    #scanner-area.scanning + #scanner-text {
-      color: #fff;
-    }
-
-    #btn-skip {
-      position: absolute;
-      bottom: 40px;
-      right: 40px;
-      z-index: 100;
-      background: rgba(15, 12, 8, 0.6);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      color: #d4af37;
-      padding: 12px 28px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-radius: 4px;
-      cursor: pointer;
-      display: none; 
-      align-items: center;
-      gap: 10px;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    }
-
-    #btn-skip:hover {
-      background: #d4af37;
-      color: #0f0c08;
-      border-color: #d4af37;
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-    }
-
-    /* ==========================================================================
-       STYLE UTAMA: STUDENT CARD & LAYOUT 4K STABIL
-       ========================================================================== */
-    .card-container {
-      width: 100%;
-      max-width: 1550px; 
-      height: 820px;     
-      background: rgba(15, 12, 8, 0.55);
-      border: 1px solid rgba(212, 175, 55, 0.25);
-      border-radius: 16px;
+    /* Wadah Utama Logo */
+    .scanner-pad {
+      width: 160px;
+      height: 160px;
+      background: #000000;
+      border-radius: 50%;
       display: flex;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 30px 70px rgba(0,0,0,0.8), 
-                  inset 0 0 60px rgba(212,175,55,0.03);
-      backdrop-filter: blur(15px);
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
-                  transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-
-    .card-container.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .card-container::before, .card-container::after {
-      content: '';
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      border: 2px solid #d4af37;
-      z-index: 10;
-      pointer-events: none;
-    }
-    .card-container::before { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-    .card-container::after { bottom: 20px; right: 20px; border-left: none; border-top: none; }
-
-    .column-left {
-      width: 32%;
-      height: 100%;
-      border-right: 1px solid rgba(212, 175, 55, 0.15);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      padding: 40px;
-      background: linear-gradient(to bottom, rgba(212,175,55,0.02) 0%, rgba(0,0,0,0) 100%);
-    }
-
-    .column-center {
-      width: 40%;
-      height: 100%;
-      padding: 60px 45px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .column-right {
-      width: 28%;
-      height: 100%;
-      border-left: 1px solid rgba(212, 175, 55, 0.15);
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 40px;
-      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 2;
+      overflow: hidden; /* Memastikan logo yang di-zoom tetap rapi terpotong lingkaran */
     }
 
-    /* ==========================================================================
-       KOMPONEN DETIL DATA SISWA
-       ========================================================================== */
-    .photo-wrapper {
-      width: 360px;
-      height: 480px;
-      border: 1px solid rgba(212, 175, 55, 0.35);
-      padding: 10px;
-      background: rgba(15, 12, 8, 0.8);
-      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
-      position: relative;
-    }
-
-    .photo-wrapper::before {
-      content: '';
-      position: absolute;
-      top: -5px; left: -5px; right: -5px; bottom: -5px;
-      border: 1px solid rgba(212, 175, 55, 0.15);
-      pointer-events: none;
-    }
-
-    .photo-box {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #14110c;
-      position: relative;
-    }
-
-    #siswa-foto {
+    /* Gambar Simbol Telapak Tangan Emas Baru (Membesar / Zoom-In) */
+    .scanner-pad img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: opacity 0.5s ease;
+      transform: scale(1); /* Mengatur tingkat perbesaran logo */
+      object-position: center 56%; /* MENGGESER LOGO AGAR LEBIH KE BAWAH (Silakan naikkan ke 58% jika kurang bawah) */
+      transition: transform 0.2s ease-out, filter 0.3s;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
-    .fade-in-item {
+    /* Animasi Berdenyut Lembut Sebelum Disentuh */
+    .scanner-container:not(.scanning) .scanner-pad {
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); transform: scale(1); }
+      50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); transform: scale(1.03); }
+      100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); transform: scale(1); }
+    }
+
+    /* Efek Visual Saat Scanning Aktif (Ditekan Lama) */
+    .scanner-container.scanning .scanner-pad {
+      transform: scale(0.96);
+      box-shadow: 0 0 35px rgba(243, 229, 171, 0.7);
+    }
+
+    /* Menyeimbangkan skala logo saat pad mengecil karena ditekan */
+    .scanner-container.scanning .scanner-pad img {
+      transform: scale(1.10); 
+      filter: brightness(1.25) drop-shadow(0 0 10px rgba(253, 230, 131, 0.5));
+    }
+
+    .scanner-instruction {
+      margin-top: 15px;
+      font-size: 1rem !important;
+      color: #bfa36b !important;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: bold;
+      min-height: 20px;
+    }
+
+    /* ==========================================================================
+       STYLE LAINNYA
+       ========================================================================== */
+    .btn-skip {
+      position: fixed;
+      bottom: 50px;
+      right: 50px;
+      background: none;
+      border: none;
+      color: #f3e5ab;
+      cursor: pointer;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      font-size: 4.5rem;
+      font-weight: bold;
+      opacity: 0.4;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-skip:hover {
+      opacity: 0.95;
+      color: #ffffff;
+      transform: scale(1.15) translateX(5px);
+      text-shadow: 0 0 25px rgba(212, 175, 55, 0.8);
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(212, 175, 55, 0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: floatParticles linear infinite;
+      z-index: 1;
+      transform: translateZ(0); 
+      will-change: transform;
+    }
+
+    @keyframes floatParticles {
+      0% { transform: translate3d(0, 105vh, 0) scale(0.3); opacity: 0; }
+      50% { opacity: 0.5; }
+      100% { transform: translate3d(0, -10vh, 0) scale(1.2); opacity: 0; }
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 2200px;
+      height: 85vh; 
+      z-index: 10;
+      position: relative;
+    }
+
+    .purnawiyata-card {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background: #14100a;
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 
+                  0 0 40px rgba(212, 175, 55, 0.15);
       opacity: 0;
-      transform: translateY(15px);
-      transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
-                  transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      transform: translate3d(0, 20px, 0);
+      backface-visibility: hidden;
+      will-change: transform, opacity;
+      padding: 16px; 
+    }
+
+    .purnawiyata-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 24px;
+      padding: 6px; 
+      background: linear-gradient(135deg, #9a741a 0%, #f7e7ad 25%, #bf953f 50%, #fcf6ba 75%, #aa7c11 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .purnawiyata-card::after {
+      content: '';
+      position: absolute;
+      top: 12px; left: 12px; right: 12px; bottom: 12px;
+      border: 2px solid #dfb74c;
+      border-radius: 16px;
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3), 0 0 10px rgba(212, 175, 55, 0.2);
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .card-content-wrapper {
+      display: grid;
+      grid-template-columns: 24% 52% 24%; 
+      width: 100%;
+      height: 100%;
+      background: #110d08;
+      border-radius: 14px;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .column-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #aa7c11, #d4af37, #aa7c11);
+      padding: 40px 30px;
+      position: relative;
+      box-shadow: 5px 0 20px rgba(0,0,0,0.4);
+      z-index: 5;
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 3 / 4; 
+      border: 6px solid #fff;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #110d08;
+      position: relative;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1; 
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    .absen-label {
+      background: rgba(15, 12, 8, 0.95);
+      color: #f3e5ab;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      width: 100%;
+      text-transform: uppercase;
+    }
+    .absen-label span { color: #ffffff; }
+
+    .music-control-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 12, 8, 0.9);
+      padding: 10px 18px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-music-toggle {
+      background: none;
+      border: none;
+      color: #f3e5ab;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+    }
+
+    .btn-music-toggle svg { width: 22px; height: 22px; }
+
+    .audio-visualizer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 3px; 
+      flex: 1;
+      height: 25px; 
+    }
+
+    .visualizer-bar {
+      flex: 1;
+      max-width: 3px; 
+      background: #f3e5ab;
+      height: 3px;
+      border-radius: 1px 1px 0 0;
+      will-change: height;
+    }
+
+    .column-center {
+      padding: 40px 40px; 
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+      overflow: hidden;
+      background: #110d08;
+      position: relative;
+      z-index: 4;
+    }
+
+    .spotlight-container {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      background: radial-gradient(ellipse at top, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+      z-index: 0;
+    }
+
+    .brand-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .school-logo { width: 85px; height: auto; }
+    .logo-ppss { width: 190px; height: auto; }
+
+    .header-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .identity-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; 
+      margin: 20px 0;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .name-container {
+      position: relative;
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+      will-change: transform, opacity;
+      min-height: 110px;
+      display: flex;
+      align-items: center;
+      padding-bottom: 15px;
+      width: 100%;
+      overflow: hidden; 
+    }
+
+    .ttl-container, .ortu-container, .nis-container, .wish-container {
+      position: relative;
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+      will-change: transform, opacity;
     }
 
     .fade-in-visible {
       opacity: 1;
-      transform: translateY(0);
-    }
-
-    .meta-title {
-      color: #8c8273;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    .name-container {
-      margin-bottom: 35px;
-      min-height: 95px; 
-      display: flex;
-      align-items: center;
+      transform: translate3d(0, 0, 0);
     }
 
     #siswa-nama {
-      color: #f3e5ab;
-      font-size: 3.2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      line-height: 1.15;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-
-    .info-block {
-      margin-bottom: 30px;
-    }
-
-    #siswa-ttl, #siswa-ortu {
-      color: #e5ded4;
-      font-size: 1.35rem;
-      font-weight: 400;
-      line-height: 1.4;
-    }
-
-    .nis-box {
-      display: inline-block;
-      padding: 8px 18px;
-      background: rgba(212, 175, 55, 0.06);
-      border: 1px solid rgba(212, 175, 55, 0.2);
-      color: #d4af37;
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      border-radius: 4px;
-    }
-
-    /* ==========================================================================
-       KOMPONEN CITA-CITA & ANGAN (REVEAL ANIMATION)
-       ========================================================================== */
-    .wish-container {
-      margin-top: 15px;
-      border-top: 1px solid rgba(212, 175, 55, 0.15);
-      padding-top: 30px;
-    }
-
-    #siswa-citacita {
-      color: #d4af37;
-      font-size: 1.65rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      line-height: 1.3;
-    }
-
-    .reveal-box {
-      width: 280px;
-      height: 380px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(212,175,55,0.2);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-      background: #14110c;
-    }
-
-    .reveal-img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .reveal-img.color {
-      z-index: 2;
-      clip-path: inset(100% 0 0 0); 
-      transition: clip-path 3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .reveal-active .reveal-img.color {
-      clip-path: inset(0 0 0 0);
-    }
-
-    .reveal-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 3;
-      background: linear-gradient(to top, rgba(15,12,8,0.9) 0%, rgba(0,0,0,0) 40%);
-      pointer-events: none;
-    }
-
-    .cc-label {
-      position: absolute;
-      bottom: 25px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      z-index: 4;
+      font-size: 3.2rem; 
+      font-weight: 800;
       color: #fff;
-      font-size: 0.85rem;
-      font-weight: 600;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      letter-spacing: 4px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 1s ease 1.5s, transform 1s ease 1.5s;
+      padding-bottom: 8px;
+      line-height: 1.2;
+      width: auto; 
+      position: relative;
+      white-space: nowrap; 
     }
 
-    .reveal-active .cc-label {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    #cc-particles-container {
+    #siswa-nama::after {
+      content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
+      bottom: 0; left: 0; width: 100%; height: 3px;
+      background: linear-gradient(to right, #a67c1e, #f3e5ab, #a67c1e);
     }
 
-    .cc-particle {
-      position: absolute;
-      background: #d4af37;
-      border-radius: 50%;
-      opacity: 0.4;
-      pointer-events: none;
-      animation: floatUp linear infinite;
-    }
+    .ttl-container { height: 40px; display: flex; align-items: center; margin-top: 15px; }
+    #siswa-ttl { font-size: 1.7rem; color: #e0e0e0; font-weight: 500; }
 
-    @keyframes floatUp {
-      0% { transform: translateY(0) scale(1); opacity: 0; }
-      10% { opacity: 0.5; }
-      90% { opacity: 0.2; }
-      100% { transform: translateY(-400px) scale(0.5); opacity: 0; }
-    }
+    .ortu-container { height: 40px; display: flex; align-items: center; }
+    .sub-detail { font-size: 1.8rem; font-style: italic; color: #f3e5ab; }
 
-    /* ==========================================================================
-       NAVIGASI INDIKATOR ABSEN & AUDIO VISUALIZER
-       ========================================================================== */
-    .absen-badge {
-      position: absolute;
-      top: -1px;
-      right: 50px;
-      background: linear-gradient(135deg, #2a2012 0%, #141009 100%);
+    .nis-container { height: 50px; display: flex; align-items: center; margin-top: 10px; }
+    
+    .nis-box { 
+      font-size: 1.4rem; 
+      color: #ffffff; 
+      font-weight: 700; 
+      background: rgba(255, 255, 255, 0.06);
+      padding: 6px 18px;
+      border-radius: 6px;
       border: 1px solid rgba(212, 175, 55, 0.3);
-      border-top: none;
+    }
+
+    .wish-container { height: 80px; display: flex; align-items: center; margin-top: 20px; }
+    
+    .wish-box {
+      font-size: 1.5rem;
+      color: #ffffff;
+      background: rgba(212, 175, 55, 0.12);
       padding: 12px 25px;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-      display: flex;
-      align-items: baseline;
-      gap: 4px;
+      border-left: 6px solid #d4af37;
+      border-radius: 0 6px 6px 0;
     }
+    .wish-box span { color: #f3e5ab; font-weight: bold; }
 
-    #num-absen { color: #f3e5ab; font-size: 1.8rem; font-weight: 700; }
-    #total-absen { color: #7c705d; font-size: 1rem; font-weight: 500; }
-    #total-absen::before { content: '/ '; }
-
-    .visualizer-container {
-      position: absolute;
-      bottom: 25px;
-      display: flex;
-      align-items: flex-end;
-      gap: 3px;
-      height: 25px;
+    .footer-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffffff;
+      line-height: 1.3;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      padding-top: 15px;
+      z-index: 2;
     }
+    .footer-title span { color: #d4af37; font-size: 1.8rem; font-weight: 800; }
 
-    .visualizer-bar {
-      width: 3px;
-      height: 3px;
-      background: linear-gradient(to top, #8c6f2d, #d4af37);
-      border-radius: 1px;
-      transition: height 0.1s ease;
-    }
-
-    #music-btn {
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      width: 45px;
-      height: 45px;
-      background: rgba(15, 12, 8, 0.6);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      border-radius: 50%;
+    .column-right {
+      position: relative;
+      overflow: hidden; 
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      z-index: 2000;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      background: #110d08; 
+      border-left: 1px solid rgba(212, 175, 55, 0.15);
+      z-index: 3;
     }
 
-    #music-btn:hover {
-      border-color: #d4af37;
-      background: rgba(212, 175, 55, 0.1);
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    .column-right::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; width: 100%; height: 30%;
+      background: linear-gradient(to top, #110d08 10%, transparent 100%);
+      z-index: 10;
+      pointer-events: none;
     }
 
-    #music-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: #d4af37;
+    .image-reveal-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
     }
 
-    .particle {
-      position: fixed;
-      background: #d4af37;
+    .img-base-bw {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) brightness(0.5);
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 1; 
+      transition: opacity 0.4s ease-in-out;
+      z-index: 2;
+    }
+
+    .img-reveal-color {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 3;
+      opacity: 0;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .reveal-active .img-reveal-color { opacity: 1; }
+
+    .cc-particle {
+      position: absolute;
+      background: radial-gradient(circle, #f3e5ab 20%, #d4af37 60%, transparent 100%);
       border-radius: 50%;
       pointer-events: none;
-      z-index: 0;
-      opacity: 0;
-      animation: globalFloat linear infinite;
+      z-index: 5;
+      filter: blur(1px);
+      animation: ccFloatUp linear infinite;
+      will-change: transform, opacity;
     }
 
-    @keyframes globalFloat {
-      0% { transform: translateY(105vh) translateX(0); opacity: 0; }
-      10% { opacity: 0.3; }
-      90% { opacity: 0.3; }
-      100% { transform: translateY(-5vh) translateX(50px); opacity: 0; }
+    @keyframes ccFloatUp {
+      0% { transform: translate3d(0, 0, 0) scale(0.5); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { transform: translate3d(0, -120vh, 0) scale(1.5); opacity: 0; }
+    }
+
+    /* NAVIGASI TOMBOL */
+    .btn-nav-arrow {
+      position: fixed;
+      bottom: 20px; 
+      background: none; 
+      border: none; 
+      color: #d4af37;
+      font-size: 5rem; 
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+      user-select: none;
+      z-index: 100;
+      opacity: 0.15; 
+      padding: 10px;
+    }
+
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 20px; }
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 20px; }
+
+    .btn-nav-arrow:hover {
+      color: #f3e5ab;
+      opacity: 0.6; 
+      transform: scale(1.1);
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    }
+
+    .purnawiyata-card.active {
+      animation: cardEntrance 0.5s ease-out forwards;
+    }
+    @keyframes cardEntrance {
+      0% { opacity: 0; transform: translate3d(0, 15px, 0); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    /* RESPONSIVE LAYOUT HP / TABLET */
+    @media (max-width: 1200px) {
+      body { overflow-y: auto; }
+      #main-gallery-content { padding: 20px; height: auto; }
+      .main-container { height: auto; padding-bottom: 100px; }
+      .purnawiyata-card { height: auto; padding: 10px; }
+      .purnawiyata-card::after { top: 6px; left: 6px; right: 6px; bottom: 6px; }
+      .card-content-wrapper { grid-template-columns: 100%; }
+      .column-left { width: 100%; padding: 30px; }
+      .photo-frame { height: 350px; max-width: 280px; }
+      .column-center { padding: 30px 20px; text-align: center; align-items: center; }
+      .logo-wrapper { justify-content: center; }
+      #siswa-nama { font-size: 2.2rem !important; white-space: normal; } 
+      #siswa-ttl { font-size: 1.3rem; }
+      .sub-detail { font-size: 1.4rem; }
+      .nis-box { font-size: 1.1rem; }
+      .wish-box { font-size: 1.2rem; }
+      .footer-title { font-size: 1.2rem; }
+      .footer-title span { font-size: 1.5rem; }
+      .column-right { height: 350px; width: 100%; border-left: none; border-top: 1px solid rgba(212, 175, 55, 0.2); }
+      
+      .btn-nav-arrow { font-size: 3.5rem; bottom: 10px; }
+      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 10px; }
+      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 10px; }
     }
   </style>
 </head>
 <body>
 
-  <audio id="scan-sound" src="https://azzahrolocare.github.io/data/purnawiyata/files/scan.mp3" preload="auto"></audio>
-  <audio id="bg-music" src="https://azzahrolocare.github.io/data/purnawiyata/files/instrumen.mp4" loop preload="auto"></audio>
-
-  <button id="music-btn" onclick="toggleMusic()" aria-label="Pause Musik">
-    <svg id="icon-play" viewBox="0 0 24 24" style="display: none;"><path d="M8 5v14l11-7z"/></svg>
-    <svg id="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-  </button>
-
   <div id="opening-container">
     <canvas id="particle-canvas"></canvas>
 
-    <div id="countdown-wrapper">
-      <video id="video-countdown" playsinline muted>
+    <div class="video-wrapper">
+      <video id="video-countdown" playsinline>
         <source src="https://azzahrolocare.github.io/data/purnawiyata/files/5_Seconds_Countdown_Timer.mp4" type="video/mp4">
         Browser tidak mendukung video HTML5.
       </video>
-    </div>
 
-    <div class="video-wrapper">
       <video id="video-bg" playsinline loop onclick="togglePlayPause()">
         <source src="https://azzahrolocare.github.io/data/purnawiyata/files/opening3.mp4" type="video/mp4">
         Browser tidak mendukung video HTML5.
       </video>
     </div>
 
-    <div id="overlay-dark"></div>
+    <div class="overlay-dark" id="overlay-dark"></div>
 
-    <div id="start-interface">
-      <div class="scanner-container">
-        <div id="scanner-area">
-          <svg viewBox="0 0 180 180">
-            <circle cx="90" cy="90" r="84" stroke="rgba(212, 175, 55, 0.15)" stroke-width="3" fill="none" />
-            <circle id="progress-bar" cx="90" cy="90" r="84" stroke="#d4af37" stroke-width="4" fill="none" stroke-linecap="round" />
+    <div class="interface-container" id="start-interface">
+      <div class="card-start">
+        <h1>SELAMAT & SUKSES</h1>
+        <p>Purnawiyata Ke-III SMP Islam Az-Zahro</p>
+        
+        <div class="scanner-container" id="scanner-area">
+          <svg class="scanner-svg">
+            <defs>
+              <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#a67c1e" />
+                <stop offset="50%" stop-color="#f3e5ab" />
+                <stop offset="100%" stop-color="#a67c1e" />
+              </linearGradient>
+            </defs>
+            <circle class="scanner-bg-circle" cx="90" cy="90" r="84"></circle>
+            <circle class="scanner-progress-circle" id="progress-bar" cx="90" cy="90" r="84"></circle>
           </svg>
-          <svg class="hand-icon" viewBox="0 0 24 24">
-            <path d="M12 2c-.83 0-1.5.67-1.5 1.5v7.21l-2.44-.61c-.08-.02-.17-.03-.25-.03-.54 0-1 .41-1.07.95l-.23 1.83c0 .12.02.24.08.34l3.5 6.07c.41.71 1.17 1.15 1.99 1.15h5.58c1.15 0 2.12-.85 2.29-2l.74-5.22c.12-.86-.4-1.67-1.23-1.89l-2.69-.73V7.5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v2.85l-1.5-.41V3.5c0-.83-.67-1.5-1.5-1.5z"/>
-          </svg>
-        </div>
-        <div id="scanner-text">Letakkan Telapak Tangan untuk Autentikasi</div>
-      </div>
-    </div>
-
-    <button id="btn-skip" onclick="menujuGaleriUtama()">
-      Lanjutkan
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
-    </button>
-  </div>
-
-  <main id="main-gallery-content">
-    <div class="card-container" id="student-card">
-      
-      <div class="absen-badge">
-        <span id="num-absen">00</span>
-        <span id="total-absen">00</span>
-      </div>
-
-      <section class="column-left">
-        <div class="photo-wrapper">
-          <div class="photo-box">
-            <img id="siswa-foto" src="" alt="Foto Profil Siswa">
+          <div class="scanner-pad">
+            <img src="https://azzahrolocare.github.io/data/purnawiyata/files/hand_scan.png" alt="Logo Gold Hand Scan" draggable="false">
           </div>
         </div>
-      </section>
-
-      <section class="column-center">
-        <div class="info-block name-container" id="cont-nama">
-          <h1 id="siswa-nama">-</h1>
-        </div>
-
-        <div class="info-block fade-in-item" id="cont-ttl">
-          <p class="meta-title">Tempat, Tanggal Lahir</p>
-          <p id="siswa-ttl">-</p>
-        </div>
-
-        <div class="info-block fade-in-item" id="cont-ortu">
-          <p class="meta-title">Hubungan Keluarga</p>
-          <p id="siswa-ortu">-</p>
-        </div>
-
-        <div class="info-block fade-in-item" id="cont-nis">
-          <div class="nis-box" id="siswa-nis-box">NIS: - | NISN: -</div>
-        </div>
-
-        <div class="info-block wish-container fade-in-item" id="cont-wish">
-          <p class="meta-title">Cita-Cita & Harapan Masa Depan</p>
-          <h2 id="siswa-citacita">-</h2>
-        </div>
-      </section>
-
-      <section class="column-right" id="column-cc">
-        <div id="cc-particles-container"></div>
-        <div class="reveal-box">
-          <img class="reveal-img bw" id="foto-citacita-bw" src="" alt="Foto Kreatif Standby">
-          <img class="reveal-img color" id="foto-citacita-color" src="" alt="Foto Kreatif Terbuka">
-          <div class="reveal-overlay"></div>
-          <div class="cc-label">Masa Depan</div>
-        </div>
-
-        <div class="visualizer-container">
-          <div class="visualizer-bar"></div>
-          <div class="visualizer-bar"></div>
-          <div class="visualizer-bar"></div>
-          <div class="visualizer-bar"></div>
-          <div class="visualizer-bar"></div>
-          <div class="visualizer-bar"></div>
-          <div class="visualizer-bar"></div>
-          <div class="visualizer-bar"></div>
-        </div>
-      </section>
-
+        <p class="scanner-instruction" id="scanner-text">Letakkan Telapak Tangan untuk Autentikasi</p>
+      </div>
     </div>
-  </main>
+
+    <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()">❯</button>
+  </div>
+
+  <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
+    <source src="https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="scan-sound" preload="auto" crossorigin="anonymous">
+    <source src="https://azzahrolocare.github.io/data/purnawiyata/files/HAND_SCAN.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="main-gallery-content">
+    <main class="main-container">
+      <div class="purnawiyata-card" id="student-card">
+        
+        <div class="card-content-wrapper">
+          
+          <div class="column-left">
+            <div class="photo-frame">
+              <img id="siswa-foto" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Foto Profil Siswa">
+            </div>
+
+            <div class="absen-label" id="siswa-absen-box">
+              No. Absen: <span id="num-absen">00</span> / <span id="total-absen">00</span> Siswa
+            </div>
+
+            <div class="music-control-container">
+              <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
+                <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
+                <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+
+              <div class="audio-visualizer" id="visualizer">
+                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column-center">
+            <div class="spotlight-container"></div>
+            
+            <div class="brand-header">
+              <div class="logo-wrapper">
+                <img class="school-logo" src="https://github.com/masrahmat-id/absensi-barcode-online-smp-smk-azzahro/raw/main/logo-smp-azzahro.png" alt="Logo SMP Islam Az-Zahro">
+                <img class="logo-ppss" src="https://azzahrolocare.github.io/media/logo/PPSS-Az-Zahro.png" alt="Logo PPSS Az-Zahro">
+              </div>
+              <header class="header-title">SELAMAT & SUKSES</header>
+            </div>
+            
+            <div class="identity-box">
+              <div class="name-container" id="cont-nama">
+                <h1 id="siswa-nama">-</h1>
+              </div>
+              
+              <div class="ttl-container" id="cont-ttl">
+                <p id="siswa-ttl"></p>
+              </div>
+              
+              <div class="ortu-container" id="cont-ortu">
+                <div class="sub-detail" id="siswa-ortu"></div>
+              </div>
+              
+              <div class="nis-container" id="cont-nis">
+                <div class="nis-box" id="siswa-nis-box"></div>
+              </div>
+
+              <div class="wish-container" id="cont-wish">
+                <div class="wish-box" id="siswa-wish-box">
+                  Cita-cita: <span id="siswa-citacita">-</span>
+                </div>
+              </div>
+            </div>
+
+            <footer class="footer-title">
+              PURNAWIYATA KE-III<br>
+              <span>SMP ISLAM AZ-ZAHRO</span><br>
+              <small style="font-size: 1.1rem; letter-spacing: 1px; color: #e0e0e0; font-weight: 500; display: inline-block; margin-top: 4px;">Tahun Pelajaran 2025/2026</small>
+            </footer>
+          </div>
+
+          <div class="column-right" id="column-cc">
+            <div id="cc-particles-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 4;"></div>
+            
+            <div class="image-reveal-wrapper">
+              <img id="foto-citacita-bw" class="img-base-bw" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Cita-cita Hitam Putih">
+              <img id="foto-citacita-color" class="img-reveal-color" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Cita-cita Berwarna">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="nav-container">
+        <button class="btn-nav-arrow" onclick="prevStudent()" aria-label="Siswa Sebelumnya">❮</button>
+        <button class="btn-nav-arrow" onclick="nextStudent()" aria-label="Siswa Selanjutnya">❯</button>
+      </div>
+    </main>
+  </div>
 
   <script>
     if ('serviceWorker' in navigator) {
@@ -726,10 +855,7 @@
       });
     }
 
-    // Ambil referensi elemen Countdown baru
     const videoCountdown = document.getElementById('video-countdown');
-    const countdownWrapper = document.getElementById('countdown-wrapper');
-
     const video = document.getElementById('video-bg');
     const startInterface = document.getElementById('start-interface');
     const overlayDark = document.getElementById('overlay-dark');
@@ -743,6 +869,7 @@
     const progressBar = document.getElementById('progress-bar');
     const scannerText = document.getElementById('scanner-text');
     
+    // Node Audio Efek Scan
     const scanSound = document.getElementById('scan-sound');
 
     let scanProgress = 0;
@@ -811,7 +938,7 @@
         particlesArray[i].update();
         particlesArray[i].draw();
       }
-      visualizerAnimationId = requestAnimationFrame(animateParticles);
+      requestAnimationFrame(animateParticles);
     }
 
     function startScanning(e) {
@@ -821,6 +948,7 @@
       scannerArea.classList.add('scanning');
       scannerText.textContent = "Memindai...";
 
+      // AKTIFKAN KONTEKS AUDIO & PUTAR AUDIO SCAN DARI DETIK 0
       try {
         if (!audioCtx) {
           audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -842,11 +970,11 @@
           scanInterval = null;
           progressBar.style.strokeDashoffset = 0;
           
+          // PINDAH HALAMAN / SUKSES: MATIKAN AUDIO SCAN
           scanSound.pause();
           scanSound.currentTime = 0;
           
-          // PINDAH KE PROSES COUNTDOWN BERIKUTNYA SEBELUM OPENING UTAMA
-          jalankanVideoCountdown();
+          mulaiVideoCountdown();
         } else {
           let currentOffset = maxOffset - (maxOffset * (scanProgress / 100));
           progressBar.style.strokeDashoffset = currentOffset;
@@ -862,6 +990,7 @@
       scannerArea.classList.remove('scanning');
       scannerText.textContent = "Letakkan Telapak Tangan untuk Autentikasi";
       
+      // DILEPAS: MATIKAN AUDIO SCAN & RESET KE DETIK AWAL
       scanSound.pause();
       scanSound.currentTime = 0;
       
@@ -885,33 +1014,34 @@
     scannerArea.addEventListener('touchend', stopScanning);
     scannerArea.addEventListener('touchcancel', stopScanning);
 
-    // FUNGSI BARU: MEMUTAR COUNTDOWN 5 DETIK SETELAH SCAN BERHASIL
-    function jalankanVideoCountdown() {
-      // Sembunyikan panel scanner
+    // FUNGSI BARU UNTUK MEMUTAR VIDEO COUNTDOWN SEBELUM OPENING
+    function mulaiVideoCountdown() {
       startInterface.style.display = 'none';
-      
-      // Tampilkan dan mainkan video countdown
-      countdownWrapper.style.display = 'block';
-      
+      videoCountdown.style.display = 'block';
+      overlayDark.style.display = 'block';
+      btnSkip.style.display = 'flex'; 
+
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch(err => console.log(err));
       }
 
-      videoCountdown.play().catch(err => {
-        console.log("Gagal memutar video countdown otomatis:", err);
-        mulaiVideoSinematik(); // Langsung lompat ke video opening jika terblokir
-      });
-
-      // Begitu video countdown selesai 1x putaran, picu video opening utama
-      videoCountdown.addEventListener('ended', function countdownSelesai() {
-        videoCountdown.removeEventListener('ended', countdownSelesai); // Clear event listener
-        countdownWrapper.style.display = 'none';
+      videoCountdown.play().catch(error => {
+        console.log("Gagal memutar video countdown: ", error);
         mulaiVideoSinematik();
       });
     }
 
-    // LOGIKA ASLI: MEMUTAR VIDEO OPENING UTAMA
+    // LISTENER KETIKA VIDEO COUNTDOWN SELESAI PUTAR
+    videoCountdown.addEventListener('ended', () => {
+      videoCountdown.style.display = 'none';
+      mulaiVideoSinematik();
+    });
+
     function mulaiVideoSinematik() {
+      // Pastikan interface start tersembunyi dan countdown mati
+      startInterface.style.display = 'none';
+      videoCountdown.style.display = 'none';
+      
       video.style.display = 'block';
       overlayDark.style.display = 'block';
       btnSkip.style.display = 'flex'; 
@@ -919,6 +1049,10 @@
       
       initParticles();
       animateParticles();
+
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      }
 
       video.muted = false; 
       video.play().catch(error => {
@@ -936,6 +1070,7 @@
     }
 
     function menujuGaleriUtama() {
+      videoCountdown.pause();
       video.pause();
       openingContainer.style.display = 'none';
       mainGalleryContent.style.display = 'flex';
@@ -1168,7 +1303,7 @@
     }
 
     function animateVisualizer() {
-      requestAnimationFrame(animateVisualizer);
+      visualizerAnimationId = requestAnimationFrame(animateVisualizer);
       const bars = document.querySelectorAll('.visualizer-bar');
       
       if (bgMusic.paused) {
