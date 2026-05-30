@@ -91,7 +91,7 @@
 
     .card-start {
       border: 2px solid #d4af37;
-      padding: 40px 60px;
+      padding: 50px 80px;
       background: rgba(26, 21, 14, 0.95);
       border-radius: 20px;
       box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
@@ -102,125 +102,116 @@
 
     .card-start h1 {
       color: #d4af37;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       letter-spacing: 3px;
       font-size: 2.8rem;
     }
 
     .card-start p {
       color: #e0e0e0;
-      margin-bottom: 30px;
+      margin-bottom: 35px;
       font-size: 1.5rem;
     }
 
     /* ==========================================================================
-       STYLE HAND SCAN INTERACTIVE BUTTON
+       STYLE BARU: TOUCH / HAND SCANNER INTERACTION
        ========================================================================== */
-    .scan-container {
+    .scanner-container {
       position: relative;
-      width: 160px;
-      height: 160px;
-      background: rgba(15, 12, 8, 0.6);
-      border: 3px dashed #d4af37;
-      border-radius: 50%;
+      width: 140px;
+      height: 140px;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
-      transition: all 0.3s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
 
-    .scan-container::before {
-      content: '';
-      position: absolute;
-      width: 110%;
-      height: 110%;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      border-top-color: #f3e5ab;
-      border-bottom-color: #f3e5ab;
-      animation: rotateRing 4s linear infinite;
-    }
-
-    .scan-hand-icon {
-      width: 80px;
-      height: 80px;
-      fill: url(#goldGradient);
-      filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
-      z-index: 2;
-      transition: transform 0.3s ease;
-      animation: pulseHand 2s ease-in-out infinite;
-    }
-
-    /* Laser Scanner Beam Effect */
-    .scan-beam {
+    /* Lingkaran Progress Menggunakan SVG */
+    .scanner-svg {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 4px;
-      background: linear-gradient(to right, transparent, #f3e5ab, #d4af37, #f3e5ab, transparent);
-      box-shadow: 0 0 12px #f3e5ab, 0 0 20px #d4af37;
-      z-index: 3;
-      opacity: 0;
-      pointer-events: none;
+      height: 100%;
+      transform: rotate(-90deg);
     }
 
-    .scan-text {
-      margin-top: 20px;
-      font-size: 1.1rem;
-      color: #f3e5ab;
-      font-weight: bold;
-      letter-spacing: 3px;
+    .scanner-bg-circle {
+      fill: none;
+      stroke: rgba(212, 175, 55, 0.15);
+      stroke-width: 6;
+    }
+
+    .scanner-progress-circle {
+      fill: none;
+      stroke: url(#gold-gradient);
+      stroke-width: 6;
+      stroke-dasharray: 402; /* 2 * PI * r (r=64) */
+      stroke-dashoffset: 402;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.05s linear;
+    }
+
+    /* Tombol Dalam / Icon Tangan */
+    .scanner-pad {
+      width: 110px;
+      height: 110px;
+      background: radial-gradient(circle, #2d2212 0%, #17120a 100%);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 2;
+    }
+
+    .scanner-pad svg {
+      width: 50px;
+      height: 50px;
+      fill: #d4af37;
+      transition: fill 0.3s, transform 0.2s;
+    }
+
+    /* Efek Berdenyut Sebelum Ditekan */
+    .scanner-container:not(.scanning) .scanner-pad {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(212, 175, 55, 0.2); }
+      50% { box-shadow: inset 0 0 25px rgba(212, 175, 55, 0.4), 0 0 25px rgba(212, 175, 55, 0.5); transform: scale(1.02); }
+      100% { box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(212, 175, 55, 0.2); }
+    }
+
+    /* Status Saat Ditekan (Scanning Aktif) */
+    .scanner-container.scanning .scanner-pad {
+      transform: scale(0.95);
+      box-shadow: inset 0 0 30px rgba(243, 229, 171, 0.6), 0 0 20px rgba(243, 229, 171, 0.4);
+    }
+
+    .scanner-container.scanning .scanner-pad svg {
+      fill: #f3e5ab;
+      transform: scale(0.9);
+    }
+
+    .scanner-instruction {
+      margin-top: 15px;
+      font-size: 1rem !important;
+      color: #bfa36b !important;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-      animation: blinkText 1.5s ease-in-out infinite;
+      font-weight: bold;
+      min-height: 20px;
     }
 
-    /* Hover & Active Scanner States */
-    .scan-container:hover {
-      transform: scale(1.05);
-      border-color: #f3e5ab;
-      box-shadow: 0 0 35px rgba(243, 229, 171, 0.4);
-    }
-
-    .scan-container:hover .scan-hand-icon {
-      animation: none;
-      transform: scale(1.1);
-    }
-
-    .scan-container.scanning .scan-beam {
-      opacity: 1;
-      animation: scanMotion 1.2s linear infinite;
-    }
-
-    .scan-container.scanning {
-      border-style: solid;
-      background: rgba(212, 175, 55, 0.15);
-      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.6);
-    }
-
-    /* Scanner Animations */
-    @keyframes rotateRing {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes pulseHand {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.9)); }
-    }
-    @keyframes scanMotion {
-      0% { top: 0%; }
-      50% { top: 100%; }
-      100% { top: 0%; }
-    }
-    @keyframes blinkText {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; text-shadow: 0 0 10px rgba(243, 229, 171, 0.6); }
-    }
-
+    /* ==========================================================================
+       STYLE BAWAAN LAINNYA (SAMA SEPERTI SEBELUMNYA)
+       ========================================================================== */
     .btn-skip {
       position: fixed;
       bottom: 50px;
@@ -248,9 +239,6 @@
       text-shadow: 0 0 25px rgba(212, 175, 55, 0.8);
     }
 
-    /* ==========================================================================
-       STYLE PROSESI SISWA & EFEK SOLID GOLD PADA PEMBUNGKUS
-       ========================================================================== */
     .particle {
       position: absolute;
       background: rgba(212, 175, 55, 0.3);
@@ -702,16 +690,6 @@
 </head>
 <body>
 
-  <svg width="0" height="0" style="position: absolute;">
-    <defs>
-      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#a67c1e" />
-        <stop offset="50%" stop-color="#f3e5ab" />
-        <stop offset="100%" stop-color="#a67c1e" />
-      </linearGradient>
-    </defs>
-  </svg>
-
   <div id="opening-container">
     <canvas id="particle-canvas"></canvas>
 
@@ -729,13 +707,25 @@
         <h1>SELAMAT & SUKSES</h1>
         <p>Purnawiyata Ke-III SMP Islam Az-Zahro</p>
         
-        <div class="scan-container" id="hand-scanner" onclick="jalankanProsedurScan()">
-          <div class="scan-beam"></div>
-          <svg class="scan-hand-icon" viewBox="0 0 24 24">
-            <path d="M12,2A1,1 0 0,0 11,3V10.29C10.7,10.11 10.36,10 10,10A1,1 0 0,0 9,11V4A1,1 0 0,0 8,3A1,1 0 0,0 7,4V12.05C6.71,11.94 6.36,11.88 6,11.88A1,1 0 0,0 5,12.88V6A1,1 0 0,0 4,5A1,1 0 0,0 3,6V17A5,5 0 0,0 8,22H16A5,5 0 0,0 21,17V12A1,1 0 0,0 20,11A1,1 0 0,0 19,12V9A1,1 0 0,0 18,8A1,1 0 0,0 17,9V11.41L15,9.41V4A1,1 0 0,0 14,3A1,1 0 0,0 13,4V10.29C12.7,10.11 12.36,10 12,10V2M15,11.41V14H17V12H19V17A3,3 0 0,1 16,20H8A3,3 0 0,1 5,17V13.88H7V15H9V13H11V12.29H13V12.29H15V11.41Z" />
+        <div class="scanner-container" id="scanner-area">
+          <svg class="scanner-svg">
+            <defs>
+              <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#a67c1e" />
+                <stop offset="50%" stop-color="#f3e5ab" />
+                <stop offset="100%" stop-color="#a67c1e" />
+              </linearGradient>
+            </defs>
+            <circle class="scanner-bg-circle" cx="70" cy="70" r="64"></circle>
+            <circle class="scanner-progress-circle" id="progress-bar" cx="70" cy="70" r="64"></circle>
           </svg>
+          <div class="scanner-pad">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2A2 2 0 0 0 10 4v7.27l-1.78-.9a2 2 0 0 0-2.65.85l-.12.24a2 2 0 0 0 .75 2.68l4.43 2.53c1.9.95 3.37 2.64 4.1 4.67A1 1 0 0 0 15.68 22h4.55a1 1 0 0 0 .98-.82l1-5.5a4 4 0 0 0-.66-3A3.76 3.76 0 0 0 19 11.23V7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2h-1V4a2 2 0 0 0-2-2z"/>
+            </svg>
+          </div>
         </div>
-        <div class="scan-text" id="scan-status-text">Sentuh untuk memindai</div>
+        <p class="scanner-instruction" id="scanner-text">Sentuh & Tahan Untuk Memulai</p>
       </div>
     </div>
 
@@ -836,7 +826,6 @@
   </div>
 
   <script>
-    // REGISTRASI SERVICE WORKER UNTUK MODE OFFLINE PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
@@ -854,8 +843,19 @@
     const openingContainer = document.getElementById('opening-container');
     const mainGalleryContent = document.getElementById('main-gallery-content');
 
+    // VARIABEL SISTEM SCANNER
+    const scannerArea = document.getElementById('scanner-area');
+    const progressBar = document.getElementById('progress-bar');
+    const scannerText = document.getElementById('scanner-text');
+    
+    let scanProgress = 0;
+    let scanInterval = null;
+    const scanDuration = 2000; // 2 Detik waktu penekanan sampai penuh
+    const scanStep = 30; // Interval pembaruan progress (ms)
+    const maxOffset = 402; // Sesuai stroke-dasharray lingkaran
+
     let studentsData = [];
-    let preloadedImages = []; // Array global untuk mengunci semua foto siswa di RAM
+    let preloadedImages = []; 
     let currentIndex = 0;
     let fadeTimeouts = []; 
     const bgMusic = document.getElementById('bg-music');
@@ -917,22 +917,65 @@
       requestAnimationFrame(animateParticles);
     }
 
-    // FUNGSI ANIMASI SCANNING SEBELUM VIDEO DIMULAI
-    function jalankanProsedurScan() {
-      const scanner = document.getElementById('hand-scanner');
-      const statusText = document.getElementById('scan-status-text');
-      
-      // Kunci klik ganda
-      if (scanner.classList.contains('scanning')) return;
-      
-      scanner.classList.add('scanning');
-      statusText.innerText = "Memproses Sidik Jari...";
-      
-      // Simulasi delay scanning selama 1.5 detik demi estetika panggung
-      setTimeout(() => {
-        mulaiVideoSinematik();
-      }, 1500);
+    /* ==========================================================================
+       LOGIKA BARU: INTERAKSI HOLD TO SCAN
+       ========================================================================== */
+    function startScanning(e) {
+      e.preventDefault();
+      if (scanInterval) return;
+
+      scannerArea.classList.add('scanning');
+      scannerText.textContent = "Memindai...";
+
+      scanInterval = setInterval(() => {
+        scanProgress += (scanStep / scanDuration) * 100;
+        
+        if (scanProgress >= 100) {
+          scanProgress = 100;
+          clearInterval(scanInterval);
+          scanInterval = null;
+          progressBar.style.strokeDashoffset = 0;
+          
+          // Trigger ketika loading selesai / sukses penuh
+          mulaiVideoSinematik();
+        } else {
+          // Update visual lingkaran loading mask
+          let currentOffset = maxOffset - (maxOffset * (scanProgress / 100));
+          progressBar.style.strokeDashoffset = currentOffset;
+        }
+      }, scanStep);
     }
+
+    function stopScanning() {
+      if (scanInterval) {
+        clearInterval(scanInterval);
+        scanInterval = null;
+      }
+      scannerArea.classList.remove('scanning');
+      scannerText.textContent = "Sentuh & Tahan Untuk Memulai";
+      
+      // Mengurangi progress secara mulus kembali ke 0 jika dilepas di tengah jalan
+      let resetInterval = setInterval(() => {
+        if (scanProgress > 0) {
+          scanProgress -= 8; // Kecepatan drop loading saat dilepas
+          if (scanProgress < 0) scanProgress = 0;
+          let currentOffset = maxOffset - (maxOffset * (scanProgress / 100));
+          progressBar.style.strokeDashoffset = currentOffset;
+        } else {
+          clearInterval(resetInterval);
+        }
+      }, 20);
+    }
+
+    // Registrasi Event Listener untuk Mouse & Touchscreen Layar HP / Kiosk
+    scannerArea.addEventListener('mousedown', startScanning);
+    scannerArea.addEventListener('mouseup', stopScanning);
+    scannerArea.addEventListener('mouseleave', stopScanning);
+    
+    scannerArea.addEventListener('touchstart', startScanning, { passive: false });
+    scannerArea.addEventListener('touchend', stopScanning);
+    scannerArea.addEventListener('touchcancel', stopScanning);
+
 
     function mulaiVideoSinematik() {
       startInterface.style.display = 'none';
@@ -1047,7 +1090,6 @@
       container.innerHTML = '';
     }
 
-    // PENGOPTIMALAN MEMORI: LOAD DATA & CACHE SEMUA GAMBAR SEKALIGUS DI AWAL
     async function loadStudentsData() {
       try {
         const response = await fetch('data-siswa.json');
@@ -1055,7 +1097,6 @@
         if(studentsData.length > 0) {
           renderStudent(0);
 
-          // Lakukan background preloading untuk semua foto agar tersimpan aman di RAM
           studentsData.forEach(student => {
             const imgProfil = new Image();
             imgProfil.src = student.foto_profil_url;
@@ -1144,7 +1185,6 @@
       elNisBox.textContent = `NIS: ${student.nis} | NISN: ${student.nisn}`;
       elCitaCita.innerText = student.cita_cita || "-";
 
-      // Penggantian Foto dari memori cache RAM lokal secara instan tanpa berkedip
       fotoElement.style.opacity = '0.3';
       fotoElement.src = student.foto_profil_url;
       fotoElement.style.opacity = '1';
