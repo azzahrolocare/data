@@ -114,12 +114,12 @@
     }
 
     /* ==========================================================================
-       STYLE: TOUCH SCANNER DENGAN LOGO CUSTOM WEBP
+       STYLE: TOUCH SCANNER DENGAN SIMBOL KUSTOM EMAS
        ========================================================================== */
     .scanner-container {
       position: relative;
-      width: 160px;
-      height: 160px;
+      width: 180px;
+      height: 180px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -137,45 +137,45 @@
       width: 100%;
       height: 100%;
       transform: rotate(-90deg);
+      z-index: 3;
+      pointer-events: none;
     }
 
     .scanner-bg-circle {
       fill: none;
-      stroke: rgba(212, 175, 55, 0.15);
-      stroke-width: 6;
+      stroke: rgba(212, 175, 55, 0.1);
+      stroke-width: 4;
     }
 
     .scanner-progress-circle {
       fill: none;
       stroke: url(#gold-gradient);
-      stroke-width: 6;
-      stroke-dasharray: 465; /* 2 * PI * r (r=74) -> 2 * 3.14159 * 74 ≈ 465 */
-      stroke-dashoffset: 465;
+      stroke-width: 5;
+      stroke-dasharray: 528; /* 2 * PI * r (r=84) -> 2 * 3.14159 * 84 ≈ 528 */
+      stroke-dashoffset: 528;
       stroke-linecap: round;
       transition: stroke-dashoffset 0.05s linear;
     }
 
-    /* Tombol Tempat Sentuh / Wadah Logo Tangan */
+    /* Wadah Utama Logo / Gambar Kustom */
     .scanner-pad {
-      width: 130px;
-      height: 130px;
-      background: radial-gradient(circle, #2d2212 0%, #17120a 100%);
+      width: 160px;
+      height: 160px;
+      background: #000000;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2);
       transition: transform 0.2s, box-shadow 0.2s;
       z-index: 2;
-      overflow: hidden; /* Menjaga logo tetap melingkar rapi */
+      overflow: hidden;
     }
 
-    /* Memasukkan gambar logo-tangan.webp */
+    /* Gambar Simbol Telapak Tangan Emas Baru */
     .scanner-pad img {
-      width: 75px;
-      height: 75px;
-      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       transition: transform 0.2s, filter 0.3s;
       user-select: none;
       -webkit-user-drag: none;
@@ -183,24 +183,23 @@
 
     /* Animasi Berdenyut Lembut Sebelum Disentuh */
     .scanner-container:not(.scanning) .scanner-pad {
-      animation: pulseGlow 2s infinite ease-in-out;
+      animation: pulseGlow 2.5s infinite ease-in-out;
     }
 
     @keyframes pulseGlow {
-      0% { box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(212, 175, 55, 0.2); }
-      50% { box-shadow: inset 0 0 25px rgba(212, 175, 55, 0.4), 0 0 25px rgba(212, 175, 55, 0.5); transform: scale(1.02); }
-      100% { box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(212, 175, 55, 0.2); }
+      0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); transform: scale(1); }
+      50% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); transform: scale(1.03); }
+      100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); transform: scale(1); }
     }
 
     /* Efek Visual Saat Scanning Aktif (Ditekan Lama) */
     .scanner-container.scanning .scanner-pad {
-      transform: scale(0.95);
-      box-shadow: inset 0 0 30px rgba(243, 229, 171, 0.6), 0 0 20px rgba(243, 229, 171, 0.4);
+      transform: scale(0.96);
+      box-shadow: 0 0 35px rgba(243, 229, 171, 0.7);
     }
 
     .scanner-container.scanning .scanner-pad img {
-      transform: scale(0.9);
-      filter: brightness(1.2) drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+      filter: brightness(1.25) drop-shadow(0 0 10px rgba(253, 230, 131, 0.5));
     }
 
     .scanner-instruction {
@@ -720,11 +719,11 @@
                 <stop offset="100%" stop-color="#a67c1e" />
               </linearGradient>
             </defs>
-            <circle class="scanner-bg-circle" cx="80" cy="80" r="74"></circle>
-            <circle class="scanner-progress-circle" id="progress-bar" cx="80" cy="80" r="74"></circle>
+            <circle class="scanner-bg-circle" cx="90" cy="90" r="84"></circle>
+            <circle class="scanner-progress-circle" id="progress-bar" cx="90" cy="90" r="84"></circle>
           </svg>
           <div class="scanner-pad">
-            <img src="https://azzahrolocare.github.io/data/purnawiyata/files/logo-tangan.webp" alt="Logo Tangan Scan" draggable="false">
+            <img src="https://azzahrolocare.github.io/data/purnawiyata/files/logo-tangan.webp" alt="Logo Gold Hand Scan" draggable="false">
           </div>
         </div>
         <p class="scanner-instruction" id="scanner-text">Sentuh & Tahan Untuk Memulai</p>
@@ -854,8 +853,8 @@
     const scanDuration = 2000; 
     const scanStep = 30; 
     
-    // UPDATE NILAI VARIABEL MASKS: Karena lingkaran diperbesar, maxOffset diubah ke 465
-    const maxOffset = 465; 
+    // UPDATE NILAI VARIABEL MASKS: Karena lingkaran diubah ke r=84, maxOffset dihitung ulang -> 2 * PI * 84 ≈ 528
+    const maxOffset = 528; 
 
     let studentsData = [];
     let preloadedImages = []; 
