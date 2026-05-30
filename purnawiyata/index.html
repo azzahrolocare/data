@@ -156,7 +156,7 @@
     }
 
     /* ==========================================================================
-       STYLE PROSESI SISWA (SISTEM TATA LETAK PROPORSIONAL & ANTI-KEDIP)
+       STYLE PROSESI SISWA & EFEK SOLID GOLD PADA PEMBUNGKUS
        ========================================================================== */
     .particle {
       position: absolute;
@@ -187,6 +187,7 @@
       position: relative;
     }
 
+    /* LAYOUT PEMBUNGKUS UTAMA DENGAN EFEK SOLID GOLD */
     .purnawiyata-card {
       display: flex;
       width: 100%;
@@ -195,22 +196,41 @@
       border-radius: 24px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      /* Efek Bayangan Emas Solid */
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 
+                  0 0 40px rgba(212, 175, 55, 0.15);
       opacity: 0;
       transform: translate3d(0, 20px, 0);
       backface-visibility: hidden;
       will-change: transform, opacity;
+      padding: 16px; /* Memberi ruang untuk bingkai emas solid */
     }
 
+    /* Bingkai Emas Solid Berlapis */
     .purnawiyata-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      border: 3px solid #d4af37;
       border-radius: 24px;
-      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2);
-      z-index: 1;
+      padding: 6px; /* Ketebalan emas solid */
+      background: linear-gradient(135deg, #9a741a 0%, #f7e7ad 25%, #bf953f 50%, #fcf6ba 75%, #aa7c11 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
       pointer-events: none;
+      z-index: 6;
+    }
+
+    /* Garis Filamen Dalam Frame Emas */
+    .purnawiyata-card::after {
+      content: '';
+      position: absolute;
+      top: 12px; left: 12px; right: 12px; bottom: 12px;
+      border: 2px solid #dfb74c;
+      border-radius: 16px;
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3), 0 0 10px rgba(212, 175, 55, 0.2);
+      pointer-events: none;
+      z-index: 6;
     }
 
     .card-content-wrapper {
@@ -218,7 +238,8 @@
       grid-template-columns: 24% 52% 24%; 
       width: 100%;
       height: 100%;
-      background: inherit;
+      background: #110d08;
+      border-radius: 14px;
       overflow: hidden;
       z-index: 2;
     }
@@ -510,30 +531,20 @@
     }
 
     @keyframes ccFloatUp {
-      0% {
-        transform: translate3d(0, 0, 0) scale(0.5);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.8;
-      }
-      90% {
-        opacity: 0.8;
-      }
-      100% {
-        transform: translate3d(0, -120vh, 0) scale(1.5);
-        opacity: 0;
-      }
+      0% { transform: translate3d(0, 0, 0) scale(0.5); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { transform: translate3d(0, -120vh, 0) scale(1.5); opacity: 0; }
     }
 
-    /* NAVIGASI TOMBOL - DIPERBARUI */
+    /* NAVIGASI TOMBOL */
     .btn-nav-arrow {
       position: fixed;
-      bottom: 20px; /* Di ujung bawah */
-      background: none; /* Tanpa latar belakang */
-      border: none; /* Tanpa bingkai */
+      bottom: 20px; 
+      background: none; 
+      border: none; 
       color: #d4af37;
-      font-size: 5rem; /* Ukuran panah besar */
+      font-size: 5rem; 
       font-weight: bold;
       cursor: pointer;
       display: flex;
@@ -542,21 +553,16 @@
       transition: all 0.3s ease;
       user-select: none;
       z-index: 100;
-      opacity: 0.15; /* Sangat samar dan pudar */
+      opacity: 0.15; 
       padding: 10px;
     }
 
-    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { 
-      left: 20px; /* Di ujung kiri bawah */
-    }
-    
-    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { 
-      right: 20px; /* Di ujung kanan bawah */
-    }
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 20px; }
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 20px; }
 
     .btn-nav-arrow:hover {
       color: #f3e5ab;
-      opacity: 0.6; /* Sedikit lebih terlihat saat hover */
+      opacity: 0.6; 
       transform: scale(1.1);
       text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
     }
@@ -574,7 +580,8 @@
       body { overflow-y: auto; }
       #main-gallery-content { padding: 20px; height: auto; }
       .main-container { height: auto; padding-bottom: 100px; }
-      .purnawiyata-card { height: auto; }
+      .purnawiyata-card { height: auto; padding: 10px; }
+      .purnawiyata-card::after { top: 6px; left: 6px; right: 6px; bottom: 6px; }
       .card-content-wrapper { grid-template-columns: 100%; }
       .column-left { width: 100%; padding: 30px; }
       .photo-frame { height: 350px; max-width: 280px; }
@@ -589,7 +596,6 @@
       .footer-title span { font-size: 1.5rem; }
       .column-right { height: 350px; width: 100%; border-left: none; border-top: 1px solid rgba(212, 175, 55, 0.2); }
       
-      /* Tombol navigasi di mobile tetap di bawah, tapi mungkin sedikit disesuaikan ukurannya */
       .btn-nav-arrow { font-size: 3.5rem; bottom: 10px; }
       .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 10px; }
       .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 10px; }
