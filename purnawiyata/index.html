@@ -6,7 +6,7 @@
   <title>Purnawiyata Ke-III SMP Islam Az-Zahro</title>
   <style>
     /* ==========================================================================
-       STYLE UMUM & STRUKTUR HALAMAN
+       STYLE UMUM & STRUKTUR HALAMAN (OPTIMALISASI LAYAR BESAR / 4K)
        ========================================================================== */
     * {
       margin: 0;
@@ -23,18 +23,17 @@
       position: relative;
     }
 
-    /* Tampilan Konten Utama (Prosesi Siswa) disembunyikan di awal */
     #main-gallery-content {
       display: none;
       justify-content: center;
       align-items: center;
       width: 100%;
-      min-height: 100vh;
-      padding: 20px;
+      height: 100vh;
+      padding: 40px;
     }
 
     /* ==========================================================================
-       STYLE DARI FILE: opening.html
+       STYLE OPENING
        ========================================================================== */
     #opening-container {
       position: fixed;
@@ -65,10 +64,8 @@
     }
 
     #video-bg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
       display: none;
       cursor: pointer;
@@ -91,51 +88,50 @@
     }
 
     .card-start {
-      border: 2px solid #d4af37;
-      padding: 40px;
+      border: 3px solid #d4af37;
+      padding: 50px 80px;
       background: rgba(26, 21, 14, 0.95);
-      border-radius: 15px;
-      box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+      border-radius: 20px;
+      box-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
     }
 
     .card-start h1 {
       color: #d4af37;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
-      font-size: 2rem;
+      margin-bottom: 15px;
+      letter-spacing: 3px;
+      font-size: 3rem;
     }
 
     .card-start p {
       color: #e0e0e0;
-      margin-bottom: 25px;
-      font-size: 1.1rem;
+      margin-bottom: 35px;
+      font-size: 1.5rem;
     }
 
     .btn-gold {
-      padding: 15px 40px;
+      padding: 20px 50px;
       background: linear-gradient(45deg, #a67c1e, #f3e5ab, #a67c1e);
       border: none;
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       cursor: pointer;
-      border-radius: 30px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      border-radius: 40px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
       color: #0f0c08;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .btn-gold:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(243, 229, 171, 0.6);
+      box-shadow: 0 0 30px rgba(243, 229, 171, 0.6);
     }
 
-    /* Perbaikan Tombol Panah: Hanya panah saja yang samar tanpa lingkaran */
     .btn-skip {
       position: fixed;
-      bottom: 40px;
-      right: 40px;
+      bottom: 50px;
+      right: 50px;
       background: none;
       border: none;
       color: #f3e5ab;
@@ -144,53 +140,51 @@
       justify-content: center;
       align-items: center;
       z-index: 20;
-      font-size: 3.5rem;
+      font-size: 5rem;
       font-weight: bold;
-      opacity: 0.35; /* Membuat panah menjadi samar secara default */
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+      opacity: 0.4;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
       transition: all 0.3s ease;
       user-select: none;
     }
 
     .btn-skip:hover {
-      opacity: 0.95; /* Menjadi jelas saat disentuh mouse */
+      opacity: 0.95;
       color: #ffffff;
       transform: scale(1.15) translateX(5px);
-      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+      text-shadow: 0 0 25px rgba(212, 175, 55, 0.8);
     }
 
     /* ==========================================================================
-       STYLE DARI FILE: prosesi siswa.html
+       STYLE PROSESI SISWA (SISTEM STABILISASI IFP 4K)
        ========================================================================== */
     .particle {
       position: absolute;
-      background: radial-gradient(circle, rgba(212,175,55,0.8) 0%, rgba(212,175,55,0) 70%);
+      background: radial-gradient(circle, rgba(212,175,55,0.6) 0%, rgba(212,175,55,0) 70%);
       border-radius: 50%;
       pointer-events: none;
       animation: floatParticles linear infinite;
       z-index: 1;
-      /* Optimasi IFP: Paksa render GPU untuk menghindari kedipan */
-      transform: translateZ(0);
+      transform: translate3d(0, 0, 0);
       will-change: transform, opacity;
     }
 
     @keyframes floatParticles {
-      0% { transform: translateY(100vh) scale(0.3) translateZ(0); opacity: 0; }
-      50% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) scale(1.2) translateZ(0); opacity: 0; }
+      0% { transform: translate3d(0, 105vh, 0) scale(0.3); opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { transform: translate3d(0, -10vh, 0) scale(1.2); opacity: 0; }
     }
 
     .music-control-container {
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: rgba(15, 12, 8, 0.6);
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      width: 90%;
-      margin-right: 25px;
+      gap: 15px;
+      background: rgba(15, 12, 8, 0.7);
+      padding: 10px 20px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      width: 100%;
       justify-content: center;
     }
 
@@ -203,9 +197,14 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      width: 28px;
-      height: 28px;
+      width: 36px;
+      height: 36px;
       flex-shrink: 0;
+    }
+
+    .btn-music-toggle svg {
+      width: 24px;
+      height: 24px;
     }
 
     .btn-music-toggle:hover {
@@ -217,18 +216,18 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 1px; 
+      gap: 2px; 
       flex: 1;
-      height: 24px; 
+      height: 30px; 
       pointer-events: none;
     }
 
     .visualizer-bar {
       flex: 1;
-      max-width: 2px; 
+      max-width: 3px; 
       background: linear-gradient(to top, #a67c1e, #f3e5ab, #ffffff);
-      height: 2px;
-      border-radius: 1px 1px 0 0;
+      height: 3px;
+      border-radius: 2px 2px 0 0;
       transition: height 0.04s ease;
       opacity: 0.85;
       will-change: height;
@@ -240,9 +239,8 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 1600px; 
-      min-height: 90vh; 
-      margin: auto 0;
+      max-width: 2400px; /* Diperlebar agar proporsional di layar 4K */
+      height: 85vh; 
       z-index: 10;
       position: relative;
     }
@@ -250,63 +248,61 @@
     .purnawiyata-card {
       display: flex;
       width: 100%;
-      height: 100%; 
-      min-height: 650px;
+      height: 100%;
       background: linear-gradient(135deg, #16120b 0%, #282012 50%, #16120b 100%);
-      border-radius: 25px;
+      border-radius: 30px;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
       opacity: 0;
-      transform: translateY(30px) translateZ(0);
+      transform: translate3d(0, 30px, 0);
       will-change: transform, opacity;
     }
 
+    /* Mengganti animasi conic-gradient berputar yang memicu lagging/glitch di resolusi 4K */
     .purnawiyata-card::before {
       content: '';
       position: absolute;
-      top: -50%; left: -50%; width: 200%; height: 200%;
-      background: conic-gradient(transparent, transparent, transparent, #d4af37, #f3e5ab, #d4af37);
-      animation: borderRotate 6s linear infinite;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border: 4px solid #d4af37;
+      border-radius: 30px;
+      box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3), 0 0 30px rgba(212, 175, 55, 0.4);
       z-index: 1;
-      will-change: transform;
+      pointer-events: none;
     }
 
     .card-content-wrapper {
       display: flex;
-      width: calc(100% - 6px);
-      height: calc(100% - 6px);
-      margin: 3px;
+      width: 100%;
+      height: 100%;
       background: inherit;
-      border-radius: 22px;
       overflow: hidden;
       z-index: 2;
     }
 
-    @keyframes borderRotate { 100% { transform: rotate(360deg); } }
-
     .column-left {
-      width: 340px;
+      width: 450px; /* Ukuran disesuaikan untuk kesimbangan 4K */
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       background: linear-gradient(45deg, #d4af37, #aa7c11, #f3e5ab);
-      padding: 40px;
+      padding: 50px 40px;
       position: relative;
-      clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
-      gap: 15px;
+      /* Dihapus clip-path miring untuk menstabilkan render outline gambar pada IFP */
+      gap: 25px;
+      box-shadow: 5px 0 25px rgba(0,0,0,0.5);
     }
 
     .photo-frame {
       width: 100%;
-      height: 380px; 
-      border: 6px solid #fff;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-      border-radius: 12px;
+      height: 70%; /* Menggunakan persentase agar dinamis */
+      border: 8px solid #fff;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+      border-radius: 16px;
       overflow: hidden;
-      background: #333;
+      background: #221c13;
       position: relative;
     }
 
@@ -315,77 +311,77 @@
       height: 100%;
       object-fit: cover;
       opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      transition: opacity 0.4s ease-in-out;
     }
 
     .photo-frame::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 35%;
-      background: linear-gradient(to top, rgba(15, 12, 8, 0.9) 0%, rgba(0,0,0,0) 100%);
+      bottom: 0; left: 0; width: 100%; height: 30%;
+      background: linear-gradient(to top, rgba(15, 12, 8, 0.8) 0%, transparent 100%);
       pointer-events: none;
     }
 
     .absen-label {
-      background: rgba(15, 12, 8, 0.85);
+      background: rgba(15, 12, 8, 0.9);
       color: #f3e5ab;
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 0.95rem;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-size: 1.2rem;
       font-weight: 700;
-      letter-spacing: 1px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      letter-spacing: 1.5px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
       text-align: center;
-      width: 90%;
-      margin-right: 25px; 
+      width: 100%;
       text-transform: uppercase;
     }
     .absen-label span { color: #ffffff; }
 
     .column-center {
       flex: 1;
-      padding: 40px 50px;
+      padding: 50px 60px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       color: #ffffff;
       overflow: hidden;
+      background: rgba(15, 12, 8, 0.2);
     }
 
     .brand-header {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
       flex-shrink: 0;
     }
 
     .logo-wrapper {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 25px;
     }
 
     .school-logo {
-      width: 75px;
+      width: 110px;
       height: auto;
       object-fit: contain;
-      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.6));
     }
 
     .logo-ppss {
-      width: 175px;
+      width: 240px;
       height: auto;
       object-fit: contain;
-      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
+      filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.6));
     }
 
     .header-title {
-      font-size: 2rem;
+      font-size: 3rem;
       font-weight: 900;
-      letter-spacing: 3px;
+      letter-spacing: 5px;
       color: #ffffff;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
     }
 
     .identity-box {
@@ -393,149 +389,124 @@
       display: flex;
       flex-direction: column;
       justify-content: center; 
-      margin: 20px 0;
+      margin: 30px 0;
       position: relative; 
-      perspective: 1000px; 
     }
 
+    /* Struktur Sorotan Lampu Panggung disederhanakan tanpa 3D Blend Mode berat untuk mencegah flickering */
     .spotlight-container {
       position: absolute;
-      top: 0; left: -20px;
-      width: calc(100% + 40px);
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       pointer-events: none;
       overflow: hidden;
       z-index: 0;
-      -webkit-mask-image: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.3) 80%, transparent 100%),
-                          linear-gradient(to right, transparent 0%, #fff 15%, #fff 85%, transparent 100%);
-      mask-image: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.3) 80%, transparent 100%),
-                  linear-gradient(to right, transparent 0%, #fff 15%, #fff 85%, transparent 100%);
-      -webkit-mask-composite: source-in;
-      mask-composite: intersect;
     }
 
     .spotlight-container::before {
       content: '';
       position: absolute;
-      top: 0; left: 5%; width: 90%; height: 6px;
-      background: linear-gradient(to right, #1f1a12, #554422, #a67c1e, #554422, #1f1a12);
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 2px 12px rgba(212, 175, 55, 0.4), 0 0 20px rgba(0, 0, 0, 0.9);
+      top: 0; left: 0; width: 100%; height: 4px;
+      background: linear-gradient(to right, transparent, #a67c1e, #f3e5ab, #a67c1e, transparent);
       z-index: 5;
     }
 
-    .spotlight-source {
-      position: absolute;
-      top: 4px;
-      width: 42px; height: 12px;
-      background: linear-gradient(to bottom, #ffffff, #f3e5ab);
-      border-radius: 50%;
-      box-shadow: 0 0 25px 12px #f3e5ab, 0 0 50px 25px rgba(212, 175, 55, 0.4);
-      z-index: 4;
-      filter: blur(0.5px);
-    }
-    .source-1 { left: 12%; }
-    .source-2 { left: 37%; }
-    .source-3 { right: 37%; }
-    .source-4 { right: 12%; }
-
     .spotlight {
       position: absolute;
-      top: 6px;
-      width: 350px; height: 130%;
-      background: radial-gradient(ellipse at top, rgba(255, 246, 212, 0.22) 0%, rgba(212, 175, 55, 0.05) 35%, rgba(212, 175, 55, 0.01) 55%, transparent 75%);
-      clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+      top: 0; width: 450px; height: 150%;
+      background: radial-gradient(ellipse at top, rgba(255, 246, 212, 0.15) 0%, rgba(212, 175, 55, 0.02) 50%, transparent 75%);
+      clip-path: polygon(48% 0, 52% 0, 100% 100%, 0 100%);
       transform-origin: top center;
-      /* Optimasi IFP: Pengurangan radius blur agar transisi swing tidak patah-patah */
-      filter: blur(6px); 
-      mix-blend-mode: screen; 
-      transform: translateZ(0);
+      filter: blur(15px); /* Diperhalus untuk resolusi 4K */
+      transform: translate3d(0,0,0);
       will-change: transform;
     }
 
-    .spotlight-1 { left: -8%; animation: stageSwing1 8s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate; }
-    .spotlight-2 { left: 22%; animation: stageSwing2 11s cubic-bezier(0.39, 0.575, 0.565, 1) infinite alternate; }
-    .spotlight-3 { right: 22%; animation: stageSwing3 9s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate; }
-    .spotlight-4 { right: -8%; animation: stageSwing4 7s cubic-bezier(0.39, 0.575, 0.565, 1) infinite alternate; }
+    .spotlight-1 { left: -10%; animation: stageSwing1 10s ease-in-out infinite alternate; }
+    .spotlight-2 { left: 25%; animation: stageSwing2 12s ease-in-out infinite alternate; }
+    .spotlight-3 { right: 25%; animation: stageSwing3 11s ease-in-out infinite alternate; }
+    .spotlight-4 { right: -10%; animation: stageSwing4 9s ease-in-out infinite alternate; }
 
+    /* Modifikasi Animasi 2D standar untuk kestabilan Framerate IFP */
     @keyframes stageSwing1 {
-      0% { transform: rotateX(15deg) rotateZ(-20deg) scaleX(0.85) translateZ(0); opacity: 0.4; }
-      100% { transform: rotateX(25deg) rotateZ(6deg) scaleX(1.15) translateZ(0); opacity: 0.85; }
+      0% { transform: translate3d(0,0,0) rotate(-15deg); opacity: 0.3; }
+      100% { transform: translate3d(0,0,0) rotate(5deg); opacity: 0.7; }
     }
     @keyframes stageSwing2 {
-      0% { transform: rotateX(20deg) rotateZ(10deg) scaleX(1.15) translateZ(0); opacity: 0.75; }
-      100% { transform: rotateX(10deg) rotateZ(-12deg) scaleX(0.75) translateZ(0); opacity: 0.35; }
+      0% { transform: translate3d(0,0,0) rotate(8deg); opacity: 0.6; }
+      100% { transform: translate3d(0,0,0) rotate(-10deg); opacity: 0.3; }
     }
     @keyframes stageSwing3 {
-      0% { transform: rotateX(10deg) rotateZ(-12deg) scaleX(0.75) translateZ(0); opacity: 0.35; }
-      100% { transform: rotateX(25deg) rotateZ(14deg) scaleX(1.15) translateZ(0); opacity: 0.85; }
+      0% { transform: translate3d(0,0,0) rotate(-8deg); opacity: 0.3; }
+      100% { transform: translate3d(0,0,0) rotate(12deg); opacity: 0.7; }
     }
     @keyframes stageSwing4 {
-      0% { transform: rotateX(25deg) rotateZ(16deg) scaleX(1.05) translateZ(0); opacity: 0.85; }
-      100% { transform: rotateX(15deg) rotateZ(-8deg) scaleX(0.85) translateZ(0); opacity: 0.4; }
+      0% { transform: translate3d(0,0,0) rotate(12deg); opacity: 0.7; }
+      100% { transform: translate3d(0,0,0) rotate(-5deg); opacity: 0.3; }
     }
 
     .spotlight-dust {
       position: absolute;
       background: white;
       border-radius: 50%;
-      box-shadow: 0 0 6px 2px #fff;
+      box-shadow: 0 0 8px 3px #fff;
       pointer-events: none;
       animation: ambientDust linear infinite;
       opacity: 0;
-      transform: translateZ(0);
+      transform: translate3d(0,0,0);
       will-change: transform, opacity;
     }
     @keyframes ambientDust {
-      0% { transform: translateY(350px) translateX(0) scale(0.2) translateZ(0); opacity: 0; }
-      20% { opacity: 0.5; }
-      80% { opacity: 0.3; }
-      100% { transform: translateY(-30px) translateX(30px) scale(0.9) translateZ(0); opacity: 0; }
+      0% { transform: translate3d(0, 400px, 0) scale(0.3); opacity: 0; }
+      20% { opacity: 0.6; }
+      80% { opacity: 0.4; }
+      100% { transform: translate3d(50px, -20px, 0) scale(1); opacity: 0; }
     }
 
-    /* EFEK TRANSISI BARU: LANGSUNG MUNCUL TANPA ANIMASI TULISAN */
+    /* KONTROL TRANSISI SMOOTH ANTI-GLITCH */
     .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container {
       position: relative;
       z-index: 2;
+      opacity: 0;
+      transform: translate3d(0, 15px, 0);
+      transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform, opacity;
+    }
+
+    .fade-in-visible {
       opacity: 1;
-      transform: none;
-      will-change: auto;
+      transform: translate3d(0, 0, 0);
     }
 
     .name-container {
-      min-height: 110px;
-      height: auto;
+      min-height: 140px;
       display: flex;
       align-items: center;
-      position: relative;
-      padding-bottom: 15px;
+      padding-bottom: 20px;
     }
 
     #siswa-nama {
-      font-size: 2.8rem;
+      font-size: 4.5rem; /* Pembesaran Skala Font Khusus Display Besar */
       font-weight: 800;
       color: #fff;
-      letter-spacing: 0.5px;
-      word-spacing: 4px;
+      letter-spacing: 1px;
       text-transform: uppercase;
-      padding-bottom: 8px;
-      line-height: 1.4;
+      padding-bottom: 12px;
+      line-height: 1.3;
       white-space: pre-wrap;
       word-wrap: break-word;
       width: 100%;
       position: relative;
-      display: inline-block;
     }
 
     #siswa-nama::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 3px;
+      bottom: 0; left: 0; width: 100%; height: 4px;
       background: linear-gradient(to right, #a67c1e 0%, #f3e5ab 25%, #d4af37 50%, #f3e5ab 75%, #a67c1e 100%);
       background-size: 200% auto;
-      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.8), 0 0 4px rgba(243, 229, 171, 0.5);
+      box-shadow: 0 3px 15px rgba(212, 175, 55, 0.8);
       border-radius: 2px;
-      animation: goldLineFlow 3s linear infinite;
+      animation: goldLineFlow 4s linear infinite;
     }
 
     @keyframes goldLineFlow {
@@ -543,58 +514,53 @@
       100% { background-position: -200% center; }
     }
 
-    /* Efek kursor ketik dinonaktifkan karena telah diganti fade-in */
-    .typing-cursor::after {
-      display: none;
-    }
+    .ttl-container { height: 45px; display: flex; align-items: center; margin-top: 15px; }
+    #siswa-ttl { font-size: 2.2rem; color: #e0e0e0; font-weight: 500; }
 
-    .ttl-container { height: 35px; display: flex; align-items: center; margin-top: 10px; }
-    #siswa-ttl { font-size: 1.4rem; color: #e0e0e0; font-weight: 500; }
+    .ortu-container { height: 45px; display: flex; align-items: center; }
+    .sub-detail { font-size: 2.3rem; font-style: italic; color: #f3e5ab; }
 
-    .ortu-container { height: 35px; display: flex; align-items: center; }
-    .sub-detail { font-size: 1.5rem; font-style: italic; color: #f3e5ab; }
-
-    .nis-container { height: 40px; display: flex; align-items: center; }
+    .nis-container { height: 55px; display: flex; align-items: center; margin-top: 10px; }
     
     .nis-box { 
-      font-size: 1.2rem; 
+      font-size: 1.8rem; 
       color: #ffffff !important; 
       font-weight: 700; 
-      letter-spacing: 0.5px;
-      text-shadow: 0px 2px 4px rgba(0,0,0,0.8);
+      letter-spacing: 1px;
+      text-shadow: 0px 2px 5px rgba(0,0,0,0.8);
       background: rgba(255, 255, 255, 0.08);
-      padding: 4px 14px;
-      border-radius: 4px;
-      border: 1px solid rgba(212, 175, 55, 0.2);
+      padding: 6px 20px;
+      border-radius: 6px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
     }
 
-    .wish-container { height: 65px; display: flex; align-items: center; margin-top: 15px; }
+    .wish-container { height: 90px; display: flex; align-items: center; margin-top: 25px; }
     
     .wish-box {
-      font-size: 1.3rem;
+      font-size: 2rem;
       color: #ffffff;
       background: rgba(212, 175, 55, 0.15);
-      padding: 10px 22px;
-      border-left: 4px solid #d4af37;
-      border-radius: 0 5px 5px 0;
+      padding: 15px 30px;
+      border-left: 6px solid #d4af37;
+      border-radius: 0 8px 8px 0;
       width: auto;
     }
     .wish-box span { color: #f3e5ab; font-weight: bold; }
 
     .footer-title {
-      font-size: 1.45rem;
+      font-size: 2rem;
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       color: #ffffff;
-      line-height: 1.3;
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
-      padding-top: 15px;
+      line-height: 1.4;
+      border-top: 1px solid rgba(212, 175, 55, 0.3);
+      padding-top: 20px;
       flex-shrink: 0;
     }
-    .footer-title span { color: #d4af37; font-size: 1.65rem; font-weight: 800; }
+    .footer-title span { color: #d4af37; font-size: 2.4rem; font-weight: 800; }
 
     .column-right {
-      width: 480px;
+      width: 600px; /* Diperlebar proporsional */
       flex-shrink: 0;
       position: relative;
       overflow: hidden; 
@@ -602,12 +568,13 @@
       align-items: center;
       justify-content: center;
       background: #110d08;
+      border-left: 1px solid rgba(212, 175, 55, 0.2);
     }
 
     .column-right::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 35%;
+      bottom: 0; left: 0; width: 100%; height: 30%;
       background: linear-gradient(to top, #16120b 10%, rgba(22, 18, 11, 0.6) 50%, transparent 100%);
       z-index: 10;
       pointer-events: none;
@@ -617,19 +584,17 @@
       position: relative;
       width: 100%;
       height: 100%;
-      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
-      mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 8%, rgba(0,0,0,1) 35%, rgba(0,0,0,1) 100%);
     }
 
     .img-base-bw {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: grayscale(100%) brightness(0.7) contrast(1.1);
+      filter: grayscale(100%) brightness(0.6) contrast(1.1);
       position: absolute;
       top: 0; left: 0;
       opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      transition: opacity 0.4s ease-in-out;
       z-index: 2;
     }
 
@@ -641,114 +606,100 @@
       top: 0; left: 0;
       z-index: 3;
       opacity: 0;
-      transition: opacity 0.6s ease;
+      transition: opacity 0.8s ease;
     }
 
     .reveal-active .img-reveal-color { opacity: 1; }
 
     .cc-particle {
       position: absolute;
-      background: radial-gradient(circle, rgba(255, 232, 156, 0.95) 0%, rgba(212, 175, 55, 0.5) 40%, rgba(212, 175, 55, 0) 70%);
+      background: radial-gradient(circle, rgba(255, 232, 156, 0.9) 0%, rgba(212, 175, 55, 0) 70%);
       border-radius: 50%;
       pointer-events: none;
       z-index: 6; 
       animation: floatUpCC linear infinite;
-      filter: drop-shadow(0 0 4px rgba(243, 229, 171, 0.6));
       opacity: 0;
-      transition: opacity 0.3s ease;
-      transform: translateZ(0);
+      transition: opacity 0.4s ease;
+      transform: translate3d(0,0,0);
       will-change: transform, opacity;
     }
 
     .show-particles .cc-particle { opacity: 1; }
 
     @keyframes floatUpCC {
-      0% { top: 105%; transform: scale(0.3) translateX(0) translateZ(0); opacity: 0; }
+      0% { transform: translate3d(0, 105%, 0) scale(0.3); opacity: 0; }
       15% { opacity: 0.8; }
-      50% { transform: scale(0.7) translateX(15px) translateZ(0); }
+      50% { transform: translate3d(20px, 50%, 0) scale(0.7); }
       85% { opacity: 0.6; }
-      100% { top: -10%; transform: scale(1.2) translateX(-15px) translateZ(0); opacity: 0; }
+      100% { transform: translate3d(-20px, -10%, 0) scale(1.2); opacity: 0; }
     }
 
-    .nav-container { display: contents; }
-
-    /* Desain Tombol Navigasi Bawah Galeri Utama */
+    /* NAVIGASI TOMBOL SAMPING PANAH BESAR */
     .btn-nav-arrow {
       position: fixed;
-      bottom: 25px;
-      background: none;
-      border: none;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 12, 8, 0.4);
+      border: 2px solid rgba(212, 175, 55, 0.3);
+      border-radius: 50%;
       color: #d4af37;
-      font-size: 3.5rem;
+      font-size: 4rem;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
+      width: 90px;
+      height: 90px;
       transition: all 0.3s ease;
       user-select: none;
       z-index: 100;
-      opacity: 0.35;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-      padding: 10px 20px;
+      opacity: 0.5;
+      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.9);
     }
 
-    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 25px; }
-    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 25px; }
+    .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 40px; padding-right: 8px;}
+    .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 40px; padding-left: 8px;}
 
     .btn-nav-arrow:hover {
       color: #f3e5ab;
-      opacity: 0.9;
-      transform: scale(1.1);
-      text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+      opacity: 1;
+      background: rgba(15, 12, 8, 0.8);
+      border-color: #d4af37;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
     }
 
     .purnawiyata-card.active {
       animation: cardEntrance 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
     @keyframes cardEntrance {
-      0% { opacity: 0; transform: scale(0.97) translateY(40px) translateZ(0); }
-      100% { opacity: 1; transform: scale(1) translateY(0) translateZ(0); }
+      0% { opacity: 0; transform: scale(0.98) translate3d(0, 30px, 0); }
+      100% { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
     }
 
-    /* Responsif Layar Hp / Mobile */
-    @media (max-width: 950px) {
+    /* RESPONSIVE LAYOUT HP */
+    @media (max-width: 1200px) {
       body { overflow-y: auto; }
-      #main-gallery-content { padding-bottom: 80px; }
-      .main-container { height: auto; padding-bottom: 80px; margin: 0; }
-      .purnawiyata-card { height: auto; min-height: initial; }
+      #main-gallery-content { padding: 20px; height: auto; }
+      .main-container { height: auto; padding-bottom: 100px; }
+      .purnawiyata-card { height: auto; }
       .card-content-wrapper { flex-direction: column; }
-      .column-left { width: 100%; clip-path: none; padding: 30px; }
-      .photo-frame { height: 320px; max-width: 260px; margin: 0 auto; }
-      .absen-label { margin-right: 0; width: 100%; max-width: 260px; }
-      .music-control-container { margin-right: 0; width: 100%; max-width: 260px; }
-      
-      .column-center { 
-        text-align: center; 
-        padding: 30px 20px 40px 20px; 
-        align-items: center; 
-      }
-      
+      .column-left { width: 100%; padding: 40px; }
+      .photo-frame { height: 400px; max-width: 320px; }
+      .column-center { padding: 40px 30px; text-align: center; align-items: center; }
       .logo-wrapper { justify-content: center; }
-      .name-container, .ttl-container, .ortu-container, .nis-container, .wish-container { 
-        height: auto; 
-        min-height: inherit;
-        justify-content: center; 
-      }
-      
-      .name-container { min-height: 70px; margin-bottom: 10px; }
-      #siswa-nama { font-size: 1.8rem; }
-      
-      .column-right { height: 320px; width: 100%; }
-      .image-reveal-wrapper {
-        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
-        mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
-      }
-      
-      .btn-skip { bottom: 20px; right: 20px; font-size: 2.8rem; }
-      .btn-nav-arrow { bottom: 15px; font-size: 2.8rem; }
-      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 15px; }
-      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 15px; }
+      #siswa-nama { font-size: 2.8rem; }
+      #siswa-nama::after { height: 3px; }
+      #siswa-ttl { font-size: 1.6rem; }
+      .sub-detail { font-size: 1.7rem; }
+      .nis-box { font-size: 1.3rem; }
+      .wish-box { font-size: 1.4rem; }
+      .footer-title { font-size: 1.5rem; }
+      .footer-title span { font-size: 1.8rem; }
+      .column-right { height: 400px; width: 100%; border-left: none; border-top: 1px solid rgba(212, 175, 55, 0.2); }
+      .btn-nav-arrow { width: 70px; height: 70px; font-size: 2.5rem; top: auto; bottom: 20px; transform: none; }
+      .btn-nav-arrow[aria-label="Siswa Sebelumnya"] { left: 20px; }
+      .btn-nav-arrow[aria-label="Siswa Selanjutnya"] { right: 20px; }
     }
   </style>
 </head>
@@ -777,7 +728,6 @@
     <button class="btn-skip" id="btn-skip" onclick="menujuGaleriUtama()" title="Masuk Ke Galeri Siswa">❯</button>
   </div>
 
-
   <audio id="bg-music" loop preload="auto" crossorigin="anonymous">
     <source src="https://azzahrolocare.github.io/data/purnawiyata/graduation-anthem.mp3" type="audio/mpeg">
   </audio>
@@ -799,13 +749,11 @@
 
             <div class="music-control-container">
               <button class="btn-music-toggle" onclick="toggleMusic()" id="music-btn" aria-label="Pause Musik">
-                <svg id="icon-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
-                <svg id="icon-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h4z"/></svg>
+                <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
               </button>
 
               <div class="audio-visualizer" id="visualizer">
-                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
-                <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
                 <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
                 <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
                 <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
@@ -825,11 +773,6 @@
             
             <div class="identity-box">
               <div class="spotlight-container" id="identity-spotlight-zone">
-                <div class="spotlight-source source-1"></div>
-                <div class="spotlight-source source-2"></div>
-                <div class="spotlight-source source-3"></div>
-                <div class="spotlight-source source-4"></div>
-                
                 <div class="spotlight spotlight-1"></div>
                 <div class="spotlight spotlight-2"></div>
                 <div class="spotlight spotlight-3"></div>
@@ -862,7 +805,7 @@
             <footer class="footer-title">
               PURNAWIYATA KE-III<br>
               <span>SMP ISLAM AZ-ZAHRO</span><br>
-              <small style="font-size: 1.1rem; letter-spacing: 1px; color: #e0e0e0; font-weight: 500; display: inline-block; margin-top: 4px;">Tahun Pelajaran 2025/2026</small>
+              <small style="font-size: 1.4rem; letter-spacing: 1px; color: #e0e0e0; font-weight: 500; display: inline-block; margin-top: 6px;">Tahun Pelajaran 2025/2026</small>
             </footer>
           </div>
 
@@ -884,7 +827,6 @@
   </div>
 
   <script>
-    // Selektor Opening
     const video = document.getElementById('video-bg');
     const startInterface = document.getElementById('start-interface');
     const overlayDark = document.getElementById('overlay-dark');
@@ -894,7 +836,6 @@
     const openingContainer = document.getElementById('opening-container');
     const mainGalleryContent = document.getElementById('main-gallery-content');
 
-    // Variabel Global Galeri Siswa
     let studentsData = [];
     let currentIndex = 0;
     let fadeTimeouts = []; 
@@ -903,7 +844,7 @@
     let audioCtx, analyser, bufferLength, dataArray;
     let visualizerAnimationId;
 
-    /* --- SISTEM PARTIKEL GOLD (OPENING) --- */
+    /* --- PARITKEL GOLD OPENING (AKSELERASI GPU) --- */
     let particlesArray = [];
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -916,8 +857,8 @@
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.size = Math.random() * 3 + 1;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * -1 - 0.5; 
+        this.speedX = Math.random() * 0.4 - 0.2;
+        this.speedY = Math.random() * -1 - 0.4; 
         this.alpha = Math.random() * 0.5 + 0.3;
       }
       update() {
@@ -934,8 +875,6 @@
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = '#d4af37';
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = '#f3e5ab';
         ctx.fill();
         ctx.restore();
       }
@@ -944,8 +883,8 @@
     function initParticles() {
       resizeCanvas();
       particlesArray = [];
-      // Optimasi IFP: Dibatasi 45 partikel di halaman awal agar meringankan beban render
-      for (let i = 0; i < 45; i++) {
+      // Mengurangi total partikel di resolusi 4K agar rendering awal sangat enteng
+      for (let i = 0; i < 35; i++) {
         particlesArray.push(new Particle());
       }
     }
@@ -959,7 +898,6 @@
       requestAnimationFrame(animateParticles);
     }
 
-    // Fungsi memutar video pembuka pertama kali
     function mulaiVideoSinematik() {
       startInterface.style.display = 'none';
       video.style.display = 'block';
@@ -970,7 +908,6 @@
       initParticles();
       animateParticles();
 
-      // Otomatis Layar Penuh
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch(err => console.log(err));
       }
@@ -996,18 +933,15 @@
       }
     }
 
-    /* --- TRANSISI UTAMA: DARI OPENING MENUJU PROSESI SISWA --- */
     function menujuGaleriUtama() {
       video.pause();
       openingContainer.style.display = 'none';
       mainGalleryContent.style.display = 'flex';
 
-      // Jalankan inisialisasi visual panggung
       createGlobalParticles();
       createSpotlightDust(); 
       createCitaCitaParticles(); 
       
-      // Muat Data Siswa & Putar Musik Utama
       loadStudentsData();
       initVisualizer();
 
@@ -1016,25 +950,26 @@
       }
 
       bgMusic.play().catch(error => {
-        console.log("Musik tertahan sistem kebijakan browser.", error);
+        console.log("Musik tertahan oleh browser policy.", error);
       });
     }
 
-    /* --- SISTEM PANGGUNG GALERI UTAMA --- */
     function padZero(num) {
       return num < 10 ? '0' + num : num;
     }
 
-    // FUNGSI PEMICU STRUKTUR ANTRIAN PENAMPAKAN TEKS SECARA BERTAHAP (DINONAKTIFKAN KARENA ANIMASI DIHILANGKAN)
     function sequentialFadeIn(containers) {
       containers.forEach((item) => {
-        if (item.callback) item.callback();
+        let timer = setTimeout(() => {
+          item.el.classList.add('fade-in-visible');
+          if (item.callback) item.callback();
+        }, item.delay);
+        fadeTimeouts.push(timer);
       });
     }
 
     function createGlobalParticles() {
-      // Optimasi IFP: Dikurangi menjadi 15 partikel mengambang agar tidak lag saat ganti slide
-      const particleCount = 15;
+      const particleCount = 12; // Diturunkan jumlahnya demi stabilitas IFP
       for (let i = 0; i < particleCount; i++) {
         let particle = document.createElement('div');
         particle.className = 'particle';
@@ -1042,7 +977,7 @@
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
         particle.style.left = Math.random() * 100 + 'vw';
-        let duration = Math.random() * 8 + 6;
+        let duration = Math.random() * 8 + 7;
         particle.style.animationDuration = duration + 's';
         let delay = Math.random() * 5;
         particle.style.animationDelay = delay + 's';
@@ -1052,8 +987,7 @@
 
     function createSpotlightDust() {
       const zone = document.getElementById('identity-spotlight-zone');
-      // Optimasi IFP: Debu panggung tengah dikurangi menjadi 6 objek saja
-      const dustCount = 6;
+      const dustCount = 5;
       for (let i = 0; i < dustCount; i++) {
         let dust = document.createElement('div');
         dust.className = 'spotlight-dust';
@@ -1061,7 +995,7 @@
         dust.style.width = size + 'px';
         dust.style.height = size + 'px';
         dust.style.left = (Math.random() * 80 + 10) + '%';
-        dust.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        dust.style.animationDuration = (Math.random() * 4 + 5) + 's';
         dust.style.animationDelay = '-' + (Math.random() * 5) + 's';
         zone.appendChild(dust);
       }
@@ -1069,8 +1003,7 @@
 
     function createCitaCitaParticles() {
       const ccContainer = document.getElementById('column-cc');
-      // Optimasi IFP: Partikel bagian kanan dikurangi menjadi 8 objek
-      const ccParticleCount = 8; 
+      const ccParticleCount = 6; 
       
       for (let i = 0; i < ccParticleCount; i++) {
         let p = document.createElement('div');
@@ -1079,7 +1012,7 @@
         p.style.width = size + 'px';
         p.style.height = size + 'px';
         p.style.left = Math.random() * 100 + '%';
-        let duration = Math.random() * 3 + 4;
+        let duration = Math.random() * 3 + 5;
         p.style.animationDuration = duration + 's';
         let delay = Math.random() * 6;
         p.style.animationDelay = '-' + delay + 's';
@@ -1095,7 +1028,7 @@
           renderStudent(0);
         }
       } catch (error) {
-        console.error("Gagal memuat file data-siswa.json:", error);
+        console.error("Gagal memuat berkas data-siswa.json:", error);
       }
     }
 
@@ -1128,6 +1061,12 @@
 
       card.classList.remove('active');
       ccContainer.classList.remove('reveal-active', 'show-particles');
+      
+      cNama.classList.remove('fade-in-visible');
+      cTtl.classList.remove('fade-in-visible');
+      cOrtu.classList.remove('fade-in-visible');
+      cNis.classList.remove('fade-in-visible');
+      cWish.classList.remove('fade-in-visible');
 
       void card.offsetWidth; 
       card.classList.add('active');
@@ -1146,12 +1085,10 @@
       elNisBox.textContent = `NIS: ${student.nis} | NISN: ${student.nisn}`;
       elCitaCita.innerText = student.cita_cita || "-";
 
-      // Gambar Profil Utama
       fotoElement.style.opacity = '0';
       fotoElement.src = student.foto_profil_url;
       fotoElement.onload = () => fotoElement.style.opacity = '1';
 
-      // Gambar Kolase Cita-cita Samping Kanan
       fotoBw.style.opacity = '0';
       const finalCCUrl = student.foto_cita_cita_url || student.foto_profil_url;
       
@@ -1159,17 +1096,19 @@
       fotoColor.src = finalCCUrl;
       fotoBw.onload = () => { fotoBw.style.opacity = '1'; };
 
-      // Langsung memicu munculnya gambar cita-cita berwarna karena teks sudah langsung muncul
-      ccContainer.classList.add('reveal-active');
-      ccContainer.classList.add('show-particles');
-
-      // Penampakan berurutan halus dinonaktifkan agar langsung muncul serentak
       sequentialFadeIn([
-        { el: cNama, delay: 0 },
-        { el: cTtl, delay: 0 },
-        { el: cOrtu, delay: 0 },
-        { el: cNis, delay: 0 },
-        { el: cWish, delay: 0 }
+        { el: cNama, delay: 100 },
+        { el: cTtl, delay: 300 },
+        { el: cOrtu, delay: 500 },
+        { el: cNis, delay: 700 },
+        { 
+          el: cWish, 
+          delay: 900, 
+          callback: () => {
+            ccContainer.classList.add('reveal-active');
+            ccContainer.classList.add('show-particles');
+          }
+        }
       ]);
     }
 
@@ -1211,7 +1150,7 @@
       const bars = document.querySelectorAll('.visualizer-bar');
       
       if (bgMusic.paused) {
-        bars.forEach(bar => { bar.style.height = '2px'; });
+        bars.forEach(bar => { bar.style.height = '3px'; });
         return;
       }
       
@@ -1220,7 +1159,7 @@
         let dataIndex = Math.floor(i * (bufferLength / bars.length));
         let value = dataArray[dataIndex];
         let percent = value / 255;
-        let height = (percent * 22) + 2; 
+        let height = (percent * 24) + 3; 
         bars[i].style.height = height + 'px';
       }
     }
@@ -1248,7 +1187,6 @@
       }
     }
 
-    // Navigasi Keyboard global (Mendukung Remote IFP / Presentasi)
     window.addEventListener('keydown', (event) => {
       if (openingContainer.style.display !== 'none') {
         if (startInterface.style.display === 'none') {
