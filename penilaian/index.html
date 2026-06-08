@@ -33,7 +33,7 @@
         }
     </script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
@@ -46,6 +46,37 @@
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
+
+    <div id="loginOverlay" class="fixed inset-0 bg-emerald-deep z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-gray-100 p-6 md:p-8 animate-in fade-in zoom-in-95 duration-200">
+            <div class="text-center mb-6">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-soft border border-emerald-light mb-4">
+                    <i data-lucide="lock" class="w-8 h-8 text-emerald-medium"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 font-serif-custom mb-1">Gerbang Autentikasi</h3>
+                <p class="text-xs text-gray-500">Silakan masukkan password dewan guru untuk mengakses Sistem Penilaian Az-Zahro</p>
+            </div>
+
+            <form id="formLogin" onsubmit="validasiPasswordSistem(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                        <i data-lucide="key-round" class="w-3.5 h-3.5 text-gray-400"></i> Password Akses
+                    </label>
+                    <input type="password" id="inputPasswordAkses" required placeholder="••••••••" 
+                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-center text-gray-900 font-bold focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none tracking-widest">
+                </div>
+
+                <div id="loginAlertBox" class="hidden p-3 rounded-xl border text-xs font-medium flex items-center gap-2 bg-red-50 text-red-700 border-red-100">
+                    <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0 text-red-600"></i>
+                    <div id="loginAlertMsg">Password salah!</div>
+                </div>
+
+                <button type="submit" id="btnSubmitLogin" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
+                    <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> Masuk ke Sistem
+                </button>
+            </form>
+        </div>
+    </div>
 
     <div>
         <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex flex-col justify-center items-center z-50">
@@ -227,7 +258,7 @@
                     { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
                     { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
                     { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
-                    { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
+                    { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, h: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
                     { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
                     { nama: "Rekap Kehadiran (S/I/A)", kkm: null, p: 34, k: 35 }
@@ -246,7 +277,7 @@
                     { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
                     { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
                     { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
-                    { nama: "Seni Budaya", kkm: 69, p: 16, h: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
+                    { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
                     { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
                     { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
@@ -306,11 +337,49 @@
 
         let dataSiswaAktif = []; 
 
+        // FUNGSI VALIDASI PASSWORD AKSES KE DATABASE (TAB LOGIN CELL B1)
+        async function validasiPasswordSistem(event) {
+            event.preventDefault();
+            
+            const inputPass = document.getElementById('inputPasswordAkses').value.trim();
+            const btnSubmit = document.getElementById('btnSubmitLogin');
+            const loginAlert = document.getElementById('loginAlertBox');
+            const loginAlertMsg = document.getElementById('loginAlertMsg');
+
+            if (!inputPass) return;
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Memverifikasi...`;
+            loginAlert.classList.add('hidden');
+            lucide.createIcons();
+
+            try {
+                const urlFetch = `${CONFIG_GAS_URL}?action=cekPassword&password=${encodeURIComponent(inputPass)}`;
+                const response = await fetch(urlFetch);
+                const result = await response.json();
+
+                if (result.status === "success" && result.valid === true) {
+                    document.getElementById('loginOverlay').classList.add('hidden');
+                    showAlert('success', 'Autentikasi berhasil. Selamat datang di portal penilaian.');
+                } else {
+                    loginAlert.classList.remove('hidden');
+                    loginAlertMsg.innerText = result.message || "Password yang Anda masukkan salah!";
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> Masuk ke Sistem`;
+                }
+            } catch (error) {
+                console.error(error);
+                loginAlert.classList.remove('hidden');
+                loginAlertMsg.innerText = "Gagal terhubung ke server. Periksa jaringan Anda.";
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> Masuk ke Sistem`;
+            }
+            lucide.createIcons();
+        }
+
         // MODIFIKASI: Fungsi pemicu gabungan untuk Fullscreen dan Update Pilihan Kelas
         function pemicuTingkatSekolah() {
-            // Jalankan Fullscreen terlebih dahulu
             aktifkanLayarPenuh();
-            // Jalankan update pilihan kelas seperti biasa
             updateKelas();
         }
 
@@ -406,11 +475,7 @@
                     }
                     
                     renderTabel(mapelInfo);
-                    
-                    // Notifikasi Dinamis Sesuai Permintaan
                     showAlert('success', `Berhasil memuat ${dataSiswaAktif.length} data siswa kelas ${kelas}.`);
-
-                    // Scroll halus ke target tabel input nilai
                     containerTabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
                 } else {
@@ -565,11 +630,8 @@
 
                 if (result.status === "success") {
                     showAlert('success', `Seluruh nilai ${mapelInfo.nama} kelas ${kelas} berhasil diperbarui.`);
-                    
-                    // Menampilkan Pop-Up Modal Sukses
                     successModalMsg.innerText = `Seluruh data penilaian mata pelajaran "${mapelInfo.nama}" untuk tingkat "${kelas}" telah aman dikirim dan sinkron ke database.`;
                     successModalOverlay.classList.remove('hidden');
-
                 } else {
                     showAlert('danger', `Gagal menyimpan data: ${result.message}`);
                 }
@@ -581,18 +643,15 @@
             }
         }
 
-        // TOMBOL CLOSE (X): Menutup modal saja agar guru bisa meneliti kembali halaman input nilai
         function tutupSuccessModalOnly() {
             successModalOverlay.classList.add('hidden');
         }
 
-        // TOMBOL LEWATI / SELESAI: Kembali ke halaman utama (reset dropdown & sembunyikan tabel)
         function resetHalamanKeAwal() {
             successModalOverlay.classList.add('hidden');
             containerTabel.classList.add('hidden');
             alertBox.classList.add('hidden');
             
-            // Reset Form Dropdown Input
             selectTingkat.value = "";
             selectKelas.innerHTML = '<option value="">-- Pilih Tingkat Dahulu --</option>';
             selectMapel.innerHTML = '<option value="">-- Pilih Kelas Dahulu --</option>';
@@ -601,7 +660,6 @@
             selectKelas.classList.replace('bg-gray-50', 'bg-gray-100');
             selectMapel.classList.replace('bg-gray-50', 'bg-gray-100');
             
-            // Gulir layar otomatis kembali ke atas
             window.scrollTo({ top: 0, behavior: 'smooth' });
             lucide.createIcons();
         }
