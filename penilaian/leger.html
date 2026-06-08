@@ -94,9 +94,9 @@
             </div>
         </nav>
 
-        <main class="max-w-[96%] mx-auto mt-8">
+        <main class="w-full max-w-full px-2 sm:px-6 mt-8">
             
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 max-w-7xl mx-auto">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-6">
                     <div class="flex items-center gap-2.5">
                         <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
@@ -112,8 +112,8 @@
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
-                    <div class="md:col-span-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+                    <div class="lg:col-span-6">
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
                             <i data-lucide="presentation" class="w-4 h-4 text-gray-400"></i> Tingkatan Kelas yang Dimonitor
                         </label>
@@ -128,29 +128,47 @@
                         </select>
                     </div>
                     
-                    <div class="md:col-span-4">
+                    <div class="lg:col-span-4">
                         <button id="btnTampilkan" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
                             <i data-lucide="eye" class="w-4 h-4 text-gold-accent"></i> Tampilkan Ledger Rekap
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-2">
+                        <button id="btnRefresh" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 text-emerald-deep font-bold rounded-xl border border-gray-200 transition-all duration-300 shadow-sm active:scale-[0.98]">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 text-emerald-medium"></i> Refresh Data
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div id="alertBox" class="hidden p-4 rounded-2xl shadow-sm border mt-5 text-sm font-medium flex items-center gap-3"></div>
+            <div id="alertBox" class="hidden p-4 rounded-2xl shadow-sm border mt-5 text-sm font-medium flex items-center gap-3 max-w-7xl mx-auto"></div>
 
-            <div id="wrapperTabel" class="hidden bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mt-6 mb-12">
-                <div class="flex items-center gap-2 mb-4">
-                    <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i>
-                    <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900"></h4>
+            <div id="wrapperTabel" class="hidden bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-gray-100 mt-6 mb-12 w-full">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i>
+                        <h4 id="judulTabel" class="text-base sm:text-xl font-serif-custom font-bold text-gray-900"></h4>
+                    </div>
+                    <span class="text-xs bg-emerald-soft text-emerald-deep font-semibold px-3 py-1 rounded-full border border-emerald-light/50">Tabel Lebar Penuh</span>
                 </div>
 
-                <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-inner max-h-[70vh] overflow-y-auto">
+                <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-inner max-h-[72vh] overflow-y-auto">
                     <table class="w-full text-center border-collapse text-xs font-medium">
                         <thead id="headTabel" class="bg-emerald-deep text-white uppercase tracking-wider sticky top-0 z-20">
                             </thead>
                         <tbody id="bodyMonitor" class="divide-y divide-gray-100 text-gray-700">
                             </tbody>
                     </table>
+                </div>
+
+                <div class="mt-6 bg-gray-50 border border-gray-200/60 rounded-2xl p-4">
+                    <div class="flex items-center gap-2 text-emerald-deep font-bold text-xs mb-3">
+                        <i data-lucide="info" class="w-4 h-4 text-gold-accent"></i>
+                        <span>Keterangan Akronim / Singkatan Mata Pelajaran:</span>
+                    </div>
+                    <div id="containerSingkatan" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-2 text-[11px] text-gray-600 font-medium">
+                        </div>
                 </div>
             </div>
         </main>
@@ -165,44 +183,46 @@
     <script>
         const CONFIG_GAS_URL = "https://script.google.com/macros/s/AKfycbz3vYiQLbsJFsT1JPyY7pcc2b0GZp2CPoefoYOmthQ0rr5j3sjFQsg50CDxlAyapz3j/exec";
 
-        // MASTER MAPEL & KKM ACUAN STRUKTURAL DATABASE (KOLOM D s.d AE)
+        // MASTER MAPEL DISINGKAT & KKM ACUAN STRUKTURAL DATABASE (KOLOM D s.d AE)
         const MAPEL_RULES = {
             "SMP": [
-                { nama: "PA & BP", kkm: 75 }, { nama: "PPKn", kkm: 70 }, { nama: "B. Indonesia", kkm: 72 },
-                { nama: "Matematika", kkm: 70 }, { nama: "IPS", kkm: 72 }, { nama: "B. Inggris", kkm: 60 },
-                { nama: "Seni Budaya", kkm: 69 }, { nama: "Penjas", kkm: 75 }, { nama: "IPA", kkm: 70 },
-                { nama: "TIK", kkm: 70 }, { nama: "BTQ", kkm: 70 }, { nama: "Prakarya", kkm: 70 },
-                { nama: "B. Madura", kkm: 70 }, { nama: "Tahfidz", kkm: 68 }, { nama: "Kehadiran", kkm: null }
+                { singkatan: "PABP", nama: "PA & BP", kkm: 75 }, { singkatan: "PPKN", nama: "PPKn", kkm: 70 }, { singkatan: "IND", nama: "B. Indonesia", kkm: 72 },
+                { singkatan: "MTK", nama: "Matematika", kkm: 70 }, { singkatan: "IPS", nama: "IPS", kkm: 72 }, { singkatan: "ING", nama: "B. Inggris", kkm: 60 },
+                { singkatan: "SBD", nama: "Seni Budaya", kkm: 69 }, { singkatan: "PJOK", nama: "Penjas", kkm: 75 }, { singkatan: "IPA", nama: "IPA", kkm: 70 },
+                { singkatan: "TIK", nama: "TIK", kkm: 70 }, { singkatan: "BTQ", nama: "BTQ", kkm: 70 }, { singkatan: "PRK", nama: "Prakarya", kkm: 70 },
+                { singkatan: "MDR", nama: "B. Madura", kkm: 70 }, { singkatan: "TFZ", nama: "Tahfidz", kkm: 68 }, { singkatan: "ABSN", nama: "Kehadiran", kkm: null }
             ],
             "SMK10": [
-                { nama: "PAI", kkm: 75 }, { nama: "B. Indonesia", kkm: 72 }, { nama: "PPKn", kkm: 70 },
-                { nama: "Matematika", kkm: 70 }, { nama: "B. Inggris", kkm: 65 }, { nama: "IPAS", kkm: 70 },
-                { nama: "Seni Rupa", kkm: 70 }, { nama: "PENJAS", kkm: 75 }, { nama: "S. Indo", kkm: 70 },
-                { nama: "DPPHP", kkm: 75 }, { nama: "DPBHP", kkm: 75 }, { nama: "DPMHP", kkm: 75 },
-                { nama: "TIK", kkm: 70 }, { nama: "BTQ", kkm: 70 }, { nama: "Kehadiran", kkm: null }
+                { singkatan: "PAI", nama: "PAI", kkm: 75 }, { singkatan: "IND", nama: "B. Indonesia", kkm: 72 }, { singkatan: "PPKN", nama: "PPKn", kkm: 70 },
+                { singkatan: "MTK", nama: "Matematika", kkm: 70 }, { singkatan: "ING", nama: "B. Inggris", kkm: 65 }, { singkatan: "IPAS", nama: "IPAS", kkm: 70 },
+                { singkatan: "SRUP", nama: "Seni Rupa", kkm: 70 }, { singkatan: "PJOK", nama: "PENJAS", kkm: 75 }, { singkatan: "SIND", nama: "S. Indo", kkm: 70 },
+                { singkatan: "DPPHP", nama: "DPPHP", kkm: 75 }, { singkatan: "DPBHP", nama: "DPBHP", kkm: 75 }, { singkatan: "DPMHP", nama: "DPMHP", kkm: 75 },
+                { singkatan: "TIK", nama: "TIK", kkm: 70 }, { singkatan: "BTQ", nama: "BTQ", kkm: 70 }, { singkatan: "ABSN", nama: "Kehadiran", kkm: null }
             ],
             "SMK11": [
-                { nama: "PAI", kkm: 75 }, { nama: "B. Indonesia", kkm: 72 }, { nama: "PPKn", kkm: 70 },
-                { nama: "Matematika", kkm: 70 }, { nama: "B. Inggris", kkm: 65 }, { nama: "TIK", kkm: 70 },
-                { nama: "PENJAS", kkm: 75 }, { nama: "S. Indo", kkm: 70 }, { nama: "Kewirausahaan", kkm: 75 },
-                { nama: "PPHN", kkm: 75 }, { nama: "PPHH", kkm: 75 }, { nama: "PPKPH", kkm: 75 },
-                { nama: "KPPP", kkm: 75 }, { nama: "BTQ", kkm: 70 }, { nama: "Kehadiran", kkm: null }
+                { singkatan: "PAI", nama: "PAI", kkm: 75 }, { singkatan: "IND", nama: "B. Indonesia", kkm: 72 }, { singkatan: "PPKN", nama: "PPKn", kkm: 70 },
+                { singkatan: "MTK", nama: "Matematika", kkm: 70 }, { singkatan: "ING", nama: "B. Inggris", kkm: 65 }, { singkatan: "TIK", nama: "TIK", kkm: 70 },
+                { singkatan: "PJOK", nama: "PENJAS", kkm: 75 }, { singkatan: "SIND", nama: "S. Indo", kkm: 70 }, { singkatan: "PKWU", nama: "Kewirausahaan", kkm: 75 },
+                { singkatan: "PPHN", nama: "PPHN", kkm: 75 }, { singkatan: "PPHH", nama: "PPHH", kkm: 75 }, { singkatan: "PPKPH", nama: "PPKPH", kkm: 75 },
+                { singkatan: "KPPP", nama: "KPPP", kkm: 75 }, { singkatan: "BTQ", nama: "BTQ", kkm: 70 }, { singkatan: "ABSN", nama: "Kehadiran", kkm: null }
             ],
             "SMK12": [
-                { nama: "PAI", kkm: 75 }, { nama: "B. Indonesia", kkm: 72 }, { nama: "PPKn", kkm: 70 },
-                { nama: "Matematika", kkm: 70 }, { nama: "B. Inggris", kkm: 65 }, { nama: "TIK", kkm: 70 },
-                { nama: "PENJAS", kkm: 75 }, { nama: "S. Indo", kkm: 70 }, { nama: "PPHN", kkm: 75 },
-                { nama: "PPHH", kkm: 75 }, { nama: "KPPP", kkm: 75 }, { nama: "Kewirausahaan", kkm: 75 },
-                { nama: "BTQ", kkm: 70 }, { nama: "Kehadiran", kkm: null }
+                { singkatan: "PAI", nama: "PAI", kkm: 75 }, { singkatan: "IND", nama: "B. Indonesia", kkm: 72 }, { singkatan: "PPKN", nama: "PPKn", kkm: 70 },
+                { singkatan: "MTK", nama: "Matematika", kkm: 70 }, { singkatan: "ING", nama: "B. Inggris", kkm: 65 }, { singkatan: "TIK", nama: "TIK", kkm: 70 },
+                { singkatan: "PJOK", nama: "PENJAS", kkm: 75 }, { singkatan: "SIND", nama: "S. Indo", kkm: 70 }, { singkatan: "PPHN", nama: "PPHN", kkm: 75 },
+                { singkatan: "PPHH", nama: "PPHH", kkm: 75 }, { singkatan: "KPPP", nama: "KPPP", kkm: 75 }, { singkatan: "PKWU", nama: "Kewirausahaan", kkm: 75 },
+                { singkatan: "BTQ", nama: "BTQ", kkm: 70 }, { singkatan: "ABSN", nama: "Kehadiran", kkm: null }
             ]
         };
 
         const selectKelas = document.getElementById('selectKelas');
         const btnTampilkan = document.getElementById('btnTampilkan');
+        const btnRefresh = document.getElementById('btnRefresh');
         const wrapperTabel = document.getElementById('wrapperTabel');
         const judulTabel = document.getElementById('judulTabel');
         const headTabel = document.getElementById('headTabel');
         const bodyMonitor = document.getElementById('bodyMonitor');
+        const containerSingkatan = document.getElementById('containerSingkatan');
         const alertBox = document.getElementById('alertBox');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const loadingText = document.getElementById('loadingText');
@@ -264,18 +284,18 @@
         window.addEventListener('resize', periksaOrientasiLayar);
         window.addEventListener('orientationchange', periksaOrientasiLayar);
 
-        // AMBIL DATA & TAMPILKAN LEDGER
-        btnTampilkan.addEventListener('click', async () => {
+        // FUNGSI UTAMA LOAD DATA LEDGER VIA AJAX API GAS
+        async function muatDataLedgerServer() {
             const kelas = selectKelas.value;
             if (!kelas) {
-                showAlert('danger', 'Silakan pilih kelas terlebih dahulu!');
+                showAlert('danger', 'Silakan pilih tingkatan kelas terlebih dahulu!');
                 return;
             }
 
             aktifkanLayarPenuh();
 
             const labelRomawi = dapatkanLabelRomawi(kelas);
-            loadingText.innerHTML = `<i data-lucide="refresh-cw" class="w-5 h-5 animate-spin text-gold-accent"></i> Mengunduh rekapitulasi ledger ${labelRomawi}...`;
+            loadingText.innerHTML = `<i data-lucide="refresh-cw" class="w-5 h-5 animate-spin text-gold-accent"></i> Sinkronisasi & mengunduh data rekap ${labelRomawi}...`;
             loadingOverlay.classList.remove('hidden');
             lucide.createIcons();
             
@@ -292,7 +312,6 @@
                         showAlert('warning', `Tidak ditemukan data siswa aktif pada database tab sheet ${labelRomawi}.`);
                         return;
                     }
-                    
                     renderStrukturLedger(kelas, result.data);
                 } else {
                     showAlert('danger', `Gagal memproses data: ${result.message}`);
@@ -302,7 +321,11 @@
                 console.error(error);
                 showAlert('danger', 'Gagal memuat rekap. Terjadi kendala komunikasi jaringan cloud.');
             }
-        });
+        }
+
+        // Event listener klik tombol Tampilkan & Refresh
+        btnTampilkan.addEventListener('click', muatDataLedgerServer);
+        btnRefresh.addEventListener('click', muatDataLedgerServer);
 
         function getAturanMapel(kelas) {
             if (kelas.includes("7") || kelas.includes("8") || kelas.includes("9")) {
@@ -321,30 +344,30 @@
             const aturanActive = getAturanMapel(kelas);
             judulTabel.innerText = `Data Rekapitulasi Ledger: ${dapatkanLabelRomawi(kelas)}`;
 
-            // 1. GENERATE HEADER KELAS DINAMIS
+            // 1. GENERATE HEADER KELAS DINAMIS (Menggunakan Singkatan)
             let headerRow1 = `
                 <tr class="divide-x divide-emerald-medium/60 border-b border-emerald-medium">
-                    <th rowspan="2" class="p-3 w-12 min-w-[48px]">No</th>
-                    <th rowspan="2" class="p-3 w-20 min-w-[90px]">NIS</th>
-                    <th rowspan="2" class="p-3 text-left sticky-nama left-0 bg-emerald-deep z-30 min-w-[200px] shadow-md">Nama Siswa</th>
+                    <th rowspan="2" class="p-3 w-10 min-w-[42px]">No</th>
+                    <th rowspan="2" class="p-3 w-16 min-w-[80px]">NIS</th>
+                    <th rowspan="2" class="p-3 text-left sticky-nama left-0 bg-emerald-deep z-30 min-w-[170px] shadow-md">Nama Siswa</th>
             `;
             
             let headerRow2 = `<tr class="divide-x divide-emerald-medium/40 bg-emerald-medium text-[10px]">`;
 
             aturanActive.forEach(mapel => {
-                const isKehadiran = mapel.nama.includes("Kehadiran");
-                const kkmLabel = mapel.kkm ? `<br class="hidden sm:inline"><span class="text-[10px] text-gold-accent lowercase font-normal">(kkm:${mapel.kkm})</span>` : '';
+                const isKehadiran = mapel.singkatan === "ABSN";
+                const kkmLabel = mapel.kkm ? `<br><span class="text-[9px] text-gold-accent font-normal lowercase">(kkm:${mapel.kkm})</span>` : '';
                 
                 headerRow1 += `
-                    <th colspan="2" class="p-2 border-b border-emerald-medium text-[11px]">
-                        ${mapel.nama}${kkmLabel}
+                    <th colspan="2" class="p-2 border-b border-emerald-medium text-[11px] font-bold tracking-wider">
+                        ${mapel.singkatan}${kkmLabel}
                     </th>
                 `;
                 
                 if (isKehadiran) {
-                    headerRow2 += `<th class="p-2 bg-emerald-medium font-bold text-yellow-100">S/I</th><th class="p-2 bg-emerald-medium font-bold text-red-200">A</th>`;
+                    headerRow2 += `<th class="p-2 bg-emerald-medium font-bold text-yellow-100 text-[9px]">S/I</th><th class="p-2 bg-emerald-medium font-bold text-red-200 text-[9px]">A</th>`;
                 } else {
-                    headerRow2 += `<th class="p-1 w-10">P</th><th class="p-1 w-10">K</th>`;
+                    headerRow2 += `<th class="p-1 w-8 text-[10px]">P</th><th class="p-1 w-8 text-[10px]">K</th>`;
                 }
             });
 
@@ -352,7 +375,7 @@
             headerRow2 += `</tr>`;
             headTabel.innerHTML = headerRow1 + headerRow2;
 
-            // 2. RENDER ROW SISWA
+            // 2. RENDER BARIS ROW SISWA
             bodyMonitor.innerHTML = "";
 
             siswaList.forEach((siswa, indexSiswa) => {
@@ -360,16 +383,16 @@
                 tr.className = indexSiswa % 2 === 0 ? "bg-white hover:bg-gray-100/70 transition-colors" : "bg-gray-50/60 hover:bg-gray-100/70 transition-colors";
                 
                 let rowHtml = `
-                    <td class="p-2.5 font-bold text-gray-400 border-r border-gray-100">${siswa.no || '-'}</td>
-                    <td class="p-2.5 font-mono tracking-wide text-gray-500 border-r border-gray-100">${siswa.nis || '-'}</td>
-                    <td class="p-2.5 text-left font-semibold text-gray-900 sticky-nama border-r border-gray-200 shadow-sm transition-colors ${indexSiswa % 2 === 0 ? 'bg-white' : 'bg-[#fcfdfd]'}">${siswa.nama}</td>
+                    <td class="p-2 font-bold text-gray-400 border-r border-gray-100">${siswa.no || '-'}</td>
+                    <td class="p-2 font-mono tracking-wide text-gray-500 border-r border-gray-100">${siswa.nis || '-'}</td>
+                    <td class="p-2 text-left font-semibold text-gray-900 sticky-nama border-r border-gray-200 shadow-sm transition-colors ${indexSiswa % 2 === 0 ? 'bg-white' : 'bg-[#fcfdfd]'}" style="font-size:11px;">${siswa.nama}</td>
                 `;
 
                 const totalCellsNeeded = aturanActive.length * 2;
 
                 for (let i = 0; i < totalCellsNeeded; i++) {
                     let val = siswa.nilai[i];
-                    let cellClass = "p-2.5 border-r border-gray-100 font-semibold";
+                    let cellClass = "p-2 border-r border-gray-100 font-semibold text-[11px]";
                     
                     const mapelIdx = Math.floor(i / 2);
                     const aturanMapelIni = aturanActive[mapelIdx];
@@ -395,6 +418,16 @@
                 });
 
                 bodyMonitor.appendChild(tr);
+            });
+
+            // 3. RENDER BLOK KETERANGAN SINGKATAN DI BAWAH TABEL
+            containerSingkatan.innerHTML = "";
+            aturanActive.forEach(item => {
+                const namaAsli = item.singkatan === "ABSN" ? "Absensi Kehadiran (Sakit/Izin & Alpa)" : item.nama;
+                const div = document.createElement('div');
+                div.className = "flex items-start gap-1 bg-white p-2 rounded-lg border border-gray-100 shadow-sm";
+                div.innerHTML = `<span class="font-bold text-emerald-deep min-w-[45px] inline-block">[${item.singkatan}]</span> <span class="text-gray-500">: ${namaAsli}</span>`;
+                containerSingkatan.appendChild(div);
             });
 
             wrapperTabel.classList.remove('hidden');
