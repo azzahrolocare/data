@@ -1,255 +1,431 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoring Nilai Siswa Keseluruhan</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="theme-color" content="#0F5132">
+    
+    <title>Monitoring Rekap Nilai Keseluruhan - Az-Zahro</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            deep: '#0F5132',
+                            medium: '#146c43',
+                            light: '#d1e7dd',
+                            soft: '#f0fdf4'
+                        },
+                        gold: {
+                            accent: '#D4AF37',
+                            muted: '#c5a059',
+                            light: '#fbf7eb'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
         body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
         }
-        .table-monitor {
-            font-size: 0.85rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        .font-serif-custom {
+            font-family: 'Playfair Display', Georgia, serif;
         }
-        .table-monitor th {
-            background-color: #212529;
-            color: white;
-            text-align: center;
-            vertical-align: middle;
-            border: 1px solid #454d55;
-            padding: 6px;
-        }
-        .table-monitor td {
-            text-align: center;
-            vertical-align: middle;
-            padding: 6px;
-        }
-        .nama-siswa {
-            text-align: left !important;
-            font-weight: 600;
-            min-width: 180px;
+        /* Sticky Column Untuk Nama Siswa agar nyaman digeser horizontal */
+        .sticky-nama {
             position: sticky;
             left: 0;
-            background-color: white;
-            z-index: 2;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-        }
-        tr:hover .nama-siswa {
-            background-color: #f1f3f5;
-        }
-        .di-bawah-kkm {
-            background-color: #f8d7da !important;
-            color: #842029;
-            font-weight: bold;
-        }
-        .nilai-kosong {
-            background-color: #fff3cd !important;
-        }
-        .sub-head {
-            font-size: 0.75rem;
-            background-color: #343a40 !important;
+            z-index: 10;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand" href="#">📈 MONITORING REKAP NILAI KESELURUHAN SMP & SMK AZ-ZAHRO</a>
-            <div class="ms-auto d-flex align-items-center">
-                <a href="https://smpi-azzahro.github.io/data/penilaian/" class="btn btn-outline-light btn-sm fw-bold px-3 py-2 me-3">
-                    ✍️ Input Penilaian
-                </a>
-                <span class="navbar-text text-white-50 d-none d-md-inline">Semester 2</span>
+    <div id="rotateOverlay" class="fixed inset-0 bg-emerald-deep/98 backdrop-blur-md hidden flex-col justify-center items-center z-50 p-6 text-center text-white animate-in fade-in duration-300">
+        <div class="max-w-xs bg-emerald-medium/40 p-8 rounded-3xl border border-emerald-light/20 shadow-2xl flex flex-col items-center">
+            <div class="relative w-20 h-20 mb-6 flex items-center justify-center bg-gold-light/10 text-gold-accent rounded-full border border-gold-accent/20">
+                <i data-lucide="smartphone" class="w-10 h-10 animate-[bounce_2s_infinite]"></i>
+                <i data-lucide="rotate-cw" class="w-5 h-5 absolute bottom-4 right-4 text-white animate-spin [animation-duration:4s]"></i>
             </div>
-        </div>
-    </nav>
-    <div class="container-fluid px-4">
-        <div class="card p-3 mb-4 border-0 shadow-sm bg-white">
-            <div class="row align-items-end g-3">
-                <div class="col-md-4">
-                    <label class="form-label fw-bold text-secondary">Pilih Kelas Yang Ingin Dimonitor</label>
-                    <select id="selectKelas" class="form-select">
-                        <option value="">-- Pilih Kelas --</option>
-                        <option value="KELAS 7">Kelas 7</option>
-                        <option value="KELAS 8">Kelas 8</option>
-                        <option value="KELAS 9">Kelas 9</option>
-                        <option value="KELAS 10">Kelas 10</option>
-                        <option value="KELAS 11">Kelas 11</option>
-                        <option value="KELAS 12">Kelas 12</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button id="btnTampilkan" class="btn btn-primary w-100 fw-bold">🔍 Tampilkan Ledger</button>
-                </div>
-                <div class="col-md-6 text-md-end text-start">
-                    <span class="badge bg-warning text-dark me-2">⚠️ Kuning = Belum Diisi</span>
-                    <span class="badge bg-danger">🚨 Merah = Di Bawah KKM</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="alertBox" class="alert d-none" role="alert"></div>
-
-        <div id="wrapperTabel" class="d-none">
-            <div class="table-responsive" style="max-height: 75vh; overflow-y: auto;">
-                <table class="table table-bordered table-sm table-hover table-monitor table-striped">
-                    <thead>
-                        <tr>
-                            <th rowspan="2" style="width: 40px;">No</th>
-                            <th rowspan="2" style="width: 80px;">NIS</th>
-                            <th rowspan="2" class="nama-siswa" style="text-align: center;">Nama Siswa</th>
-                            <th colspan="2">PA & BP<br><small>(KKM 75)</small></th>
-                            <th colspan="2">PPKn<br><small>(KKM 70)</small></th>
-                            <th colspan="2">B.Indo<br><small>(KKM 72)</small></th>
-                            <th colspan="2">Matematika<br><small>(KKM 70)</small></th>
-                            <th colspan="2">IPS<br><small>(KKM 72)</small></th>
-                            <th colspan="2">B.Inggris<br><small>(KKM 60)</small></th>
-                            <th colspan="2">Seni Bud<br><small>(KKM 69)</small></th>
-                            <th colspan="2">Penjas<br><small>(KKM 75)</small></th>
-                            <th colspan="2">IPA<br><small>(KKM 70)</small></th>
-                            <th colspan="2">TIK<br><small>(KKM 70)</small></th>
-                            <th colspan="2">BTQ<br><small>(KKM 70)</small></th>
-                            <th colspan="2">Prakarya<br><small>(KKM 70)</small></th>
-                            <th colspan="2">B.Madura<br><small>(KKM 70)</small></th>
-                            <th colspan="2">Tahfidz<br><small>(KKM 68)</small></th>
-                        </tr>
-                        <tr>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                            <th class="sub-head">P</th><th class="sub-head">K</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bodyMonitor">
-                        </tbody>
-                </table>
-            </div>
+            <h3 class="text-xl font-bold font-serif-custom text-gold-accent mb-2">Mode Landscape Direkomendasikan</h3>
+            <p class="text-xs text-gray-200/90 leading-relaxed mb-4">
+                Untuk tampilan tabel rekap nilai yang lebih luas, presisi, dan nyaman dipandang, silakan aktifkan rotasi layar otomatis dan **putar HP Anda ke posisi horizontal (Landscape)**.
+            </p>
+            <button onclick="tutupOverlayRotasi()" class="w-full py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-xl border border-white/10 transition-all active:scale-95">
+                Tetap Gunakan Portrait
+            </button>
         </div>
     </div>
 
+    <div>
+        <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex flex-col justify-center items-center z-50">
+            <div class="text-center p-6 max-w-sm">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-deep border-t-transparent mb-4"></div>
+                <div id="loadingText" class="font-bold text-emerald-deep flex items-center justify-center gap-2"></div>
+            </div>
+        </div>
+
+        <nav class="sticky top-0 z-40 bg-emerald-deep/95 backdrop-blur-md shadow-lg border-b border-emerald-medium/50 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="p-2 bg-emerald-medium rounded-xl border border-emerald-light/20 flex-shrink-0">
+                        <i data-lucide="trending-up" class="w-5 h-5 sm:w-6 h-6 text-gold-accent"></i>
+                    </div>
+                    <h1 class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate">
+                        Monitoring Rekap Nilai Keseluruhan
+                    </h1>
+                </div>
+                <a href="https://smpi-azzahro.github.io/data/penilaian/" class="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gold-accent hover:bg-yellow-400 text-emerald-deep font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 flex-shrink-0">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5 sm:w-4 h-4"></i> Input Penilaian
+                </a>
+            </div>
+        </nav>
+
+        <main class="max-w-[96%] mx-auto mt-8">
+            
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-6">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
+                        <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Pilih Filter Kelas</h5>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs font-semibold">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-700 border border-amber-100">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Belum Diisi
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 text-red-700 border border-red-100">
+                            <span class="w-2 h-2 rounded-full bg-red-500"></span> Di Bawah KKM
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
+                    <div class="md:col-span-8">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="presentation" class="w-4 h-4 text-gray-400"></i> Tingkatan Kelas yang Dimonitor
+                        </label>
+                        <select id="selectKelas" onchange="pemicuOtomatisFull()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none font-medium">
+                            <option value="">-- Pilih Kelas --</option>
+                            <option value="KELAS 7">SMP - VII</option>
+                            <option value="KELAS 8">SMP - VIII</option>
+                            <option value="KELAS 9">SMP - IX</option>
+                            <option value="KELAS 10">SMK - X</option>
+                            <option value="KELAS 11">SMK - XI</option>
+                            <option value="KELAS 12">SMK - XII</option>
+                        </select>
+                    </div>
+                    
+                    <div class="md:col-span-4">
+                        <button id="btnTampilkan" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
+                            <i data-lucide="eye" class="w-4 h-4 text-gold-accent"></i> Tampilkan Ledger Rekap
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="alertBox" class="hidden p-4 rounded-2xl shadow-sm border mt-5 text-sm font-medium flex items-center gap-3"></div>
+
+            <div id="wrapperTabel" class="hidden bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mt-6 mb-12">
+                <div class="flex items-center gap-2 mb-4">
+                    <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i>
+                    <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900"></h4>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-gray-100 shadow-inner max-h-[70vh] overflow-y-auto">
+                    <table class="w-full text-center border-collapse text-xs font-medium">
+                        <thead id="headTabel" class="bg-emerald-deep text-white uppercase tracking-wider sticky top-0 z-20">
+                            </thead>
+                        <tbody id="bodyMonitor" class="divide-y divide-gray-100 text-gray-700">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="bg-emerald-deep text-gray-200 border-t-2 border-gold-accent/40 mt-12 py-6 px-4">
+        <div class="max-w-7xl mx-auto text-center text-xs text-gray-400">
+            &copy; 2026 Yayasan Pendidikan Az-Zahro. Seluruh Hak Cipta Dilindungi.
+        </div>
+    </footer>
+
     <script>
-        // ====================================================================
-        // PASTE URL WEB APP APPS SCRIPT ANDA YANG BARU DI SINI
-        // ====================================================================
         const CONFIG_GAS_URL = "https://script.google.com/macros/s/AKfycbz3vYiQLbsJFsT1JPyY7pcc2b0GZp2CPoefoYOmthQ0rr5j3sjFQsg50CDxlAyapz3j/exec";
 
-        // Susunan KKM mengikuti urutan kolom dari D sampai AE (Total 14 mapel x 2 = 28 Kolom)
-        // Indeks ganjil = Pengetahuan, Indeks genap = Keterampilan
-        const KKM_LIST = [
-            75, 75, // PA_BP (P & K)
-            70, 70, // PPKN
-            72, 72, // B_INDO
-            70, 70, // MATEMATIKA
-            72, 72, // IPS
-            60, 60, // B_INGGRIS
-            69, 69, // SENI_BUD
-            75, 75, // PENJAS
-            70, 70, // IPA
-            70, 70, // TIK
-            70, 70, // BTQ
-            70, 70, // PRAKARYA
-            70, 70, // B_MADURA
-            68, 68  // TAHFIDZ
-        ];
+        // MASTER MAPEL & KKM ACUAN STRUKTURAL DATABASE (KOLOM D s.d AE)
+        const MAPEL_RULES = {
+            "SMP": [
+                { nama: "PA & BP", kkm: 75 }, { nama: "PPKn", kkm: 70 }, { nama: "B. Indonesia", kkm: 72 },
+                { nama: "Matematika", kkm: 70 }, { nama: "IPS", kkm: 72 }, { nama: "B. Inggris", kkm: 60 },
+                { nama: "Seni Budaya", kkm: 69 }, { nama: "Penjas", kkm: 75 }, { nama: "IPA", kkm: 70 },
+                { nama: "TIK", kkm: 70 }, { nama: "BTQ", kkm: 70 }, { nama: "Prakarya", kkm: 70 },
+                { nama: "B. Madura", kkm: 70 }, { nama: "Tahfidz", kkm: 68 }, { nama: "Kehadiran", kkm: null }
+            ],
+            "SMK10": [
+                { nama: "PAI", kkm: 75 }, { nama: "B. Indonesia", kkm: 72 }, { nama: "PPKn", kkm: 70 },
+                { nama: "Matematika", kkm: 70 }, { nama: "B. Inggris", kkm: 65 }, { nama: "IPAS", kkm: 70 },
+                { nama: "Seni Rupa", kkm: 70 }, { nama: "PENJAS", kkm: 75 }, { nama: "S. Indo", kkm: 70 },
+                { nama: "DPPHP", kkm: 75 }, { nama: "DPBHP", kkm: 75 }, { nama: "DPMHP", kkm: 75 },
+                { nama: "TIK", kkm: 70 }, { nama: "BTQ", kkm: 70 }, { nama: "Kehadiran", kkm: null }
+            ],
+            "SMK11": [
+                { nama: "PAI", kkm: 75 }, { nama: "B. Indonesia", kkm: 72 }, { nama: "PPKn", kkm: 70 },
+                { nama: "Matematika", kkm: 70 }, { nama: "B. Inggris", kkm: 65 }, { nama: "TIK", kkm: 70 },
+                { nama: "PENJAS", kkm: 75 }, { nama: "S. Indo", kkm: 70 }, { nama: "Kewirausahaan", kkm: 75 },
+                { nama: "PPHN", kkm: 75 }, { nama: "PPHH", kkm: 75 }, { nama: "PPKPH", kkm: 75 },
+                { nama: "KPPP", kkm: 75 }, { nama: "BTQ", kkm: 70 }, { nama: "Kehadiran", kkm: null }
+            ],
+            "SMK12": [
+                { nama: "PAI", kkm: 75 }, { nama: "B. Indonesia", kkm: 72 }, { nama: "PPKn", kkm: 70 },
+                { nama: "Matematika", kkm: 70 }, { nama: "B. Inggris", kkm: 65 }, { nama: "TIK", kkm: 70 },
+                { nama: "PENJAS", kkm: 75 }, { nama: "S. Indo", kkm: 70 }, { nama: "PPHN", kkm: 75 },
+                { nama: "PPHH", kkm: 75 }, { nama: "KPPP", kkm: 75 }, { nama: "Kewirausahaan", kkm: 75 },
+                { nama: "BTQ", kkm: 70 }, { nama: "Kehadiran", kkm: null }
+            ]
+        };
 
         const selectKelas = document.getElementById('selectKelas');
         const btnTampilkan = document.getElementById('btnTampilkan');
         const wrapperTabel = document.getElementById('wrapperTabel');
+        const judulTabel = document.getElementById('judulTabel');
+        const headTabel = document.getElementById('headTabel');
         const bodyMonitor = document.getElementById('bodyMonitor');
         const alertBox = document.getElementById('alertBox');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingText');
 
+        // FUNGSI KONVERSI NAMA KELAS DATABASE KE FORMAT ROMAWI UNTUK JUDUL TABEL
+        function dapatkanLabelRomawi(kelasRaw) {
+            const pemetaan = {
+                "KELAS 7": "SMP - VII",
+                "KELAS 8": "SMP - VIII",
+                "KELAS 9": "SMP - IX",
+                "KELAS 10": "SMK - X",
+                "KELAS 11": "SMK - XI",
+                "KELAS 12": "SMK - XII"
+            };
+            return pemetaan[kelasRaw] || kelasRaw;
+        }
+
+        // LOGIKA PEMICU FULL SCREEN LAYAR PENUH
+        function pemicuOtomatisFull() {
+            aktifkanLayarPenuh();
+        }
+
+        function aktifkanLayarPenuh() {
+            if (!document.fullscreenElement && 
+                !document.mozFullScreenElement && 
+                !document.webkitFullscreenElement && 
+                !document.msFullscreenElement) {
+                
+                const elemenDokumen = document.documentElement;
+                if (elemenDokumen.requestFullscreen) {
+                    elemenDokumen.requestFullscreen();
+                } else if (elemenDokumen.msRequestFullscreen) {
+                    elemenDokumen.msRequestFullscreen();
+                } else if (elemenDokumen.mozRequestFullScreen) {
+                    elemenDokumen.mozRequestFullScreen();
+                } else if (elemenDokumen.webkitRequestFullscreen) {
+                    elemenDokumen.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            }
+        }
+
+        // LOGIKA DETEKSI ROTASI HP (PORTRAIT / LANDSCAPE)
+        function periksaOrientasiLayar() {
+            const rotateOverlay = document.getElementById('rotateOverlay');
+            if (window.innerWidth < 1024 && window.innerHeight > window.innerWidth) {
+                if (sessionStorage.getItem('ignoreRotationAlert') !== 'true') {
+                    rotateOverlay.classList.remove('hidden');
+                }
+            } else {
+                rotateOverlay.classList.add('hidden');
+            }
+        }
+
+        function tutupOverlayRotasi() {
+            document.getElementById('rotateOverlay').classList.add('hidden');
+            sessionStorage.setItem('ignoreRotationAlert', 'true');
+        }
+
+        window.addEventListener('resize', periksaOrientasiLayar);
+        window.addEventListener('orientationchange', periksaOrientasiLayar);
+
+        // AMBIL DATA & TAMPILKAN LEDGER
         btnTampilkan.addEventListener('click', async () => {
             const kelas = selectKelas.value;
             if (!kelas) {
-                showAlert('danger', '⚠️ Silakan pilih kelas terlebih dahulu!');
+                showAlert('danger', 'Silakan pilih kelas terlebih dahulu!');
                 return;
             }
 
-            showAlert('info', '⏳ Sedang memuat nilai dari database... Mohon tunggu.');
-            wrapperTabel.classList.add('d-none');
+            aktifkanLayarPenuh();
+
+            const labelRomawi = dapatkanLabelRomawi(kelas);
+            loadingText.innerHTML = `<i data-lucide="refresh-cw" class="w-5 h-5 animate-spin text-gold-accent"></i> Mengunduh rekapitulasi ledger ${labelRomawi}...`;
+            loadingOverlay.classList.remove('hidden');
+            lucide.createIcons();
+            
+            wrapperTabel.classList.add('hidden');
+            alertBox.classList.add('hidden');
 
             try {
-                // Mengirim parameter action=monitoring ke backend GAS
                 const res = await fetch(`${CONFIG_GAS_URL}?action=monitoring&kelas=${encodeURIComponent(kelas)}`);
                 const result = await res.json();
+                loadingOverlay.classList.add('hidden');
 
                 if (result.status === "success") {
-                    if (result.data.length === 0) {
-                        showAlert('warning', `⚠️ Tidak ditemukan data siswa pada ${kelas}`);
+                    if (!result.data || result.data.length === 0) {
+                        showAlert('warning', `Tidak ditemukan data siswa aktif pada database tab sheet ${labelRomawi}.`);
                         return;
                     }
-                    renderLedger(result.data);
-                    alertBox.classList.add('d-none');
+                    
+                    renderStrukturLedger(kelas, result.data);
                 } else {
-                    showAlert('danger', `❌ Terjadi kesalahan: ${result.message}`);
+                    showAlert('danger', `Gagal memproses data: ${result.message}`);
                 }
             } catch (error) {
+                loadingOverlay.classList.add('hidden');
                 console.error(error);
-                showAlert('danger', '❌ Gagal memuat data. Periksa jaringan atau URL Deployment Apps Script Anda.');
+                showAlert('danger', 'Gagal memuat rekap. Terjadi kendala komunikasi jaringan cloud.');
             }
         });
 
-        function renderLedger(siswaList) {
-            bodyMonitor.innerHTML = "";
-            
-            siswaList.forEach(siswa => {
-                const tr = document.createElement('tr');
-                
-                // Set Kolom Identitas Utama
-                let rowHtml = `
-                    <td>${siswa.no || '-'}</td>
-                    <td>${siswa.nis || '-'}</td>
-                    <td class="nama-siswa">${siswa.nama}</td>
-                `;
-                
-                // Looping 28 elemen nilai (Kolom D hingga AE)
-                for (let idx = 0; idx < 28; idx++) {
-                    let val = siswa.nilai[idx];
-                    let cellClass = "";
-                    
-                    // Validasi tampilan jika kosong atau di bawah KKM
-                    if (val === "" || val === null || val === undefined) {
-                        val = "-";
-                        cellClass = "nilai-kosong";
-                    } else {
-                        val = Number(val);
-                        let kkmAcuan = KKM_LIST[idx];
-                        if (val < kkmAcuan) {
-                            cellClass = "di-bawah-kkm";
-                        }
-                    }
-                    
-                    rowHtml += `<td class="${cellClass}">${val}</td>`;
-                }
-                
-                tr.innerHTML = rowHtml;
-                bodyMonitor.appendChild(tr);
-            });
-            
-            wrapperTabel.classList.remove('d-none');
+        function getAturanMapel(kelas) {
+            if (kelas.includes("7") || kelas.includes("8") || kelas.includes("9")) {
+                return MAPEL_RULES["SMP"];
+            } else if (kelas.includes("10")) {
+                return MAPEL_RULES["SMK10"];
+            } else if (kelas.includes("11")) {
+                return MAPEL_RULES["SMK11"];
+            } else if (kelas.includes("12")) {
+                return MAPEL_RULES["SMK12"];
+            }
+            return MAPEL_RULES["SMP"];
         }
 
-        function showAlert(type, msg) {
-            alertBox.className = `alert alert-${type} mt-2`;
-            alertBox.innerHTML = msg;
-            alertBox.classList.remove('d-none');
+        function renderStrukturLedger(kelas, siswaList) {
+            const aturanActive = getAturanMapel(kelas);
+            judulTabel.innerText = `Data Rekapitulasi Ledger: ${dapatkanLabelRomawi(kelas)}`;
+
+            // 1. GENERATE HEADER KELAS DINAMIS
+            let headerRow1 = `
+                <tr class="divide-x divide-emerald-medium/60 border-b border-emerald-medium">
+                    <th rowspan="2" class="p-3 w-12 min-w-[48px]">No</th>
+                    <th rowspan="2" class="p-3 w-20 min-w-[90px]">NIS</th>
+                    <th rowspan="2" class="p-3 text-left sticky-nama left-0 bg-emerald-deep z-30 min-w-[200px] shadow-md">Nama Siswa</th>
+            `;
+            
+            let headerRow2 = `<tr class="divide-x divide-emerald-medium/40 bg-emerald-medium text-[10px]">`;
+
+            aturanActive.forEach(mapel => {
+                const isKehadiran = mapel.nama.includes("Kehadiran");
+                const kkmLabel = mapel.kkm ? `<br class="hidden sm:inline"><span class="text-[10px] text-gold-accent lowercase font-normal">(kkm:${mapel.kkm})</span>` : '';
+                
+                headerRow1 += `
+                    <th colspan="2" class="p-2 border-b border-emerald-medium text-[11px]">
+                        ${mapel.nama}${kkmLabel}
+                    </th>
+                `;
+                
+                if (isKehadiran) {
+                    headerRow2 += `<th class="p-2 bg-emerald-medium font-bold text-yellow-100">S/I</th><th class="p-2 bg-emerald-medium font-bold text-red-200">A</th>`;
+                } else {
+                    headerRow2 += `<th class="p-1 w-10">P</th><th class="p-1 w-10">K</th>`;
+                }
+            });
+
+            headerRow1 += `</tr>`;
+            headerRow2 += `</tr>`;
+            headTabel.innerHTML = headerRow1 + headerRow2;
+
+            // 2. RENDER ROW SISWA
+            bodyMonitor.innerHTML = "";
+
+            siswaList.forEach((siswa, indexSiswa) => {
+                const tr = document.createElement('tr');
+                tr.className = indexSiswa % 2 === 0 ? "bg-white hover:bg-gray-100/70 transition-colors" : "bg-gray-50/60 hover:bg-gray-100/70 transition-colors";
+                
+                let rowHtml = `
+                    <td class="p-2.5 font-bold text-gray-400 border-r border-gray-100">${siswa.no || '-'}</td>
+                    <td class="p-2.5 font-mono tracking-wide text-gray-500 border-r border-gray-100">${siswa.nis || '-'}</td>
+                    <td class="p-2.5 text-left font-semibold text-gray-900 sticky-nama border-r border-gray-200 shadow-sm transition-colors ${indexSiswa % 2 === 0 ? 'bg-white' : 'bg-[#fcfdfd]'}">${siswa.nama}</td>
+                `;
+
+                const totalCellsNeeded = aturanActive.length * 2;
+
+                for (let i = 0; i < totalCellsNeeded; i++) {
+                    let val = siswa.nilai[i];
+                    let cellClass = "p-2.5 border-r border-gray-100 font-semibold";
+                    
+                    const mapelIdx = Math.floor(i / 2);
+                    const aturanMapelIni = aturanActive[mapelIdx];
+
+                    if (val === "" || val === null || val === undefined) {
+                        val = "-";
+                        cellClass += " bg-amber-50 text-amber-700/80 font-normal";
+                    } else {
+                        val = Number(val);
+                        if (aturanMapelIni.kkm !== null && val < aturanMapelIni.kkm) {
+                            cellClass += " bg-red-50 text-red-600 font-bold";
+                        }
+                    }
+
+                    rowHtml += `<td class="${cellClass}">${val}</td>`;
+                }
+
+                tr.innerHTML = rowHtml;
+                
+                tr.addEventListener('mouseenter', () => tr.querySelector('.sticky-nama').classList.add('bg-gray-100'));
+                tr.addEventListener('mouseleave', () => {
+                    tr.querySelector('.sticky-nama').classList.remove('bg-gray-100');
+                });
+
+                bodyMonitor.appendChild(tr);
+            });
+
+            wrapperTabel.classList.remove('hidden');
+            lucide.createIcons();
         }
+
+        function showAlert(type, message) {
+            alertBox.classList.remove('hidden', 'bg-emerald-soft', 'text-emerald-deep', 'border-emerald-light', 'bg-red-50', 'text-red-700', 'border-red-100', 'bg-amber-50', 'text-amber-700', 'border-amber-100');
+            let icon = "info";
+
+            if (type === 'success') {
+                alertBox.classList.add('bg-emerald-soft', 'text-emerald-deep', 'border-emerald-light');
+                icon = "check-circle-2";
+            } else if (type === 'danger') {
+                alertBox.classList.add('bg-red-50', 'text-red-700', 'border-red-100');
+                icon = "alert-octagon";
+            } else if (type === 'warning') {
+                alertBox.classList.add('bg-amber-50', 'text-amber-700', 'border-amber-100');
+                icon = "alert-triangle";
+            }
+
+            alertBox.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5 flex-shrink-0"></i> <div>${message}</div>`;
+            alertBox.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        // Jalankan deteksi orientasi saat pertama kali dibuka
+        window.addEventListener('DOMContentLoaded', () => {
+            periksaOrientasiLayar();
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>
