@@ -74,9 +74,9 @@
                         
                         <div class="grid grid-cols-2 gap-3">
                             <button onclick="resetHalamanKeAwal()" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs sm:text-sm rounded-xl transition-all active:scale-95">
-                            Selesai
+                                Selesai
                             </button>
-                            <a href="https://azzahrolocare.github.io/data/penilaian/leger.html" onclick="tutupSuccessModalOnly()" class="inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md active:scale-95">
+                            <a href="https://azzahrolocare.github.io/data/penilaian/leger.html" target="_blank" onclick="tutupSuccessModalOnly()" class="inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md active:scale-95">
                                 <i data-lucide="file-text" class="w-4 h-4 text-gold-accent"></i> Lihat Nilai
                             </a>
                         </div>
@@ -114,7 +114,7 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
                             <i data-lucide="school" class="w-4 h-4 text-gray-400"></i> Tingkat Sekolah
                         </label>
-                        <select id="selectTingkat" onchange="updateKelas()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
+                        <select id="selectTingkat" onchange="pemicuTingkatSekolah()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
                             <option value="">-- Pilih Tingkat --</option>
                             <option value="SMP">SMP Islam Az-Zahro</option>
                             <option value="SMK">SMK Az-Zahro</option>
@@ -234,7 +234,7 @@
                 "KELAS 8": [
                     { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
                     { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
-                    { nama: "IPS", kkm: 72, p: 12, h: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
+                    { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
                     { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
                     { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
@@ -304,6 +304,34 @@
         const successModalMsg = document.getElementById('successModalMsg');
 
         let dataSiswaAktif = []; 
+
+        // MODIFIKASI: Fungsi pemicu gabungan untuk Fullscreen dan Update Pilihan Kelas
+        function pemicuTingkatSekolah() {
+            // Jalankan Fullscreen terlebih dahulu
+            aktifkanLayarPenuh();
+            // Jalankan update pilihan kelas seperti biasa
+            updateKelas();
+        }
+
+        // MODIFIKASI: Fungsi API Fullscreen Browser
+        function aktifkanLayarPenuh() {
+            if (!document.fullscreenElement && 
+                !document.mozFullScreenElement && 
+                !document.webkitFullscreenElement && 
+                !document.msFullscreenElement) {
+                
+                const elemenDokumen = document.documentElement;
+                if (elemenDokumen.requestFullscreen) {
+                    elemenDokumen.requestFullscreen();
+                } else if (elemenDokumen.msRequestFullscreen) {
+                    elemenDokumen.msRequestFullscreen();
+                } else if (elemenDokumen.mozRequestFullScreen) {
+                    elemenDokumen.mozRequestFullScreen();
+                } else if (elemenDokumen.webkitRequestFullscreen) {
+                    elemenDokumen.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            }
+        }
 
         function updateKelas() {
             const tingkat = selectTingkat.value;
@@ -538,7 +566,7 @@
                     showAlert('success', `Seluruh nilai ${mapelInfo.nama} kelas ${kelas} berhasil diperbarui.`);
                     
                     // Menampilkan Pop-Up Modal Sukses
-                    successModalMsg.innerText = `Seluruh data penilaian mata pelajaran "${mapelInfo.nama}" untuk tingkat "${kelas}" telah aman dikirim dan sinkron ke database Az-Zahro.`;
+                    successModalMsg.innerText = `Seluruh data penilaian mata pelajaran "${mapelInfo.nama}" untuk tingkat "${kelas}" telah aman dikirim dan sinkron ke database.`;
                     successModalOverlay.classList.remove('hidden');
 
                 } else {
