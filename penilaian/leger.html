@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Nilai Siswa Keseluruhan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .table-monitor {
+            font-size: 0.85rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .table-monitor th {
+            background-color: #212529;
+            color: white;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #454d55;
+            padding: 6px;
+        }
+        .table-monitor td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 6px;
+        }
+        .nama-siswa {
+            text-align: left !important;
+            font-weight: 600;
+            min-width: 180px;
+            position: sticky;
+            left: 0;
+            background-color: white;
+            z-index: 2;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        }
+        tr:hover .nama-siswa {
+            background-color: #f1f3f5;
+        }
+        .di-bawah-kkm {
+            background-color: #f8d7da !important;
+            color: #842029;
+            font-weight: bold;
+        }
+        .nilai-kosong {
+            background-color: #fff3cd !important;
+        }
+        .sub-head {
+            font-size: 0.75rem;
+            background-color: #343a40 !important;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#">📈 MONITORING REKAP NILAI KESELURUHAN SMP & SMK AZ-ZAHRO</a>
+            <div class="ms-auto d-flex align-items-center">
+                <a href="https://smpi-azzahro.github.io/data/penilaian/" class="btn btn-outline-light btn-sm fw-bold px-3 py-2 me-3">
+                    ✍️ Input Penilaian
+                </a>
+                <span class="navbar-text text-white-50 d-none d-md-inline">Semester 2</span>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid px-4">
+        <div class="card p-3 mb-4 border-0 shadow-sm bg-white">
+            <div class="row align-items-end g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">Pilih Kelas Yang Ingin Dimonitor</label>
+                    <select id="selectKelas" class="form-select">
+                        <option value="">-- Pilih Kelas --</option>
+                        <option value="KELAS 7">Kelas 7</option>
+                        <option value="KELAS 8">Kelas 8</option>
+                        <option value="KELAS 9">Kelas 9</option>
+                        <option value="KELAS 10">Kelas 10</option>
+                        <option value="KELAS 11">Kelas 11</option>
+                        <option value="KELAS 12">Kelas 12</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button id="btnTampilkan" class="btn btn-primary w-100 fw-bold">🔍 Tampilkan Ledger</button>
+                </div>
+                <div class="col-md-6 text-md-end text-start">
+                    <span class="badge bg-warning text-dark me-2">⚠️ Kuning = Belum Diisi</span>
+                    <span class="badge bg-danger">🚨 Merah = Di Bawah KKM</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="alertBox" class="alert d-none" role="alert"></div>
+
+        <div id="wrapperTabel" class="d-none">
+            <div class="table-responsive" style="max-height: 75vh; overflow-y: auto;">
+                <table class="table table-bordered table-sm table-hover table-monitor table-striped">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width: 40px;">No</th>
+                            <th rowspan="2" style="width: 80px;">NIS</th>
+                            <th rowspan="2" class="nama-siswa" style="text-align: center;">Nama Siswa</th>
+                            <th colspan="2">PA & BP<br><small>(KKM 75)</small></th>
+                            <th colspan="2">PPKn<br><small>(KKM 70)</small></th>
+                            <th colspan="2">B.Indo<br><small>(KKM 72)</small></th>
+                            <th colspan="2">Matematika<br><small>(KKM 70)</small></th>
+                            <th colspan="2">IPS<br><small>(KKM 72)</small></th>
+                            <th colspan="2">B.Inggris<br><small>(KKM 60)</small></th>
+                            <th colspan="2">Seni Bud<br><small>(KKM 69)</small></th>
+                            <th colspan="2">Penjas<br><small>(KKM 75)</small></th>
+                            <th colspan="2">IPA<br><small>(KKM 70)</small></th>
+                            <th colspan="2">TIK<br><small>(KKM 70)</small></th>
+                            <th colspan="2">BTQ<br><small>(KKM 70)</small></th>
+                            <th colspan="2">Prakarya<br><small>(KKM 70)</small></th>
+                            <th colspan="2">B.Madura<br><small>(KKM 70)</small></th>
+                            <th colspan="2">Tahfidz<br><small>(KKM 68)</small></th>
+                        </tr>
+                        <tr>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                            <th class="sub-head">P</th><th class="sub-head">K</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyMonitor">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====================================================================
+        // PASTE URL WEB APP APPS SCRIPT ANDA YANG BARU DI SINI
+        // ====================================================================
+        const CONFIG_GAS_URL = "https://script.google.com/macros/s/AKfycbz3vYiQLbsJFsT1JPyY7pcc2b0GZp2CPoefoYOmthQ0rr5j3sjFQsg50CDxlAyapz3j/exec";
+
+        // Susunan KKM mengikuti urutan kolom dari D sampai AE (Total 14 mapel x 2 = 28 Kolom)
+        // Indeks ganjil = Pengetahuan, Indeks genap = Keterampilan
+        const KKM_LIST = [
+            75, 75, // PA_BP (P & K)
+            70, 70, // PPKN
+            72, 72, // B_INDO
+            70, 70, // MATEMATIKA
+            72, 72, // IPS
+            60, 60, // B_INGGRIS
+            69, 69, // SENI_BUD
+            75, 75, // PENJAS
+            70, 70, // IPA
+            70, 70, // TIK
+            70, 70, // BTQ
+            70, 70, // PRAKARYA
+            70, 70, // B_MADURA
+            68, 68  // TAHFIDZ
+        ];
+
+        const selectKelas = document.getElementById('selectKelas');
+        const btnTampilkan = document.getElementById('btnTampilkan');
+        const wrapperTabel = document.getElementById('wrapperTabel');
+        const bodyMonitor = document.getElementById('bodyMonitor');
+        const alertBox = document.getElementById('alertBox');
+
+        btnTampilkan.addEventListener('click', async () => {
+            const kelas = selectKelas.value;
+            if (!kelas) {
+                showAlert('danger', '⚠️ Silakan pilih kelas terlebih dahulu!');
+                return;
+            }
+
+            showAlert('info', '⏳ Sedang memuat nilai dari database... Mohon tunggu.');
+            wrapperTabel.classList.add('d-none');
+
+            try {
+                // Mengirim parameter action=monitoring ke backend GAS
+                const res = await fetch(`${CONFIG_GAS_URL}?action=monitoring&kelas=${encodeURIComponent(kelas)}`);
+                const result = await res.json();
+
+                if (result.status === "success") {
+                    if (result.data.length === 0) {
+                        showAlert('warning', `⚠️ Tidak ditemukan data siswa pada ${kelas}`);
+                        return;
+                    }
+                    renderLedger(result.data);
+                    alertBox.classList.add('d-none');
+                } else {
+                    showAlert('danger', `❌ Terjadi kesalahan: ${result.message}`);
+                }
+            } catch (error) {
+                console.error(error);
+                showAlert('danger', '❌ Gagal memuat data. Periksa jaringan atau URL Deployment Apps Script Anda.');
+            }
+        });
+
+        function renderLedger(siswaList) {
+            bodyMonitor.innerHTML = "";
+            
+            siswaList.forEach(siswa => {
+                const tr = document.createElement('tr');
+                
+                // Set Kolom Identitas Utama
+                let rowHtml = `
+                    <td>${siswa.no || '-'}</td>
+                    <td>${siswa.nis || '-'}</td>
+                    <td class="nama-siswa">${siswa.nama}</td>
+                `;
+                
+                // Looping 28 elemen nilai (Kolom D hingga AE)
+                for (let idx = 0; idx < 28; idx++) {
+                    let val = siswa.nilai[idx];
+                    let cellClass = "";
+                    
+                    // Validasi tampilan jika kosong atau di bawah KKM
+                    if (val === "" || val === null || val === undefined) {
+                        val = "-";
+                        cellClass = "nilai-kosong";
+                    } else {
+                        val = Number(val);
+                        let kkmAcuan = KKM_LIST[idx];
+                        if (val < kkmAcuan) {
+                            cellClass = "di-bawah-kkm";
+                        }
+                    }
+                    
+                    rowHtml += `<td class="${cellClass}">${val}</td>`;
+                }
+                
+                tr.innerHTML = rowHtml;
+                bodyMonitor.appendChild(tr);
+            });
+            
+            wrapperTabel.classList.remove('d-none');
+        }
+
+        function showAlert(type, msg) {
+            alertBox.className = `alert alert-${type} mt-2`;
+            alertBox.innerHTML = msg;
+            alertBox.classList.remove('d-none');
+        }
+    </script>
+</body>
+</html>
