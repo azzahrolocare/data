@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Input Nilai Semester 2 - SMP Islam Az-Zahro</title>
+    <title>Penilaian Semester Genap - Az-Zahro</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -44,132 +44,166 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen pb-16 text-gray-800">
+<body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
 
-    <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex-col justify-center items-center z-50">
-        <div class="text-center p-6 max-w-sm">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-deep border-t-transparent mb-4"></div>
-            <div class="font-bold text-emerald-deep flex items-center justify-center gap-2">
-                <i data-lucide="database" class="w-5 h-5 animate-bounce text-gold-accent"></i>
-                Menyimpan Data Ke Database...
-            </div>
-        </div>
-    </div>
-
-    <nav class="sticky top-0 z-40 bg-emerald-deep/95 backdrop-blur-md shadow-lg border-b border-emerald-medium/50 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="p-2 bg-emerald-medium rounded-xl border border-emerald-light/20">
-                    <i data-lucide="trending-up" class="w-6 h-6 text-gold-accent"></i>
-                </div>
-                <div>
-                    <span class="text-xs font-semibold tracking-widest text-gold-accent block uppercase">SMP Islam Az-Zahro</span>
-                    <h1 class="text-lg md:text-xl font-serif-custom font-bold tracking-wide">Sistem Input Nilai Smt 2</h1>
+    <div>
+        <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex-col justify-center items-center z-50">
+            <div class="text-center p-6 max-w-sm">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-deep border-t-transparent mb-4"></div>
+                <div class="font-bold text-emerald-deep flex items-center justify-center gap-2">
+                    <i data-lucide="database" class="w-5 h-5 animate-bounce text-gold-accent"></i>
+                    Menyimpan Data Ke Database...
                 </div>
             </div>
-            <a href="https://smpi-azzahro.github.io/data/penilaian/monitoring.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gold-accent hover:bg-yellow-400 text-emerald-deep font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-95">
-                <i data-lucide="monitor" class="w-4 h-4"></i> Monitoring Nilai
-            </a>
         </div>
-    </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        
-        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
-            <div class="flex items-center gap-2.5 mb-6 border-b border-gray-100 pb-4">
-                <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
-                <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Pilih Kelas & Mata Pelajaran</h5>
+        <nav class="sticky top-0 z-40 bg-emerald-deep/95 backdrop-blur-md shadow-lg border-b border-emerald-medium/50 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="p-2 bg-emerald-medium rounded-xl border border-emerald-light/20 flex-shrink-0">
+                        <i data-lucide="trending-up" class="w-5 h-5 sm:w-6 h-6 text-gold-accent"></i>
+                    </div>
+                    <h1 class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate">
+                        Penilaian Semester Genap
+                    </h1>
+                </div>
+                <a href="https://smpi-azzahro.github.io/data/penilaian/monitoring.html" class="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gold-accent hover:bg-yellow-400 text-emerald-deep font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 flex-shrink-0">
+                    <i data-lucide="monitor" class="w-3.5 h-3.5 sm:w-4 h-4"></i> <span class="hidden xs:inline">Monitoring</span> Nilai
+                </a>
             </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
-                <div class="md:col-span-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-                        <i data-lucide="presentation" class="w-4 h-4 text-gray-400"></i> Pilih Kelas
-                    </label>
-                    <select id="selectKelas" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none appearance-none">
-                        <option value="">-- Pilih Kelas --</option>
-                        <option value="KELAS 7">Kelas 7</option>
-                        <option value="KELAS 8">Kelas 8</option>
-                        <option value="KELAS 9">Kelas 9</option>
-                        <option value="KELAS 10">Kelas 10</option>
-                        <option value="KELAS 11">Kelas 11</option>
-                        <option value="KELAS 12">Kelas 12</option>
-                    </select>
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+                <div class="flex items-center gap-2.5 mb-6 border-b border-gray-100 pb-4">
+                    <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
+                    <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Pilih Kelas & Mata Pelajaran</h5>
                 </div>
                 
-                <div class="md:col-span-5">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-                        <i data-lucide="book-open" class="w-4 h-4 text-gray-400"></i> Pilih Mata Pelajaran / Program
-                    </label>
-                    <select id="selectMapel" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
-                        <option value="">-- Pilih Mapel --</option>
-                        <optgroup label="KELOMPOK A (WAJIB)" class="font-semibold text-emerald-deep bg-emerald-soft/50">
-                            <option value="PA_BP" class="font-normal text-gray-900 bg-white">PA dan BP</option>
-                            <option value="PPKN" class="font-normal text-gray-900 bg-white">PPKn</option>
-                            <option value="B_INDO" class="font-normal text-gray-900 bg-white">B. Indonesia</option>
-                            <option value="MATEMATIKA" class="font-normal text-gray-900 bg-white">Matematika</option>
-                            <option value="IPS" class="font-normal text-gray-900 bg-white">IPS</option>
-                            <option value="B_INGGRIS" class="font-normal text-gray-900 bg-white">B. Inggris</option>
-                        </optgroup>
-                        <optgroup label="KELOMPOK B (WAJIB)" class="font-semibold text-emerald-deep bg-emerald-soft/50">
-                            <option value="SENI_BUD" class="font-normal text-gray-900 bg-white">Seni Budaya</option>
-                            <option value="PENJAS" class="font-normal text-gray-900 bg-white">Penjas</option>
-                            <option value="IPA" class="font-normal text-gray-900 bg-white">IPA</option>
-                        </optgroup>
-                        <optgroup label="KELOMPOK C & PROGRAM" class="font-semibold text-emerald-deep bg-emerald-soft/50">
-                            <option value="TIK" class="font-normal text-gray-900 bg-white">TIK</option>
-                            <option value="BTQ" class="font-normal text-gray-900 bg-white">BTQ</option>
-                            <option value="PRAKARYA" class="font-normal text-gray-900 bg-white">Prakarya</option>
-                            <option value="B_MADURA" class="font-normal text-gray-900 bg-white">B. Madura</option>
-                            <option value="TAHFIDZ" class="font-normal text-gray-900 bg-white">Program Tahfidz</option>
-                        </optgroup>
-                        <optgroup label="REKAP KEHADIRAN" class="font-semibold text-emerald-deep bg-emerald-soft/50">
-                            <option value="KEHADIRAN" class="font-normal text-gray-900 bg-white">Alpha, Sakit, Izin</option>
-                        </optgroup>
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
+                    <div class="md:col-span-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="presentation" class="w-4 h-4 text-gray-400"></i> Pilih Kelas
+                        </label>
+                        <select id="selectKelas" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none appearance-none">
+                            <option value="">-- Pilih Kelas --</option>
+                            <option value="KELAS 7">Kelas 7</option>
+                            <option value="KELAS 8">Kelas 8</option>
+                            <option value="KELAS 9">Kelas 9</option>
+                            <option value="KELAS 10">Kelas 10</option>
+                            <option value="KELAS 11">Kelas 11</option>
+                            <option value="KELAS 12">Kelas 12</option>
+                        </select>
+                    </div>
+                    
+                    <div class="md:col-span-5">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="book-open" class="w-4 h-4 text-gray-400"></i> Pilih Mata Pelajaran / Program
+                        </label>
+                        <select id="selectMapel" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
+                            <option value="">-- Pilih Mapel --</option>
+                            <optgroup label="KELOMPOK A (WAJIB)" class="font-semibold text-emerald-deep bg-emerald-soft/50">
+                                <option value="PA_BP" class="font-normal text-gray-900 bg-white">PA dan BP</option>
+                                <option value="PPKN" class="font-normal text-gray-900 bg-white">PPKn</option>
+                                <option value="B_INDO" class="font-normal text-gray-900 bg-white">B. Indonesia</option>
+                                <option value="MATEMATIKA" class="font-normal text-gray-900 bg-white">Matematika</option>
+                                <option value="IPS" class="font-normal text-gray-900 bg-white">IPS</option>
+                                <option value="B_INGGRIS" class="font-normal text-gray-900 bg-white">B. Inggris</option>
+                            </optgroup>
+                            <optgroup label="KELOMPOK B (WAJIB)" class="font-semibold text-emerald-deep bg-emerald-soft/50">
+                                <option value="SENI_BUD" class="font-normal text-gray-900 bg-white">Seni Budaya</option>
+                                <option value="PENJAS" class="font-normal text-gray-900 bg-white">Penjas</option>
+                                <option value="IPA" class="font-normal text-gray-900 bg-white">IPA</option>
+                            </optgroup>
+                            <optgroup label="KELOMPOK C & PROGRAM" class="font-semibold text-emerald-deep bg-emerald-soft/50">
+                                <option value="TIK" class="font-normal text-gray-900 bg-white">TIK</option>
+                                <option value="BTQ" class="font-normal text-gray-900 bg-white">BTQ</option>
+                                <option value="PRAKARYA" class="font-normal text-gray-900 bg-white">Prakarya</option>
+                                <option value="B_MADURA" class="font-normal text-gray-900 bg-white">B. Madura</option>
+                                <option value="TAHFIDZ" class="font-normal text-gray-900 bg-white">Program Tahfidz</option>
+                            </optgroup>
+                            <optgroup label="REKAP KEHADIRAN" class="font-semibold text-emerald-deep bg-emerald-soft/50">
+                                <option value="KEHADIRAN" class="font-normal text-gray-900 bg-white">Alpha, Sakit, Izin</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    
+                    <div class="md:col-span-3">
+                        <button id="btnMuat" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i> Muat Daftar Siswa
+                        </button>
+                    </div>
                 </div>
-                
-                <div class="md:col-span-3">
-                    <button id="btnMuat" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
-                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Muat Daftar Siswa
+            </div>
+
+            <div id="alertBox" class="hidden p-4 rounded-2xl shadow-sm border mt-5 transition-all duration-300 text-sm font-medium flex items-center gap-3"></div>
+
+            <div id="containerTabel" class="hidden bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mt-6 transition-all duration-500 mb-12">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-5 mb-6">
+                    <div>
+                        <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900 flex items-center gap-2">
+                            <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Daftar Siswa
+                        </h4>
+                        <div id="infoKkm" class="inline-flex items-center gap-1 mt-2 text-xs font-semibold bg-emerald-soft text-emerald-deep border border-emerald-light px-3 py-1.5 rounded-xl"></div>
+                    </div>
+                    <button id="btnSimpanAtas" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg">
+                        <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Semua Nilai
+                    </button>
+                </div>
+
+                <div id="mobileCardsWrapper" class="md:hidden space-y-4 mb-6"></div>
+
+                <div class="overflow-x-auto rounded-2xl border border-gray-100 hidden md:block">
+                    <table class="w-full text-left border-collapse">
+                        <thead id="headTabel" class="bg-emerald-deep text-white text-xs font-semibold uppercase tracking-wider">
+                            </thead>
+                        <tbody id="bodyTabel" class="divide-y divide-gray-100 text-sm">
+                            </tbody>
+                    </table>
+                </div>
+
+                <div class="flex justify-end mt-6">
+                    <button id="btnSimpanBawah" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg">
+                        <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Semua Nilai
                     </button>
                 </div>
             </div>
-        </div>
+        </main>
+    </div>
 
-        <div id="alertBox" class="hidden p-4 rounded-2xl shadow-sm border mt-5 transition-all duration-300 text-sm font-medium flex items-center gap-3"></div>
-
-        <div id="containerTabel" class="hidden bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mt-6 transition-all duration-500">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-5 mb-6">
-                <div>
-                    <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900 flex items-center gap-2">
-                        <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Daftar Siswa
-                    </h4>
-                    <div id="infoKkm" class="inline-flex items-center gap-1 mt-2 text-xs font-semibold bg-emerald-soft text-emerald-deep border border-emerald-light px-3 py-1.5 rounded-xl"></div>
+    <footer class="bg-emerald-deep text-gray-200 border-t-2 border-gold-accent/40 mt-12 py-8 px-4">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                <div class="md:col-span-4 space-y-2">
+                    <div class="flex items-center gap-2 text-white">
+                        <i data-lucide="info" class="w-5 h-5 text-gold-accent"></i>
+                        <span class="font-serif-custom font-bold text-base tracking-wide">Informasi Sistem Penilaian</span>
+                    </div>
+                    <p class="text-xs text-gray-300/90 leading-relaxed">
+                        Aplikasi ini merupakan platform digital terintegrasi yang digunakan untuk mempermudah koordinasi, manajemen data, dan penginputan nilai harian serta capaian kompetensi semester genap secara langsung ke pusat data lembaga pendidikan.
+                    </p>
                 </div>
-                <button id="btnSimpanAtas" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg">
-                    <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Semua Nilai
-                </button>
+                <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-emerald-medium/30 p-4 rounded-xl border border-emerald-light/10">
+                        <h6 class="text-xs font-bold text-gold-accent uppercase tracking-wider mb-1">SMP Islam Az-Zahro</h6>
+                        <p class="text-[11px] text-gray-300 leading-normal">
+                            Digunakan oleh jajaran dewan guru untuk menginput nilai pengetahuan, keterampilan, serta rekapitulasi kehadiran (Alpha/Sakit) siswa kelas VII, VIII, dan IX guna menunjang akurasi pencetakan buku rapor.
+                        </p>
+                    </div>
+                    <div class="bg-emerald-medium/30 p-4 rounded-xl border border-emerald-light/10">
+                        <h6 class="text-xs font-bold text-gold-accent uppercase tracking-wider mb-1">SMK Az-Zahro</h6>
+                        <p class="text-[11px] text-gray-300 leading-normal">
+                            Mengakomodasi kebutuhan entri nilai kompetensi keahlian, muatan kewirausahaan, serta rekap kehadiran bagi siswa jenjang SMK (Kelas X, XI, XII) untuk menjamin validitas rekam jejak akademik siswa.
+                        </p>
+                    </div>
+                </div>
             </div>
-
-            <div id="mobileCardsWrapper" class="md:hidden space-y-4 mb-6"></div>
-
-            <div class="overflow-x-auto rounded-2xl border border-gray-100 hidden md:block">
-                <table class="w-full text-left border-collapse">
-                    <thead id="headTabel" class="bg-emerald-deep text-white text-xs font-semibold uppercase tracking-wider">
-                        </thead>
-                    <tbody id="bodyTabel" class="divide-y divide-gray-100 text-sm">
-                        </tbody>
-                </table>
-            </div>
-
-            <div class="flex justify-end mt-6">
-                <button id="btnSimpanBawah" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg">
-                    <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Semua Nilai
-                </button>
+            <div class="border-t border-emerald-medium/40 mt-6 pt-4 text-center text-[11px] text-gray-400">
+                &copy; 2026 Yayasan Pendidikan Az-Zahro. Seluruh Hak Cipta Dilindungi.
             </div>
         </div>
-    </main>
+    </footer>
 
     <script>
         const CONFIG_GAS_URL = "https://script.google.com/macros/s/AKfycbz3vYiQLbsJFsT1JPyY7pcc2b0GZp2CPoefoYOmthQ0rr5j3sjFQsg50CDxlAyapz3j/exec";
@@ -256,7 +290,6 @@
                 infoKkm.classList.add('hidden');
             }
 
-            // Set Judul Kolom Desktop View
             if (mapelKey === "KEHADIRAN") {
                 headTabel.innerHTML = `
                     <tr class="divide-x divide-emerald-medium text-center">
@@ -289,7 +322,7 @@
                 const valP = siswa.valP !== undefined && siswa.valP !== null ? siswa.valP : "";
                 const valK = siswa.valK !== undefined && siswa.valK !== null ? siswa.valK : "";
 
-                // 1. BANGUN HTML KARTU (MOBILE VIEW)
+                // HTML KARTU (MOBILE VIEW)
                 const cardHTML = `
                     <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200/70 shadow-sm space-y-3">
                         <div class="flex items-center justify-between border-b border-gray-200/60 pb-2">
@@ -314,7 +347,7 @@
                 `;
                 mobileCardsWrapper.insertAdjacentHTML('beforeend', cardHTML);
 
-                // 2. BANGUN HTML TR (DESKTOP VIEW)
+                // HTML TR (DESKTOP VIEW)
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50/80 transition-colors divide-x divide-gray-100 text-gray-700 font-medium";
                 tr.innerHTML = `
@@ -333,14 +366,11 @@
                 bodyTabel.appendChild(tr);
             });
 
-            // Sinkronisasi Pengisian Otomatis Antara Input Kartu HP & Tabel Desktop
             hubungkanInputLayar();
-
             containerTabel.classList.remove('hidden');
             lucide.createIcons();
         }
 
-        // Fungsi Penjaga: Jika Guru Mengetik Di HP/Desktop, Kedua Sisi Data Otomatis Selaras
         function hubungkanInputLayar() {
             const pMobile = document.querySelectorAll('.input-p-mobile');
             const pDesktop = document.querySelectorAll('.input-p-desktop');
@@ -365,7 +395,6 @@
 
             if (!kelas || !mapelKey) return;
 
-            // Membaca Melalui Elemen Desktop (Karena Nilainya Dipastikan Selalu Sama Berkat Sinkronisasi Di Atas)
             const inputsP = document.querySelectorAll('.input-p-desktop');
             const inputsK = document.querySelectorAll('.input-k-desktop');
             const scoresPayload = [];
