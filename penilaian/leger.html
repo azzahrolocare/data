@@ -308,7 +308,7 @@
 
                 if (result.status === "success") {
                     if (!result.data || result.data.length === 0) {
-                        showAlert('warning', `Tidak ditemukan data siswa aktif pada database tab sheet ${labelRomawi}.`);
+                        showAlert('warning', `Tidak ditemukan data siswa aktif pada database ${labelRomawi}.`);
                         return;
                     }
                     renderStrukturLedger(kelas, result.data);
