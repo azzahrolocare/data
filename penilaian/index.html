@@ -32,16 +32,12 @@
         }
     </script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-        }
-        .font-serif-custom {
-            font-family: 'Playfair Display', Georgia, serif;
-        }
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .font-serif-custom { font-family: 'Playfair Display', Georgia, serif; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
@@ -68,7 +64,7 @@
                     </h1>
                 </div>
                 <a href="https://smpi-azzahro.github.io/data/penilaian/monitoring.html" class="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gold-accent hover:bg-yellow-400 text-emerald-deep font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 flex-shrink-0">
-                    <i data-lucide="monitor" class="w-3.5 h-3.5 sm:w-4 h-4"></i> <span class="hidden xs:inline">Monitoring</span> Nilai
+                    <i data-lucide="monitor" class="w-3.5 h-3.5 sm:w-4 h-4"></i> <span>Monitoring Nilai</span>
                 </a>
             </div>
         </nav>
@@ -78,60 +74,42 @@
             <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
                 <div class="flex items-center gap-2.5 mb-6 border-b border-gray-100 pb-4">
                     <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
-                    <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Pilih Kelas & Mata Pelajaran</h5>
+                    <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Filter Tingkat, Kelas & Mata Pelajaran</h5>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
-                    <div class="md:col-span-4">
+                    <div class="md:col-span-3">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="school" class="w-4 h-4 text-gray-400"></i> Tingkat Sekolah
+                        </label>
+                        <select id="selectTingkat" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
+                            <option value="">-- Pilih Tingkat --</option>
+                            <option value="SMP">SMP Islam Az-Zahro</option>
+                            <option value="SMK">SMK Az-Zahro</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-3">
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
                             <i data-lucide="presentation" class="w-4 h-4 text-gray-400"></i> Pilih Kelas
                         </label>
-                        <select id="selectKelas" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none appearance-none">
-                            <option value="">-- Pilih Kelas --</option>
-                            <option value="KELAS 7">Kelas 7</option>
-                            <option value="KELAS 8">Kelas 8</option>
-                            <option value="KELAS 9">Kelas 9</option>
-                            <option value="KELAS 10">Kelas 10</option>
-                            <option value="KELAS 11">Kelas 11</option>
-                            <option value="KELAS 12">Kelas 12</option>
+                        <select id="selectKelas" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-400 outline-none transition-all cursor-not-allowed">
+                            <option value="">-- Pilih Tingkat Dulu --</option>
                         </select>
                     </div>
                     
-                    <div class="md:col-span-5">
+                    <div class="md:col-span-4">
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
                             <i data-lucide="book-open" class="w-4 h-4 text-gray-400"></i> Pilih Mata Pelajaran / Program
                         </label>
-                        <select id="selectMapel" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
-                            <option value="">-- Pilih Mapel --</option>
-                            <optgroup label="KELOMPOK A (WAJIB)" class="font-semibold text-emerald-deep bg-emerald-soft/50">
-                                <option value="PA_BP" class="font-normal text-gray-900 bg-white">PA dan BP</option>
-                                <option value="PPKN" class="font-normal text-gray-900 bg-white">PPKn</option>
-                                <option value="B_INDO" class="font-normal text-gray-900 bg-white">B. Indonesia</option>
-                                <option value="MATEMATIKA" class="font-normal text-gray-900 bg-white">Matematika</option>
-                                <option value="IPS" class="font-normal text-gray-900 bg-white">IPS</option>
-                                <option value="B_INGGRIS" class="font-normal text-gray-900 bg-white">B. Inggris</option>
-                            </optgroup>
-                            <optgroup label="KELOMPOK B (WAJIB)" class="font-semibold text-emerald-deep bg-emerald-soft/50">
-                                <option value="SENI_BUD" class="font-normal text-gray-900 bg-white">Seni Budaya</option>
-                                <option value="PENJAS" class="font-normal text-gray-900 bg-white">Penjas</option>
-                                <option value="IPA" class="font-normal text-gray-900 bg-white">IPA</option>
-                            </optgroup>
-                            <optgroup label="KELOMPOK C & PROGRAM" class="font-semibold text-emerald-deep bg-emerald-soft/50">
-                                <option value="TIK" class="font-normal text-gray-900 bg-white">TIK</option>
-                                <option value="BTQ" class="font-normal text-gray-900 bg-white">BTQ</option>
-                                <option value="PRAKARYA" class="font-normal text-gray-900 bg-white">Prakarya</option>
-                                <option value="B_MADURA" class="font-normal text-gray-900 bg-white">B. Madura</option>
-                                <option value="TAHFIDZ" class="font-normal text-gray-900 bg-white">Program Tahfidz</option>
-                            </optgroup>
-                            <optgroup label="REKAP KEHADIRAN" class="font-semibold text-emerald-deep bg-emerald-soft/50">
-                                <option value="KEHADIRAN" class="font-normal text-gray-900 bg-white">Alpha, Sakit, Izin</option>
-                            </optgroup>
+                        <select id="selectMapel" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-400 outline-none transition-all cursor-not-allowed">
+                            <option value="">-- Pilih Kelas Dulu --</option>
                         </select>
                     </div>
                     
-                    <div class="md:col-span-3">
-                        <button id="btnMuat" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
-                            <i data-lucide="refresh-cw" class="w-4 h-4"></i> Muat Daftar Siswa
+                    <div class="md:col-span-2">
+                        <button id="btnMuat" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i> Muat Data
                         </button>
                     </div>
                 </div>
@@ -206,26 +184,78 @@
     </footer>
 
     <script>
+        // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
         const CONFIG_GAS_URL = "https://script.google.com/macros/s/AKfycbz3vYiQLbsJFsT1JPyY7pcc2b0GZp2CPoefoYOmthQ0rr5j3sjFQsg50CDxlAyapz3j/exec";
 
-        const MAPEL_MAPPING = {
-            "PA_BP":       { nama: "PA dan BP",        kkm: 75, p: 4,  k: 5 },  
-            "PPKN":        { nama: "PPKn",             kkm: 70, p: 6,  k: 7 },  
-            "B_INDO":      { nama: "B. INDONESIA",     kkm: 72, p: 8,  k: 9 },  
-            "MATEMATIKA":  { nama: "MATEMATIKA",       kkm: 70, p: 10, k: 11 }, 
-            "IPS":         { nama: "IPS",              kkm: 72, p: 12, k: 13 }, 
-            "B_INGGRIS":   { nama: "B. INGGRIS",       kkm: 60, p: 14, k: 15 }, 
-            "SENI_BUD":    { nama: "SENI BUDAYA",      kkm: 69, p: 16, k: 17 }, 
-            "PENJAS":      { nama: "PENJAS",           kkm: 75, p: 18, k: 19 }, 
-            "IPA":         { nama: "IPA",              kkm: 70, p: 20, k: 21 }, 
-            "TIK":         { nama: "TIK",              kkm: 70, p: 22, k: 23 }, 
-            "BTQ":         { nama: "BTQ",              kkm: 70, p: 24, k: 25 }, 
-            "PRAKARYA":    { nama: "PRAKARYA",         kkm: 70, p: 26, k: 27 }, 
-            "B_MADURA":    { nama: "B. MADURA",        kkm: 70, p: 28, k: 29 }, 
-            "TAHFIDZ":     { nama: "PROGRAM TAHFIDZ",  kkm: 68, p: 30, k: 31 }, 
-            "KEHADIRAN":   { nama: "Tingkat Kehadiran", kkm: null, alpha: 34, sakit: 35 } 
+        // MASTER DATA DATABASE PEMETAAN TINGKAT - KELAS - KOORDINAT KOLOM EMAS
+        const DATABASE_SEKOLAH = {
+            "SMP": {
+                "KELAS 7": [
+                    { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
+                    { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
+                    { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
+                    { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
+                    { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
+                    { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
+                    { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
+                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                ],
+                "KELAS 8": [
+                    { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
+                    { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
+                    { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
+                    { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
+                    { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
+                    { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
+                    { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
+                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                ],
+                "KELAS 9": [
+                    { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
+                    { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
+                    { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
+                    { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
+                    { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
+                    { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
+                    { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
+                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                ]
+            },
+            "SMK": {
+                "KELAS 10": [
+                    { nama: "PAI (Pendidikan Agama Islam)", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 75, p: 6, k: 7 },
+                    { nama: "PPKn", kkm: 75, p: 8, k: 9 }, { nama: "Matematika", kkm: 75, p: 10, k: 11 },
+                    { nama: "B. Inggris", kkm: 75, p: 12, k: 13 }, { nama: "IPAS", kkm: 75, p: 14, k: 15 },
+                    { nama: "Seni Rupa", kkm: 75, p: 16, k: 17 }, { nama: "PENJAS", kkm: 75, p: 18, k: 19 },
+                    { nama: "S. Indo", kkm: 75, p: 20, k: 21 }, { nama: "DPPHP", kkm: 75, p: 22, k: 23 },
+                    { nama: "DPBHP", kkm: 75, p: 24, k: 25 }, { nama: "DPMHP", kkm: 75, p: 26, k: 27 },
+                    { nama: "TIK", kkm: 75, p: 28, k: 29 }, { nama: "BTQ", kkm: 75, p: 30, k: 31 },
+                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                ],
+                "KELAS 11": [
+                    { nama: "PAI (Pendidikan Agama Islam)", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 75, p: 6, k: 7 },
+                    { nama: "PPKn", kkm: 75, p: 8, k: 9 }, { nama: "Matematika", kkm: 75, p: 10, k: 11 },
+                    { nama: "B. Inggris", kkm: 75, p: 12, k: 13 }, { nama: "TIK", kkm: 75, p: 14, k: 15 },
+                    { nama: "PENJAS", kkm: 75, p: 16, k: 17 }, { nama: "S. Indo", kkm: 75, p: 18, k: 19 },
+                    { nama: "Kewirausahaan", kkm: 75, p: 20, k: 21 }, { nama: "PPHN", kkm: 75, p: 22, k: 23 },
+                    { nama: "PPHH", kkm: 75, p: 24, k: 25 }, { nama: "PPKPH", kkm: 75, p: 26, k: 27 },
+                    { nama: "KPPP", kkm: 75, p: 28, k: 29 }, { nama: "BTQ", kkm: 75, p: 30, k: 31 },
+                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                ],
+                "KELAS 12": [
+                    { nama: "PAI (Pendidikan Agama Islam)", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 75, p: 6, k: 7 },
+                    { nama: "PPKn", kkm: 75, p: 8, k: 9 }, { nama: "Matematika", kkm: 75, p: 10, k: 11 },
+                    { nama: "B. Inggris", kkm: 75, p: 12, k: 13 }, { nama: "TIK", kkm: 75, p: 14, k: 15 },
+                    { nama: "PENJAS", kkm: 75, p: 16, k: 17 }, { nama: "S. Indo", kkm: 75, p: 18, k: 19 },
+                    { nama: "Kewirausahaan", kkm: 75, p: 20, k: 21 }, { nama: "PPHN", kkm: 75, p: 22, k: 23 },
+                    { nama: "PPHH", kkm: 75, p: 24, k: 25 }, { nama: "KPPP", kkm: 75, p: 28, k: 29 },
+                    { nama: "BTQ", kkm: 75, p: 30, k: 31 },
+                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                ]
+            }
         };
 
+        const selectTingkat = document.getElementById('selectTingkat');
         const selectKelas = document.getElementById('selectKelas');
         const selectMapel = document.getElementById('selectMapel');
         const btnMuat = document.getElementById('btnMuat');
@@ -235,53 +265,86 @@
         const headTabel = document.getElementById('headTabel');
         const bodyTabel = document.getElementById('bodyTabel');
         const mobileCardsWrapper = document.getElementById('mobileCardsWrapper');
-        const btnSimpanAtas = document.getElementById('btnSimpanAtas');
-        const btnSimpanBawah = document.getElementById('btnSimpanBawah');
         const alertBox = document.getElementById('alertBox');
         const loadingOverlay = document.getElementById('loadingOverlay');
 
-        let dataSiswaAktif = []; 
+        let dataSiswaAktif = [];
 
+        // ONCHANGE TINGKAT SEKOLAH
+        selectTingkat.addEventListener('change', () => {
+            const tingkat = selectTingkat.value;
+            selectKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+            selectMapel.innerHTML = '<option value="">-- Pilih Kelas Dulu --</option>';
+            selectKelas.disabled = selectMapel.disabled = true;
+            selectKelas.className = selectMapel.className = "w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-400 outline-none cursor-not-allowed";
+
+            if (tingkat) {
+                selectKelas.disabled = false;
+                selectKelas.className = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none cursor-pointer";
+                
+                Object.keys(DATABASE_SEKOLAH[tingkat]).forEach(kelas => {
+                    selectKelas.innerHTML += `<option value="${kelas}">${kelas}</option>`;
+                });
+            }
+        });
+
+        // ONCHANGE PILIHAN KELAS
+        selectKelas.addEventListener('change', () => {
+            const tingkat = selectTingkat.value;
+            const kelas = selectKelas.value;
+            selectMapel.innerHTML = '<option value="">-- Pilih Mapel --</option>';
+            selectMapel.disabled = true;
+            selectMapel.className = "w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-400 outline-none cursor-not-allowed";
+
+            if (kelas) {
+                selectMapel.disabled = false;
+                selectMapel.className = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none cursor-pointer";
+                
+                DATABASE_SEKOLAH[tingkat][kelas].forEach((mapel, index) => {
+                    selectMapel.innerHTML += `<option value="${index}">${mapel.nama}</option>`;
+                });
+            }
+        });
+
+        // TOMBOL MUAT DATA SISWA
         btnMuat.addEventListener('click', async () => {
             const kelas = selectKelas.value;
-            const mapelKey = selectMapel.value;
+            const mapelIndex = selectMapel.value;
 
-            if (!kelas || !mapelKey) {
-                showAlert('danger', 'Silakan pilih Kelas dan Mata Pelajaran terlebih dahulu!');
+            if (!kelas || mapelIndex === "") {
+                showAlert('danger', 'Silakan tentukan Tingkat, Kelas, dan Mata Pelajaran terlebih dahulu!');
                 return;
             }
 
-            showAlert('info', 'Memuat data siswa harian...');
+            showAlert('info', 'Sedang mengambil data harian siswa dari server...');
             containerTabel.classList.add('hidden');
             
-            const mapelInfo = MAPEL_MAPPING[mapelKey];
-            let colPParam = mapelInfo.p || mapelInfo.alpha || "";
-            let colKParam = mapelInfo.k || mapelInfo.sakit || "";
+            const mapelInfo = DATABASE_SEKOLAH[selectTingkat.value][kelas][mapelIndex];
             
             try {
-                const urlFetch = `${CONFIG_GAS_URL}?kelas=${encodeURIComponent(kelas)}&colP=${colPParam}&colK=${colKParam}`;
+                const urlFetch = `${CONFIG_GAS_URL}?kelas=${encodeURIComponent(kelas)}&colP=${mapelInfo.p}&colK=${mapelInfo.k}`;
                 const response = await fetch(urlFetch);
                 const result = await response.json();
 
                 if (result.status === "success") {
                     dataSiswaAktif = result.data;
                     if (dataSiswaAktif.length === 0) {
-                        showAlert('warning', `Tidak ada data siswa ditemukan di tab ${kelas} (Baris 11+ kosong).`);
+                        showAlert('warning', `Tidak ditemukan baris data siswa di tab ${kelas}.`);
                         return;
                     }
-                    
-                    renderTabel(mapelKey, mapelInfo);
-                    showAlert('success', `Berhasil memuat ${dataSiswaAktif.length} data siswa.`);
+                    renderTabelElemen(mapelInfo);
+                    showAlert('success', `Berhasil memuat ${dataSiswaAktif.length} siswa dari tab ${kelas}.`);
                 } else {
-                    showAlert('danger', `Gagal: ${result.message}`);
+                    showAlert('danger', `Gagal memuat: ${result.message}`);
                 }
             } catch (error) {
                 console.error(error);
-                showAlert('danger', 'Terjadi kesalahan jaringan saat mengambil data. Pastikan URL GAS benar.');
+                showAlert('danger', 'Gangguan koneksi jaringan. Hubungi Administrator sistem.');
             }
         });
 
-        function renderTabel(mapelKey, mapelInfo) {
+        // RENDER KARTU HP & TABEL DESKTOP
+        function renderTabelElemen(mapelInfo) {
             judulTabel.innerHTML = `<i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Input Nilai: ${mapelInfo.nama}`;
             if (mapelInfo.kkm) {
                 infoKkm.classList.remove('hidden');
@@ -290,64 +353,50 @@
                 infoKkm.classList.add('hidden');
             }
 
-            if (mapelKey === "KEHADIRAN") {
-                headTabel.innerHTML = `
-                    <tr class="divide-x divide-emerald-medium text-center">
-                        <th class="py-4 px-3 w-[8%]">No</th>
-                        <th class="py-4 px-3 w-[15%]">NIS</th>
-                        <th class="py-4 px-4 text-left">Nama Lengkap Siswa</th>
-                        <th class="py-4 px-3 w-[15%]">Alpha (α)</th>
-                        <th class="py-4 px-3 w-[15%]">Sakit (S)</th>
-                    </tr>
-                `;
-            } else {
-                headTabel.innerHTML = `
-                    <tr class="divide-x divide-emerald-medium text-center">
-                        <th class="py-4 px-3 w-[8%]">No</th>
-                        <th class="py-4 px-3 w-[15%]">NIS</th>
-                        <th class="py-4 px-4 text-left">Nama Lengkap Siswa</th>
-                        <th class="py-4 px-3 w-[15%]">Pengetahuan</th>
-                        <th class="py-4 px-3 w-[15%]">Keterampilan</th>
-                    </tr>
-                `;
-            }
+            const isKehadiran = mapelInfo.nama.includes("Kehadiran");
+            const labelP = isKehadiran ? "Alpha (α)" : "Pengetahuan";
+            const labelK = isKehadiran ? "Sakit (S)" : "Keterampilan";
 
-            bodyTabel.innerHTML = "";
-            mobileCardsWrapper.innerHTML = "";
+            headTabel.innerHTML = `
+                <tr class="divide-x divide-emerald-medium text-center">
+                    <th class="py-4 px-3 w-[8%]">No</th>
+                    <th class="py-4 px-3 w-[15%]">NIS</th>
+                    <th class="py-4 px-4 text-left">Nama Lengkap Siswa</th>
+                    <th class="py-4 px-3 w-[15%]">${labelP}</th>
+                    <th class="py-4 px-3 w-[15%]">${labelK}</th>
+                </tr>
+            `;
 
-            const labelP = mapelKey === "KEHADIRAN" ? "Alpha (α)" : "Pengetahuan";
-            const labelK = mapelKey === "KEHADIRAN" ? "Sakit (S)" : "Keterampilan";
+            bodyTabel.innerHTML = mobileCardsWrapper.innerHTML = "";
 
             dataSiswaAktif.forEach((siswa) => {
-                const valP = siswa.valP !== undefined && siswa.valP !== null ? siswa.valP : "";
-                const valK = siswa.valK !== undefined && siswa.valK !== null ? siswa.valK : "";
+                const valP = (siswa.valP !== undefined && siswa.valP !== null) ? siswa.valP : "";
+                const valK = (siswa.valK !== undefined && siswa.valK !== null) ? siswa.valK : "";
 
-                // HTML KARTU (MOBILE VIEW)
+                // BUILD KARTU HP
                 const cardHTML = `
-                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200/70 shadow-sm space-y-3">
+                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200 shadow-sm space-y-3">
                         <div class="flex items-center justify-between border-b border-gray-200/60 pb-2">
                             <div>
-                                <span class="text-[10px] font-mono font-bold text-gray-400 block tracking-wider">NIS: ${siswa.nis || '-'}</span>
+                                <span class="text-[10px] font-mono font-bold text-gray-400 block">NIS: ${siswa.nis || '-'}</span>
                                 <h5 class="font-bold text-gray-900 text-sm">${siswa.no}. ${siswa.nama}</h5>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-1">${labelP}</label>
-                                <input type="number" class="w-full text-center bg-white border border-gray-200 focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-2 text-sm rounded-xl outline-none transition-all input-p-mobile" 
-                                       data-row="${siswa.row}" value="${valP}" min="0" max="100">
+                                <input type="number" class="w-full text-center bg-white border border-gray-200 focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-2 text-sm rounded-xl outline-none input-p-mobile" data-row="${siswa.row}" value="${valP}">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-1">${labelK}</label>
-                                <input type="number" class="w-full text-center bg-white border border-gray-200 focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-2 text-sm rounded-xl outline-none transition-all input-k-mobile" 
-                                       data-row="${siswa.row}" value="${valK}" min="0" max="100">
+                                <input type="number" class="w-full text-center bg-white border border-gray-200 focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-2 text-sm rounded-xl outline-none input-k-mobile" data-row="${siswa.row}" value="${valK}">
                             </div>
                         </div>
                     </div>
                 `;
                 mobileCardsWrapper.insertAdjacentHTML('beforeend', cardHTML);
 
-                // HTML TR (DESKTOP VIEW)
+                // BUILD ROW TABLE DESKTOP
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50/80 transition-colors divide-x divide-gray-100 text-gray-700 font-medium";
                 tr.innerHTML = `
@@ -355,29 +404,28 @@
                     <td class="text-center py-3.5 text-xs font-mono tracking-wider text-gray-500">${siswa.nis || '-'}</td>
                     <td class="py-3.5 px-4 font-semibold text-gray-900">${siswa.nama}</td>
                     <td class="py-3.5 px-3">
-                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-semibold px-2 py-1.5 rounded-lg outline-none transition-all input-p-desktop" 
-                               data-row="${siswa.row}" value="${valP}" min="0" max="100">
+                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-semibold px-2 py-1.5 rounded-lg outline-none input-p-desktop" data-row="${siswa.row}" value="${valP}">
                     </td>
                     <td class="py-3.5 px-3">
-                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-semibold px-2 py-1.5 rounded-lg outline-none transition-all input-k-desktop" 
-                               data-row="${siswa.row}" value="${valK}" min="0" max="100">
+                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-semibold px-2 py-1.5 rounded-lg outline-none input-k-desktop" data-row="${siswa.row}" value="${valK}">
                     </td>
                 `;
                 bodyTabel.appendChild(tr);
             });
 
-            hubungkanInputLayar();
+            sinkronisasiInputLayar();
             containerTabel.classList.remove('hidden');
             lucide.createIcons();
         }
 
-        function hubungkanInputLayar() {
+        // SINKRONISASI KETIKAN ANTARA LAYAR HP & LAYAR DESKTOP
+        function sinkronisasiInputLayar() {
             const pMobile = document.querySelectorAll('.input-p-mobile');
             const pDesktop = document.querySelectorAll('.input-p-desktop');
             const kMobile = document.querySelectorAll('.input-k-mobile');
             const kDesktop = document.querySelectorAll('.input-k-desktop');
 
-            for(let i=0; i < pMobile.length; i++) {
+            for (let i = 0; i < pMobile.length; i++) {
                 pMobile[i].addEventListener('input', (e) => pDesktop[i].value = e.target.value);
                 pDesktop[i].addEventListener('input', (e) => pMobile[i].value = e.target.value);
                 kMobile[i].addEventListener('input', (e) => kDesktop[i].value = e.target.value);
@@ -385,16 +433,16 @@
             }
         }
 
-        btnSimpanAtas.addEventListener('click', simpanSemuaNilai);
-        btnSimpanBawah.addEventListener('click', simpanSemuaNilai);
+        document.getElementById('btnSimpanAtas').addEventListener('click', simpanDataKeSpreadsheet);
+        document.getElementById('btnSimpanBawah').addEventListener('click', simpanDataKeSpreadsheet);
 
-        async function simpanSemuaNilai() {
+        // KIRIM DATA KE BACKEND GAS
+        async function simpanDataKeSpreadsheet() {
             const kelas = selectKelas.value;
-            const mapelKey = selectMapel.value;
-            const mapelInfo = MAPEL_MAPPING[mapelKey];
+            const mapelIndex = selectMapel.value;
+            if (!kelas || mapelIndex === "") return;
 
-            if (!kelas || !mapelKey) return;
-
+            const mapelInfo = DATABASE_SEKOLAH[selectTingkat.value][kelas][mapelIndex];
             const inputsP = document.querySelectorAll('.input-p-desktop');
             const inputsK = document.querySelectorAll('.input-k-desktop');
             const scoresPayload = [];
@@ -413,13 +461,13 @@
 
             const payload = {
                 kelas: kelas,
-                colP: mapelInfo.p || mapelInfo.alpha,
-                colK: mapelInfo.k || mapelInfo.sakit,
+                colP: mapelInfo.p,
+                colK: mapelInfo.k,
                 scores: scoresPayload
             };
 
             loadingOverlay.classList.remove('hidden');
-            showAlert('info', 'Sedang mengunggah rangkuman data ke Google Sheets...');
+            showAlert('info', 'Sedang menyimpan data baru Anda ke Spreadsheet...');
 
             try {
                 const response = await fetch(CONFIG_GAS_URL, {
@@ -432,38 +480,27 @@
                 loadingOverlay.classList.add('hidden');
 
                 if (result.status === "success") {
-                    showAlert('success', `🎉 Sukses! Seluruh data penilaian ${mapelInfo.nama} untuk ${kelas} telah diperbarui di server.`);
+                    showAlert('success', `🎉 Sukses! Seluruh data nilai ${mapelInfo.nama} untuk ${kelas} berhasil diperbarui di server.`);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
-                    showAlert('danger', `Gagal menyimpan data: ${result.message}`);
+                    showAlert('danger', `Gagal: ${result.message}`);
                 }
-
             } catch (error) {
                 loadingOverlay.classList.add('hidden');
                 console.error(error);
-                showAlert('danger', 'Kesalahan jaringan / CORS Blocked. Pastikan setelan Web App GAS Anda valid.');
+                showAlert('danger', 'Terjadi kesalahan jaringan / CORS terblokir. Periksa deployment GAS Anda.');
             }
         }
 
         function showAlert(type, message) {
             alertBox.classList.remove('hidden', 'bg-emerald-soft', 'text-emerald-deep', 'border-emerald-light', 'bg-red-50', 'text-red-700', 'border-red-100', 'bg-blue-50', 'text-blue-700', 'border-blue-100', 'bg-amber-50', 'text-amber-700', 'border-amber-100');
-            
-            let iconMarkup = "";
-            if (type === 'success') {
-                alertBox.classList.add('bg-emerald-soft', 'text-emerald-deep', 'border-emerald-light');
-                iconMarkup = `<i data-lucide="check-circle-2" class="w-5 h-5 flex-shrink-0 text-emerald-deep"></i>`;
-            } else if (type === 'danger') {
-                alertBox.classList.add('bg-red-50', 'text-red-700', 'border-red-100');
-                iconMarkup = `<i data-lucide="alert-octagon" class="w-5 h-5 flex-shrink-0 text-red-600"></i>`;
-            } else if (type === 'warning') {
-                alertBox.classList.add('bg-amber-50', 'text-amber-700', 'border-amber-100');
-                iconMarkup = `<i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 text-amber-600"></i>`;
-            } else {
-                alertBox.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-100');
-                iconMarkup = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i>`;
-            }
+            let icon = "";
+            if (type === 'success') { alertBox.classList.add('bg-emerald-soft', 'text-emerald-deep', 'border-emerald-light'); icon = `<i data-lucide="check-circle-2" class="text-emerald-deep"></i>`; }
+            else if (type === 'danger') { alertBox.classList.add('bg-red-50', 'text-red-700', 'border-red-100'); icon = `<i data-lucide="alert-octagon" class="text-red-600"></i>`; }
+            else if (type === 'warning') { alertBox.classList.add('bg-amber-50', 'text-amber-700', 'border-amber-100'); icon = `<i data-lucide="alert-triangle" class="text-amber-600"></i>`; }
+            else { alertBox.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-100'); icon = `<i data-lucide="info" class="text-blue-600"></i>`; }
 
-            alertBox.innerHTML = `${iconMarkup} <div>${message}</div>`;
+            alertBox.innerHTML = `${icon} <div>${message}</div>`;
             lucide.createIcons();
         }
 
