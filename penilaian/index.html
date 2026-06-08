@@ -390,7 +390,7 @@
             } catch (error) {
                 loadingOverlay.classList.add('hidden');
                 console.error(error);
-                showAlert('danger', 'Terjadi kesalahan jaringan saat mengambil data dari database cloud.');
+                showAlert('danger', 'Terjadi kesalahan jaringan saat mengambil data dari database.');
             }
         });
 
@@ -538,7 +538,7 @@
                     showAlert('success', `Seluruh nilai ${mapelInfo.nama} kelas ${kelas} berhasil diperbarui.`);
                     
                     // Menampilkan Pop-Up Modal Sukses
-                    successModalMsg.innerText = `Seluruh data penilaian mata pelajaran "${mapelInfo.nama}" untuk tingkat "${kelas}" telah aman dikirim dan sinkron ke Cloud Spreadsheet Az-Zahro.`;
+                    successModalMsg.innerText = `Seluruh data penilaian mata pelajaran "${mapelInfo.nama}" untuk tingkat "${kelas}" telah aman dikirim dan sinkron ke database Az-Zahro.`;
                     successModalOverlay.classList.remove('hidden');
 
                 } else {
