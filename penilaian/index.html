@@ -32,23 +32,55 @@
         }
     </script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .font-serif-custom { font-family: 'Playfair Display', Georgia, serif; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        .font-serif-custom {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
 
     <div>
-        <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex-col justify-center items-center z-50">
+        <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex flex-col justify-center items-center z-50">
             <div class="text-center p-6 max-w-sm">
                 <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-deep border-t-transparent mb-4"></div>
-                <div class="font-bold text-emerald-deep flex items-center justify-center gap-2">
-                    <i data-lucide="database" class="w-5 h-5 animate-bounce text-gold-accent"></i>
-                    Menyimpan Data Ke Database...
+                <div id="loadingText" class="font-bold text-emerald-deep flex items-center justify-center gap-2"></div>
+            </div>
+        </div>
+
+        <div id="successModalOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
+            <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200">
+                
+                <button onclick="tutupSuccessModalOnly()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-100 rounded-xl transition-all outline-none">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+
+                <div class="text-center mt-2">
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-soft border border-emerald-light mb-4">
+                        <i data-lucide="check-circle-2" class="w-10 h-10 text-emerald-medium"></i>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 font-serif-custom mb-1">Data Berhasil Disimpan!</h3>
+                    <p id="successModalMsg" class="text-sm text-gray-600 px-2 mb-6"></p>
+
+                    <div class="border-t border-gray-100 my-4 pt-4">
+                        <p class="text-xs font-semibold text-gray-500 mb-4">Apakah Anda ingin memeriksa halaman monitoring rekap nilai?</p>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="resetHalamanKeAwal()" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs sm:text-sm rounded-xl transition-all active:scale-95">
+                            Selesai
+                            </button>
+                            <a href="https://smpi-azzahro.github.io/data/penilaian/monitoring.html" onclick="tutupSuccessModalOnly()" class="inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md active:scale-95">
+                                <i data-lucide="monitor" class="w-4 h-4 text-gold-accent"></i> Cek Monitoring
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,8 +95,8 @@
                         Penilaian Semester Genap
                     </h1>
                 </div>
-                <a href="https://smpi-azzahro.github.io/data/penilaian/monitoring.html" class="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gold-accent hover:bg-yellow-400 text-emerald-deep font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 flex-shrink-0">
-                    <i data-lucide="monitor" class="w-3.5 h-3.5 sm:w-4 h-4"></i> <span>Monitoring Nilai</span>
+                <a href="https://smpi-azzahro.github.io/data/penilaian/monitoring.html" target="_blank" class="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gold-accent hover:bg-yellow-400 text-emerald-deep font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 flex-shrink-0">
+                    <i data-lucide="monitor" class="w-3.5 h-3.5 sm:w-4 h-4"></i> <span class="hidden xs:inline">Monitoring</span> Nilai
                 </a>
             </div>
         </nav>
@@ -74,7 +106,7 @@
             <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
                 <div class="flex items-center gap-2.5 mb-6 border-b border-gray-100 pb-4">
                     <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
-                    <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Filter Tingkat, Kelas & Mata Pelajaran</h5>
+                    <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Pilih Tingkat, Kelas & Mata Pelajaran</h5>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-end">
@@ -82,7 +114,7 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
                             <i data-lucide="school" class="w-4 h-4 text-gray-400"></i> Tingkat Sekolah
                         </label>
-                        <select id="selectTingkat" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
+                        <select id="selectTingkat" onchange="updateKelas()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
                             <option value="">-- Pilih Tingkat --</option>
                             <option value="SMP">SMP Islam Az-Zahro</option>
                             <option value="SMK">SMK Az-Zahro</option>
@@ -93,23 +125,23 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
                             <i data-lucide="presentation" class="w-4 h-4 text-gray-400"></i> Pilih Kelas
                         </label>
-                        <select id="selectKelas" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-400 outline-none transition-all cursor-not-allowed">
-                            <option value="">-- Pilih Tingkat Dulu --</option>
+                        <select id="selectKelas" onchange="updateMapel()" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
+                            <option value="">-- Pilih Tingkat Dahulu --</option>
                         </select>
                     </div>
                     
-                    <div class="md:col-span-4">
+                    <div class="md:col-span-3">
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-                            <i data-lucide="book-open" class="w-4 h-4 text-gray-400"></i> Pilih Mata Pelajaran / Program
+                            <i data-lucide="book-open" class="w-4 h-4 text-gray-400"></i> Mata Pelajaran
                         </label>
-                        <select id="selectMapel" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-400 outline-none transition-all cursor-not-allowed">
-                            <option value="">-- Pilih Kelas Dulu --</option>
+                        <select id="selectMapel" disabled class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
+                            <option value="">-- Pilih Kelas Dahulu --</option>
                         </select>
                     </div>
                     
-                    <div class="md:col-span-2">
-                        <button id="btnMuat" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
-                            <i data-lucide="refresh-cw" class="w-4 h-4"></i> Muat Data
+                    <div class="md:col-span-3">
+                        <button id="btnMuat" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i> Muat Daftar Siswa
                         </button>
                     </div>
                 </div>
@@ -117,7 +149,7 @@
 
             <div id="alertBox" class="hidden p-4 rounded-2xl shadow-sm border mt-5 transition-all duration-300 text-sm font-medium flex items-center gap-3"></div>
 
-            <div id="containerTabel" class="hidden bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mt-6 transition-all duration-500 mb-12">
+            <div id="containerTabel" class="hidden bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mt-6 transition-all duration-500 mb-12 scroll-mt-24">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-5 mb-6">
                     <div>
                         <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900 flex items-center gap-2">
@@ -184,11 +216,10 @@
     </footer>
 
     <script>
-        // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
         const CONFIG_GAS_URL = "https://script.google.com/macros/s/AKfycbz3vYiQLbsJFsT1JPyY7pcc2b0GZp2CPoefoYOmthQ0rr5j3sjFQsg50CDxlAyapz3j/exec";
 
-        // MASTER DATA DATABASE PEMETAAN TINGKAT - KELAS - KOORDINAT KOLOM EMAS
-        const DATABASE_SEKOLAH = {
+        // MASTER DATA TINGKAT, KELAS, MAPEL DAN KELOLAAN STRUKTUR KOLOM SPREADSHEET
+        const DATA_SEKOLAH = {
             "SMP": {
                 "KELAS 7": [
                     { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
@@ -198,7 +229,7 @@
                     { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
                     { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
-                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                    { nama: "Rekap Kehadiran (S/I/A)", kkm: null, p: 34, k: 35 }
                 ],
                 "KELAS 8": [
                     { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
@@ -208,49 +239,48 @@
                     { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
                     { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
-                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                    { nama: "Rekap Kehadiran (S/I/A)", kkm: null, p: 34, k: 35 }
                 ],
                 "KELAS 9": [
                     { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
                     { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
                     { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
-                    { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
+                    { nama: "Seni Budaya", kkm: 69, p: 16, h: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
                     { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
                     { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
-                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                    { nama: "Rekap Kehadiran (S/I/A)", kkm: null, p: 34, k: 35 }
                 ]
             },
             "SMK": {
                 "KELAS 10": [
-                    { nama: "PAI (Pendidikan Agama Islam)", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 75, p: 6, k: 7 },
-                    { nama: "PPKn", kkm: 75, p: 8, k: 9 }, { nama: "Matematika", kkm: 75, p: 10, k: 11 },
-                    { nama: "B. Inggris", kkm: 75, p: 12, k: 13 }, { nama: "IPAS", kkm: 75, p: 14, k: 15 },
-                    { nama: "Seni Rupa", kkm: 75, p: 16, k: 17 }, { nama: "PENJAS", kkm: 75, p: 18, k: 19 },
-                    { nama: "S. Indo", kkm: 75, p: 20, k: 21 }, { nama: "DPPHP", kkm: 75, p: 22, k: 23 },
+                    { nama: "PAI", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 72, p: 6, k: 7 },
+                    { nama: "PPKn", kkm: 70, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
+                    { nama: "B. Inggris", kkm: 65, p: 12, k: 13 }, { nama: "IPAS", kkm: 70, p: 14, k: 15 },
+                    { nama: "Seni Rupa", kkm: 70, p: 16, k: 17 }, { nama: "PENJAS", kkm: 75, p: 18, k: 19 },
+                    { nama: "S. Indo", kkm: 70, p: 20, k: 21 }, { nama: "DPPHP", kkm: 75, p: 22, k: 23 },
                     { nama: "DPBHP", kkm: 75, p: 24, k: 25 }, { nama: "DPMHP", kkm: 75, p: 26, k: 27 },
-                    { nama: "TIK", kkm: 75, p: 28, k: 29 }, { nama: "BTQ", kkm: 75, p: 30, k: 31 },
-                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                    { nama: "TIK", kkm: 70, p: 28, k: 29 }, { nama: "BTQ", kkm: 70, p: 30, k: 31 },
+                    { nama: "Rekap Kehadiran (S/I/A)", kkm: null, p: 34, k: 35 }
                 ],
                 "KELAS 11": [
-                    { nama: "PAI (Pendidikan Agama Islam)", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 75, p: 6, k: 7 },
-                    { nama: "PPKn", kkm: 75, p: 8, k: 9 }, { nama: "Matematika", kkm: 75, p: 10, k: 11 },
-                    { nama: "B. Inggris", kkm: 75, p: 12, k: 13 }, { nama: "TIK", kkm: 75, p: 14, k: 15 },
-                    { nama: "PENJAS", kkm: 75, p: 16, k: 17 }, { nama: "S. Indo", kkm: 75, p: 18, k: 19 },
+                    { nama: "PAI", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 72, p: 6, k: 7 },
+                    { nama: "PPKn", kkm: 70, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
+                    { nama: "B. Inggris", kkm: 65, p: 12, k: 13 }, { nama: "TIK", kkm: 70, p: 14, k: 15 },
+                    { nama: "PENJAS", kkm: 75, p: 16, k: 17 }, { nama: "S. Indo", kkm: 70, p: 18, k: 19 },
                     { nama: "Kewirausahaan", kkm: 75, p: 20, k: 21 }, { nama: "PPHN", kkm: 75, p: 22, k: 23 },
                     { nama: "PPHH", kkm: 75, p: 24, k: 25 }, { nama: "PPKPH", kkm: 75, p: 26, k: 27 },
-                    { nama: "KPPP", kkm: 75, p: 28, k: 29 }, { nama: "BTQ", kkm: 75, p: 30, k: 31 },
-                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                    { nama: "KPPP", kkm: 75, p: 28, k: 29 }, { nama: "BTQ", kkm: 70, p: 30, k: 31 },
+                    { nama: "Rekap Kehadiran (S/I/A)", kkm: null, p: 34, k: 35 }
                 ],
                 "KELAS 12": [
-                    { nama: "PAI (Pendidikan Agama Islam)", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 75, p: 6, k: 7 },
-                    { nama: "PPKn", kkm: 75, p: 8, k: 9 }, { nama: "Matematika", kkm: 75, p: 10, k: 11 },
-                    { nama: "B. Inggris", kkm: 75, p: 12, k: 13 }, { nama: "TIK", kkm: 75, p: 14, k: 15 },
-                    { nama: "PENJAS", kkm: 75, p: 16, k: 17 }, { nama: "S. Indo", kkm: 75, p: 18, k: 19 },
-                    { nama: "Kewirausahaan", kkm: 75, p: 20, k: 21 }, { nama: "PPHN", kkm: 75, p: 22, k: 23 },
-                    { nama: "PPHH", kkm: 75, p: 24, k: 25 }, { nama: "KPPP", kkm: 75, p: 28, k: 29 },
-                    { nama: "BTQ", kkm: 75, p: 30, k: 31 },
-                    { nama: "Rekap Kehadiran (A/S)", kkm: null, p: 34, k: 35 }
+                    { nama: "PAI", kkm: 75, p: 4, k: 5 }, { nama: "B. Indonesia", kkm: 72, p: 6, k: 7 },
+                    { nama: "PPKn", kkm: 70, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
+                    { nama: "B. Inggris", kkm: 65, p: 12, k: 13 }, { nama: "TIK", kkm: 70, p: 14, k: 15 },
+                    { nama: "PENJAS", kkm: 75, p: 16, k: 17 }, { nama: "S. Indo", kkm: 70, p: 18, k: 19 },
+                    { nama: "PPHN", kkm: 75, p: 22, k: 23 }, { nama: "PPHH", kkm: 75, p: 24, k: 25 },
+                    { nama: "KPPP", kkm: 75, p: 28, k: 29 }, { nama: "Kewirausahaan", kkm: 75, p: 20, k: 21 },
+                    { nama: "BTQ", kkm: 70, p: 30, k: 31 }, { nama: "Rekap Kehadiran (S/I/A)", kkm: null, p: 34, k: 35 }
                 ]
             }
         };
@@ -265,87 +295,109 @@
         const headTabel = document.getElementById('headTabel');
         const bodyTabel = document.getElementById('bodyTabel');
         const mobileCardsWrapper = document.getElementById('mobileCardsWrapper');
+        const btnSimpanAtas = document.getElementById('btnSimpanAtas');
+        const btnSimpanBawah = document.getElementById('btnSimpanBawah');
         const alertBox = document.getElementById('alertBox');
         const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingText');
+        const successModalOverlay = document.getElementById('successModalOverlay');
+        const successModalMsg = document.getElementById('successModalMsg');
 
-        let dataSiswaAktif = [];
+        let dataSiswaAktif = []; 
 
-        // ONCHANGE TINGKAT SEKOLAH
-        selectTingkat.addEventListener('change', () => {
+        function updateKelas() {
             const tingkat = selectTingkat.value;
             selectKelas.innerHTML = '<option value="">-- Pilih Kelas --</option>';
-            selectMapel.innerHTML = '<option value="">-- Pilih Kelas Dulu --</option>';
-            selectKelas.disabled = selectMapel.disabled = true;
-            selectKelas.className = selectMapel.className = "w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-400 outline-none cursor-not-allowed";
+            selectMapel.innerHTML = '<option value="">-- Pilih Kelas Dahulu --</option>';
+            selectKelas.disabled = true;
+            selectMapel.disabled = true;
+            selectKelas.classList.replace('bg-gray-50', 'bg-gray-100');
+            selectMapel.classList.replace('bg-gray-50', 'bg-gray-100');
 
             if (tingkat) {
                 selectKelas.disabled = false;
-                selectKelas.className = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none cursor-pointer";
-                
-                Object.keys(DATABASE_SEKOLAH[tingkat]).forEach(kelas => {
+                selectKelas.classList.replace('bg-gray-100', 'bg-gray-50');
+                const listKelas = Object.keys(DATA_SEKOLAH[tingkat]);
+                listKelas.forEach(kelas => {
                     selectKelas.innerHTML += `<option value="${kelas}">${kelas}</option>`;
                 });
             }
-        });
+            lucide.createIcons();
+        }
 
-        // ONCHANGE PILIHAN KELAS
-        selectKelas.addEventListener('change', () => {
+        function updateMapel() {
             const tingkat = selectTingkat.value;
             const kelas = selectKelas.value;
             selectMapel.innerHTML = '<option value="">-- Pilih Mapel --</option>';
             selectMapel.disabled = true;
-            selectMapel.className = "w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-400 outline-none cursor-not-allowed";
+            selectMapel.classList.replace('bg-gray-50', 'bg-gray-100');
 
             if (kelas) {
                 selectMapel.disabled = false;
-                selectMapel.className = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none cursor-pointer";
-                
-                DATABASE_SEKOLAH[tingkat][kelas].forEach((mapel, index) => {
+                selectMapel.classList.replace('bg-gray-100', 'bg-gray-50');
+                const listMapel = DATA_SEKOLAH[tingkat][kelas];
+                listMapel.forEach((mapel, index) => {
                     selectMapel.innerHTML += `<option value="${index}">${mapel.nama}</option>`;
                 });
             }
-        });
+            lucide.createIcons();
+        }
 
-        // TOMBOL MUAT DATA SISWA
+        // AMBIL DATA SISWA
         btnMuat.addEventListener('click', async () => {
+            const tingkat = selectTingkat.value;
             const kelas = selectKelas.value;
             const mapelIndex = selectMapel.value;
 
-            if (!kelas || mapelIndex === "") {
-                showAlert('danger', 'Silakan tentukan Tingkat, Kelas, dan Mata Pelajaran terlebih dahulu!');
+            if (!tingkat || !kelas || !mapelIndex) {
+                showAlert('danger', 'Silakan tentukan Tingkat, Kelas dan Mata Pelajaran terlebih dahulu!');
                 return;
             }
 
-            showAlert('info', 'Sedang mengambil data harian siswa dari server...');
+            const mapelInfo = DATA_SEKOLAH[tingkat][kelas][mapelIndex];
+
+            loadingText.innerHTML = `<i data-lucide="users" class="w-5 h-5 animate-bounce text-gold-accent"></i> Memuat Data Siswa ${kelas}...`;
+            loadingOverlay.classList.remove('hidden');
+            lucide.createIcons();
+
             containerTabel.classList.add('hidden');
-            
-            const mapelInfo = DATABASE_SEKOLAH[selectTingkat.value][kelas][mapelIndex];
             
             try {
                 const urlFetch = `${CONFIG_GAS_URL}?kelas=${encodeURIComponent(kelas)}&colP=${mapelInfo.p}&colK=${mapelInfo.k}`;
                 const response = await fetch(urlFetch);
                 const result = await response.json();
 
+                loadingOverlay.classList.add('hidden');
+
                 if (result.status === "success") {
                     dataSiswaAktif = result.data;
                     if (dataSiswaAktif.length === 0) {
-                        showAlert('warning', `Tidak ditemukan baris data siswa di tab ${kelas}.`);
+                        showAlert('warning', `Tidak ada data siswa ditemukan di tab ${kelas} (Baris 11+ kosong).`);
                         return;
                     }
-                    renderTabelElemen(mapelInfo);
-                    showAlert('success', `Berhasil memuat ${dataSiswaAktif.length} siswa dari tab ${kelas}.`);
+                    
+                    renderTabel(mapelInfo);
+                    
+                    // Notifikasi Dinamis Sesuai Permintaan
+                    showAlert('success', `Berhasil memuat ${dataSiswaAktif.length} data siswa kelas ${kelas}.`);
+
+                    // Scroll halus ke target tabel input nilai
+                    containerTabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
                 } else {
-                    showAlert('danger', `Gagal memuat: ${result.message}`);
+                    showAlert('danger', `Gagal: ${result.message}`);
                 }
             } catch (error) {
+                loadingOverlay.classList.add('hidden');
                 console.error(error);
-                showAlert('danger', 'Gangguan koneksi jaringan. Hubungi Administrator sistem.');
+                showAlert('danger', 'Terjadi kesalahan jaringan saat mengambil data dari database cloud.');
             }
         });
 
-        // RENDER KARTU HP & TABEL DESKTOP
-        function renderTabelElemen(mapelInfo) {
+        function renderTabel(mapelInfo) {
+            const isKehadiran = mapelInfo.nama.includes("Kehadiran");
             judulTabel.innerHTML = `<i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Input Nilai: ${mapelInfo.nama}`;
+            
             if (mapelInfo.kkm) {
                 infoKkm.classList.remove('hidden');
                 infoKkm.innerHTML = `<i data-lucide="target" class="w-3.5 h-3.5 text-gold-accent"></i> Standar KKM: ${mapelInfo.kkm}`;
@@ -353,9 +405,8 @@
                 infoKkm.classList.add('hidden');
             }
 
-            const isKehadiran = mapelInfo.nama.includes("Kehadiran");
-            const labelP = isKehadiran ? "Alpha (α)" : "Pengetahuan";
-            const labelK = isKehadiran ? "Sakit (S)" : "Keterampilan";
+            const labelP = isKehadiran ? "Sakit / Izin" : "Pengetahuan";
+            const labelK = isKehadiran ? "Alpha (α)" : "Keterampilan";
 
             headTabel.innerHTML = `
                 <tr class="divide-x divide-emerald-medium text-center">
@@ -367,36 +418,37 @@
                 </tr>
             `;
 
-            bodyTabel.innerHTML = mobileCardsWrapper.innerHTML = "";
+            bodyTabel.innerHTML = "";
+            mobileCardsWrapper.innerHTML = "";
 
             dataSiswaAktif.forEach((siswa) => {
-                const valP = (siswa.valP !== undefined && siswa.valP !== null) ? siswa.valP : "";
-                const valK = (siswa.valK !== undefined && siswa.valK !== null) ? siswa.valK : "";
+                const valP = siswa.valP !== undefined && siswa.valP !== null ? siswa.valP : "";
+                const valK = siswa.valK !== undefined && siswa.valK !== null ? siswa.valK : "";
 
-                // BUILD KARTU HP
                 const cardHTML = `
-                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200 shadow-sm space-y-3">
+                    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200/70 shadow-sm space-y-3">
                         <div class="flex items-center justify-between border-b border-gray-200/60 pb-2">
                             <div>
-                                <span class="text-[10px] font-mono font-bold text-gray-400 block">NIS: ${siswa.nis || '-'}</span>
+                                <span class="text-[10px] font-mono font-bold text-gray-400 block tracking-wider">NIS: ${siswa.nis || '-'}</span>
                                 <h5 class="font-bold text-gray-900 text-sm">${siswa.no}. ${siswa.nama}</h5>
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-1">${labelP}</label>
-                                <input type="number" class="w-full text-center bg-white border border-gray-200 focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-2 text-sm rounded-xl outline-none input-p-mobile" data-row="${siswa.row}" value="${valP}">
+                                <input type="number" class="w-full text-center bg-white border border-gray-200 focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-2 text-sm rounded-xl outline-none transition-all input-p-mobile" 
+                                       data-row="${siswa.row}" value="${valP}">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-500 mb-1">${labelK}</label>
-                                <input type="number" class="w-full text-center bg-white border border-gray-200 focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-2 text-sm rounded-xl outline-none input-k-mobile" data-row="${siswa.row}" value="${valK}">
+                                <input type="number" class="w-full text-center bg-white border border-gray-200 focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-2 text-sm rounded-xl outline-none transition-all input-k-mobile" 
+                                       data-row="${siswa.row}" value="${valK}">
                             </div>
                         </div>
                     </div>
                 `;
                 mobileCardsWrapper.insertAdjacentHTML('beforeend', cardHTML);
 
-                // BUILD ROW TABLE DESKTOP
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50/80 transition-colors divide-x divide-gray-100 text-gray-700 font-medium";
                 tr.innerHTML = `
@@ -404,28 +456,29 @@
                     <td class="text-center py-3.5 text-xs font-mono tracking-wider text-gray-500">${siswa.nis || '-'}</td>
                     <td class="py-3.5 px-4 font-semibold text-gray-900">${siswa.nama}</td>
                     <td class="py-3.5 px-3">
-                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-semibold px-2 py-1.5 rounded-lg outline-none input-p-desktop" data-row="${siswa.row}" value="${valP}">
+                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-semibold px-2 py-1.5 rounded-lg outline-none transition-all input-p-desktop" 
+                               data-row="${siswa.row}" value="${valP}">
                     </td>
                     <td class="py-3.5 px-3">
-                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-semibold px-2 py-1.5 rounded-lg outline-none input-k-desktop" data-row="${siswa.row}" value="${valK}">
+                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-semibold px-2 py-1.5 rounded-lg outline-none transition-all input-k-desktop" 
+                               data-row="${siswa.row}" value="${valK}">
                     </td>
                 `;
                 bodyTabel.appendChild(tr);
             });
 
-            sinkronisasiInputLayar();
+            hubungkanInputLayar();
             containerTabel.classList.remove('hidden');
             lucide.createIcons();
         }
 
-        // SINKRONISASI KETIKAN ANTARA LAYAR HP & LAYAR DESKTOP
-        function sinkronisasiInputLayar() {
+        function hubungkanInputLayar() {
             const pMobile = document.querySelectorAll('.input-p-mobile');
             const pDesktop = document.querySelectorAll('.input-p-desktop');
             const kMobile = document.querySelectorAll('.input-k-mobile');
             const kDesktop = document.querySelectorAll('.input-k-desktop');
 
-            for (let i = 0; i < pMobile.length; i++) {
+            for(let i=0; i < pMobile.length; i++) {
                 pMobile[i].addEventListener('input', (e) => pDesktop[i].value = e.target.value);
                 pDesktop[i].addEventListener('input', (e) => pMobile[i].value = e.target.value);
                 kMobile[i].addEventListener('input', (e) => kDesktop[i].value = e.target.value);
@@ -433,16 +486,17 @@
             }
         }
 
-        document.getElementById('btnSimpanAtas').addEventListener('click', simpanDataKeSpreadsheet);
-        document.getElementById('btnSimpanBawah').addEventListener('click', simpanDataKeSpreadsheet);
+        btnSimpanAtas.addEventListener('click', simpanSemuaNilai);
+        btnSimpanBawah.addEventListener('click', simpanSemuaNilai);
 
-        // KIRIM DATA KE BACKEND GAS
-        async function simpanDataKeSpreadsheet() {
+        // PROSES SIMPAN DATA & SINKRONISASI
+        async function simpanSemuaNilai() {
+            const tingkat = selectTingkat.value;
             const kelas = selectKelas.value;
             const mapelIndex = selectMapel.value;
-            if (!kelas || mapelIndex === "") return;
+            if (!tingkat || !kelas || !mapelIndex) return;
 
-            const mapelInfo = DATABASE_SEKOLAH[selectTingkat.value][kelas][mapelIndex];
+            const mapelInfo = DATA_SEKOLAH[tingkat][kelas][mapelIndex];
             const inputsP = document.querySelectorAll('.input-p-desktop');
             const inputsK = document.querySelectorAll('.input-k-desktop');
             const scoresPayload = [];
@@ -466,8 +520,9 @@
                 scores: scoresPayload
             };
 
+            loadingText.innerHTML = `<i data-lucide="database" class="w-5 h-5 animate-spin text-gold-accent"></i> Menyimpan Ke Database Sheets...`;
             loadingOverlay.classList.remove('hidden');
-            showAlert('info', 'Sedang menyimpan data baru Anda ke Spreadsheet...');
+            lucide.createIcons();
 
             try {
                 const response = await fetch(CONFIG_GAS_URL, {
@@ -480,27 +535,67 @@
                 loadingOverlay.classList.add('hidden');
 
                 if (result.status === "success") {
-                    showAlert('success', `🎉 Sukses! Seluruh data nilai ${mapelInfo.nama} untuk ${kelas} berhasil diperbarui di server.`);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    showAlert('success', `Seluruh nilai ${mapelInfo.nama} kelas ${kelas} berhasil diperbarui.`);
+                    
+                    // Menampilkan Pop-Up Modal Sukses
+                    successModalMsg.innerText = `Seluruh data penilaian mata pelajaran "${mapelInfo.nama}" untuk tingkat "${kelas}" telah aman dikirim dan sinkron ke Database.`;
+                    successModalOverlay.classList.remove('hidden');
+
                 } else {
-                    showAlert('danger', `Gagal: ${result.message}`);
+                    showAlert('danger', `Gagal menyimpan data: ${result.message}`);
                 }
+
             } catch (error) {
                 loadingOverlay.classList.add('hidden');
                 console.error(error);
-                showAlert('danger', 'Terjadi kesalahan jaringan / CORS terblokir. Periksa deployment GAS Anda.');
+                showAlert('danger', 'Kesalahan jaringan / Jaringan Terputus. Sinkronisasi gagal.');
             }
+        }
+
+        // TOMBOL CLOSE (X): Menutup modal saja agar guru bisa meneliti kembali halaman input nilai
+        function tutupSuccessModalOnly() {
+            successModalOverlay.classList.add('hidden');
+        }
+
+        // TOMBOL LEWATI / SELESAI: Kembali ke halaman utama (reset dropdown & sembunyikan tabel)
+        function resetHalamanKeAwal() {
+            successModalOverlay.classList.add('hidden');
+            containerTabel.classList.add('hidden');
+            alertBox.classList.add('hidden');
+            
+            // Reset Form Dropdown Input
+            selectTingkat.value = "";
+            selectKelas.innerHTML = '<option value="">-- Pilih Tingkat Dahulu --</option>';
+            selectMapel.innerHTML = '<option value="">-- Pilih Kelas Dahulu --</option>';
+            selectKelas.disabled = true;
+            selectMapel.disabled = true;
+            selectKelas.classList.replace('bg-gray-50', 'bg-gray-100');
+            selectMapel.classList.replace('bg-gray-50', 'bg-gray-100');
+            
+            // Gulir layar otomatis kembali ke atas
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
         }
 
         function showAlert(type, message) {
             alertBox.classList.remove('hidden', 'bg-emerald-soft', 'text-emerald-deep', 'border-emerald-light', 'bg-red-50', 'text-red-700', 'border-red-100', 'bg-blue-50', 'text-blue-700', 'border-blue-100', 'bg-amber-50', 'text-amber-700', 'border-amber-100');
-            let icon = "";
-            if (type === 'success') { alertBox.classList.add('bg-emerald-soft', 'text-emerald-deep', 'border-emerald-light'); icon = `<i data-lucide="check-circle-2" class="text-emerald-deep"></i>`; }
-            else if (type === 'danger') { alertBox.classList.add('bg-red-50', 'text-red-700', 'border-red-100'); icon = `<i data-lucide="alert-octagon" class="text-red-600"></i>`; }
-            else if (type === 'warning') { alertBox.classList.add('bg-amber-50', 'text-amber-700', 'border-amber-100'); icon = `<i data-lucide="alert-triangle" class="text-amber-600"></i>`; }
-            else { alertBox.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-100'); icon = `<i data-lucide="info" class="text-blue-600"></i>`; }
+            
+            let iconMarkup = "";
+            if (type === 'success') {
+                alertBox.classList.add('bg-emerald-soft', 'text-emerald-deep', 'border-emerald-light');
+                iconMarkup = `<i data-lucide="check-circle-2" class="w-5 h-5 flex-shrink-0 text-emerald-deep"></i>`;
+            } else if (type === 'danger') {
+                alertBox.classList.add('bg-red-50', 'text-red-700', 'border-red-100');
+                iconMarkup = `<i data-lucide="alert-octagon" class="w-5 h-5 flex-shrink-0 text-red-600"></i>`;
+            } else if (type === 'warning') {
+                alertBox.classList.add('bg-amber-50', 'text-amber-700', 'border-amber-100');
+                iconMarkup = `<i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 text-amber-600"></i>`;
+            } else {
+                alertBox.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-100');
+                iconMarkup = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i>`;
+            }
 
-            alertBox.innerHTML = `${icon} <div>${message}</div>`;
+            alertBox.innerHTML = `${iconMarkup} <div>${message}</div>`;
             lucide.createIcons();
         }
 
