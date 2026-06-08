@@ -130,7 +130,7 @@
                     
                     <div class="lg:col-span-4">
                         <button id="btnTampilkan" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]">
-                            <i data-lucide="eye" class="w-4 h-4 text-gold-accent"></i> Tampilkan Ledger Rekap
+                            <i data-lucide="eye" class="w-4 h-4 text-gold-accent"></i> Tampilkan leger Rekap
                         </button>
                     </div>
 
@@ -283,8 +283,8 @@
         window.addEventListener('resize', periksaOrientasiLayar);
         window.addEventListener('orientationchange', periksaOrientasiLayar);
 
-        // FUNGSI UTAMA LOAD DATA LEDGER VIA AJAX API GAS
-        async function muatDataLedgerServer() {
+        // FUNGSI UTAMA LOAD DATA leger VIA AJAX API GAS
+        async function muatDatalegerServer() {
             const kelas = selectKelas.value;
             if (!kelas) {
                 showAlert('danger', 'Silakan pilih tingkatan kelas terlebih dahulu!');
@@ -311,7 +311,7 @@
                         showAlert('warning', `Tidak ditemukan data siswa aktif pada database ${labelRomawi}.`);
                         return;
                     }
-                    renderStrukturLedger(kelas, result.data);
+                    renderStrukturleger(kelas, result.data);
                 } else {
                     showAlert('danger', `Gagal memproses data: ${result.message}`);
                 }
@@ -323,8 +323,8 @@
         }
 
         // Event listener klik tombol Tampilkan & Refresh
-        btnTampilkan.addEventListener('click', muatDataLedgerServer);
-        btnRefresh.addEventListener('click', muatDataLedgerServer);
+        btnTampilkan.addEventListener('click', muatDatalegerServer);
+        btnRefresh.addEventListener('click', muatDatalegerServer);
 
         function getAturanMapel(kelas) {
             if (kelas.includes("7") || kelas.includes("8") || kelas.includes("9")) {
@@ -339,9 +339,9 @@
             return MAPEL_RULES["SMP"];
         }
 
-        function renderStrukturLedger(kelas, siswaList) {
+        function renderStrukturleger(kelas, siswaList) {
             const aturanActive = getAturanMapel(kelas);
-            judulTabel.innerText = `Data Rekapitulasi Ledger: ${dapatkanLabelRomawi(kelas)}`;
+            judulTabel.innerText = `Data Rekapitulasi leger: ${dapatkanLabelRomawi(kelas)}`;
 
             // 1. GENERATE HEADER KELAS DINAMIS (Menggunakan Singkatan)
             let headerRow1 = `
