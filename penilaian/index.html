@@ -33,7 +33,7 @@
         }
     </script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
@@ -156,7 +156,13 @@
                         <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900 flex items-center gap-2">
                             <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Daftar Siswa
                         </h4>
-                        <div id="infoKkm" class="inline-flex items-center gap-1 mt-2 text-xs font-semibold bg-emerald-soft text-emerald-deep border border-emerald-light px-3 py-1.5 rounded-xl"></div>
+                        <div class="flex flex-wrap items-center gap-2 mt-2">
+                            <div id="infoKkm" class="inline-flex items-center gap-1 text-xs font-semibold bg-emerald-soft text-emerald-deep border border-emerald-light px-3 py-1.5 rounded-xl"></div>
+                            <div id="infoCatatanNilai" class="inline-flex items-center gap-1 text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 px-3 py-1.5 rounded-xl">
+                                <i data-lucide="info" class="w-3.5 h-3.5 text-amber-600 flex-shrink-0"></i>
+                                <span>Nilai Pengetahuan isi dengan Nilai Dongkrak/Nilai Kasih Sayang KKM 75. Nilai Keterampilan isi dengan Nilai Asli Kerja Siswa.</span>
+                            </div>
+                        </div>
                     </div>
                     <button id="btnSimpanAtas" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg">
                         <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Semua Nilai
@@ -236,7 +242,7 @@
                 "KELAS 8": [
                     { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
                     { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
-                    { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
+                    { nama: "IPS", kkm: 72, p: 12, h: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
                     { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
                     { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
@@ -247,7 +253,7 @@
                     { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
                     { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
                     { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
-                    { nama: "Seni Budaya", kkm: 69, p: 16, h: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
+                    { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
                     { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
                     { nama: "B. Madura", kkm: 70, p: 28, k: 29 }, { nama: "Program Tahfidz", kkm: 68, p: 30, k: 31 },
@@ -294,6 +300,7 @@
         const containerTabel = document.getElementById('containerTabel');
         const judulTabel = document.getElementById('judulTabel');
         const infoKkm = document.getElementById('infoKkm');
+        const infoCatatanNilai = document.getElementById('infoCatatanNilai');
         const headTabel = document.getElementById('headTabel');
         const bodyTabel = document.getElementById('bodyTabel');
         const mobileCardsWrapper = document.getElementById('mobileCardsWrapper');
@@ -431,12 +438,14 @@
             if (mapelInfo.kkm) {
                 infoKkm.classList.remove('hidden');
                 infoKkm.innerHTML = `<i data-lucide="target" class="w-3.5 h-3.5 text-gold-accent"></i> Standar KKM: ${mapelInfo.kkm}`;
+                infoCatatanNilai.classList.remove('hidden'); // Tampilkan catatan jika mata pelajaran bernilai
             } else {
                 infoKkm.classList.add('hidden');
+                infoCatatanNilai.classList.add('hidden'); // Sembunyikan catatan jika berupa rekap kehadiran
             }
 
-            const labelP = isKehadiran ? "Sakit / Izin" : "Nilai Dongkrak (KKM 75)";
-            const labelK = isKehadiran ? "Alpha (α)" : "Nilai Asli";
+            const labelP = isKehadiran ? "Sakit / Izin" : "Pengetahuan";
+            const labelK = isKehadiran ? "Alpha (α)" : "Keterampilan";
 
             headTabel.innerHTML = `
                 <tr class="divide-x divide-emerald-medium text-center">
