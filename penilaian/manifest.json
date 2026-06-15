@@ -1,0 +1,23 @@
+{
+  "name": "Sistem Penilaian",
+  "short_name": "Penilaian Semester Genap - Az-Zahro",
+  "description": "Aplikasi input nilai harian dan capaian kompetensi semester genap Yayasan Ponpes Az-Zahro, SMP & SMK Azzahro",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0F5132",
+  "theme_color": "#0F5132",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
