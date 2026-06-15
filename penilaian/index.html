@@ -219,7 +219,7 @@
             </div>
             <div class="border-t border-emerald-medium/40 mt-6 pt-4 text-center text-[11px] text-gray-400">
                 &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
-                SMP Islam Az-Zahro 󠁯• SMK Az-Zahro
+                SMP Islam Az-Zahro • SMK Az-Zahro
             </div>
         </div>
     </footer>
@@ -243,7 +243,7 @@
                 "KELAS 8": [
                     { nama: "PA dan BP", kkm: 75, p: 4, k: 5 }, { nama: "PPKn", kkm: 70, p: 6, k: 7 },
                     { nama: "B. Indonesia", kkm: 72, p: 8, k: 9 }, { nama: "Matematika", kkm: 70, p: 10, k: 11 },
-                    { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, k: 15 },
+                    { nama: "IPS", kkm: 72, p: 12, k: 13 }, { nama: "B. Inggris", kkm: 60, p: 14, h: 15 },
                     { nama: "Seni Budaya", kkm: 69, p: 16, k: 17 }, { nama: "Penjas", kkm: 75, p: 18, k: 19 },
                     { nama: "IPA", kkm: 70, p: 20, k: 21 }, { nama: "TIK", kkm: 70, p: 22, k: 23 },
                     { nama: "BTQ", kkm: 70, p: 24, k: 25 }, { nama: "Prakarya", kkm: 70, p: 26, k: 27 },
@@ -317,31 +317,56 @@
 
         // MODIFIKASI: Fungsi pemicu gabungan untuk Fullscreen dan Update Pilihan Kelas
         function pemicuTingkatSekolah() {
-            // Jalankan Fullscreen terlebih dahulu
-            aktifkanLayarPenuh();
+            // Jalankan Fullscreen khusus optimalisasi Google Chrome
+            aktifkanLayarPenuhChrome();
             // Jalankan update pilihan kelas seperti biasa
             updateKelas();
         }
 
-        // MODIFIKASI: Fungsi API Fullscreen Browser
-        function aktifkanLayarPenuh() {
+        // MODIFIKASI: Fungsi API Fullscreen Khusus Google Chrome
+        function aktifkanLayarPenuhChrome() {
+            const targetElemen = document.body;
+            
             if (!document.fullscreenElement && 
                 !document.mozFullScreenElement && 
                 !document.webkitFullscreenElement && 
                 !document.msFullscreenElement) {
                 
-                const elemenDokumen = document.documentElement;
-                if (elemenDokumen.requestFullscreen) {
-                    elemenDokumen.requestFullscreen();
-                } else if (elemenDokumen.msRequestFullscreen) {
-                    elemenDokumen.msRequestFullscreen();
-                } else if (elemenDokumen.mozRequestFullScreen) {
-                    elemenDokumen.mozRequestFullScreen();
-                } else if (elemenDokumen.webkitRequestFullscreen) {
-                    elemenDokumen.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                if (targetElemen.requestFullscreen) {
+                    targetElemen.requestFullscreen();
+                } else if (targetElemen.webkitRequestFullscreen) {
+                    targetElemen.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                } else if (targetElemen.mozRequestFullScreen) {
+                    targetElemen.mozRequestFullScreen();
+                } else if (targetElemen.msRequestFullscreen) {
+                    targetElemen.msRequestFullscreen();
                 }
+                
+                // Tegaskan warna bar notifikasi & baterai ke Chrome
+                setWarnaTemaChrome("#0F5132");
             }
         }
+
+        // Fungsi pembantu penyesuaian meta tag theme-color
+        function setWarnaTemaChrome(warna) {
+            let metaTheme = document.querySelector('meta[name="theme-color"]');
+            if (!metaTheme) {
+                metaTheme = document.createElement('meta');
+                metaTheme.name = "theme-color";
+                document.head.appendChild(metaTheme);
+            }
+            metaTheme.setAttribute('content', warna);
+        }
+
+        // Event listener memantau perubahan status fullscreen di Google Chrome
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                document.body.classList.add('bg-gray-50');
+                setWarnaTemaChrome("#0F5132");
+            } else {
+                setWarnaTemaChrome("#0F5132");
+            }
+        });
 
         function updateKelas() {
             const tingkat = selectTingkat.value;
@@ -446,7 +471,7 @@
             }
 
             const labelP = isKehadiran ? "Sakit / Izin" : "Pengetahuan";
-            const labelK = isKehadiran ? "Alpha (α)" : "Keterampilan";
+            const labelK = isKehadiran ? "Alpha (\u03B1)" : "Keterampilan";
 
             headTabel.innerHTML = `
                 <tr class="divide-x divide-emerald-medium text-center">
