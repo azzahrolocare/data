@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Manajemen File Base64 - Deep Emerald</title>
+    <title>Sistem Cloud Previewer Base64 - Deep Emerald</title>
     <style>
+        /* --- CSS TEMA PREMIUM DEEP EMERALD --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
@@ -20,7 +21,7 @@
         .container {
             background-color: #ffffff;
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0, 77, 64, 0.1);
@@ -45,7 +46,7 @@
         input[type="file"] {
             display: block;
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: #e0f2f1;
             border: 1px dashed #00796b;
             border-radius: 6px;
@@ -96,16 +97,16 @@
         button:hover { background-color: #00332c; }
         button:active { transform: scale(0.98); }
 
-        button.btn-lihat {
+        button.btn-proses {
             background-color: #00796b;
-            padding: 6px 12px;
+            padding: 6px 14px;
             font-size: 13px;
             width: auto;
             margin: 0;
+            border-radius: 4px;
         }
-        button.btn-lihat:hover { background-color: #004d40; }
+        button.btn-proses:hover { background-color: #004d40; }
 
-        /* Gaya Tabel Menu File Base64 */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -115,7 +116,7 @@
 
         th, td {
             border: 1px solid #b2dfdb;
-            padding: 10px;
+            padding: 12px;
             text-align: left;
         }
 
@@ -126,18 +127,19 @@
 
         tr:nth-child(even) { background-color: #fafafa; }
 
+        /* Area Responsif Pratinjau */
         .preview-box {
             text-align: center;
             margin-top: 15px;
-        }
-
-        #pratinjauGambar {
-            max-width: 100%;
-            max-height: 400px;
+            padding: 20px;
+            background-color: #fafafa;
             border-radius: 8px;
-            border: 3px solid #b2dfdb;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: none;
+            border: 1px dashed #b2dfdb;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .loading {
@@ -146,34 +148,51 @@
             font-size: 14px;
             display: none;
         }
+
+        /* Gaya Khusus Elemen Media Preview */
+        .preview-box audio {
+            width: 100%;
+            max-width: 500px;
+        }
+        .preview-box video {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .preview-box iframe {
+            border-radius: 6px;
+            border: 1px solid #b2dfdb;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Sistem Manajemen File Base64</h2>
+        <h2>Sistem Cloud Previewer Base64 (Multi-Format)</h2>
         
-        <h3>1. Unggah Gambar & Ambil Teks Base64</h3>
-        <input type="file" id="pilihGambar" accept="image/*">
+        <h3>1. Unggah File (Gambar, Audio, Video, PDF, dll.)</h3>
+        <input type="file" id="pilihFile" accept="*/*">
 
         <h3>Hasil Teks Base64:</h3>
-        <textarea id="hasilTeks" rows="6" placeholder="Teks Base64 otomatis terisi..."></textarea>
+        <textarea id="hasilTeks" rows="6" placeholder="Teks Base64 otomatis terisi berdasarkan file apa pun yang Anda pilih..."></textarea>
         
         <div class="counter-box">
             Jumlah Karakter: <span id="hitungKarakter">0</span>
         </div>
         
-        <button id="tombolSimpan">Simpan ke Cloud (.txt)</button>
-        <div id="statusUpload" class="loading">Sedang menyimpan ke Google Drive...</div>
+        <button id="tombolSimpan">Simpan File ke Cloud</button>
+        <div id="statusUpload" class="loading">Sedang mengonversi dan mengunggah ke Google Drive...</div>
 
         <hr style="border: 0; border-top: 2px solid #e0f2f1; margin: 30px 0;">
 
-        <h3>2. Menu Database File Base64</h3>
-        <span id="statusMuat Tabel" class="loading">Memuat daftar file...</span>
+        <h3>2. Menu Database Semua File</h3>
+        <span id="statusMuatTabel" class="loading">Memuat daftar database...</span>
         <table>
             <thead>
                 <tr>
-                    <th>Nama File (.txt)</th>
+                    <th>Nama File Asli</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -181,37 +200,40 @@
                 </tbody>
         </table>
 
-        <h3>3. Pratinjau Gambar</h3>
-        <div class="preview-box">
-            <div id="statusBaca" class="loading">Mengambil kode Base64 dari file .txt di Drive...</div>
-            <img id="pratinjauGambar" alt="Hasil konversi Cloud Base64">
+        <h3>3. Area Pratinjau / Respon File</h3>
+        <div class="preview-box" id="kotakPratinjau">
+            <div id="statusBaca" class="loading">Mengambil data biner dari Cloud...</div>
+            <span style="color: #888; font-style: italic;">Belum ada file yang dipilih untuk ditampilkan.</span>
         </div>
     </div>
 
     <script>
-        // !!! GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA !!!
+        // !!! KUNCI UTAMA: GANTI DENGAN URL WEB APP APPS SCRIPT ANDA !!!
         const URL_API = "https://script.google.com/macros/s/AKfycbz55LnGsgcLUbMSiQDjbMw8REqTt4UdC0nSxI9oSL6m_-XP_Dj3A_28iIfjmSt5M6ApAw/exec";
 
-        const inputGambar = document.getElementById('pilihGambar');
+        const pilihFile = document.getElementById('pilihFile');
         const outputTeks = document.getElementById('hasilTeks');
         const hitungKarakter = document.getElementById('hitungKarakter');
         const tombolSimpan = document.getElementById('tombolSimpan');
         const tabelFile = document.getElementById('tabelFile');
-        const pratinjauGambar = document.getElementById('pratinjauGambar');
+        const kotakPratinjau = document.getElementById('kotakPratinjau');
         
         let namaFileGlobal = "";
+        let tipeFileGlobal = "";
 
-        // Hitung Karakter
+        // Fungsi Hitung Karakter (.txt)
         function perbaruiPenghitung() {
             hitungKarakter.textContent = outputTeks.value.length.toLocaleString('id-ID');
         }
         outputTeks.addEventListener('input', perbaruiPenghitung);
 
-        // Konversi gambar ke Base64 saat di-upload
-        inputGambar.addEventListener('change', function(e) {
+        // Membaca jenis file apa pun dan mengubahnya menjadi Base64
+        pilihFile.addEventListener('change', function(e) {
             const file = e.target.files[0]; 
             if (file) {
                 namaFileGlobal = file.name;
+                tipeFileGlobal = file.type; 
+                
                 const reader = new FileReader(); 
                 reader.onloadend = function() {
                     outputTeks.value = reader.result; 
@@ -221,11 +243,11 @@
             }
         });
 
-        // SIMPAN KE GOOGLE DRIVE & SHEETS
+        // SIMPAN KE GOOGLE CLOUD
         tombolSimpan.addEventListener('click', function() {
             const konten = outputTeks.value.trim();
             if (!konten) {
-                alert("Pilih gambar atau isi teks Base64 terlebih dahulu!");
+                alert("Silakan pilih file terlebih dahulu!");
                 return;
             }
 
@@ -235,87 +257,114 @@
                 method: "POST",
                 body: JSON.stringify({
                     aksi: "simpan",
-                    namaFile: namaFileGlobal || "file_base64.txt",
-                    kontenBase64: konten
+                    namaFile: namaFileGlobal || "file_tanpa_nama",
+                    kontenBase64: konten,
+                    tipeFile: tipeFileGlobal || "application/octet-stream"
                 })
             })
             .then(res => res.json())
             .then(data => {
                 document.getElementById('statusUpload').style.display = 'none';
                 if(data.status === "sukses") {
-                    alert("Berhasil disimpan ke Google Drive!");
+                    alert("File sukses disimpan ke Google Drive!");
                     outputTeks.value = "";
                     perbaruiPenghitung();
-                    muatDaftarFile(); // Refresh tabel
+                    muatDaftarFile(); 
                 } else {
                     alert("Gagal: " + data.pesan);
                 }
             })
             .catch(err => {
                 document.getElementById('statusUpload').style.display = 'none';
-                alert("Terjadi kesalahan koneksi backend.");
-                console.error(err);
+                alert("Gagal terhubung ke server backend.");
             });
         });
 
-        // AMBIL DAFTAR FILE DARI GOOGLE SHEETS
+        // MUAT DAFTAR DATABASE DARI SHEET
         function muatDaftarFile() {
-            document.getElementById('statusMuat Tabel').style.display = 'inline';
+            document.getElementById('statusMuatTabel').style.display = 'inline';
             tabelFile.innerHTML = "";
 
             fetch(URL_API)
             .then(res => res.json())
             .then(data => {
-                document.getElementById('statusMuat Tabel').style.display = 'none';
+                document.getElementById('statusMuatTabel').style.display = 'none';
                 if (data.status === "sukses" && data.data.length > 0) {
                     data.data.forEach(file => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${file.namaFile}</td>
-                            <td><button class="btn-lihat" onclick="lihatGambarCloud('${file.idFile}')">Lihat</button></td>
+                            <td><button class="btn-proses" onclick="prosesFileCloud('${file.idFile}', '${file.namaFile}', '${file.tipeFile}')">Buka / Preview</button></td>
                         `;
                         tabelFile.appendChild(row);
                     });
                 } else {
-                    tabelFile.innerHTML = `<tr><td colspan="2" style="text-align:center;">Belum ada data file.</td></tr>`;
+                    tabelFile.innerHTML = `<tr><td colspan="2" style="text-align:center;">Belum ada data file di database.</td></tr>`;
                 }
             })
             .catch(err => {
-                document.getElementById('statusMuat Tabel').style.display = 'none';
-                console.error(err);
+                document.getElementById('statusMuatTabel').style.display = 'none';
             });
         }
 
-        // BACA FILE .TXT DARI DRIVE DAN TAMPILKAN GAMBARNYA
-        function lihatGambarCloud(idFile) {
-            pratinjauGambar.style.display = 'none';
-            document.getElementById('statusBaca').style.display = 'block';
+        // LOGIKA UTAMA: PARSING DAN PREVIEW SENSITIF MULTI-FORMAT
+        function prosesFileCloud(idFile, namaAsli, tipeAsli) {
+            // Pasang animasi loading di dalam kotak pratinjau
+            kotakPratinjau.innerHTML = '<div id="statusBaca" style="color: #00796b; font-style: italic;">Mengambil biner teks dari Cloud Drive...</div>';
 
             fetch(URL_API, {
                 method: "POST",
-                body: JSON.stringify({
-                    aksi: "baca",
-                    idFile: idFile
-                })
+                body: JSON.stringify({ aksi: "baca", idFile: idFile })
             })
             .then(res => res.json())
             .then(data => {
-                document.getElementById('statusBaca').style.display = 'none';
                 if (data.status === "sukses") {
-                    pratinjauGambar.src = data.kontenBase64;
-                    pratinjauGambar.style.display = 'inline-block';
+                    const base64Data = data.kontenBase64;
+                    
+                    // 1. JIKA FORMAT GAMBAR
+                    if (tipeAsli.startsWith("image/")) {
+                        kotakPratinjau.innerHTML = `<img src="${base64Data}" style="max-width:100%; max-height:350px; border-radius:6px; border: 2px solid #b2dfdb;">`;
+                    } 
+                    // 2. JIKA FORMAT AUDIO / REKAMAN SUARA
+                    else if (tipeAsli.startsWith("audio/")) {
+                        kotakPratinjau.innerHTML = `
+                            <audio controls src="${base64Data}"></audio>
+                            <p style="margin-top:10px; font-weight:bold; color:#004d40;">Mendengarkan: ${namaAsli}</p>
+                        `;
+                    } 
+                    // 3. JIKA FORMAT VIDEO
+                    else if (tipeAsli.startsWith("video/")) {
+                        kotakPratinjau.innerHTML = `<video controls src="${base64Data}"></video>`;
+                    } 
+                    // 4. JIKA FORMAT DOKUMEN PDF
+                    else if (tipeAsli === "application/pdf") {
+                        kotakPratinjau.innerHTML = `<iframe src="${base64Data}" width="100%" height="500px"></iframe>`;
+                    } 
+                    // 5. JIKA FORMAT TIDAK DI-SUPPORT BROWSER (WORD, EXCEL, ZIP, DLL) -> AUTO DOWNLOAD
+                    else {
+                        const linkUnduh = document.createElement('a');
+                        linkUnduh.href = base64Data;
+                        linkUnduh.download = namaAsli;
+                        document.body.appendChild(linkUnduh);
+                        linkUnduh.click();
+                        document.body.removeChild(linkUnduh);
+                        
+                        kotakPratinjau.innerHTML = `
+                            <div style="color: #004d40; font-weight: bold;">
+                                💾 File "${namaAsli}" berhasil diunduh otomatis karena format tidak mendukung preview langsung!
+                            </div>`;
+                    }
                 } else {
-                    alert("Gagal membaca file: " + data.pesan);
+                    kotakPratinjau.innerHTML = `<span style="color:red;">Gagal memuat file: ${data.pesan}</span>`;
                 }
             })
             .catch(err => {
-                document.getElementById('statusBaca').style.display = 'none';
-                alert("Gagal memuat gambar.");
+                kotakPratinjau.innerHTML = '<span style="color:red;">Terjadi kesalahan jaringan backend.</span>';
                 console.error(err);
             });
         }
 
-        // Jalankan fungsi muat tabel pertama kali saat web dibuka
+        // Muat database saat halaman pertama kali dibuka
         window.onload = muatDaftarFile;
     </script>
 </body>
