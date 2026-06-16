@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>DAFTAR KOLEKTIF HASIL TES KEMAMPUAN AKADEMIK</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            margin: 20px;
+            line-height: 1.4;
+        }
+        .header-main {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .info-table {
+            width: 100%;
+            margin-bottom: 15px;
+            border-collapse: collapse;
+        }
+        .info-table td {
+            padding: 2px 0;
+            vertical-align: top;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f2f2f2;
+            text-align: center;
+            font-weight: bold;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .footer-section {
+            margin-top: 30px;
+            width: 100%;
+        }
+        .footer-left {
+            float: left;
+            font-size: 9px;
+            color: #555;
+        }
+        .footer-right {
+            float: right;
+            text-align: left;
+            margin-right: 50px;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        /* Style untuk panel dropdown interaktif */
+        .control-panel {
+            background-color: #f9f9f9;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .control-panel label {
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+        .control-panel select {
+            padding: 5px;
+            font-size: 12px;
+        }
+        /* Menyembunyikan panel dropdown saat dicetak ke PDF */
+        @media print {
+            .control-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Panel Dropdown Pengurutan -->
+    <div class="control-panel">
+        <label for="sortOption">Urutkan Berdasarkan Nilai Terbesar:</label>
+        <select id="sortOption" onchange="urutkanData()">
+            <option value="keseluruhan">Secara Keseluruhan (Total)</option>
+            <option value="matematika">Matematika</option>
+            <option value="bahasa">Bahasa Indonesia</option>
+        </select>
+    </div>
+
+    <!-- Header Dokumen Sesuai Berkas Asli -->
+    <div class="header-main">
+        KEMENTERIAN PENDIDIKAN DASAR DAN MENENGAH<br>
+        DINAS PENDIDIKAN<br>
+        TES KEMAMPUAN AKADEMIK SMP/MTS TAHUN 2026<br>
+        ** DAFTAR KOLEKTIF HASIL TES KEMAMPUAN AKADEMIK **\
+    </div>
+
+    <table class="info-table">
+        <tr>
+            <td style="width: 15%;">Provinsi</td>
+            <td style="width: 45%;">: 05-JAWA TIMUR</td>
+            <td style="width: 15%;">NPSN</td>
+            <td style="width: 25%;">: 70024271</td>
+        </tr>
+        <tr>
+            <td>Kota/Kabupaten</td>
+            <td>: 31-ΚΑΒ. BONDOWOSO</td>
+            <td>Kepala Satuan Pendidikan</td>
+            <td>: Rodi, S.Pd.</td>
+        </tr>
+        <tr>
+            <td>Satuan Pendidikan</td>
+            <td>: 1017-SMP ISLAM AZ-ZAHRO</td>
+            <td>NIP Kepala Satuan Pendidikan</td>
+            <td>: </td>
+        </tr>
+    </table>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>No Urut</th>
+                <th>Nomor Peserta</th>
+                <th>NISN</th>
+                <th>Nama Peserta</th>
+                <th>Tempat, Tanggal Lahir</th>
+                <th>Matematika</th>
+                <th>Bahasa Indonesia</th>
+                <th>Keterangan</th>
+            </tr>
+        </thead>
+        <tbody id="studentRows">
+            <!-- Data mentah untuk diurutkan oleh JavaScript -->
+            <tr data-mat="50.00" data-indo="53.33"><td></td><td>T2-26-05-31-1017-0020-5</td><td>0108117463</td><td>Sofiya Latifah</td><td>Bondowoso, 12 September 2010</td><td>50.00 (Memadai)</td><td>53.33 (Memadai)</td><td></td></tr>
+            <tr data-mat="46.67" data-indo="53.33"><td></td><td>T2-26-05-31-1017-0022-3</td><td>3114305251</td><td>RINA KHOMARIYAH</td><td>BONDOWOSO, 9 Desember 2011</td><td>46.67 (Memadai)</td><td>53.33 (Memadai)</td><td></td></tr>
+            <tr data-mat="46.67" data-indo="56.67"><td></td><td>T2-26-05-31-1017-0029-4</td><td>0117508351</td><td>Mohammad Fatthunur Faizin</td><td>Bondowoso, 12 Juli 2011</td><td>46.67 (Memadai)</td><td>56.67 (Memadai)</td><td></td></tr>
+            <tr data-mat="46.67" data-indo="46.67"><td></td><td>T2-26-05-31-1017-0028-5</td><td>0104373040</td><td>SITTI LAINI</td><td>BONDOWOSO, 21 Mei 2010</td><td>46.67 (Memadai)</td><td>46.67 (Kurang)</td><td></td></tr>
+            <tr data-mat="46.67" data-indo="43.33"><td></td><td>T2-26-05-31-1017-0030-3</td><td>3113634149</td><td>ANDHIKA BAGUS RAMADHAN</td><td>BONDOWOSO, 21 Agustus 2011</td><td>46.67 (Memadai)</td><td>43.33 (Kurang)</td><td></td></tr>
+            <tr data-mat="43.33" data-indo="43.33"><td></td><td>T2-26-05-31-1017-0024-9</td><td>0102633447</td><td>Mohammad Ferianto</td><td>Bondowoso, 15 Februari 2010</td><td>43.33 (Memadai)</td><td>43.33 (Kurang)</td><td></td></tr>
+            <tr data-mat="40.00" data-indo="76.67"><td></td><td>T2-26-05-31-1017-0023-2</td><td>0112483701</td><td>Avita Hemiyatin</td><td>Bondowoso, 19 Juni 2011</td><td>40.00 (Memadai)</td><td>76.67 (Baik)</td><td></td></tr>
+            <tr data-mat="40.00" data-indo="66.67"><td></td><td>T2-26-05-31-1017-0010-7</td><td>3115006209</td><td>SILVI IZZATUL MAULIDAH</td><td>BONDOWOSO, 16 Juli 2011</td><td>40.00 (Memadai)</td><td>66.67 (Memadai)</td><td></td></tr>
+            <tr data-mat="40.00" data-indo="60.00"><td></td><td>T2-26-05-31-1017-0007-2</td><td>0114950342</td><td>LAILA NUR FILA SYAFA</td><td>BONDOWOSO, 22 Mei 2011</td><td>40.00 (Memadai)</td><td>60.00 (Memadai)</td><td></td></tr>
+            <tr data-mat="40.00" data-indo="40.00"><td></td><td>T2-26-05-31-1017-0014-3</td><td>0104776302</td><td>Devita Masuro</td><td>Bondowoso, 5 Desember 2010</td><td>40.00 (Memadai)</td><td>40.00 (Kurang)</td><td></td></tr>
+            <tr data-mat="40.00" data-indo="33.33"><td></td><td>T2-26-05-31-1017-0001-8</td><td>0102655649</td><td>FANIA RAHMAWATI</td><td>BONDOWOSO, 2 Juli 2010</td><td>40.00 (Memadai)</td><td>33.33 (Kurang)</td><td></td></tr>
+            <tr data-mat="36.67" data-indo="73.33"><td></td><td>T2-26-05-31-1017-0006-3</td><td>0116540904</td><td>Ummi Sofia Sa'ada</td><td>Bondowoso, 15 Januari 2011</td><td>36.67 (Memadai)</td><td>73.33 (Memadai)</td><td></td></tr>
+            <tr data-mat="36.67" data-indo="53.33"><td></td><td>T2-26-05-31-1017-0019-6</td><td>3119713408</td><td>RISKA MAULIDIA</td><td>Probolinggo, 8 Februari 2011</td><td>36.67 (Memadai)</td><td>53.33 (Memadai)</td><td></td></tr>
+            <tr data-mat="36.67" data-indo="53.33"><td></td><td>T2-26-05-31-1017-0017-8</td><td>3118153763</td><td>RINI SAMSIYAH</td><td>BONDOWOSO, 9 Desember 2011</td><td>36.67 (Memadai)</td><td>53.33 (Memadai)</td><td></td></tr>
+            <tr data-mat="36.67" data-indo="46.67"><td></td><td>T2-26-05-31-1017-0026-7</td><td>0103189776</td><td>NUR FADILAH ANGGRAINI</td><td>BONDOWOSO, 20 Mei 2010</td><td>36.67 (Memadai)</td><td>46.67 (Kurang)</td><td></td></tr>
+            <tr data-mat="36.67" data-indo="43.33"><td></td><td>T2-26-05-31-1017-0008-9</td><td>0102912322</td><td>Yusi Yuliana Dewi</td><td>Bondowoso, 3 April 2010</td><td>36.67 (Memadai)</td><td>43.33 (Kurang)</td><td></td></tr>
+            <tr data-mat="36.67" data-indo="36.67"><td></td><td>T2-26-05-31-1017-0013-4</td><td>0124159506</td><td>DANDI</td><td>BONDOWOSO, 1 Februari 2012</td><td>36.67 (Memadai)</td><td>36.67 (Kurang)</td><td></td></tr>
+            <tr data-mat="36.67" data-indo="33.33"><td></td><td>T2-26-05-31-1017-0027-6</td><td>0094134364</td><td>MUHAMMAD ROIHAN</td><td>Bondowoso, 11 Agustus 2009</td><td>36.67 (Memadai)</td><td>33.33 (Kurang)</td><td></td></tr>
+            <tr data-mat="33.33" data-indo="53.33"><td></td><td>T2-26-05-31-1017-0009-8</td><td>0107080615</td><td>TRY ANGGUN NUR FADILAH</td><td>Bondowoso, 30 Desember 2010</td><td>33.33 (Memadai)</td><td>53.33 (Memadai)</td><td></td></tr>
+            <tr data-mat="33.33" data-indo="53.33"><td></td><td>T2-26-05-31-1017-0025-8</td><td>0108990601</td><td>Kiki Stifani</td><td>Bondowoso, 14 Oktober 2010</td><td>33.33 (Memadai)</td><td>53.33 (Memadai)</td><td></td></tr>
+            <tr data-mat="33.33" data-indo="46.67"><td></td><td>T2-26-05-31-1017-0021-4</td><td>0104779685</td><td>Wita</td><td>Bondowoso, 23 Juni 2010</td><td>33.33 (Memadai)</td><td>46.67 (Kurang)</td><td></td></tr>
+            <tr data-mat="33.33" data-indo="43.33"><td></td><td>T2-26-05-31-1017-0018-7</td><td>0081874393</td><td>MUKHLAS</td><td>BONDOWOSO, 22 Desember 2008</td><td>33.33 (Memadai)</td><td>43.33 (Kurang)</td><td></td></tr>
+            <tr data-mat="33.33" data-indo="30.00"><td></td><td>T2-26-05-31-1017-0012-5</td><td>0082165609</td><td>MUKHLIS</td><td>BONDOWOSO, 22 Desember 2008</td><td>33.33 (Memadai)</td><td>30.00 (Kurang)</td><td></td></tr>
+            <tr data-mat="33.33" data-indo="30.00"><td></td><td>T2-26-05-31-1017-0015-2</td><td>0102533380</td><td>RIFZIKA DJAMILATUS SUBHAN</td><td>Bondowoso, 17 Juni 2010</td><td>33.33 (Memadai)</td><td>30.00 (Kurang)</td><td></td></tr>
+            <tr data-mat="30.00" data-indo="40.00"><td></td><td>T2-26-05-31-1017-0005-4</td><td>0109531186</td><td>ADITYA EKA SAPUTRA</td><td>BONDOWOSO, 29 September 2010</td><td>30.00 (Kurang)</td><td>40.00 (Kurang)</td><td></td></tr>
+            <tr data-mat="30.00" data-indo="43.33"><td></td><td>T2-26-05-31-1017-0011-6</td><td>0115851571</td><td>Nasivatul Balgis Bakhira</td><td>Bondowoso, 4 Januari 2011</td><td>30.00 (Kurang)</td><td>43.33 (Kurang)</td><td></td></tr>
+            <tr data-mat="26.67" data-indo="33.33"><td></td><td>T2-26-05-31-1017-0016-9</td><td>0127682320</td><td>ARIN HISFUALAH</td><td>BONDOWOSO, 28 Mei 2012</td><td>26.67 (Kurang)</td><td>33.33 (Kurang)</td><td></td></tr>
+            <tr data-mat="23.33" data-indo="46.67"><td></td><td>T2-26-05-31-1017-0003-6</td><td>0107204403</td><td>DIMAS ARIF MAULANA</td><td>Bondowoso, 11 Desember 2010</td><td>23.33 (Kurang)</td><td>46.67 (Kurang)</td><td></td></tr>
+            <tr data-mat="23.33" data-indo="40.00"><td></td><td>T2-26-05-31-1017-0004-5</td><td>0082114134</td><td>AHMAD HABIBI MAULANA</td><td>Bondowoso, 28 April 2008</td><td>23.33 (Kurang)</td><td>40.00 (Kurang)</td><td></td></tr>
+            <tr data-mat="16.67" data-indo="30.00"><td></td><td>T2-26-05-31-1017-0002-7</td><td>0101792722</td><td>KHOIRUL ANWAR</td><td>BONDOWOSO, 7 November 2011</td><td>16.67 (Kurang)</td><td>30.00 (Kurang)</td><td></td></tr>
+        </tbody>
+    </table>
+
+    <!-- Footer Dokumen -->
+    <div class="footer-section clearfix">
+        <div class="footer-left">
+            Dicetak dari https://tka.kemendikdasmen.go.id<br>
+            Selasa, 09 Juni 2026 Jam 00:23:19<br>
+            Oleh: P05311017
+        </div>
+        <div class="footer-right">
+            Kepala Satuan Pendidikan,<br><br><br><br>
+            <strong>Rodi, S.Pd.</strong>
+        </div>
+    </div>
+
+    <!-- Script Logika Pengurutan Tiga Opsi dengan No Urut Tetap Center -->
+    <script>
+        function urutkanData() {
+            const kriteria = document.getElementById('sortOption').value;
+            const tbody = document.getElementById('studentRows');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                let matA = parseFloat(a.getAttribute('data-mat'));
+                let matB = parseFloat(b.getAttribute('data-mat'));
+                let indoA = parseFloat(a.getAttribute('data-indo'));
+                let indoB = parseFloat(b.getAttribute('data-indo'));
+
+                if (kriteria === 'keseluruhan') {
+                    let totalA = matA + indoA;
+                    let totalB = matB + indoB;
+                    if (totalB !== totalA) {
+                        return totalB - totalA;
+                    }
+                    return matB - matA;
+                } else if (kriteria === 'matematika') {
+                    if (matB !== matA) {
+                        return matB - matA;
+                    }
+                    return indoB - indoA;
+                } else if (kriteria === 'bahasa') {
+                    if (indoB !== indoA) {
+                        return indoB - indoA;
+                    }
+                    return matB - matA;
+                }
+                return 0;
+            });
+
+            // Menyusun ulang baris ke tabel dan memaksa posisi no urut agar di tengah (center)
+            tbody.innerHTML = '';
+            rows.forEach((row, index) => {
+                row.cells[0].innerText = index + 1;
+                row.cells[0].className = 'text-center'; // Mempertahankan format nomor urut di tengah
+                tbody.appendChild(row);
+            });
+        }
+
+        // Jalankan fungsi pengurutan default saat halaman web pertama kali dimuat
+        window.onload = urutkanData;
+    </script>
+</body>
+</html>
