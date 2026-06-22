@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0F5132">
+    <title>Sistem Input Nilai Wali Kelas / Guru - Az-Zahro</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            deep: '#0F5132',
+                            medium: '#146c43',
+                            light: '#d1e7dd',
+                            soft: '#f0fdf4'
+                        },
+                        gold: {
+                            accent: '#D4AF37',
+                            muted: '#c5a059',
+                            light: '#fbf7eb'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .font-serif-custom { font-family: 'Playfair Display', Georgia, serif; }
+        .table-input { width: 80px; text-align: center; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
+
+    <div>
+        <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex flex-col justify-center items-center z-50">
+            <div class="text-center p-6 max-w-sm">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-deep border-t-transparent mb-4"></div>
+                <div id="loadingText" class="font-bold text-emerald-deep flex items-center justify-center gap-2 text-sm"></div>
+            </div>
+        </div>
+
+        <nav class="sticky top-0 z-40 bg-emerald-deep/95 backdrop-blur-md shadow-lg border-b border-emerald-medium/50 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="p-2 bg-emerald-medium rounded-xl border border-emerald-light/20 flex-shrink-0">
+                        <i data-lucide="trending-up" class="w-5 h-5 sm:w-6 h-6 text-gold-accent"></i>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                        <h1 id="navJudulUtama" class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate">
+                            E-Nilai Siswa Az-Zahro
+                        </h1>
+                        <div id="subInfoNav" class="text-[11px] sm:text-xs text-emerald-light/90 font-medium tracking-wide mt-0.5 truncate flex items-center gap-1.5">
+                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-gold-accent animate-pulse"></span>
+                            <span id="navDetailText">Silahkan pilih kelas dan mapel terlebih dahulu...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <button type="button" onclick="bukaModalAwal()" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-medium hover:bg-emerald-deep text-white font-semibold text-xs rounded-xl border border-emerald-light/20 transition-all shadow-sm active:scale-95">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-gold-accent"></i> <span class="hidden sm:inline">Ganti Kelas</span>
+                    </button>
+                    <button type="button" onclick="bukaModalPengaturan()" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-medium hover:bg-emerald-deep text-white font-semibold text-xs rounded-xl border border-emerald-light/20 transition-all shadow-sm active:scale-95">
+                        <i data-lucide="settings" class="w-3.5 h-3.5 text-gold-accent"></i> <span>Materi KD</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+            
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-6">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
+                        <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Komponen Penilaian Nilai</h5>
+                    </div>
+                    <div class="flex gap-2">
+                        <span id="badgeKelas" class="bg-emerald-soft text-emerald-deep px-3 py-1 rounded-lg text-xs font-bold border border-emerald-light/50">-</span>
+                        <span id="badgeMapel" class="bg-gold-light text-gold-muted px-3 py-1 rounded-lg text-xs font-bold border border-gold-accent/20">-</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                        <i data-lucide="award" class="w-4 h-4 text-emerald-medium"></i> Input Komponen Nilai
+                    </label>
+                    <select id="pilihKomponen" onchange="renderTabelSiswa()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
+                        <option value="KD1" selected>KD 1</option>
+                        <option value="KD2">KD 2</option>
+                        <option value="KD3">KD 3</option>
+                        <option value="KD4">KD 4</option>
+                        <option value="KD5">KD 5</option>
+                        <option value="KD6">KD 6</option>
+                        <option value="KD7">KD 7</option>
+                        <option value="KD8">KD 8</option>
+                        <option value="UTS">UTS</option>
+                        <option value="PAS">PAS</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="infoMateriAktif" class="p-4 rounded-2xl shadow-sm border mt-5 transition-all duration-300 text-sm font-medium flex items-center gap-3 bg-blue-50 text-blue-700 border-blue-100">
+                <i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i>
+                <div><b>Materi Aktif:</b> Memuat informasi...</div>
+            </div>
+
+            <div id="containerTabel" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mt-6 transition-all duration-500 mb-12">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-5 mb-6">
+                    <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900 flex items-center gap-2">
+                        <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Daftar Siswa
+                    </h4>
+                    <button type="submit" form="formNilaiSiswa" id="btnSimpanNilai" disabled class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]">
+                        <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai ke Sheets
+                    </button>
+                </div>
+
+                <form id="formNilaiSiswa">
+                    <div class="overflow-x-auto rounded-2xl border border-gray-100">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-emerald-deep text-white text-xs font-semibold uppercase tracking-wider text-center">
+                                <tr>
+                                    <th class="py-4 px-3 w-[12%]">No</th>
+                                    <th class="py-4 px-4 text-left">Nama Lengkap Siswa</th>
+                                    <th class="py-4 px-3 w-[25%]" id="thKomponen">Nilai</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTabelSiswa" class="divide-y divide-gray-100 text-sm font-medium text-gray-700">
+                                <tr><td colspan="3" class="text-center py-8 text-gray-400 font-medium">Silahkan tentukan Kelas & Mapel terlebih dahulu.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <div id="modalAwal" class="fixed inset-0 bg-emerald-deep/40 backdrop-blur-md flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200">
+            <div class="text-center mb-5">
+                <div class="p-3 bg-emerald-soft rounded-2xl inline-block border border-emerald-light mb-2">
+                    <i data-lucide="school" class="w-8 h-8 text-emerald-deep"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 font-serif-custom">Portal Rekap Penilaian</h3>
+                <p class="text-xs text-gray-500 mt-1">Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro</p>
+            </div>
+
+            <form id="formGerbangAwal" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                        <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-medium"></i> Pilih Tingkat Kelas
+                    </label>
+                    <select id="gerbangKelas" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                        <option value="" disabled selected>-- Pilih Kelas --</option>
+                        <option value="VII">Kelas VII (Tujuh)</option>
+                        <option value="VIII">Kelas VIII (Delapan)</option>
+                        <option value="IX">Kelas IX (Sembilan)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5 text-emerald-medium"></i> Pilih Mata Pelajaran
+                    </label>
+                    <select id="gerbangMapel" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                        <option value="" disabled selected>-- Pilih Mapel --</option>
+                        <option value="PAI">PAI</option>
+                        <option value="PPKn">PPKn</option>
+                        <option value="B. Indonesia">B. Indonesia</option>
+                        <option value="Matematika">Matematika</option>
+                        <option value="IPS">IPS</option>
+                        <option value="IPA">IPA</option>
+                        <option value="B. Inggris">B. Inggris</option>
+                        <option value="Seni Budaya">Seni Budaya</option>
+                        <option value="PJOK">PJOK</option>
+                        <option value="TIK">TIK</option>
+                        <option value="BTQ">BTQ</option>
+                        <option value="Prakarya">Prakarya</option>
+                        <option value="B. Madura">B. Madura</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md mt-2">
+                    <i data-lucide="arrow-right-circle" class="w-4 h-4 text-gold-accent"></i> Masuk Ke Formulir Nilai
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalPengaturan" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh]">
+            
+            <button type="button" onclick="tutupModalPengaturan()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-100 rounded-xl transition-all outline-none">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex items-center gap-2 border-b border-gray-100 pb-3 mb-4 flex-shrink-0">
+                <i data-lucide="settings-2" class="w-5 h-5 text-emerald-deep"></i>
+                <h3 class="text-lg font-bold text-gray-900 font-serif-custom">Pengaturan Detail & Materi KD</h3>
+            </div>
+
+            <div class="overflow-y-auto pr-1 space-y-4 flex-1">
+                <div>
+                    <span class="block text-xs font-bold text-emerald-deep tracking-wider uppercase mb-2">📄 Data Detail</span>
+                    <div class="bg-gray-50 border-l-4 border-emerald-deep p-3 text-xs space-y-1.5 rounded-r-xl">
+                        <div id="textMapel"><b>Mata Pelajaran:</b> -</div>
+                        <div id="textGuru"><b>Nama Guru:</b> -</div>
+                        <div id="textKkm"><b>KKM:</b> -</div>
+                        <div id="textKelas"><b>Kelas:</b> -</div>
+                    </div>
+                </div>
+
+                <form id="formPengaturanKD" class="space-y-3">
+                    <span class="block text-xs font-bold text-emerald-medium tracking-wider uppercase mb-1">✏️ Kompetensi Dasar (KD)</span>
+                    <div class="grid grid-cols-1 gap-2.5">
+                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 1:</label><input type="text" id="modal_kd1" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 2:</label><input type="text" id="modal_kd2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 3:</label><input type="text" id="modal_kd3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 4:</label><input type="text" id="modal_kd4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 5:</label><input type="text" id="modal_kd5" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 6:</label><input type="text" id="modal_kd6" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 7:</label><input type="text" id="modal_kd7" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 8:</label><input type="text" id="modal_kd8" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="border-t border-gray-100 pt-3 mt-4 flex-shrink-0">
+                <button type="submit" form="formPengaturanKD" id="btnSimpanKD" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md">
+                    <i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Update Judul Materi KD
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-emerald-deep text-gray-200 border-t-2 border-gold-accent/40 mt-12 py-6 px-4">
+        <div class="max-w-7xl mx-auto text-center text-[11px] text-gray-400">
+            &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
+            SMP Islam Az-Zahro • SMK Az-Zahro
+        </div>
+    </footer>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
+        
+        let DATA_CACHED = { pengaturan: {}, siswa: [] };
+        let KELAS_AKTIF = "";
+        let MAPEL_AKTIF = "";
+
+        // KONTROL TAMPILAN MODAL
+        function bukaModalAwal() {
+            document.getElementById('modalAwal').classList.remove('hidden');
+        }
+        function tutupModalAwal() {
+            document.getElementById('modalAwal').classList.add('hidden');
+        }
+        function bukaModalPengaturan() {
+            if(!KELAS_AKTIF || !MAPEL_AKTIF) { alert("Pilih Kelas dan Mapel terlebih dahulu!"); return; }
+            document.getElementById('modalPengaturan').classList.remove('hidden');
+        }
+        function tutupModalPengaturan() {
+            document.getElementById('modalPengaturan').classList.add('hidden');
+        }
+
+        // INTERSEPSI FORM GERBANG PEMILIHAN KELAS & MAPEL DI AWAL
+        document.getElementById('formGerbangAwal').addEventListener('submit', function(e) {
+            e.preventDefault();
+            KELAS_AKTIF = document.getElementById('gerbangKelas').value;
+            MAPEL_AKTIF = document.getElementById('gerbangMapel').value;
+            
+            tutupModalAwal();
+            
+            // Perbarui Judul Nav & Badge Info Luar
+            document.getElementById('navJudulUtama').innerText = `E-Nilai Siswa Kelas ${KELAS_AKTIF}`;
+            document.getElementById('badgeKelas').innerText = `Kelas: ${KELAS_AKTIF}`;
+            document.getElementById('badgeMapel').innerText = `Mapel: ${MAPEL_AKTIF}`;
+            
+            // Muat Data Utama Dari Google Sheets
+            muatDataUtama(MAPEL_AKTIF, KELAS_AKTIF);
+        });
+
+        // 1. FUNGSI UTAMA MEMUAT DATA DARI SHEET GOOGLE (DENGAN TAMBAHAN PARAMETER KELAS)
+        function muatDataUtama(namaSheet, tingkatKelas) {
+            const overlay = document.getElementById('loadingOverlay');
+            const btn = document.getElementById('btnSimpanNilai');
+            
+            if(overlay) {
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Memuat Data Kelas ${tingkatKelas} [Sheet ${namaSheet}]...`;
+                overlay.classList.remove('hidden');
+            }
+            btn.disabled = true;
+            lucide.createIcons();
+
+            // LOGIKA PARAMETER: mengirimkan sheet dan kelas target sekaligus ke Backend Google Script
+            const urlTarget = `${WEB_APP_URL}?sheet=${encodeURIComponent(namaSheet)}&kelas=${encodeURIComponent(tingkatKelas)}`;
+
+            fetch(urlTarget)
+                .then(response => response.json())
+                .then(hasil => {
+                    if(overlay) overlay.classList.add('hidden');
+                    if (hasil.status === "success") {
+                        DATA_CACHED = hasil;
+                        
+                        // Menampilkan info nama guru dan mapel di bawah judul navbar secara real-time
+                        const guruNama = hasil.pengaturan.guru || "-";
+                        const mapelNama = hasil.pengaturan.mapel || namaSheet;
+                        document.getElementById('navDetailText').innerText = `Guru: ${guruNama}`;
+
+                        // Menulis Teks Keterangan di Dalam Modal Pengaturan
+                        document.getElementById('textMapel').innerHTML = "<b>Mata Pelajaran:</b> " + mapelNama;
+                        document.getElementById('textGuru').innerHTML = "<b>Nama Guru:</b> " + guruNama;
+                        document.getElementById('textKkm').innerHTML = "<b>KKM:</b> " + (hasil.pengaturan.kkm || "-");
+                        document.getElementById('textKelas').innerHTML = "<b>Kelas:</b> " + (hasil.pengaturan.kelas || tingkatKelas);
+
+                        // Menaruh Data Judul KD ke Input Box di Dalam Modal Pengaturan
+                        for(let i=1; i<=8; i++) {
+                            document.getElementById('modal_kd' + i).value = hasil.pengaturan['kd' + i] || "";
+                        }
+
+                        // Mengisi Data Tabel Luar
+                        renderTabelSiswa();
+                    } else {
+                        alert("Gagal memuat data dari Spreadsheet: " + hasil.message);
+                        bukaModalAwal();
+                    }
+                })
+                .catch(err => {
+                    if(overlay) overlay.classList.add('hidden');
+                    console.error(err);
+                    alert("Koneksi gagal atau konfigurasi ID Spreadsheet Kelas salah.");
+                    bukaModalAwal();
+                });
+        }
+
+        // 2. RENDER DAFTAR TABEL SISWA
+        function renderTabelSiswa() {
+            const komponen = document.getElementById('pilihKomponen').value;
+            const tbody = document.getElementById('bodyTabelSiswa');
+            const thKomponen = document.getElementById('thKomponen');
+            const infoMateriAktif = document.getElementById('infoMateriAktif');
+            
+            tbody.innerHTML = "";
+            thKomponen.innerText = "Nilai " + komponen;
+            document.getElementById('judulTabel').innerHTML = `<i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Input Nilai: ${MAPEL_AKTIF}`;
+
+            if (komponen.startsWith("KD")) {
+                let nomorKD = komponen.replace("KD", "");
+                let judulMateri = DATA_CACHED.pengaturan['kd' + nomorKD] || "Belum ada ringkasan materi";
+                infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i><div><b>Materi Aktif (${komponen}):</b> ${judulMateri}</div>`;
+            } else {
+                infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i><div><b>Komponen Aktif:</b> Penilaian Tengah/Akhir Semester (${komponen})</div>`;
+            }
+
+            if (!DATA_CACHED.siswa || DATA_CACHED.siswa.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-gray-400 font-medium">Tidak ada data siswa ditemukan mulai baris C16.</td></tr>`;
+                document.getElementById('btnSimpanNilai').disabled = true;
+                lucide.createIcons();
+                return;
+            }
+
+            DATA_CACHED.siswa.forEach((siswa, index) => {
+                let nilaiSekarang = siswa[komponen] !== undefined ? siswa[komponen] : "";
+                let tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50/80 transition-colors divide-x divide-gray-100";
+                tr.innerHTML = `
+                    <td class="text-center py-3.5 font-bold text-gray-400">${index + 1}</td>
+                    <td class="py-3.5 px-4 font-semibold text-gray-900">${siswa.nama}</td>
+                    <td class="py-3.5 px-3">
+                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-1.5 text-sm rounded-xl outline-none transition-all input-nilai-siswa" 
+                               data-baris="${siswa.baris}" min="0" max="100" value="${nilaiSekarang}">
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('btnSimpanNilai').disabled = false;
+            lucide.createIcons();
+        }
+
+        // 3. PROSES SIMPAN PENGATURAN KD DARI MODAL
+        document.getElementById('formPengaturanKD').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSimpanKD');
+            const overlay = document.getElementById('loadingOverlay');
+            
+            btn.disabled = true;
+            btn.innerText = 'Menyimpan Pengaturan...';
+            if(overlay) {
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="database" class="w-4 h-4 animate-spin text-gold-accent"></i> Memperbarui Judul KD di Sheets...`;
+                overlay.classList.remove('hidden');
+            }
+            lucide.createIcons();
+
+            const dataKDSimpan = {
+                mapelTarget: MAPEL_AKTIF,
+                kelasTarget: KELAS_AKTIF, // dikirim ke backend script
+                tipeAksi: "simpanPengaturan",
+                kd1: document.getElementById('modal_kd1').value,
+                kd2: document.getElementById('modal_kd2').value,
+                kd3: document.getElementById('modal_kd3').value,
+                kd4: document.getElementById('modal_kd4').value,
+                kd5: document.getElementById('modal_kd5').value,
+                kd6: document.getElementById('modal_kd6').value,
+                kd7: document.getElementById('modal_kd7').value,
+                kd8: document.getElementById('modal_kd8').value
+            };
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify(dataKDSimpan)
+            }).then(() => {
+                alert("Judul Kompetensi Dasar (KD) Sukses Diperbarui!");
+                btn.disabled = false;
+                btn.innerText = 'Update Judul Materi KD';
+                tutupModalPengaturan();
+                muatDataUtama(MAPEL_AKTIF, KELAS_AKTIF);
+            }).catch(err => {
+                if(overlay) overlay.classList.add('hidden');
+                alert("Gagal: " + err.message);
+                btn.disabled = false;
+            });
+        });
+
+        // 4. PROSES SIMPAN NILAI SISWA KE SHEETS
+        document.getElementById('formNilaiSiswa').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSimpanNilai');
+            const overlay = document.getElementById('loadingOverlay');
+            const komponen = document.getElementById('pilihKomponen').value;
+            
+            btn.disabled = true;
+            btn.innerText = 'Menyimpan Nilai...';
+            if(overlay) {
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="save" class="w-4 h-4 animate-spin text-gold-accent"></i> Menyimpan Nilai Ke Database...`;
+                overlay.classList.remove('hidden');
+            }
+            lucide.createIcons();
+
+            const elemenInputs = document.querySelectorAll('.input-nilai-siswa');
+            let dataNilaiArray = [];
+            
+            elemenInputs.forEach(input => {
+                dataNilaiArray.push({
+                    baris: input.getAttribute('data-baris'),
+                    nilai: input.value.trim() === "" ? "" : Number(input.value)
+                });
+            });
+
+            const paketDataNilai = {
+                mapelTarget: MAPEL_AKTIF,
+                kelasTarget: KELAS_AKTIF, // dikirim ke backend script
+                tipeAksi: "simpanNilai",
+                komponenPilihan: komponen,
+                dataNilai: dataNilaiArray
+            };
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify(paketDataNilai)
+            }).then(() => {
+                alert(`Seluruh Nilai ${komponen} Berhasil Disimpan Ke Sheet ${MAPEL_AKTIF} Kelas ${KELAS_AKTIF}!`);
+                btn.disabled = false;
+                btn.innerText = 'Simpan Nilai ke Sheets';
+                muatDataUtama(MAPEL_AKTIF, KELAS_AKTIF);
+            }).catch(err => {
+                if(overlay) overlay.classList.add('hidden');
+                alert("Terjadi masalah jaringan: " + err.message);
+                btn.disabled = false;
+                btn.innerText = 'Simpan Nilai ke Sheets';
+            });
+        });
+
+        // Tampilkan modal pemilihan kelas pertama kali saat web dibuka
+        window.addEventListener('DOMContentLoaded', () => {
+            bukaModalAwal();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
