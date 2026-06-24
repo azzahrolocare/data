@@ -2,10 +2,10 @@
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0F5132">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#0F5132">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Sistem Input Nilai Wali Kelas / Guru - Az-Zahro</title>
     
     <link class="manifest" href="manifest.json">
@@ -420,6 +420,14 @@
             } else if (docElm.msRequestFullscreen) { /* IE/Edge */
                 docElm.msRequestFullscreen();
             }
+
+            // Trik Optimal: Paksa penulisan ulang meta tag theme-color agar diprioritaskan peramban mobile saat layar penuh
+            setTimeout(() => {
+                let metaTheme = document.querySelector('meta[name="theme-color"]');
+                if (metaTheme) {
+                    metaTheme.setAttribute('content', '#0F5132');
+                }
+            }, 300);
         }
 
         // FUNGSI UNTUK MENAMPILKAN NOTIFIKASI KUSTOM BERWARNA (TOAST)
@@ -486,7 +494,7 @@
         }
 
         // VALIDASI KESESUAIAN SANDI REAL-TIME DI BAWAH KOLOM
-        function validasiKesesuaianSandi() {
+        function validasiKessesuaianSandi() {
             const pwBaru = document.getElementById('modalPwBaru').value;
             const pwKonf = document.getElementById('modalPwKonfirmasi').value;
             const msgSandiLemah = document.getElementById('msgSandiLemah');
