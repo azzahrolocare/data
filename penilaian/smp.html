@@ -45,6 +45,21 @@
 <body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
 
     <div>
+        <div id="customToast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 max-w-md w-full hidden">
+            <div class="bg-white border-l-4 border-emerald-deep rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-emerald-soft/30 border border-gray-100">
+                <div class="p-2 bg-emerald-soft text-emerald-deep rounded-xl border border-emerald-light">
+                    <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-medium"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 id="toastTitle" class="text-sm font-bold text-gray-900 font-serif-custom">Notifikasi</h4>
+                    <p id="toastMessage" class="text-xs text-gray-600 mt-0.5 leading-relaxed"></p>
+                </div>
+                <button onclick="hideToast()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
         <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex flex-col justify-center items-center z-50">
             <div class="text-center p-6 max-w-sm">
                 <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-deep border-t-transparent mb-4"></div>
@@ -64,14 +79,14 @@
                         </h1>
                         <div id="subInfoNav" class="text-[11px] sm:text-xs text-emerald-light/90 font-medium tracking-wide mt-0.5 truncate flex items-center gap-1.5">
                             <span class="inline-block w-1.5 h-1.5 rounded-full bg-gold-accent animate-pulse"></span>
-                            <span id="navDetailText">Silahkan pilih kelas dan mapel terlebih dahulu...</span>
+                            <span id="navDetailText">Silahkan login akun guru terlebih dahulu...</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="flex items-center gap-2 flex-shrink-0">
                     <button type="button" onclick="bukaModalAwal()" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-medium hover:bg-emerald-deep text-white font-semibold text-xs rounded-xl border border-emerald-light/20 transition-all shadow-sm active:scale-95">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-gold-accent"></i> <span class="hidden sm:inline">Ganti Kelas</span>
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-gold-accent"></i> <span>Ganti Akun</span>
                     </button>
                     <button type="button" onclick="bukaModalPengaturan()" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-medium hover:bg-emerald-deep text-white font-semibold text-xs rounded-xl border border-emerald-light/20 transition-all shadow-sm active:scale-95">
                         <i data-lucide="settings" class="w-3.5 h-3.5 text-gold-accent"></i> <span>Materi KD</span>
@@ -82,11 +97,11 @@
 
         <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             
-            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+            <div id="panelAksesMengajar" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 hidden mb-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-6">
                     <div class="flex items-center gap-2.5">
                         <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
-                        <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Komponen Penilaian Nilai</h5>
+                        <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Panel Kontrol Penilaian</h5>
                     </div>
                     <div class="flex gap-2">
                         <span id="badgeKelas" class="bg-emerald-soft text-emerald-deep px-3 py-1 rounded-lg text-xs font-bold border border-emerald-light/50">-</span>
@@ -94,28 +109,37 @@
                     </div>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-                        <i data-lucide="award" class="w-4 h-4 text-emerald-medium"></i> Input Komponen Nilai
-                    </label>
-                    <select id="pilihKomponen" onchange="renderTabelSiswa()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none">
-                        <option value="KD1" selected>KD 1</option>
-                        <option value="KD2">KD 2</option>
-                        <option value="KD3">KD 3</option>
-                        <option value="KD4">KD 4</option>
-                        <option value="KD5">KD 5</option>
-                        <option value="KD6">KD 6</option>
-                        <option value="KD7">KD 7</option>
-                        <option value="KD8">KD 8</option>
-                        <option value="UTS">UTS</option>
-                        <option value="PAS">PAS</option>
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-4 h-4 text-emerald-medium"></i> Pilih Kelas & Mapel Anda
+                        </label>
+                        <select id="pilihJadwalDinamis" onchange="gantiJadwalAktif()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                            </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="award" class="w-4 h-4 text-emerald-medium"></i> Input Komponen Nilai
+                        </label>
+                        <select id="pilihKomponen" onchange="renderTabelSiswa()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                            <option value="KD1" selected>KD 1</option>
+                            <option value="KD2">KD 2</option>
+                            <option value="KD3">KD 3</option>
+                            <option value="KD4">KD 4</option>
+                            <option value="KD5">KD 5</option>
+                            <option value="KD6">KD 6</option>
+                            <option value="KD7">KD 7</option>
+                            <option value="KD8">KD 8</option>
+                            <option value="UTS">UTS</option>
+                            <option value="PAS">PAS</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div id="infoMateriAktif" class="p-4 rounded-2xl shadow-sm border mt-5 transition-all duration-300 text-sm font-medium flex items-center gap-3 bg-blue-50 text-blue-700 border-blue-100">
+            <div id="infoMateriAktif" class="p-4 rounded-2xl shadow-sm border mt-5 transition-all duration-300 text-sm font-medium flex items-center gap-3 bg-blue-50 text-blue-700 border-blue-100 hidden">
                 <i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i>
-                <div><b>Materi Aktif:</b> Memuat informasi...</div>
+                <div id="textMateriAktif"><b>Materi Aktif:</b> Memuat informasi...</div>
             </div>
 
             <div id="containerTabel" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mt-6 transition-all duration-500 mb-12">
@@ -123,8 +147,8 @@
                     <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900 flex items-center gap-2">
                         <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Daftar Siswa
                     </h4>
-                    <button type="submit" form="formNilaiSiswa" id="btnSimpanNilai" disabled class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]">
-                        <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai ke Sheets
+                    <button type="submit" form="formNilaiSiswa" id="btnSimpanNilai" disabled class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]">
+                        <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai
                     </button>
                 </div>
 
@@ -139,7 +163,7 @@
                                 </tr>
                             </thead>
                             <tbody id="bodyTabelSiswa" class="divide-y divide-gray-100 text-sm font-medium text-gray-700">
-                                <tr><td colspan="3" class="text-center py-8 text-gray-400 font-medium">Silahkan tentukan Kelas & Mapel terlebih dahulu.</td></tr>
+                                <tr><td colspan="3" class="text-center py-8 text-gray-400 font-medium">Silahkan melakukan login akses guru terlebih dahulu.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -152,49 +176,29 @@
         <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200">
             <div class="text-center mb-5">
                 <div class="p-3 bg-emerald-soft rounded-2xl inline-block border border-emerald-light mb-2">
-                    <i data-lucide="school" class="w-8 h-8 text-emerald-deep"></i>
+                    <i data-lucide="shield-check" class="w-8 h-8 text-emerald-deep"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 font-serif-custom">Portal Rekap Penilaian</h3>
-                <p class="text-xs text-gray-500 mt-1">Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro</p>
+                <h3 class="text-xl font-bold text-gray-900 font-serif-custom">Portal E-Nilai Az-Zahro</h3>
+                <p class="text-xs text-gray-500 mt-1">Autentikasi & Pemindaian Otomatis Hak Mengajar</p>
             </div>
 
             <form id="formGerbangAwal" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-medium"></i> Pilih Tingkat Kelas
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-emerald-medium"></i> Nama Lengkap Guru
                     </label>
-                    <select id="gerbangKelas" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
-                        <option value="" disabled selected>-- Pilih Kelas --</option>
-                        <option value="VII">Kelas VII (Tujuh)</option>
-                        <option value="VIII">Kelas VIII (Delapan)</option>
-                        <option value="IX">Kelas IX (Sembilan)</option>
-                    </select>
+                    <input type="text" id="gerbangGuru" required placeholder="Contoh: RAHMATTULLAH" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <i data-lucide="book-open" class="w-3.5 h-3.5 text-emerald-medium"></i> Pilih Mata Pelajaran
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-medium"></i> Password Akses
                     </label>
-                    <select id="gerbangMapel" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
-                        <option value="" disabled selected>-- Pilih Mapel --</option>
-                        <option value="PAI">PAI</option>
-                        <option value="PPKn">PPKn</option>
-                        <option value="B. Indonesia">B. Indonesia</option>
-                        <option value="Matematika">Matematika</option>
-                        <option value="IPS">IPS</option>
-                        <option value="IPA">IPA</option>
-                        <option value="B. Inggris">B. Inggris</option>
-                        <option value="Seni Budaya">Seni Budaya</option>
-                        <option value="PJOK">PJOK</option>
-                        <option value="TIK">TIK</option>
-                        <option value="BTQ">BTQ</option>
-                        <option value="Prakarya">Prakarya</option>
-                        <option value="B. Madura">B. Madura</option>
-                    </select>
+                    <input type="password" id="gerbangPassword" required placeholder="••••••••" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
                 </div>
 
                 <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md mt-2">
-                    <i data-lucide="arrow-right-circle" class="w-4 h-4 text-gold-accent"></i> Masuk Ke Formulir Nilai
+                    <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> Masuk & Pindai Jadwal
                 </button>
             </form>
         </div>
@@ -240,7 +244,7 @@
 
             <div class="border-t border-gray-100 pt-3 mt-4 flex-shrink-0">
                 <button type="submit" form="formPengaturanKD" id="btnSimpanKD" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md">
-                    <i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Update Judul Materi KD
+                    <i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Simpan
                 </button>
             </div>
         </div>
@@ -257,10 +261,43 @@
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
         
         let DATA_CACHED = { pengaturan: {}, siswa: [] };
+        let GURU_AKTIF = "";
         let KELAS_AKTIF = "";
         let MAPEL_AKTIF = "";
+        let LIST_HAK_MENGAJAR = [];
+        let toastTimeout;
 
-        // KONTROL TAMPILAN MODAL
+        // FUNGSI UNTUK MENAMPILKAN NOTIFIKASI KUSTOM BERWARNA (TOAST)
+        function showToast(title, message) {
+            const toast = document.getElementById('customToast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastMessage').innerText = message;
+            
+            toast.classList.remove('hidden');
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full', 'opacity-0');
+                toast.classList.add('translate-x-0', 'opacity-100');
+            }, 50);
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                hideToast();
+            }, 5000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('customToast');
+            toast.classList.remove('translate-x-0', 'opacity-100');
+            toast.classList.add('translate-x-full', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // KONTROL MODAL TAMPILAN
         function bukaModalAwal() {
             document.getElementById('modalAwal').classList.remove('hidden');
         }
@@ -275,24 +312,72 @@
             document.getElementById('modalPengaturan').classList.add('hidden');
         }
 
-        // INTERSEPSI FORM GERBANG PEMILIHAN KELAS & MAPEL DI AWAL
+        // INTERSEPSI FORM AUTHENTIKASI UTAMA GURU & SCAN JADWAL
         document.getElementById('formGerbangAwal').addEventListener('submit', function(e) {
             e.preventDefault();
-            KELAS_AKTIF = document.getElementById('gerbangKelas').value;
-            MAPEL_AKTIF = document.getElementById('gerbangMapel').value;
+            GURU_AKTIF = document.getElementById('gerbangGuru').value.trim().toUpperCase();
+            let password = document.getElementById('gerbangPassword').value;
             
-            tutupModalAwal();
-            
-            // Perbarui Judul Nav & Badge Info Luar
+            const overlay = document.getElementById('loadingOverlay');
+            if(overlay) {
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="shield" class="w-4 h-4 animate-spin text-gold-accent"></i> Memverifikasi Akun & Memindai Jadwal...`;
+                overlay.classList.remove('hidden');
+            }
+            lucide.createIcons();
+
+            const urlAuth = `${WEB_APP_URL}?aksi=login&guru=${encodeURIComponent(GURU_AKTIF)}&password=${encodeURIComponent(password)}`;
+
+            fetch(urlAuth)
+                .then(res => res.json())
+                .then(hasil => {
+                    if(overlay) overlay.classList.add('hidden');
+                    if (hasil.status === "success") {
+                        LIST_HAK_MENGAJAR = hasil.hakMengajar;
+                        
+                        if (LIST_HAK_MENGAJAR.length === 0) {
+                            alert("Login sukses! Namun Nama Anda tidak terdaftar sebagai pengajar di mapel manapun pada Kelas VII, VIII, atau IX.");
+                            bukaModalAwal();
+                            return;
+                        }
+
+                        tutupModalAwal();
+                        document.getElementById('panelAksesMengajar').classList.remove('hidden');
+                        document.getElementById('infoMateriAktif').classList.remove('hidden');
+
+                        const selectJadwal = document.getElementById('pilihJadwalDinamis');
+                        selectJadwal.innerHTML = "";
+                        LIST_HAK_MENGAJAR.forEach(item => {
+                            selectJadwal.innerHTML += `<option value="${item.kelas}|${item.mapel}">Kelas ${item.kelas} — Mapel: ${item.mapel}</option>`;
+                        });
+
+                        gantiJadwalAktif();
+                    } else {
+                        alert("Gagal Masuk: " + hasil.message);
+                    }
+                })
+                .catch(err => {
+                    if(overlay) overlay.classList.add('hidden');
+                    console.error(err);
+                    alert("Koneksi gagal atau sistem otentikasi pusat bermasalah.");
+                });
+        });
+
+        function gantiJadwalAktif() {
+            const jadwalPilihan = document.getElementById('pilihJadwalDinamis').value;
+            if(!jadwalPilihan) return;
+
+            const part = jadwalPilihan.split("|");
+            KELAS_AKTIF = part[0];
+            MAPEL_AKTIF = part[1];
+
             document.getElementById('navJudulUtama').innerText = `E-Nilai Siswa Kelas ${KELAS_AKTIF}`;
             document.getElementById('badgeKelas').innerText = `Kelas: ${KELAS_AKTIF}`;
             document.getElementById('badgeMapel').innerText = `Mapel: ${MAPEL_AKTIF}`;
             
-            // Muat Data Utama Dari Google Sheets
             muatDataUtama(MAPEL_AKTIF, KELAS_AKTIF);
-        });
+        }
 
-        // 1. FUNGSI UTAMA MEMUAT DATA DARI SHEET GOOGLE (DENGAN TAMBAHAN PARAMETER KELAS)
+        // FUNGSI UTAMA MEMUAT DATA DARI SHEET GOOGLE VIA SCRIPT BACKEND
         function muatDataUtama(namaSheet, tingkatKelas) {
             const overlay = document.getElementById('loadingOverlay');
             const btn = document.getElementById('btnSimpanNilai');
@@ -304,7 +389,6 @@
             btn.disabled = true;
             lucide.createIcons();
 
-            // LOGIKA PARAMETER: mengirimkan sheet dan kelas target sekaligus ke Backend Google Script
             const urlTarget = `${WEB_APP_URL}?sheet=${encodeURIComponent(namaSheet)}&kelas=${encodeURIComponent(tingkatKelas)}`;
 
             fetch(urlTarget)
@@ -314,23 +398,17 @@
                     if (hasil.status === "success") {
                         DATA_CACHED = hasil;
                         
-                        // Menampilkan info nama guru dan mapel di bawah judul navbar secara real-time
-                        const guruNama = hasil.pengaturan.guru || "-";
-                        const mapelNama = hasil.pengaturan.mapel || namaSheet;
-                        document.getElementById('navDetailText').innerText = `Guru: ${guruNama}`;
+                        document.getElementById('navDetailText').innerText = `Guru: ${GURU_AKTIF}`;
 
-                        // Menulis Teks Keterangan di Dalam Modal Pengaturan
-                        document.getElementById('textMapel').innerHTML = "<b>Mata Pelajaran:</b> " + mapelNama;
-                        document.getElementById('textGuru').innerHTML = "<b>Nama Guru:</b> " + guruNama;
+                        document.getElementById('textMapel').innerHTML = "<b>Mata Pelajaran:</b> " + namaSheet;
+                        document.getElementById('textGuru').innerHTML = "<b>Nama Guru:</b> " + GURU_AKTIF;
                         document.getElementById('textKkm').innerHTML = "<b>KKM:</b> " + (hasil.pengaturan.kkm || "-");
-                        document.getElementById('textKelas').innerHTML = "<b>Kelas:</b> " + (hasil.pengaturan.kelas || tingkatKelas);
+                        document.getElementById('textKelas').innerHTML = "<b>Kelas:</b> " + tingkatKelas;
 
-                        // Menaruh Data Judul KD ke Input Box di Dalam Modal Pengaturan
                         for(let i=1; i<=8; i++) {
                             document.getElementById('modal_kd' + i).value = hasil.pengaturan['kd' + i] || "";
                         }
 
-                        // Mengisi Data Tabel Luar
                         renderTabelSiswa();
                     } else {
                         alert("Gagal memuat data dari Spreadsheet: " + hasil.message);
@@ -345,7 +423,7 @@
                 });
         }
 
-        // 2. RENDER DAFTAR TABEL SISWA
+        // RENDER DAFTAR TABEL SISWA SECARA DINAMIS
         function renderTabelSiswa() {
             const komponen = document.getElementById('pilihKomponen').value;
             const tbody = document.getElementById('bodyTabelSiswa');
@@ -390,33 +468,39 @@
             lucide.createIcons();
         }
 
-        // 3. PROSES SIMPAN PENGATURAN KD DARI MODAL
+        // PROSES SIMPAN PENGATURAN KD DARI MODAL DENGAN OPTIMASI CACHE LOKAL & TOAST
         document.getElementById('formPengaturanKD').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSimpanKD');
-            const overlay = document.getElementById('loadingOverlay');
             
             btn.disabled = true;
-            btn.innerText = 'Menyimpan Pengaturan...';
-            if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="database" class="w-4 h-4 animate-spin text-gold-accent"></i> Memperbarui Judul KD di Sheets...`;
-                overlay.classList.remove('hidden');
-            }
+            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Menyimpan...`;
             lucide.createIcons();
+
+            const kd1New = document.getElementById('modal_kd1').value;
+            const kd2New = document.getElementById('modal_kd2').value;
+            const kd3New = document.getElementById('modal_kd3').value;
+            const kd4New = document.getElementById('modal_kd4').value;
+            const kd5New = document.getElementById('modal_kd5').value;
+            const kd6New = document.getElementById('modal_kd6').value;
+            const kd7New = document.getElementById('modal_kd7').value;
+            const kd8New = document.getElementById('modal_kd8').value;
 
             const dataKDSimpan = {
                 mapelTarget: MAPEL_AKTIF,
-                kelasTarget: KELAS_AKTIF, // dikirim ke backend script
+                kelasTarget: KELAS_AKTIF,
                 tipeAksi: "simpanPengaturan",
-                kd1: document.getElementById('modal_kd1').value,
-                kd2: document.getElementById('modal_kd2').value,
-                kd3: document.getElementById('modal_kd3').value,
-                kd4: document.getElementById('modal_kd4').value,
-                kd5: document.getElementById('modal_kd5').value,
-                kd6: document.getElementById('modal_kd6').value,
-                kd7: document.getElementById('modal_kd7').value,
-                kd8: document.getElementById('modal_kd8').value
+                kd1: kd1New,
+                kd2: kd2New,
+                kd3: kd3New,
+                kd4: kd4New,
+                kd5: kd5New,
+                kd6: kd6New,
+                kd7: kd7New,
+                kd8: kd8New
             };
+
+            tutupModalPengaturan();
 
             fetch(WEB_APP_URL, {
                 method: "POST",
@@ -424,31 +508,39 @@
                 headers: { "Content-Type": "text/plain" },
                 body: JSON.stringify(dataKDSimpan)
             }).then(() => {
-                alert("Judul Kompetensi Dasar (KD) Sukses Diperbarui!");
                 btn.disabled = false;
-                btn.innerText = 'Update Judul Materi KD';
-                tutupModalPengaturan();
-                muatDataUtama(MAPEL_AKTIF, KELAS_AKTIF);
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Simpan`;
+                
+                DATA_CACHED.pengaturan.kd1 = kd1New;
+                DATA_CACHED.pengaturan.kd2 = kd2New;
+                DATA_CACHED.pengaturan.kd3 = kd3New;
+                DATA_CACHED.pengaturan.kd4 = kd4New;
+                DATA_CACHED.pengaturan.kd5 = kd5New;
+                DATA_CACHED.pengaturan.kd6 = kd6New;
+                DATA_CACHED.pengaturan.kd7 = kd7New;
+                DATA_CACHED.pengaturan.kd8 = kd8New;
+
+                renderTabelSiswa();
+
+                showToast(
+                    "Judul Kompetensi Dasar (KD) Sukses Diperbarui!", 
+                    `Sistem Penilaian Utama E-Nilai Siswa Az-Zahro Kelas ${KELAS_AKTIF} - [Mapel: ${MAPEL_AKTIF}]`
+                );
             }).catch(err => {
-                if(overlay) overlay.classList.add('hidden');
                 alert("Gagal: " + err.message);
                 btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Simpan`;
             });
         });
 
-        // 4. PROSES SIMPAN NILAI SISWA KE SHEETS
+        // PROSES SIMPAN NILAI SISWA KE SHEETS DENGAN TOAST MULUS
         document.getElementById('formNilaiSiswa').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSimpanNilai');
-            const overlay = document.getElementById('loadingOverlay');
             const komponen = document.getElementById('pilihKomponen').value;
             
             btn.disabled = true;
-            btn.innerText = 'Menyimpan Nilai...';
-            if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="save" class="w-4 h-4 animate-spin text-gold-accent"></i> Menyimpan Nilai Ke Database...`;
-                overlay.classList.remove('hidden');
-            }
+            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Menyimpan Nilai...`;
             lucide.createIcons();
 
             const elemenInputs = document.querySelectorAll('.input-nilai-siswa');
@@ -463,7 +555,7 @@
 
             const paketDataNilai = {
                 mapelTarget: MAPEL_AKTIF,
-                kelasTarget: KELAS_AKTIF, // dikirim ke backend script
+                kelasTarget: KELAS_AKTIF,
                 tipeAksi: "simpanNilai",
                 komponenPilihan: komponen,
                 dataNilai: dataNilaiArray
@@ -475,19 +567,29 @@
                 headers: { "Content-Type": "text/plain" },
                 body: JSON.stringify(paketDataNilai)
             }).then(() => {
-                alert(`Seluruh Nilai ${komponen} Berhasil Disimpan Ke Sheet ${MAPEL_AKTIF} Kelas ${KELAS_AKTIF}!`);
                 btn.disabled = false;
-                btn.innerText = 'Simpan Nilai ke Sheets';
-                muatDataUtama(MAPEL_AKTIF, KELAS_AKTIF);
+                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai`;
+
+                elemenInputs.forEach(input => {
+                    let barisId = input.getAttribute('data-baris');
+                    let targetSiswa = DATA_CACHED.siswa.find(s => s.baris == barisId);
+                    if(targetSiswa) {
+                        targetSiswa[komponen] = input.value.trim() === "" ? "" : Number(input.value);
+                    }
+                });
+
+                showToast(
+                    "Data Nilai Berhasil Disimpan!",
+                    `Seluruh Nilai ${komponen} Berhasil Disimpan Ke Sheet ${MAPEL_AKTIF} Kelas ${KELAS_AKTIF}!`
+                );
             }).catch(err => {
-                if(overlay) overlay.classList.add('hidden');
                 alert("Terjadi masalah jaringan: " + err.message);
                 btn.disabled = false;
-                btn.innerText = 'Simpan Nilai ke Sheets';
+                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai`;
             });
         });
 
-        // Tampilkan modal pemilihan kelas pertama kali saat web dibuka
+        // Trigger inisialisasi awal saat dokumen selesai dimuat
         window.addEventListener('DOMContentLoaded', () => {
             bukaModalAwal();
             lucide.createIcons();
