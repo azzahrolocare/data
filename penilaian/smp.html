@@ -46,9 +46,9 @@
 
     <div>
         <div id="customToast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 max-w-md w-full hidden">
-            <div class="bg-white border-l-4 border-emerald-deep rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-emerald-soft/30 border border-gray-100">
-                <div class="p-2 bg-emerald-soft text-emerald-deep rounded-xl border border-emerald-light">
-                    <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-medium"></i>
+            <div id="toastBorder" class="bg-white border-l-4 border-emerald-deep rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-emerald-soft/30 border border-gray-100">
+                <div id="toastIconBg" class="p-2 bg-emerald-soft text-emerald-deep rounded-xl border border-emerald-light">
+                    <i id="toastIcon" data-lucide="check-circle-2" class="w-5 h-5 text-emerald-medium"></i>
                 </div>
                 <div class="flex-1 min-w-0">
                     <h4 id="toastTitle" class="text-sm font-bold text-gray-900 font-serif-custom">Notifikasi</h4>
@@ -100,7 +100,7 @@
                                     <i data-lucide="key-round" class="w-3.5 h-3.5 text-emerald-medium"></i> Ganti Password
                                 </button>
                                 <hr class="border-gray-100">
-                                <button type="button" onclick="prosesKeluarAkun()" class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
+                                <button type="button" onclick="tampilkanModalKeluar()" class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
                                     <i data-lucide="log-out" class="w-3.5 h-3.5 text-red-500"></i> Keluar
                                 </button>
                             </div>
@@ -187,7 +187,6 @@
         </main>
     </div>
 
-    <!-- MODAL PORTAL LOGIN AWAL -->
     <div id="modalAwal" class="fixed inset-0 bg-emerald-deep/40 backdrop-blur-md flex justify-center items-center z-50 p-4">
         <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200">
             <div class="text-center mb-5">
@@ -225,7 +224,6 @@
         </div>
     </div>
 
-    <!-- MODAL MATERI KD -->
     <div id="modalPengaturan" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
         <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh]">
             
@@ -272,7 +270,6 @@
         </div>
     </div>
 
-    <!-- MODAL GANTI PASSWORD -->
     <div id="modalGantiPassword" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200">
             <button type="button" onclick="tutupModalGantiPassword()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-100 rounded-xl transition-all outline-none">
@@ -316,7 +313,6 @@
                             <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
-                    <!-- Peringatan Kesalahan Real-time -->
                     <p id="msgErrorPassword" class="text-[11px] text-red-600 font-bold mt-1.5 hidden flex items-center gap-1">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password tidak cocok.
                     </p>
@@ -326,6 +322,24 @@
                     <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Perbarui Kata Sandi
                 </button>
             </form>
+        </div>
+    </div>
+
+    <div id="modalKonfirmasiKeluar" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
+            <div class="p-3 bg-red-50 text-red-600 rounded-2xl inline-block border border-red-100 mb-3">
+                <i data-lucide="log-out" class="w-8 h-8 text-red-600"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 font-serif-custom">Konfirmasi Keluar</h3>
+            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Apakah Anda yakin ingin keluar dari sistem E-Nilai Az-Zahro? Sesi aktif Anda saat ini akan berakhir.</p>
+            <div class="flex gap-3 mt-5">
+                <button type="button" onclick="tutupModalKeluar()" class="w-1/2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition-all outline-none">
+                    Batal
+                </button>
+                <button type="button" onclick="prosesKeluarAkun()" class="w-1/2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none">
+                    Ya, Keluar
+                </button>
+            </div>
         </div>
     </div>
 
@@ -347,10 +361,27 @@
         let toastTimeout;
 
         // FUNGSI UNTUK MENAMPILKAN NOTIFIKASI KUSTOM BERWARNA (TOAST)
-        function showToast(title, message) {
+        function showToast(title, message, type = "success") {
             const toast = document.getElementById('customToast');
+            const toastBorder = document.getElementById('toastBorder');
+            const toastIconBg = document.getElementById('toastIconBg');
+            const toastIcon = document.getElementById('toastIcon');
+
             document.getElementById('toastTitle').innerText = title;
             document.getElementById('toastMessage').innerText = message;
+
+            // Penyesuaian tema warna toast berdasarkan tipe informasi
+            if (type === "error") {
+                toastBorder.className = "bg-white border-l-4 border-red-600 rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-red-50/30 border border-gray-100";
+                toastIconBg.className = "p-2 bg-red-50 text-red-600 rounded-xl border border-red-100";
+                toastIcon.setAttribute("data-lucide", "alert-triangle");
+                toastIcon.className = "w-5 h-5 text-red-600";
+            } else {
+                toastBorder.className = "bg-white border-l-4 border-emerald-deep rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-emerald-soft/30 border border-gray-100";
+                toastIconBg.className = "p-2 bg-emerald-soft text-emerald-deep rounded-xl border border-emerald-light";
+                toastIcon.setAttribute("data-lucide", "check-circle-2");
+                toastIcon.className = "w-5 h-5 text-emerald-medium";
+            }
             
             toast.classList.remove('hidden');
             lucide.createIcons();
@@ -368,12 +399,14 @@
 
         function hideToast() {
             const toast = document.getElementById('customToast');
-            toast.classList.remove('translate-x-0', 'opacity-100');
-            toast.classList.add('translate-x-full', 'opacity-0');
-            
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 300);
+            if (toast) {
+                toast.classList.remove('translate-x-0', 'opacity-100');
+                toast.classList.add('translate-x-full', 'opacity-0');
+                
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }
         }
 
         // FUNGSI TOGGLE LIHAT/SEMBUNYIKAN PASSWORD (ICON MATA)
@@ -458,11 +491,19 @@
             document.getElementById('modalGantiPassword').classList.add('hidden');
         }
 
+        // KONTROL MODAL KELUAR CUSTOM
+        function tampilkanModalKeluar() {
+            document.getElementById('dropdownAkunMenu').classList.add('hidden');
+            document.getElementById('modalKonfirmasiKeluar').classList.remove('hidden');
+            lucide.createIcons();
+        }
+        function tutupModalKeluar() {
+            document.getElementById('modalKonfirmasiKeluar').classList.add('hidden');
+        }
+
         // PROSES KELUAR AKUN (LOGOUT)
         function prosesKeluarAkun() {
-            if(confirm("Apakah Anda yakin ingin keluar dari sistem E-Nilai Az-Zahro?")) {
-                location.reload();
-            }
+            location.reload();
         }
 
         // INTERSEPSI FORM AUTHENTIKASI UTAMA GURU & SCAN JADWAL
@@ -536,7 +577,7 @@
             const btn = document.getElementById('btnSimpanNilai');
             
             if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Memuat Data Kelas ${tingkatKelas} [Sheet ${namaSheet}]...`;
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Memuat Data Kelas ${tingkatKelas} Mapel ${namaSheet}...`;
                 overlay.classList.remove('hidden');
             }
             btn.disabled = true;
@@ -564,14 +605,14 @@
 
                         renderTabelSiswa();
                     } else {
-                        alert("Gagal memuat data dari Spreadsheet: " + hasil.message);
+                        alert("Gagal memuat data dari Database: " + hasil.message);
                         bukaModalAwal();
                     }
                 })
                 .catch(err => {
                     if(overlay) overlay.classList.add('hidden');
                     console.error(err);
-                    alert("Koneksi gagal atau konfigurasi ID Spreadsheet Kelas salah.");
+                    alert("Koneksi gagal atau konfigurasi ID Kelas salah.");
                     bukaModalAwal();
                 });
         }
@@ -768,7 +809,12 @@
             });
 
             if (adaKolomKosong) {
-                alert("Penyimpanan Dibatalkan: Kolom nilai tidak boleh ada yang kosong! Nilai yang kosong harus diisi dengan angka nol (0) terlebih dahulu.");
+                // MODIFIKASI: Menggunakan custom Toast bawaan bertipe 'error' untuk memunculkan pesan Pembatalan
+                showToast(
+                    "Penyimpanan Dibatalkan!",
+                    "Kolom nilai tidak boleh ada yang kosong! Nilai yang belum terisi harus diisi dengan angka nol (0) terlebih dahulu.",
+                    "error"
+                );
                 return;
             }
             
@@ -810,7 +856,7 @@
 
                 showToast(
                     "Data Nilai Berhasil Disimpan!",
-                    `Seluruh Nilai ${komponen} Berhasil Disimpan Ke Sheet ${MAPEL_AKTIF} Kelas ${KELAS_AKTIF}!`
+                    `Seluruh Nilai ${komponen} Berhasil Disimpan Ke Database ${MAPEL_AKTIF} Kelas ${KELAS_AKTIF}!`
                 );
             }).catch(err => {
                 alert("Terjadi masalah jaringan: " + err.message);
