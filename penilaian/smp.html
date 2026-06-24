@@ -85,10 +85,6 @@
                 </div>
                 
                 <div class="flex items-center gap-2 flex-shrink-0 relative">
-                    <button type="button" onclick="bukaModalPengaturan()" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-medium hover:bg-emerald-deep text-white font-semibold text-xs rounded-xl border border-emerald-light/20 transition-all shadow-sm active:scale-95">
-                        <i data-lucide="settings" class="w-3.5 h-3.5 text-gold-accent"></i> <span>Materi KD</span>
-                    </button>
-                    
                     <div class="relative inline-block text-left">
                         <button type="button" onclick="toggleDropdownAkun()" id="btnMenuAkun" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-medium hover:bg-emerald-deep text-white font-semibold text-xs rounded-xl border border-emerald-light/20 transition-all shadow-sm active:scale-95">
                             <i data-lucide="user" class="w-3.5 h-3.5 text-gold-accent"></i> <span>Akun</span> <i data-lucide="chevron-down" class="w-3 h-3 opacity-70"></i>
@@ -124,13 +120,13 @@
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
                             <i data-lucide="calendar" class="w-4 h-4 text-emerald-medium"></i> Pilih Kelas & Mapel Anda
                         </label>
                         <select id="pilihJadwalDinamis" onchange="gantiJadwalAktif()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
-                            </select>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
@@ -149,6 +145,11 @@
                             <option value="PAS">PAS</option>
                         </select>
                     </div>
+                    <div>
+                        <button type="button" onclick="bukaModalPengaturan()" class="w-full inline-flex items-center justify-center gap-2 h-[46px] bg-emerald-medium hover:bg-emerald-deep text-white font-bold text-sm rounded-xl border border-emerald-light/20 transition-all shadow-md active:scale-95">
+                            <i data-lucide="settings" class="w-4 h-4 text-gold-accent"></i> <span>Materi KD</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -162,9 +163,6 @@
                     <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900 flex items-center gap-2">
                         <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Daftar Siswa
                     </h4>
-                    <button type="submit" form="formNilaiSiswa" id="btnSimpanNilai" disabled class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]">
-                        <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai
-                    </button>
                 </div>
 
                 <form id="formNilaiSiswa">
@@ -181,6 +179,12 @@
                                 <tr><td colspan="3" class="text-center py-8 text-gray-400 font-medium">Silahkan melakukan login akses guru terlebih dahulu.</td></tr>
                             </tbody>
                         </table>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-end">
+                        <button type="submit" id="btnSimpanNilai" disabled class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]">
+                            <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai
+                        </button>
                     </div>
                 </form>
             </div>
@@ -221,6 +225,21 @@
                     <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> Masuk & Pindai Jadwal
                 </button>
             </form>
+        </div>
+    </div>
+
+    <div id="modalGagalMasuk" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
+            <div class="p-3 bg-red-50 text-red-600 rounded-2xl inline-block border border-red-100 mb-3">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 font-serif-custom" id="judulModalGagal">Gagal Masuk</h3>
+            <p class="text-xs text-gray-500 mt-2 leading-relaxed" id="pesanModalGagal"></p>
+            <div class="mt-5">
+                <button type="button" onclick="tutupModalGagalMasuk()" class="w-full px-4 py-2.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none">
+                    Tutup
+                </button>
+            </div>
         </div>
     </div>
 
@@ -469,16 +488,27 @@
             document.getElementById('modalAwal').classList.add('hidden');
         }
         function bukaModalPengaturan() {
-            if(!KELAS_AKTIF || !MAPEL_AKTIF) { alert("Pilih Kelas dan Mapel terlebih dahulu!"); return; }
+            if(!KELAS_AKTIF || !MAPEL_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Pilih Kelas dan Mapel terlebih dahulu!"); return; }
             document.getElementById('modalPengaturan').classList.remove('hidden');
         }
         function tutupModalPengaturan() {
             document.getElementById('modalPengaturan').classList.add('hidden');
         }
 
+        // MODAL GAGAL MASUK KUSTOM TAILWIND
+        function tampilkanModalGagalMasuk(judul, pesan) {
+            document.getElementById('judulModalGagal').innerText = judul;
+            document.getElementById('pesanModalGagal').innerText = pesan;
+            document.getElementById('modalGagalMasuk').classList.remove('hidden');
+            lucide.createIcons();
+        }
+        function tutupModalGagalMasuk() {
+            document.getElementById('modalGagalMasuk').classList.add('hidden');
+        }
+
         // MODAL GANTI PASSWORD
         function bukaModalGantiPassword() {
-            if (!GURU_AKTIF) { alert("Silakan login akun guru terlebih dahulu!"); return; }
+            if (!GURU_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); return; }
             document.getElementById('dropdownAkunMenu').classList.add('hidden');
             document.getElementById('modalPwGuruNama').value = GURU_AKTIF;
             document.getElementById('modalPwBaru').value = "";
@@ -529,7 +559,7 @@
                         LIST_HAK_MENGAJAR = hasil.hakMengajar;
                         
                         if (LIST_HAK_MENGAJAR.length === 0) {
-                            alert("Login sukses! Namun Nama Anda tidak terdaftar sebagai pengajar di mapel manapun pada Kelas VII, VIII, atau IX.");
+                            tampilkanModalGagalMasuk("Hak Akses Kosong", "Login sukses! Namun Nama Anda tidak terdaftar sebagai pengajar di mapel manapun pada Kelas VII, VIII, atau IX.");
                             bukaModalAwal();
                             return;
                         }
@@ -546,13 +576,13 @@
 
                         gantiJadwalAktif();
                     } else {
-                        alert("Gagal Masuk: " + hasil.message);
+                        tampilkanModalGagalMasuk("Gagal Masuk", hasil.message);
                     }
                 })
                 .catch(err => {
                     if(overlay) overlay.classList.add('hidden');
                     console.error(err);
-                    alert("Koneksi gagal atau sistem otentikasi pusat bermasalah.");
+                    tampilkanModalGagalMasuk("Kesalahan Sistem", "Koneksi gagal atau sistem otentikasi pusat bermasalah.");
                 });
         });
 
@@ -605,14 +635,14 @@
 
                         renderTabelSiswa();
                     } else {
-                        alert("Gagal memuat data dari Database: " + hasil.message);
+                        tampilkanModalGagalMasuk("Gagal Memuat Data", hasil.message);
                         bukaModalAwal();
                     }
                 })
                 .catch(err => {
                     if(overlay) overlay.classList.add('hidden');
                     console.error(err);
-                    alert("Koneksi gagal atau konfigurasi ID Kelas salah.");
+                    tampilkanModalGagalMasuk("Kesalahan Koneksi", "Koneksi gagal atau konfigurasi ID Kelas salah.");
                     bukaModalAwal();
                 });
         }
@@ -731,7 +761,7 @@
                     `Sistem Penilaian Utama E-Nilai Siswa Az-Zahro Kelas ${KELAS_AKTIF} - [Mapel: ${MAPEL_AKTIF}]`
                 );
             }).catch(err => {
-                alert("Gagal: " + err.message);
+                tampilkanModalGagalMasuk("Gagal Menyimpan", err.message);
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Simpan`;
             });
@@ -744,7 +774,7 @@
             const pwKonf = document.getElementById('modalPwKonfirmasi').value;
 
             if (pwBaru.length < 4) {
-                alert("Gagal: Kata sandi baru minimal harus terdiri dari 4 karakter.");
+                tampilkanModalGagalMasuk("Sandi Lemah", "Gagal: Kata sandi baru minimal harus terdiri dari 4 karakter.");
                 return;
             }
 
@@ -779,7 +809,7 @@
                 );
             }).catch(err => {
                 if(overlay) overlay.classList.add('hidden');
-                alert("Terjadi kegagalan koneksi sistem: " + err.message);
+                tampilkanModalGagalMasuk("Gagal Memperbarui", "Terjadi kegagalan koneksi sistem: " + err.message);
             });
         });
 
@@ -793,7 +823,7 @@
                 let nomorKD = komponen.replace("KD", "");
                 let judulMateri = DATA_CACHED.pengaturan['kd' + nomorKD] || "";
                 if (judulMateri.trim() === "") {
-                    alert(`Gagal Menyimpan! Judul Materi untuk ${komponen} masih kosong. Anda dilarang menginput nilai sebelum mengisi Judul KD di menu kanan atas.`);
+                    tampilkanModalGagalMasuk("Penyimpanan Dibatalkan", `Gagal Menyimpan! Judul Materi untuk ${komponen} masih kosong. Anda dilarang menginput nilai sebelum mengisi Judul KD di menu kanan atas.`);
                     return;
                 }
             }
@@ -859,7 +889,7 @@
                     `Seluruh Nilai ${komponen} Berhasil Disimpan Ke Database ${MAPEL_AKTIF} Kelas ${KELAS_AKTIF}!`
                 );
             }).catch(err => {
-                alert("Terjadi masalah jaringan: " + err.message);
+                tampilkanModalGagalMasuk("Masalah Jaringan", "Terjadi masalah jaringan: " + err.message);
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai`;
             });
