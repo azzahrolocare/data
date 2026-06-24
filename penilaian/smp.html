@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0F5132">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#0F5132">
     <title>Sistem Input Nilai Wali Kelas / Guru - Az-Zahro</title>
     
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -206,7 +209,7 @@
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                         <i data-lucide="user" class="w-3.5 h-3.5 text-emerald-medium"></i> Nama Lengkap Guru
                     </label>
-                    <input type="text" id="gerbangGuru" required placeholder="Contoh: RAHMATTULLAH" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase">
+                    <input type="text" id="gerbangGuru" required placeholder=" " class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase">
                 </div>
 
                 <div>
@@ -221,8 +224,8 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md mt-2">
-                    <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> Masuk
+                <button type="submit" id="btnMasukGerbang" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md mt-2 disabled:opacity-75 disabled:pointer-events-none">
+                    <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> <span>Masuk</span>
                 </button>
             </form>
         </div>
@@ -320,6 +323,9 @@
                             <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
+                    <p id="msgSandiLemah" class="text-[11px] text-red-600 font-bold mt-1.5 hidden flex items-center gap-1">
+                        <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password minimal harus terdiri dari 4 karakter.
+                    </p>
                 </div>
 
                 <div>
@@ -447,22 +453,31 @@
         function validasiKesesuaianSandi() {
             const pwBaru = document.getElementById('modalPwBaru').value;
             const pwKonf = document.getElementById('modalPwKonfirmasi').value;
+            const msgSandiLemah = document.getElementById('msgSandiLemah');
             const errorMsg = document.getElementById('msgErrorPassword');
             const btnSubmit = document.getElementById('btnSubmitGantiPw');
 
-            if (pwKonf.length === 0) {
-                errorMsg.classList.add('hidden');
-                btnSubmit.disabled = false;
-                return;
+            let apakahValid = true;
+
+            // Validasi 1: Sandi Lemah (Kurang dari 4 karakter)
+            if (pwBaru.length > 0 && pwBaru.length < 4) {
+                msgSandiLemah.classList.remove('hidden');
+                apakahValid = false;
+            } else {
+                msgSandiLemah.classList.add('hidden');
             }
 
-            if (pwBaru !== pwKonf) {
+            // Validasi 2: Kesesuaian Sandi (Match Check)
+            if (pwKonf.length === 0) {
+                errorMsg.classList.add('hidden');
+            } else if (pwBaru !== pwKonf) {
                 errorMsg.classList.remove('hidden');
-                btnSubmit.disabled = true;
+                apakahValid = false;
             } else {
                 errorMsg.classList.add('hidden');
-                btnSubmit.disabled = false;
             }
+
+            btnSubmit.disabled = !apakahValid;
             lucide.createIcons();
         }
 
@@ -513,6 +528,7 @@
             document.getElementById('modalPwGuruNama').value = GURU_AKTIF;
             document.getElementById('modalPwBaru').value = "";
             document.getElementById('modalPwKonfirmasi').value = "";
+            document.getElementById('msgSandiLemah').classList.add('hidden');
             document.getElementById('msgErrorPassword').classList.add('hidden');
             document.getElementById('btnSubmitGantiPw').disabled = false;
             document.getElementById('modalGantiPassword').classList.remove('hidden');
@@ -542,6 +558,12 @@
             GURU_AKTIF = document.getElementById('gerbangGuru').value.trim().toUpperCase();
             let password = document.getElementById('gerbangPassword').value;
             
+            const btnMasuk = document.getElementById('btnMasukGerbang');
+            if (btnMasuk) {
+                btnMasuk.disabled = true;
+                btnMasuk.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> <span>Memproses...</span>`;
+            }
+            
             const overlay = document.getElementById('loadingOverlay');
             if(overlay) {
                 document.getElementById('loadingText').innerHTML = `<i data-lucide="shield" class="w-4 h-4 animate-spin text-gold-accent"></i> Memverifikasi Akun & Memindai Jadwal...`;
@@ -555,6 +577,11 @@
                 .then(res => res.json())
                 .then(hasil => {
                     if(overlay) overlay.classList.add('hidden');
+                    if (btnMasuk) {
+                        btnMasuk.disabled = false;
+                        btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> <span>Masuk</span>`;
+                        lucide.createIcons();
+                    }
                     if (hasil.status === "success") {
                         LIST_HAK_MENGAJAR = hasil.hakMengajar;
                         
@@ -581,6 +608,11 @@
                 })
                 .catch(err => {
                     if(overlay) overlay.classList.add('hidden');
+                    if (btnMasuk) {
+                        btnMasuk.disabled = false;
+                        btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> <span>Masuk</span>`;
+                        lucide.createIcons();
+                    }
                     console.error(err);
                     tampilkanModalGagalMasuk("Kesalahan Sistem", "Koneksi gagal atau sistem otentikasi pusat bermasalah.");
                 });
@@ -774,12 +806,11 @@
             const pwKonf = document.getElementById('modalPwKonfirmasi').value;
 
             if (pwBaru.length < 4) {
-                tampilkanModalGagalMasuk("Sandi Lemah", "Gagal: Kata sandi baru minimal harus terdiri dari 4 karakter.");
-                return;
+                return; // Dicegah oleh validasi real-time (button disabled)
             }
 
             if (pwBaru !== pwKonf) {
-                return; // Dicegah oleh sistem validasi real-time button disabled
+                return; // Dicegah oleh validasi real-time (button disabled)
             }
 
             const overlay = document.getElementById('loadingOverlay');
