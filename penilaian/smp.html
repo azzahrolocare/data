@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#0F5132">
     <title>Sistem Input Nilai Wali Kelas / Guru - Az-Zahro</title>
     
-    <link rel="manifest" href="manifest.json">
+    <link class="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -212,10 +212,7 @@
                         <i data-lucide="user" class="w-3.5 h-3.5 text-emerald-medium"></i> Nama Lengkap Guru
                     </label>
                     <div class="relative">
-                        <input type="text" id="gerbangGuru" required placeholder=" " class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase">
-                        <button type="button" onclick="bukaFullScreenGuru()" title="Layar Penuh Input Nama" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-deep outline-none transition-colors">
-                            <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                        </button>
+                        <input type="text" id="gerbangGuru" required placeholder=" " onclick="bukaAplikasiLayarPenuh()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase cursor-pointer">
                     </div>
                 </div>
 
@@ -235,29 +232,6 @@
                     <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> <span>Masuk</span>
                 </button>
             </form>
-        </div>
-    </div>
-
-    <div id="modalFullScreenGuru" class="fixed inset-0 bg-emerald-deep flex flex-col justify-center items-center z-[60] p-6 hidden animate-in fade-in duration-200">
-        <div class="w-full max-w-2xl text-center space-y-6">
-            <div class="p-4 bg-emerald-medium rounded-full inline-block border border-emerald-light/20 shadow-inner">
-                <i data-lucide="user-check" class="w-12 h-12 text-gold-accent"></i>
-            </div>
-            <div class="space-y-1">
-                <h3 class="text-2xl font-serif-custom font-bold text-white tracking-wide">Nama Lengkap Pendidik</h3>
-                <p class="text-xs text-emerald-light/80">Silakan ketik nama lengkap Anda untuk pemindaian hak mengajar</p>
-            </div>
-            <div class="relative w-full">
-                <input type="text" id="fsGuruInput" placeholder="CONTOH: DRS. H. AHMAD MAULANA" oninput="sinkronisasiNamaFS(this.value)" class="w-full bg-emerald-medium/40 border-2 border-emerald-light/30 rounded-2xl px-6 py-5 text-xl font-bold tracking-wide text-white text-center focus:bg-emerald-medium/60 focus:border-gold-accent transition-all outline-none uppercase placeholder-emerald-light/30 shadow-lg">
-            </div>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-                <button type="button" onclick="tutupFullScreenGuru()" class="px-6 py-3.5 bg-emerald-medium hover:bg-emerald-light/10 text-emerald-light font-bold text-sm rounded-xl border border-emerald-light/20 transition-all active:scale-95">
-                    Kembali
-                </button>
-                <button type="button" onclick="selesaiFullScreenGuru()" class="px-8 py-3.5 bg-gradient-to-r from-gold-accent to-gold-muted hover:from-white hover:to-white hover:text-emerald-deep text-emerald-deep font-extrabold text-sm rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
-                    <i data-lucide="check-circle" class="w-4 h-4"></i> Selesai & Lanjutkan
-                </button>
-            </div>
         </div>
     </div>
 
@@ -420,42 +394,32 @@
             if (apakahKunci) {
                 document.body.classList.add('overflow-hidden-modal');
             } else {
-                // Periksa apakah masih ada modal lain yang terbuka sebelum melepas lock
                 const modalAwal = !document.getElementById('modalAwal').classList.contains('hidden');
                 const modalPengaturan = !document.getElementById('modalPengaturan').classList.contains('hidden');
                 const modalGantiPassword = !document.getElementById('modalGantiPassword').classList.contains('hidden');
                 const modalKonfirmasiKeluar = !document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden');
                 const modalGagal = !document.getElementById('modalGagalMasuk').classList.contains('hidden');
-                const modalFS = !document.getElementById('modalFullScreenGuru').classList.contains('hidden');
 
-                if (!modalAwal && !modalPengaturan && !modalGantiPassword && !modalKonfirmasiKeluar && !modalGagal && !modalFS) {
+                if (!modalAwal && !modalPengaturan && !modalGantiPassword && !modalKonfirmasiKeluar && !modalGagal) {
                     document.body.classList.remove('overflow-hidden-modal');
                 }
             }
         }
 
-        // MANAGEMENT LAYAR PENULISAN LAYAR PENUH (FULL SCREEN GURU)
-        function bukaFullScreenGuru() {
-            const valSeka = document.getElementById('gerbangGuru').value;
-            document.getElementById('fsGuruInput').value = valSeka;
-            document.getElementById('modalFullScreenGuru').classList.remove('hidden');
+        // FUNGSI PEMICU LAYAR PENUH NATIVE (HTML5 FULLSCREEN API)
+        function bukaAplikasiLayarPenuh() {
             kunciScrollLatar(true);
-            setTimeout(() => { document.getElementById('fsGuruInput').focus(); }, 150);
-            lucide.createIcons();
-        }
-
-        function tutupFullScreenGuru() {
-            document.getElementById('modalFullScreenGuru').classList.add('hidden');
-            kunciScrollLatar(false);
-        }
-
-        function sinkronisasiNamaFS(val) {
-            document.getElementById('gerbangGuru').value = val.toUpperCase();
-        }
-
-        function selesaiFullScreenGuru() {
-            tutupFullScreenGuru();
-            setTimeout(() => { document.getElementById('gerbangPassword').focus(); }, 100);
+            
+            const docElm = document.documentElement;
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.mozRequestFullScreen) { /* Firefox */
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                docElm.webkitRequestFullscreen();
+            } else if (docElm.msRequestFullscreen) { /* IE/Edge */
+                docElm.msRequestFullscreen();
+            }
         }
 
         // FUNGSI UNTUK MENAMPILKAN NOTIFIKASI KUSTOM BERWARNA (TOAST)
@@ -468,7 +432,6 @@
             document.getElementById('toastTitle').innerText = title;
             document.getElementById('toastMessage').innerText = message;
 
-            // Penyesuaian tema warna toast berdasarkan tipe informasi
             if (type === "error") {
                 toastBorder.className = "bg-white border-l-4 border-red-600 rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-red-50/30 border border-gray-100";
                 toastIconBg.className = "p-2 bg-red-50 text-red-600 rounded-xl border border-red-100";
@@ -532,7 +495,6 @@
 
             let apakahValid = true;
 
-            // Validasi 1: Sandi Lemah (Kurang dari 4 karakter)
             if (pwBaru.length > 0 && pwBaru.length < 4) {
                 msgSandiLemah.classList.remove('hidden');
                 apakahValid = false;
@@ -540,7 +502,6 @@
                 msgSandiLemah.classList.add('hidden');
             }
 
-            // Validasi 2: Kesesuaian Sandi (Match Check)
             if (pwKonf.length === 0) {
                 errorMsg.classList.add('hidden');
             } else if (pwBaru !== pwKonf) {
@@ -709,7 +670,7 @@
             KELAS_AKTIF = part[0];
             MAPEL_AKTIF = part[1];
 
-            document.getElementById('navJudulUtama').innerText = `SmartGrader`;
+            document.getElementById('navJudulUtama').innerText = `SmartGrader Kelas ${KELAS_AKTIF}`;
             document.getElementById('badgeKelas').innerText = `Kelas: ${KELAS_AKTIF}`;
             document.getElementById('badgeMapel').innerText = `Mapel: ${MAPEL_AKTIF}`;
             
@@ -888,12 +849,8 @@
             const pwBaru = document.getElementById('modalPwBaru').value;
             const pwKonf = document.getElementById('modalPwKonfirmasi').value;
 
-            if (pwBaru.length < 4) {
-                return; // Dicegah oleh validasi real-time (button disabled)
-            }
-
-            if (pwBaru !== pwKonf) {
-                return; // Dicegah oleh validasi real-time (button disabled)
+            if (pwBaru.length < 4 || pwBaru !== pwKonf) {
+                return;
             }
 
             const overlay = document.getElementById('loadingOverlay');
@@ -927,7 +884,7 @@
             });
         });
 
-        // PROSES SIMPAN NILAI SISWA KE SHEETS DENGAN TOAST MULUS
+        // PROSES SIMPAN NILAI SISWA KE SHEETS
         document.getElementById('formNilaiSiswa').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSimpanNilai');
@@ -953,7 +910,6 @@
             });
 
             if (adaKolomKosong) {
-                // MODIFIKASI: Menggunakan custom Toast bawaan bertipe 'error' untuk memunculkan pesan Pembatalan
                 showToast(
                     "Penyimpanan Dibatalkan!",
                     "Kolom nilai tidak boleh ada yang kosong! Nilai yang belum terisi harus diisi dengan angka nol (0) terlebih dahulu.",
@@ -1009,7 +965,6 @@
             });
         });
 
-        // Trigger inisialisasi awal saat dokumen selesai dimuat
         window.addEventListener('DOMContentLoaded', () => {
             bukaModalAwal();
             lucide.createIcons();
