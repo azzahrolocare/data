@@ -43,6 +43,8 @@
         body { font-family: 'Inter', system-ui, sans-serif; }
         .font-serif-custom { font-family: 'Playfair Display', Georgia, serif; }
         .table-input { width: 80px; text-align: center; }
+        /* Kunci scroll latar belakang */
+        .overflow-hidden-modal { overflow: hidden !important; height: 100vh !important; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
@@ -209,7 +211,12 @@
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                         <i data-lucide="user" class="w-3.5 h-3.5 text-emerald-medium"></i> Nama Lengkap Guru
                     </label>
-                    <input type="text" id="gerbangGuru" required placeholder=" " class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase">
+                    <div class="relative">
+                        <input type="text" id="gerbangGuru" required placeholder=" " class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase">
+                        <button type="button" onclick="bukaFullScreenGuru()" title="Layar Penuh Input Nama" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-deep outline-none transition-colors">
+                            <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div>
@@ -228,6 +235,29 @@
                     <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> <span>Masuk</span>
                 </button>
             </form>
+        </div>
+    </div>
+
+    <div id="modalFullScreenGuru" class="fixed inset-0 bg-emerald-deep flex flex-col justify-center items-center z-[60] p-6 hidden animate-in fade-in duration-200">
+        <div class="w-full max-w-2xl text-center space-y-6">
+            <div class="p-4 bg-emerald-medium rounded-full inline-block border border-emerald-light/20 shadow-inner">
+                <i data-lucide="user-check" class="w-12 h-12 text-gold-accent"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="text-2xl font-serif-custom font-bold text-white tracking-wide">Nama Lengkap Pendidik</h3>
+                <p class="text-xs text-emerald-light/80">Silakan ketik nama lengkap Anda untuk pemindaian hak mengajar</p>
+            </div>
+            <div class="relative w-full">
+                <input type="text" id="fsGuruInput" placeholder="CONTOH: DRS. H. AHMAD MAULANA" oninput="sinkronisasiNamaFS(this.value)" class="w-full bg-emerald-medium/40 border-2 border-emerald-light/30 rounded-2xl px-6 py-5 text-xl font-bold tracking-wide text-white text-center focus:bg-emerald-medium/60 focus:border-gold-accent transition-all outline-none uppercase placeholder-emerald-light/30 shadow-lg">
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+                <button type="button" onclick="tutupFullScreenGuru()" class="px-6 py-3.5 bg-emerald-medium hover:bg-emerald-light/10 text-emerald-light font-bold text-sm rounded-xl border border-emerald-light/20 transition-all active:scale-95">
+                    Kembali
+                </button>
+                <button type="button" onclick="selesaiFullScreenGuru()" class="px-8 py-3.5 bg-gradient-to-r from-gold-accent to-gold-muted hover:from-white hover:to-white hover:text-emerald-deep text-emerald-deep font-extrabold text-sm rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i> Selesai & Lanjutkan
+                </button>
+            </div>
         </div>
     </div>
 
@@ -385,6 +415,49 @@
         let LIST_HAK_MENGAJAR = [];
         let toastTimeout;
 
+        // FUNGSI UTAMA UNTUK MENGUNCI / MELEPAS SCROLL BODY
+        function kunciScrollLatar(apakahKunci) {
+            if (apakahKunci) {
+                document.body.classList.add('overflow-hidden-modal');
+            } else {
+                // Periksa apakah masih ada modal lain yang terbuka sebelum melepas lock
+                const modalAwal = !document.getElementById('modalAwal').classList.contains('hidden');
+                const modalPengaturan = !document.getElementById('modalPengaturan').classList.contains('hidden');
+                const modalGantiPassword = !document.getElementById('modalGantiPassword').classList.contains('hidden');
+                const modalKonfirmasiKeluar = !document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden');
+                const modalGagal = !document.getElementById('modalGagalMasuk').classList.contains('hidden');
+                const modalFS = !document.getElementById('modalFullScreenGuru').classList.contains('hidden');
+
+                if (!modalAwal && !modalPengaturan && !modalGantiPassword && !modalKonfirmasiKeluar && !modalGagal && !modalFS) {
+                    document.body.classList.remove('overflow-hidden-modal');
+                }
+            }
+        }
+
+        // MANAGEMENT LAYAR PENULISAN LAYAR PENUH (FULL SCREEN GURU)
+        function bukaFullScreenGuru() {
+            const valSeka = document.getElementById('gerbangGuru').value;
+            document.getElementById('fsGuruInput').value = valSeka;
+            document.getElementById('modalFullScreenGuru').classList.remove('hidden');
+            kunciScrollLatar(true);
+            setTimeout(() => { document.getElementById('fsGuruInput').focus(); }, 150);
+            lucide.createIcons();
+        }
+
+        function tutupFullScreenGuru() {
+            document.getElementById('modalFullScreenGuru').classList.add('hidden');
+            kunciScrollLatar(false);
+        }
+
+        function sinkronisasiNamaFS(val) {
+            document.getElementById('gerbangGuru').value = val.toUpperCase();
+        }
+
+        function selesaiFullScreenGuru() {
+            tutupFullScreenGuru();
+            setTimeout(() => { document.getElementById('gerbangPassword').focus(); }, 100);
+        }
+
         // FUNGSI UNTUK MENAMPILKAN NOTIFIKASI KUSTOM BERWARNA (TOAST)
         function showToast(title, message, type = "success") {
             const toast = document.getElementById('customToast');
@@ -498,16 +571,20 @@
         // KONTROL MODAL TAMPILAN
         function bukaModalAwal() {
             document.getElementById('modalAwal').classList.remove('hidden');
+            kunciScrollLatar(true);
         }
         function tutupModalAwal() {
             document.getElementById('modalAwal').classList.add('hidden');
+            kunciScrollLatar(false);
         }
         function bukaModalPengaturan() {
             if(!KELAS_AKTIF || !MAPEL_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Pilih Kelas dan Mapel terlebih dahulu!"); return; }
             document.getElementById('modalPengaturan').classList.remove('hidden');
+            kunciScrollLatar(true);
         }
         function tutupModalPengaturan() {
             document.getElementById('modalPengaturan').classList.add('hidden');
+            kunciScrollLatar(false);
         }
 
         // MODAL GAGAL MASUK KUSTOM TAILWIND
@@ -515,10 +592,12 @@
             document.getElementById('judulModalGagal').innerText = judul;
             document.getElementById('pesanModalGagal').innerText = pesan;
             document.getElementById('modalGagalMasuk').classList.remove('hidden');
+            kunciScrollLatar(true);
             lucide.createIcons();
         }
         function tutupModalGagalMasuk() {
             document.getElementById('modalGagalMasuk').classList.add('hidden');
+            kunciScrollLatar(false);
         }
 
         // MODAL GANTI PASSWORD
@@ -532,19 +611,23 @@
             document.getElementById('msgErrorPassword').classList.add('hidden');
             document.getElementById('btnSubmitGantiPw').disabled = false;
             document.getElementById('modalGantiPassword').classList.remove('hidden');
+            kunciScrollLatar(true);
         }
         function tutupModalGantiPassword() {
             document.getElementById('modalGantiPassword').classList.add('hidden');
+            kunciScrollLatar(false);
         }
 
         // KONTROL MODAL KELUAR CUSTOM
         function tampilkanModalKeluar() {
             document.getElementById('dropdownAkunMenu').classList.add('hidden');
             document.getElementById('modalKonfirmasiKeluar').classList.remove('hidden');
+            kunciScrollLatar(true);
             lucide.createIcons();
         }
         function tutupModalKeluar() {
             document.getElementById('modalKonfirmasiKeluar').classList.add('hidden');
+            kunciScrollLatar(false);
         }
 
         // PROSES KELUAR AKUN (LOGOUT)
@@ -626,7 +709,7 @@
             KELAS_AKTIF = part[0];
             MAPEL_AKTIF = part[1];
 
-            document.getElementById('navJudulUtama').innerText = `SmartGrader Kelas ${KELAS_AKTIF}`;
+            document.getElementById('navJudulUtama').innerText = `SmartGrader`;
             document.getElementById('badgeKelas').innerText = `Kelas: ${KELAS_AKTIF}`;
             document.getElementById('badgeMapel').innerText = `Mapel: ${MAPEL_AKTIF}`;
             
