@@ -75,7 +75,7 @@
                     </div>
                     <div class="flex flex-col min-w-0">
                         <h1 id="navJudulUtama" class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate">
-                            E-Nilai Siswa Az-Zahro
+                            SmartGrader Az-Zahro
                         </h1>
                         <div id="subInfoNav" class="text-[11px] sm:text-xs text-emerald-light/90 font-medium tracking-wide mt-0.5 truncate flex items-center gap-1.5">
                             <span class="inline-block w-1.5 h-1.5 rounded-full bg-gold-accent animate-pulse"></span>
@@ -197,8 +197,8 @@
                 <div class="p-3 bg-emerald-soft rounded-2xl inline-block border border-emerald-light mb-2">
                     <i data-lucide="shield-check" class="w-8 h-8 text-emerald-deep"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 font-serif-custom">Portal E-Nilai Az-Zahro</h3>
-                <p class="text-xs text-gray-500 mt-1">Autentikasi & Pemindaian Otomatis Hak Mengajar</p>
+                <h3 class="text-xl font-bold text-gray-900 font-serif-custom">SmartGrader Az-Zahro</h3>
+                <p class="text-xs text-gray-500 mt-1">Autentikasi & Pemindaian Otomatis Pendidik</p>
             </div>
 
             <form id="formGerbangAwal" class="space-y-4">
@@ -211,10 +211,10 @@
 
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-medium"></i> Password Akses
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-medium"></i> Password
                     </label>
                     <div class="relative">
-                        <input type="password" id="gerbangPassword" required placeholder="••••••••" class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                        <input type="password" id="gerbangPassword" required placeholder=" " class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
                         <button type="button" onclick="toggleVisibilitasSandi('gerbangPassword', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 outline-none transition-colors">
                             <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
@@ -222,7 +222,7 @@
                 </div>
 
                 <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md mt-2">
-                    <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> Masuk & Pindai Jadwal
+                    <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> Masuk
                 </button>
             </form>
         </div>
@@ -350,7 +350,7 @@
                 <i data-lucide="log-out" class="w-8 h-8 text-red-600"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900 font-serif-custom">Konfirmasi Keluar</h3>
-            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Apakah Anda yakin ingin keluar dari sistem E-Nilai Az-Zahro? Sesi aktif Anda saat ini akan berakhir.</p>
+            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Apakah Anda yakin ingin keluar dari sistem SmartGrader Az-Zahro?</p>
             <div class="flex gap-3 mt-5">
                 <button type="button" onclick="tutupModalKeluar()" class="w-1/2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition-all outline-none">
                     Batal
@@ -594,7 +594,7 @@
             KELAS_AKTIF = part[0];
             MAPEL_AKTIF = part[1];
 
-            document.getElementById('navJudulUtama').innerText = `E-Nilai Siswa Kelas ${KELAS_AKTIF}`;
+            document.getElementById('navJudulUtama').innerText = `SmartGrader Kelas ${KELAS_AKTIF}`;
             document.getElementById('badgeKelas').innerText = `Kelas: ${KELAS_AKTIF}`;
             document.getElementById('badgeMapel').innerText = `Mapel: ${MAPEL_AKTIF}`;
             
