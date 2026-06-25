@@ -53,10 +53,18 @@
         .custom-scroll::-webkit-scrollbar-track { background: #f0fdf4; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #146c43; border-radius: 10px; }
         
-        /* Tambahan CSS agar saat Full Screen area tetap rapi dan mendapat padding aman dari poni/notch HP */
-        :fullscreen body {
+        /* PERBAIKAN: Memaksa header tetap menempel di atas (tidak ikut bergerak) saat mode Fullscreen */
+        :fullscreen nav, :-webkit-full-screen nav {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+        }
+        
+        /* Memberikan jarak aman pada konten utama agar tidak tertutup oleh header yang di-fixed */
+        :fullscreen main, :-webkit-full-screen main {
+            margin-top: 8rem !important; /* Menyesuaikan tinggi navbar h-24 */
             padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
         }
     </style>
 </head>
