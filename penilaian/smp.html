@@ -202,8 +202,8 @@
                 <div class="p-3 bg-emerald-soft rounded-2xl inline-block border border-emerald-light mb-2">
                     <i data-lucide="shield-check" class="w-8 h-8 text-emerald-deep"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 font-serif-custom">SmartGrader Az-Zahro</h3>
-                <p class="text-xs text-gray-500 mt-1">Autentikasi & Pemindaian Otomatis Pendidik</p>
+                <h3 class="text-xl font-bold text-gray-900 font-serif-custom">SmartGrader SMPI Az-Zahro</h3>
+                <p class="text-xs text-gray-500 mt-1">Autentikasi Guru & Pemindaian Kelas Otomatis</p>
             </div>
 
             <form id="formGerbangAwal" class="space-y-4">
@@ -372,6 +372,24 @@
         </div>
     </div>
 
+    <div id="modalKonfirmasiKembali" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
+            <div class="p-3 bg-red-50 text-red-600 rounded-2xl inline-block border border-red-100 mb-3">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>
+            </div>
+            <h3 class="text-lg font-bold text-red-600 font-serif-custom">Peringatan!</h3>
+            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Anda tidak sengaja menekan tombol kembali atau keluar dari mode fokus. Ingin melanjutkan pengisian nilai?</p>
+            <div class="flex flex-col gap-2 mt-5">
+                <button type="button" onclick="kembaliKeFullscreenUtama()" class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none flex items-center justify-center gap-2">
+                    <i data-lucide="expand" class="w-4 h-4 text-white"></i> Lanjut Mengisi Nilai
+                </button>
+                <button type="button" onclick="konfirmasiBenarKeluar()" class="w-full px-4 py-2 text-gray-400 hover:text-red-600 font-semibold text-xs rounded-xl transition-all outline-none">
+                    Tidak, Saya Ingin Keluar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-emerald-deep text-gray-200 border-t-2 border-gold-accent/40 mt-12 py-6 px-4">
         <div class="max-w-7xl mx-auto text-center text-[11px] text-gray-400">
             &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
@@ -398,15 +416,16 @@
                 const modalPengaturan = !document.getElementById('modalPengaturan').classList.contains('hidden');
                 const modalGantiPassword = !document.getElementById('modalGantiPassword').classList.contains('hidden');
                 const modalKonfirmasiKeluar = !document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden');
+                const modalKonfirmasiKembali = !document.getElementById('modalKonfirmasiKembali').classList.contains('hidden');
                 const modalGagal = !document.getElementById('modalGagalMasuk').classList.contains('hidden');
 
-                if (!modalAwal && !modalPengaturan && !modalGantiPassword && !modalKonfirmasiKeluar && !modalGagal) {
+                if (!modalAwal && !modalPengaturan && !modalGantiPassword && !modalKonfirmasiKeluar && !modalKonfirmasiKembali && !modalGagal) {
                     document.body.classList.remove('overflow-hidden-modal');
                 }
             }
         }
 
-        // FUNGSI PEMICU LAYAR PENUH NATIVE (HTML5 FULLSCREEN API)
+        // FUNGSI PEMICU LAYAR PENUH NATIVE (HTML5 FULLSCREEN API) + INJEKSI STATUS RIWAYAT
         function bukaAplikasiLayarPenuh() {
             kunciScrollLatar(true);
             
@@ -419,6 +438,11 @@
                 docElm.webkitRequestFullscreen();
             } else if (docElm.msRequestFullscreen) { /* IE/Edge */
                 docElm.msRequestFullscreen();
+            }
+
+            // Kunci Tombol Kembali: Dorong state baru ke riwayat browser jika belum ada
+            if (window.history.state !== "fullscreen-mode") {
+                window.history.pushState("fullscreen-mode", null, "#fullscreen");
             }
 
             // Trik Optimal: Paksa penulisan ulang meta tag theme-color agar diprioritaskan peramban mobile saat layar penuh
@@ -602,6 +626,30 @@
         // PROSES KELUAR AKUN (LOGOUT)
         function prosesKeluarAkun() {
             location.reload();
+        }
+
+        // KONTROL MODAL INTERSEPSI KEMBALI
+        function bukaModalKonfirmasiKembali() {
+            document.getElementById('modalKonfirmasiKembali').classList.remove('hidden');
+            kunciScrollLatar(true);
+            lucide.createIcons();
+        }
+        function tutupModalKonfirmasiKembali() {
+            document.getElementById('modalKonfirmasiKembali').classList.add('hidden');
+            kunciScrollLatar(false);
+        }
+
+        // AKSI LANJUTKAN PENGISIAN NILAI
+        function kembaliKeFullscreenUtama() {
+            tutupModalKonfirmasiKembali();
+            bukaAplikasiLayarPenuh();
+        }
+
+        // AKSI KONFIRMASI BENAR-BENAR INGIN KELUAR HALAMAN
+        function konfirmasiBenarKeluar() {
+            tutupModalKonfirmasiKembali();
+            window.history.replaceState(null, null, " ");
+            prosesKeluarAkun();
         }
 
         // INTERSEPSI FORM AUTHENTIKASI UTAMA GURU & SCAN JADWAL
@@ -970,6 +1018,34 @@
                 tampilkanModalGagalMasuk("Masalah Jaringan", "Terjadi masalah jaringan: " + err.message);
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai`;
+            });
+        });
+
+        // EVENT LISTENER DETEKSI TOMBOL KEMBALI FISIK / GESTURE HP
+        window.addEventListener('popstate', function(event) {
+            const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
+            
+            // Jika user menekan tombol back saat posisi sudah berhasil masuk (modal awal tertutup)
+            if (modalAwalHidden) {
+                // Dorong kembali status hash agar browser tidak berpindah halaman mundur
+                window.history.pushState("fullscreen-mode", null, "#fullscreen");
+                // Munculkan dialog penyelamat pengisian nilai
+                bukaModalKonfirmasiKembali();
+            }
+        });
+
+        // EVENT LISTENER DETEKSI PERUBAHAN FULLSCREEN SECARA NATIVE (SWIPE GESTURE KELUAR NATIVE, ESC, DLL)
+        const eventLayarPenuh = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
+        eventLayarPenuh.forEach(eventName => {
+            document.addEventListener(eventName, () => {
+                const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+                const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
+                const modalKeluarHidden = document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden');
+                
+                // Jika tidak sedang fullscreen, tetapi guru telah login dan tidak berniat keluar via menu resmi
+                if (!isFullscreen && modalAwalHidden && modalKeluarHidden) {
+                    bukaModalKonfirmasiKembali();
+                }
             });
         });
 
