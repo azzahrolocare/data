@@ -213,7 +213,6 @@
                         <i data-lucide="user" class="w-3.5 h-3.5 text-emerald-medium"></i> Nama Lengkap Guru
                     </label>
                     <div class="relative">
-                        <!-- PROTEKSI ANTIFILL DENGAN ATRIBUT TERBARU KEBUTUHAN MOBILE -->
                         <input type="text" id="gerbangGuru" required placeholder=" " onclick="bukaAplikasiLayarPenuh()" 
                                autocomplete="off" 
                                autocorrect="off" 
@@ -649,6 +648,7 @@
         // AKSI LANJUTKAN PENGISIAN NILAI
         function kembaliKeFullscreenUtama() {
             tutupModalKonfirmasiKembali();
+            kunciScrollLatar(false); // Melepas pengunci scroll saat user kembali fokus
             bukaAplikasiLayarPenuh();
         }
 
