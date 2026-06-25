@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth w-full h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0F5132">
+    <!-- PWA & Full Screen Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- Warna Bar Notifikasi / Status Bar Ponsel -->
+    <meta name="theme-color" content="#0F5132" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0F5132" media="(prefers-color-scheme: dark)">
+    
     <title>Monitoring Rekap Nilai Keseluruhan (Leger) - Az-Zahro</title>
     <script src="security-lock.js"></script>
     
@@ -40,7 +46,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
+        body { font-family: 'Inter', system-ui, sans-serif; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
         .font-serif-custom { font-family: 'Playfair Display', Georgia, serif; }
         .overflow-hidden-modal { overflow: hidden !important; height: 100vh !important; }
         .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
@@ -48,7 +54,7 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: #146c43; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
+<body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800 w-full overflow-x-hidden">
 
     <div>
         <nav class="sticky top-0 z-40 bg-emerald-deep/95 backdrop-blur-md shadow-lg border-b border-emerald-medium/50 text-white">
@@ -69,6 +75,10 @@
                 </div>
                 
                 <div class="flex items-center gap-2 flex-shrink-0">
+                    <!-- Tombol Masuk Mode Fullscreen -->
+                    <button type="button" onclick="toggleFullscreen()" id="btnFullscreen" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-medium/80 hover:bg-emerald-medium text-white font-bold text-xs rounded-xl border border-emerald-light/20 transition-all shadow-sm active:scale-95">
+                        <i data-lucide="maximize" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Layar Penuh</span>
+                    </button>
                     <button type="button" onclick="prosesKeluarAkun()" id="btnKeluar" class="hidden inline-flex items-center gap-1.5 px-3 py-2 bg-red-700/80 hover:bg-red-800 text-white font-bold text-xs rounded-xl border border-red-500/20 transition-all shadow-sm active:scale-95">
                         <i data-lucide="log-out" class="w-3.5 h-3.5"></i> <span>Keluar</span>
                     </button>
@@ -230,6 +240,20 @@
         
         let GURU_LOGIN = "";
         let LIST_HAK_MENGAJAR = [];
+
+        // Fungsi Fitur Full Screen Browser API
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Gagal mengaktifkan Fullscreen: ${err.message}`);
+                });
+                document.getElementById('btnFullscreen').innerHTML = `<i data-lucide="minimize" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Keluar Penuh</span>`;
+            } else {
+                document.exitFullscreen();
+                document.getElementById('btnFullscreen').innerHTML = `<i data-lucide="maximize" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Layar Penuh</span>`;
+            }
+            lucide.createIcons();
+        }
 
         function setKunciScroll(statusKunci) {
             if (statusKunci) document.body.classList.add('overflow-hidden-modal');
