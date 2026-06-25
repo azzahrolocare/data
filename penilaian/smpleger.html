@@ -51,7 +51,6 @@
 <body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
 
     <div>
-        <!-- NAVBAR ATAS SYSTEM -->
         <nav class="sticky top-0 z-40 bg-emerald-deep/95 backdrop-blur-md shadow-lg border-b border-emerald-medium/50 text-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
                 <div class="flex items-center gap-3 min-w-0">
@@ -77,10 +76,8 @@
             </div>
         </nav>
 
-        <!-- CONTAINER UTAMA -->
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             
-            <!-- PANEL FILTER HAK AKSES JADWAL -->
             <div id="panelFilterLeger" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 hidden mb-6">
                 <div class="flex items-center gap-2.5 border-b border-gray-100 pb-4 mb-6">
                     <i data-lucide="layers" class="w-5 h-5 text-emerald-deep"></i>
@@ -104,21 +101,20 @@
                 </div>
             </div>
 
-            <!-- TOAST ALERT SYSTEM -->
             <div id="alertBox" class="p-4 rounded-2xl border text-xs sm:text-sm font-medium flex items-center gap-3 hidden mb-6"></div>
 
-            <!-- INTERFACE DATA REKAP LEGER -->
             <div id="wrapperHasilTabel" class="hidden space-y-6 mb-12">
                 
-                <!-- TABEL MATRIKS LEGER -->
                 <div class="bg-white rounded-3xl p-5 md:p-7 shadow-sm border border-gray-100">
                     <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
                         <h4 class="text-md sm:text-lg font-serif-custom font-bold text-gray-900 flex items-center gap-2">
                             <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Lembar Transkrip Leger Kelas
                         </h4>
-                        <button onclick="window.print()" class="px-4 py-2 bg-emerald-deep hover:bg-emerald-medium text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5">
-                            <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print Leger
-                        </button>
+                        <div class="flex items-center gap-2 print:hidden">
+                            <button onclick="tarikDataLegerPusat()" class="px-4 py-2 bg-emerald-deep hover:bg-emerald-medium text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5 active:scale-95">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Data
+                            </button>
+                        </div>
                     </div>
 
                     <div class="overflow-x-auto rounded-2xl border border-gray-200 custom-scroll">
@@ -155,7 +151,6 @@
                     </div>
                 </div>
 
-                <!-- DESKRIPSI RINGKASAN KD -->
                 <div class="bg-white rounded-3xl p-5 md:p-7 shadow-sm border border-gray-100">
                     <div class="flex items-center gap-2 border-b border-gray-100 pb-3 mb-4">
                         <i data-lucide="info" class="w-5 h-5 text-emerald-deep"></i>
@@ -169,7 +164,6 @@
         </main>
     </div>
 
-    <!-- MODAL PORTAL GERBANG LOGIN AWAL GURU -->
     <div id="modalAwal" class="fixed inset-0 bg-emerald-deep/40 backdrop-blur-md flex justify-center items-center z-50 p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 animate-in fade-in zoom-in-95 duration-200">
             <div class="text-center mb-5">
@@ -202,7 +196,6 @@
         </div>
     </div>
 
-    <!-- MODAL NOTIFIKASI GAGAL MASUK -->
     <div id="modalGagalMasuk" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative text-center">
             <div class="p-3 bg-red-50 text-red-600 rounded-2xl inline-block border border-red-100 mb-3">
@@ -218,15 +211,13 @@
         </div>
     </div>
 
-    <!-- SCREEN LOADER LAYER OVERLAY -->
     <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex flex-col justify-center items-center z-50">
         <div class="text-center p-6">
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-deep border-t-transparent mb-4"></div>
-            <div id="loadingText" class="font-bold text-emerald-deep flex items-center justify-center gap-2 text-sm">Menarik data leger...</div>
+            <div id="loadingText" class="font-bold text-emerald-deep flex items-center justify-center gap-2 text-sm">Memuat data leger...</div>
         </div>
     </div>
 
-    <!-- FOOTER INSTITUSI -->
     <footer class="bg-emerald-deep text-gray-200 border-t-2 border-gold-accent/40 mt-12 py-6 px-4 print:hidden">
         <div class="max-w-7xl mx-auto text-center text-[11px] text-gray-400">
             &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
@@ -234,7 +225,6 @@
         </div>
     </footer>
 
-    <!-- ENGINE LOGIC JAVASCRIPT LEGER -->
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
         
@@ -285,7 +275,7 @@
                         setKunciScroll(false);
                         document.getElementById('panelFilterLeger').classList.remove('hidden');
                         document.getElementById('btnKeluar').classList.remove('hidden');
-                        document.getElementById('navDetailText').innerText = `Guru: ${GURU_LOGIN} (Mode Monitoring Leger)`;
+                        document.getElementById('navDetailText').innerText = `Guru: ${GURU_LOGIN}`;
 
                         const dropdown = document.getElementById('pilihLegerMapel');
                         dropdown.innerHTML = "";
@@ -313,7 +303,7 @@
             const kelasTarget = part[0];
             const mapelTarget = part[1];
 
-            showLoading(true, `Menarik Lembar Transkrip Leger Kelas ${kelasTarget} [${mapelTarget}]...`);
+            showLoading(true, `Memuat Lembar Transkrip Leger Kelas ${kelasTarget} [${mapelTarget}]...`);
 
             const urlLeger = `${WEB_APP_URL}?aksi=baca&sheet=${encodeURIComponent(mapelTarget)}&kelas=${encodeURIComponent(kelasTarget)}`;
 
