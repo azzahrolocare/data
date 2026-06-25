@@ -9,7 +9,7 @@
     <link rel="manifest" href="manifest.json">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Leger Az-Zahro">
     
     <title>Monitoring Rekap Nilai Keseluruhan (Leger) - Az-Zahro</title>
@@ -53,8 +53,9 @@
         .custom-scroll::-webkit-scrollbar-track { background: #f0fdf4; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #146c43; border-radius: 10px; }
         
-        /* Tambahan CSS agar saat Full Screen area tetap rapi dan mendapat padding aman dari poni/notch HP */
-        :fullscreen body {
+        /* Modifikasi CSS agar saat Full Screen area latar belakang dasar langsung hijau mengikuti tema navbar */
+        :fullscreen, :fullscreen body, :-webkit-full-screen, :-webkit-full-screen body {
+            background-color: #0F5132 !important;
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
         }
