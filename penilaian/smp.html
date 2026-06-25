@@ -433,7 +433,9 @@
 
         // FUNGSI PEMICU LAYAR PENUH NATIVE (HTML5 FULLSCREEN API) + INJEKSI STATUS RIWAYAT
         function bukaAplikasiLayarPenuh() {
-            kunciScrollLatar(true);
+            // Jika modal awal masih terbuka, kunci scroll. Jika sudah login, bebaskan scroll halaman utama.
+            const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
+            kunciScrollLatar(!modalAwalHidden);
             
             const docElm = document.documentElement;
             if (docElm.requestFullscreen) {
@@ -648,8 +650,9 @@
         // AKSI LANJUTKAN PENGISIAN NILAI
         function kembaliKeFullscreenUtama() {
             tutupModalKonfirmasiKembali();
-            kunciScrollLatar(false); // Melepas pengunci scroll saat user kembali fokus
             bukaAplikasiLayarPenuh();
+            // Paksa pembukaan kunci scroll agar halaman daftar siswa bisa digeser kembali
+            kunciScrollLatar(false);
         }
 
         // AKSI KONFIRMASI BENAR-BENAR INGIN KELUAR HALAMAN
@@ -838,6 +841,8 @@
             });
 
             document.getElementById('btnSimpanNilai').disabled = false;
+            // Pastikan scroll aktif kembali setelah data siswa berhasil tampil di layar
+            kunciScrollLatar(false);
             lucide.createIcons();
         }
 
