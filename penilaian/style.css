@@ -21,9 +21,9 @@
 
     --nav-dock-bg: rgba(15, 81, 50, 0.85); 
     --nav-dock-border: rgba(255, 255, 255, 0.2);
-    --icon-circle-pasif: rgba(255, 255, 255, 0.1);
-    --icon-circle-aktif: #ffffff;
-    --icon-text-aktif: #0F5132;
+    ---circle-pasif: rgba(255, 255, 255, 0.1);
+    ---circle-aktif: #ffffff;
+    ---text-aktif: #0F5132;
 }
 
 html, body {
@@ -96,8 +96,8 @@ body::before {
     box-shadow: 0 6px 20px var(--btn-shadow);
 }
 
-.theme-icon-active {
-    color: var(--accent-icon) !important;
+.theme--active {
+    color: var(--accent-) !important;
 }
 
 .glow-sphere-1 {
@@ -146,7 +146,7 @@ body::before {
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.icon-circle {
+.-circle {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -169,7 +169,7 @@ body::before {
 /*Bottom icon Navigasi*/
 .nav-text {
     position: absolute;
-    bottom: 2px;
+    bottom: -20px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
