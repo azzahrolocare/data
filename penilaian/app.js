@@ -2,55 +2,55 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnM
 
 const DAFTAR_TEMA = {
     "biru-ungu": {
-        bodyBg: "linear-gradient(135deg, #0b0f19, #1e1b4b, #111827)", bodySolidBg: "#0b0f19",
-        glow1: "#3b82f6", glow2: "#7c3aed", btnPrimaryBg: "linear-gradient(90deg, #4f46e5, #7c3aed)",
+        bodyBg: "linear-gradient(135deg, #0b0f19, #1e1b4b, #111827)", 
+        bodySolidBg: "#0b0f19",
+        glow1: "#3b82f6", glow2: "#7c3aed", 
+        btnPrimaryBg: "linear-gradient(90deg, #4f46e5, #7c3aed)",
         btnPrimaryHover: "linear-gradient(90deg, #6366f1, #8b5cf6)", btnShadow: "rgba(124, 58, 237, 0.4)",
         accentIcon: "#818cf8", glassBg: "rgba(255, 255, 255, 0.05)", glassBorder: "rgba(255, 255, 255, 0.12)",
         scrollbarThumb: "rgba(129, 140, 248, 0.3)", themeColor: "#1e1b4b", navDockBg: "rgba(11, 15, 25, 0.9)",
         iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#1e1b4b"
     },
     "emerald": {
-        bodyBg: "linear-gradient(135deg, #09331f, #146c43)", bodySolidBg: "#09331f",
-        glow1: "#198754", glow2: "#D4AF37", btnPrimaryBg: "linear-gradient(90deg, #146c43, #0F5132)",
-        btnPrimaryHover: "linear-gradient(90deg, #198754, #146c43)", btnShadow: "rgba(20, 108, 67, 0.4)",
-        accentIcon: "#D4AF37", glassBg: "rgba(255, 255, 255, 0.08)", glassBorder: "rgba(255, 255, 255, 0.18)",
-        scrollbarThumb: "rgba(255, 255, 255, 0.25)", themeColor: "#0F5132", navDockBg: "rgba(15, 81, 50, 0.95)",
-        iconCirclePasif: "rgba(255, 255, 255, 0.1)", iconCircleAktif: "#ffffff", iconTextAktif: "#0F5132"
+        bodyBg: "linear-gradient(135deg, #061f14, #0b3a24, #05140e)", 
+        bodySolidBg: "#061f14",
+        glow1: "#10b981", glow2: "#f59e0b", 
+        btnPrimaryBg: "linear-gradient(90deg, #059669, #10b981)",
+        btnPrimaryHover: "linear-gradient(90deg, #10b981, #34d399)", btnShadow: "rgba(16, 185, 129, 0.3)",
+        accentIcon: "#f59e0b", glassBg: "rgba(255, 255, 255, 0.04)", glassBorder: "rgba(255, 255, 255, 0.12)",
+        scrollbarThumb: "rgba(16, 185, 129, 0.25)", themeColor: "#0b3a24", navDockBg: "rgba(6, 31, 20, 0.93)",
+        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#0b3a24"
     },
     "electric-blue": {
-        bodyBg: "linear-gradient(135deg, #76c8ff, #d78bff)", bodySolidBg: "#76c8ff",
-        glow1: "#4fa3ff", glow2: "#ff7cd5", btnPrimaryBg: "linear-gradient(90deg, #2f7dff, #cb3dff)",
-        btnPrimaryHover: "linear-gradient(90deg, #1e6bf2, #b82ae6)", btnShadow: "rgba(47, 125, 255, 0.4)",
-        accentIcon: "#ffffff", glassBg: "rgba(255, 255, 255, 0.18)", glassBorder: "rgba(255, 255, 255, 0.3)",
-        scrollbarThumb: "#2f7dff", themeColor: "#2f7dff", navDockBg: "rgba(47, 125, 255, 0.95)",
-        iconCirclePasif: "rgba(255, 255, 255, 0.2)", iconCircleAktif: "#ffffff", iconTextAktif: "#2f7dff"
+        bodyBg: "linear-gradient(135deg, #a2d2ff, #c7d2fe, #e0e7ff)", 
+        bodySolidBg: "#a2d2ff",
+        glow1: "#3b82f6", glow2: "#a855f7", 
+        btnPrimaryBg: "linear-gradient(90deg, #3b82f6, #6366f1)",
+        btnPrimaryHover: "linear-gradient(90deg, #2563eb, #4f46e5)", btnShadow: "rgba(59, 130, 246, 0.3)",
+        accentIcon: "#3b82f6", glassBg: "rgba(255, 255, 255, 0.45)", glassBorder: "rgba(255, 255, 255, 0.6)",
+        scrollbarThumb: "#3b82f6", themeColor: "#3b82f6", navDockBg: "rgba(219, 234, 254, 0.95)",
+        iconCirclePasif: "rgba(0, 0, 0, 0.08)", iconCircleAktif: "#3b82f6", iconTextAktif: "#ffffff"
     },
     "sunset-orange": {
-        bodyBg: "linear-gradient(135deg, #1a0f05, #3a1c05, #140b00)", bodySolidBg: "#1a0f05",
-        glow1: "#ea580c", glow2: "#eab308", btnPrimaryBg: "linear-gradient(90deg, #ea580c, #ca8a04)",
-        btnPrimaryHover: "linear-gradient(90deg, #f97316, #eab308)", btnShadow: "rgba(234, 88, 12, 0.4)",
-        accentIcon: "#f97316", glassBg: "rgba(255, 255, 255, 0.05)", glassBorder: "rgba(255, 255, 255, 0.12)",
-        scrollbarThumb: "rgba(234, 88, 12, 0.3)", themeColor: "#3a1c05", navDockBg: "rgba(58, 28, 5, 0.95)",
-        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#3a1c05"
+        bodyBg: "linear-gradient(135deg, #1e0b01, #4c1d05, #140500)", 
+        bodySolidBg: "#1e0b01",
+        glow1: "#f97316", glow2: "#f59e0b", 
+        btnPrimaryBg: "linear-gradient(90deg, #ea580c, #f97316)",
+        btnPrimaryHover: "linear-gradient(90deg, #f97316, #fb923c)", btnShadow: "rgba(249, 115, 22, 0.3)",
+        accentIcon: "#f97316", glassBg: "rgba(255, 255, 255, 0.03)", glassBorder: "rgba(255, 255, 255, 0.1|)",
+        scrollbarThumb: "rgba(249, 115, 22, 0.25)", themeColor: "#4c1d05", navDockBg: "rgba(30, 11, 1, 0.93)",
+        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#4c1d05"
     },
     "pastel-cotton": {
-    "bodyBg": "linear-gradient(135deg, #a2d2ff, #ffafcc)", 
-    "bodySolidBg": "#a2d2ff",
-    "glow1": "#bde0fe", 
-    "glow2": "#ffc8dd", 
-    "btnPrimaryBg": "linear-gradient(90deg, #4ea8de, #ff70a6)",
-    "btnPrimaryHover": "linear-gradient(90deg, #3a92c8, #e05387)", 
-    "btnShadow": "rgba(78, 168, 222, 0.4)",
-    "accentIcon": "#ffffff", 
-    "glassBg": "rgba(255, 255, 255, 0.25)", 
-    "glassBorder": "rgba(255, 255, 255, 0.4)",
-    "scrollbarThumb": "#4ea8de", 
-    "themeColor": "#4ea8de", 
-    "navDockBg": "rgba(162, 210, 255, 0.95)",
-    "iconCirclePasif": "rgba(255, 255, 255, 0.3)", 
-    "iconCircleAktif": "#ffffff", 
-    "iconTextAktif": "#4ea8de"
-}
+        bodyBg: "linear-gradient(135deg, #e0f2fe, #fce7f3, #f0fdf4)", 
+        bodySolidBg: "#e0f2fe",
+        glow1: "#38bdf8", glow2: "#f472b6", 
+        btnPrimaryBg: "linear-gradient(90deg, #0ea5e9, #ec4899)",
+        btnPrimaryHover: "linear-gradient(90deg, #0284c7, #db2777)", btnShadow: "rgba(14, 165, 233, 0.25)",
+        accentIcon: "#db2777", glassBg: "rgba(255, 255, 255, 0.5)", glassBorder: "rgba(255, 255, 255, 0.65)",
+        scrollbarThumb: "#0ea5e9", themeColor: "#0ea5e9", navDockBg: "rgba(240, 249, 255, 0.95)",
+        iconCirclePasif: "rgba(0, 0, 0, 0.08)", iconCircleAktif: "#0ea5e9", iconTextAktif: "#ffffff"
+    }
 };
 
 let DATA_CACHED = { pengaturan: {}, siswa: [] };
@@ -78,11 +78,11 @@ function pilihSistemTema(namaTema) {
     root.style.setProperty('--icon-circle-aktif', konfigurasi.iconCircleAktif);
     root.style.setProperty('--icon-text-aktif', konfigurasi.iconTextAktif);
 
-    if (namaTema === "electric-blue") {
+    if (namaTema === "electric-blue" || namaTema === "pastel-cotton") {
         root.style.setProperty('--text-main', '#0f172a'); root.style.setProperty('--text-muted', '#334155');
-        root.style.setProperty('--card-text', '#1e293b'); root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.5)');
-        root.style.setProperty('--input-text', '#0f172a'); root.style.setProperty('--input-border', 'rgba(0, 0, 0, 0.15)');
-        root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.8)');
+        root.style.setProperty('--card-text', '#1e293b'); root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.6)');
+        root.style.setProperty('--input-text', '#0f172a'); root.style.setProperty('--input-border', 'rgba(0, 0, 0, 0.12)');
+        root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.85)');
     } else {
         root.style.setProperty('--text-main', '#ffffff'); root.style.setProperty('--text-muted', '#d1e7dd');
         root.style.setProperty('--card-text', '#ffffff'); root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.1)');
@@ -127,7 +127,6 @@ function kunciScrollLatar(apakahKunci) {
 }
 
 function bukaModalTemaCepat() { document.getElementById('modalPilihTemaCepat').classList.remove('hidden'); kunciScrollLatar(true); }
-/* Tambahkan Fungsi Modal lainnya di bawah ini agar rapi... */
 function tutupModalTemaCepat() { document.getElementById('modalPilihTemaCepat').classList.add('hidden'); kunciScrollLatar(false); resetNavActiveState(); }
 function bukaModalAkunCepat() {
     if (!GURU_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); resetNavActiveState(); return; }
@@ -200,7 +199,6 @@ function tampilkanModalKeluar() { document.getElementById('modalKonfirmasiKeluar
 function tutupModalKeluar() { document.getElementById('modalKonfirmasiKeluar').classList.add('hidden'); kunciScrollLatar(false); resetNavActiveState(); }
 function prosesKeluarAkun() { location.reload(); }
 function bukaModalKonfirmasiKembali() { document.getElementById('modalKonfirmasiKembali').classList.remove('hidden'); kunciScrollLatar(true); lucide.createIcons(); }
-/* ... Lanjutan kode penanganan event form & render data yang sama persis dengan kode Anda sebelumnya ... */
 
 document.getElementById('formGerbangAwal').addEventListener('submit', function(e) {
     e.preventDefault();
