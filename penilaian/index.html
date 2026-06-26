@@ -7,26 +7,24 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Sistem Input Nilai Wali Kelas / Guru - Az-Zahro</title>
-    <script src="security-lock.js"></script>
     
+    <!-- Scripts & Stylesheets -->
+    <script src="security-lock.js"></script>
     <link class="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- File CSS Eksternal -->
+    <link rel="stylesheet" href="style.css">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        emerald: {
-                            deep: '#0F5132',
-                            medium: '#146c43',
-                            light: '#d1e7dd',
-                            soft: '#f0fdf4'
-                        },
-                        gold: {
-                            accent: '#D4AF37',
-                            muted: '#c5a059',
-                            light: '#fbf7eb'
-                        }
+                        emerald: { deep: '#0F5132', medium: '#146c43', light: '#d1e7dd', soft: '#f0fdf4' },
+                        gold: { accent: '#D4AF37', muted: '#c5a059', light: '#fbf7eb' }
                     },
                     fontFamily: {
                         serif: ['Playfair Display', 'Georgia', 'serif'],
@@ -36,225 +34,13 @@
             }
         }
     </script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        :root {
-            --body-bg: linear-gradient(135deg, #09331f, #146c43);
-            --body-solid-bg: #09331f; 
-            --glow-1: #198754;
-            --glow-2: #D4AF37;
-            --btn-primary-bg: linear-gradient(90deg, #146c43, #0F5132);
-            --btn-primary-hover: linear-gradient(90deg, #198754, #146c43);
-            --btn-shadow: rgba(20, 108, 67, 0.4);
-            --accent-icon: #D4AF37;
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --scrollbar-thumb: rgba(255, 255, 255, 0.25);
-            --text-main: #ffffff;
-            --text-muted: #d1e7dd;
-            --card-text: #ffffff;
-            --input-bg: rgba(255, 255, 255, 0.1);
-            --input-text: #ffffff;
-            --input-border: rgba(255, 255, 255, 0.2);
-            --input-focus-bg: rgba(255, 255, 255, 0.2);
-
-            /* Tema Variabel Tambahan Khusus Bottom Nav Dock */
-            --nav-dock-bg: rgba(15, 81, 50, 0.85); /* Menyesuaikan Latar Belakang Utama */
-            --nav-dock-border: rgba(255, 255, 255, 0.2);
-            --icon-circle-pasif: rgba(255, 255, 255, 0.1);
-            --icon-circle-aktif: #ffffff;
-            --icon-text-aktif: #0F5132;
-        }
-
-        html, body {
-            overscroll-behavior-y: none;
-            overscroll-behavior-x: none;
-            background-color: var(--body-solid-bg);
-        }
-
-        body { 
-            font-family: 'Inter', system-ui, sans-serif; 
-            color: var(--text-main);
-            transition: background-color 0.5s ease, color 0.3s ease;
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--body-bg);
-            z-index: -2;
-            pointer-events: none;
-            transition: background 0.5s ease;
-        }
-        
-        .font-serif-custom { font-family: 'Playfair Display', Georgia, serif; }
-        .table-input { width: 80px; text-align: center; }
-        .overflow-hidden-modal { overflow: hidden !important; height: 100vh !important; }
-
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            color: var(--card-text);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .glass-card-dark {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-        }
-
-        .theme-input {
-            background: var(--input-bg);
-            color: var(--input-text);
-            border: 1px solid var(--input-border);
-            transition: all 0.3s ease;
-        }
-        .theme-input:focus {
-            background: var(--input-focus-bg);
-            border-color: var(--glow-1);
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
-        }
-        .theme-input option {
-            background: #111827;
-            color: #ffffff;
-        }
-
-        .theme-btn-primary {
-            background: var(--btn-primary-bg);
-            box-shadow: 0 4px 14px var(--btn-shadow);
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-        .theme-btn-primary:hover:not(:disabled) {
-            background: var(--btn-primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px var(--btn-shadow);
-        }
-
-        .theme-icon-active {
-            color: var(--accent-icon) !important;
-        }
-
-        .glow-sphere-1 {
-            position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
-            background: radial-gradient(circle, var(--glow-1) 0%, transparent 70%);
-            opacity: 0.25; z-index: -1; pointer-events: none; transition: background 0.5s ease;
-        }
-        .glow-sphere-2 {
-            position: fixed; bottom: -10%; right: -10%; width: 50vw; height: 50vw;
-            background: radial-gradient(circle, var(--glow-2) 0%, transparent 70%);
-            opacity: 0.2; z-index: -1; pointer-events: none; transition: background 0.5s ease;
-        }
-
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
-        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 99px; }
-
-        /* DESIGN BOTTOM NAV DOCK CUSTOM DENGAN ELIPS LENGKUNG LANDAI */
-        .custom-bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            width: 100%;
-            height: 80px;
-            z-index: 40;
-            background: var(--nav-dock-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--nav-dock-border);
-            border-bottom: none;
-            /* Trik kurva elips responsif bagian atas navbar */
-            border-radius: 50% 50% 0 0 / 25px 25px 0 0;
-            box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 0 1.5rem;
-        }
-
-        /* Struktur Item Navigasi */
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            width: 65px;
-            height: 100%;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Wadah Lingkaran Permanen */
-        .icon-circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--icon-circle-pasif);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.8);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2;
-        }
-
-        .icon-circle i {
-            width: 20px;
-            height: 20px;
-            transition: transform 0.3s ease, color 0.4s ease;
-        }
-
-        /* Tulisan/Teks Menu Hilang Total Saat Pasif */
-        .nav-text {
-            position: absolute;
-            bottom: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-            color: #ffffff;
-            opacity: 0;
-            transform: translateY(6px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            white-space: nowrap;
-            z-index: 1;
-        }
-
-        /* MICRO-INTERACTIONS: KONDISI KETIKA MENU AKTIF */
-        .nav-item.active {
-            transform: translateY(-14px);
-        }
-
-        .nav-item.active .icon-circle {
-            background: var(--icon-circle-aktif);
-            color: var(--icon-text-aktif);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3), 0 0 0 4px rgba(255, 255, 255, 0.1);
-            transform: scale(1.08);
-        }
-
-        .nav-item.active .icon-circle i {
-            transform: scale(1.05);
-        }
-
-        .nav-item.active .nav-text {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
 </head>
 <body class="h-screen overflow-hidden flex flex-col justify-between select-none">
 
     <div class="glow-sphere-1"></div>
     <div class="glow-sphere-2"></div>
 
+    <!-- Toast Notification -->
     <div id="customToast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 max-w-md w-full hidden">
         <div id="toastBorder" class="glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-emerald-500">
             <div id="toastIconBg" class="p-2 bg-white/10 rounded-xl border border-white/10">
@@ -270,6 +56,7 @@
         </div>
     </div>
 
+    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex flex-col justify-center items-center z-50">
         <div class="glass-panel text-center p-6 max-w-sm rounded-3xl">
             <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white/30 border-t-white mb-4"></div>
@@ -277,6 +64,7 @@
         </div>
     </div>
 
+    <!-- Top Navigation -->
     <nav class="sticky top-0 z-40 glass-panel border-t-0 border-x-0 rounded-b-3xl shadow-lg flex-shrink-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3 min-w-0">
@@ -296,6 +84,7 @@
         </div>
     </nav>
 
+    <!-- Main Content Container -->
     <div class="flex-1 overflow-y-auto overscroll-none pb-28">
         <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             
@@ -316,8 +105,7 @@
                         <label class="block text-sm font-semibold text-white/90 mb-2 flex items-center gap-1.5">
                             <i data-lucide="calendar" class="w-4 h-4 theme-icon-active"></i> Pilih Kelas & Mapel Anda
                         </label>
-                        <select id="pilihJadwalDinamis" onchange="gantiJadwalAktif()" class="w-full theme-input rounded-xl px-4 py-3 font-semibold focus:bg-gray-900/40 outline-none text-sm">
-                        </select>
+                        <select id="pilihJadwalDinamis" onchange="gantiJadwalAktif()" class="w-full theme-input rounded-xl px-4 py-3 font-semibold focus:bg-gray-900/40 outline-none text-sm"></select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-white/90 mb-2 flex items-center gap-1.5">
@@ -377,45 +165,32 @@
         </main>
     </div>
 
+    <!-- Bottom Nav Dock -->
     <div id="bottomNavDock" class="custom-bottom-nav hidden max-w-lg mx-auto mb-safe">
-        <div id="navTema" onclick="navKlikAksi(this, 'tema')" class="nav-item pt-3">
-            <div class="icon-circle">
-                <i data-lucide="palette"></i>
-            </div>
+        <div id="navTema" onclick="navKlikAksi(this, 'tema')" data-clicked="false" class="nav-item pt-3">
+            <div class="icon-circle"><i data-lucide="palette"></i></div>
             <span class="nav-text">Pilih Tema</span>
         </div>
-        
-        <div id="navLeger" onclick="navKlikAksi(this, 'leger')" class="nav-item pt-1">
-            <div class="icon-circle">
-                <i data-lucide="book-open"></i>
-            </div>
+        <div id="navLeger" onclick="navKlikAksi(this, 'leger')" data-clicked="false" class="nav-item pt-1">
+            <div class="icon-circle"><i data-lucide="book-open"></i></div>
             <span class="nav-text">Buka Leger</span>
         </div>
-        
-        <div id="navMateri" onclick="navKlikAksi(this, 'materi')" class="nav-item pt-1">
-            <div class="icon-circle">
-                <i data-lucide="settings"></i>
-            </div>
+        <div id="navMateri" onclick="navKlikAksi(this, 'materi')" data-clicked="false" class="nav-item pt-1">
+            <div class="icon-circle"><i data-lucide="settings"></i></div>
             <span class="nav-text">Materi KD</span>
         </div>
-        
-        <div id="navAkun" onclick="navKlikAksi(this, 'akun')" class="nav-item pt-3">
-            <div class="icon-circle">
-                <i data-lucide="user"></i>
-            </div>
+        <div id="navAkun" onclick="navKlikAksi(this, 'akun')" data-clicked="false" class="nav-item pt-3">
+            <div class="icon-circle"><i data-lucide="user"></i></div>
             <span class="nav-text">Akun Guru</span>
         </div>
     </div>
 
+    <!-- Modals -->
     <div id="modalPilihTemaCepat" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
-        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
-            <button type="button" onclick="tutupModalTemaCepat()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative">
+            <button type="button" onclick="tutupModalTemaCepat()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
             <div class="text-center mb-4 border-b border-white/10 pb-3">
-                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5">
-                    <i data-lucide="palette" class="w-6 h-6 theme-icon-active"></i>
-                </div>
+                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5"><i data-lucide="palette" class="w-6 h-6 theme-icon-active"></i></div>
                 <h3 class="text-base font-bold text-white font-serif-custom">Kustomisasi Tema Sistem</h3>
             </div>
             <div class="grid grid-cols-1 gap-2.5 text-xs">
@@ -428,95 +203,56 @@
     </div>
 
     <div id="modalMenuAkunCepat" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
-        <div class="glass-panel rounded-3xl max-w-sm w-full p-5 relative animate-in fade-in zoom-in-95 duration-200">
-            <button type="button" onclick="tutupModalAkunCepat()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-5 relative">
+            <button type="button" onclick="tutupModalAkunCepat()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
             <div class="text-center mb-4 border-b border-white/10 pb-3">
-                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5">
-                    <i data-lucide="user" class="w-6 h-6 theme-icon-active"></i>
-                </div>
+                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5"><i data-lucide="user" class="w-6 h-6 theme-icon-active"></i></div>
                 <h3 id="modalAkunTitle" class="text-base font-bold text-white font-serif-custom">Manajemen Akun</h3>
             </div>
             <div class="space-y-2 text-xs">
-                <button type="button" onclick="tutupModalAkunCepat(); bukaModalGantiPassword();" class="w-full text-left px-4 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-white flex items-center gap-2.5 transition-colors">
-                    <i data-lucide="key-round" class="w-4 h-4 theme-icon-active"></i> Ganti Password Akun
-                </button>
-                <button type="button" onclick="tutupModalAkunCepat(); tampilkanModalKeluar();" class="w-full text-left px-4 py-3.5 bg-red-500/5 hover:bg-red-500/10 border border-red-500/20 rounded-xl font-bold text-red-400 flex items-center gap-2.5 transition-colors">
-                    <i data-lucide="log-out" class="w-4 h-4 text-red-400"></i> Keluar / Log Out
-                </button>
+                <button type="button" onclick="tutupModalAkunCepat(); bukaModalGantiPassword();" class="w-full text-left px-4 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-white flex items-center gap-2.5 transition-colors"><i data-lucide="key-round" class="w-4 h-4 theme-icon-active"></i> Ganti Password Akun</button>
+                <button type="button" onclick="tutupModalAkunCepat(); tampilkanModalKeluar();" class="w-full text-left px-4 py-3.5 bg-red-500/5 hover:bg-red-500/10 border border-red-500/20 rounded-xl font-bold text-red-400 flex items-center gap-2.5 transition-colors"><i data-lucide="log-out" class="w-4 h-4 text-red-400"></i> Keluar / Log Out</button>
             </div>
         </div>
     </div>
 
     <div id="modalAwal" class="fixed inset-0 bg-black/60 backdrop-blur-lg flex justify-center items-center z-50 p-4">
-        <div class="glass-panel rounded-3xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
+        <div class="glass-panel rounded-3xl max-w-md w-full p-6 relative">
             <div class="text-center mb-5">
-                <div class="p-3 bg-white/10 rounded-2xl inline-block border border-white/10 mb-2">
-                    <i data-lucide="shield-check" class="w-8 h-8 theme-icon-active"></i>
-                </div>
+                <div class="p-3 bg-white/10 rounded-2xl inline-block border border-white/10 mb-2"><i data-lucide="shield-check" class="w-8 h-8 theme-icon-active"></i></div>
                 <h3 class="text-xl font-bold text-white font-serif-custom">SmartGrader SMPI Az-Zahro</h3>
                 <p class="text-xs text-white/60 mt-1">Autentikasi & Pemindaian Data Guru Otomatis</p>
             </div>
-
             <form id="formGerbangAwal" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-white/70 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> Nama Lengkap Guru
-                    </label>
-                    <div class="relative">
-                        <input type="text" id="gerbangGuru" required placeholder=" " onclick="bukaAplikasiLayarPenuh()" 
-                               autocomplete="off" 
-                               autocorrect="off" 
-                               autocapitalize="characters" 
-                               spellcheck="false" 
-                               class="w-full theme-input rounded-xl px-4 py-3 font-semibold focus:bg-gray-900/40 outline-none text-sm uppercase cursor-pointer">
-                    </div>
+                    <label class="block text-xs font-bold text-white/70 uppercase tracking-wider mb-1.5 flex items-center gap-1"><i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> Nama Lengkap Guru</label>
+                    <input type="text" id="gerbangGuru" required placeholder=" " onclick="bukaAplikasiLayarPenuh()" autocomplete="off" class="w-full theme-input rounded-xl px-4 py-3 font-semibold outline-none text-sm uppercase cursor-pointer">
                 </div>
-
                 <div>
-                    <label class="block text-xs font-bold text-white/70 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <i data-lucide="lock" class="w-3.5 h-3.5 theme-icon-active"></i> Password
-                    </label>
+                    <label class="block text-xs font-bold text-white/70 uppercase tracking-wider mb-1.5 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5 theme-icon-active"></i> Password</label>
                     <div class="relative">
-                        <input type="password" id="gerbangPassword" required placeholder=" " class="w-full theme-input rounded-xl pl-4 pr-11 py-3 font-semibold focus:bg-gray-900/40 outline-none text-sm">
-                        <button type="button" onclick="toggleVisibilitasSandi('gerbangPassword', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
+                        <input type="password" id="gerbangPassword" required class="w-full theme-input rounded-xl pl-4 pr-11 py-3 font-semibold outline-none text-sm">
+                        <button type="button" onclick="toggleVisibilitasSandi('gerbangPassword', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"><i data-lucide="eye" class="w-4 h-4"></i></button>
                     </div>
                 </div>
-
-                <button type="submit" id="btnMasukGerbang" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 theme-btn-primary font-bold text-sm rounded-xl mt-2 disabled:opacity-75 disabled:pointer-events-none">
-                    <i data-lucide="log-in" class="w-4 h-4 theme-icon-active"></i> <span>Masuk</span>
-                </button>
+                <button type="submit" id="btnMasukGerbang" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 theme-btn-primary font-bold text-sm rounded-xl mt-2"><i data-lucide="log-in" class="w-4 h-4 theme-icon-active"></i> <span>Masuk</span></button>
             </form>
         </div>
     </div>
 
     <div id="modalGagalMasuk" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
-        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
-            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3">
-                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-400"></i>
-            </div>
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative text-center">
+            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3"><i data-lucide="alert-triangle" class="w-8 h-8 text-red-400"></i></div>
             <h3 class="text-lg font-bold text-white font-serif-custom" id="judulModalGagal">Gagal Masuk</h3>
             <p class="text-xs text-white/70 mt-2 leading-relaxed" id="pesanModalGagal"></p>
-            <div class="mt-5">
-                <button type="button" onclick="tutupModalGagalMasuk()" class="w-full px-4 py-2.5 theme-btn-primary font-bold text-xs rounded-xl outline-none shadow-md">
-                    Tutup
-                </button>
-            </div>
+            <div class="mt-5"><button type="button" onclick="tutupModalGagalMasuk()" class="w-full px-4 py-2.5 theme-btn-primary font-bold text-xs rounded-xl">Tutup</button></div>
         </div>
     </div>
 
     <div id="modalPengaturan" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
-        <div class="glass-panel rounded-3xl max-w-lg w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh]">
-            <button type="button" onclick="tutupModalPengaturan()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <div class="flex items-center gap-2 border-b border-white/10 pb-3 mb-4 flex-shrink-0">
-                <i data-lucide="settings-2" class="w-5 h-5 text-white"></i>
-                <h3 class="text-lg font-bold font-serif-custom text-white">Pengaturan Detail & Materi KD</h3>
-            </div>
+        <div class="glass-panel rounded-3xl max-w-lg w-full p-6 relative flex flex-col max-h-[85vh]">
+            <button type="button" onclick="tutupModalPengaturan()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="flex items-center gap-2 border-b border-white/10 pb-3 mb-4 flex-shrink-0"><i data-lucide="settings-2" class="w-5 h-5 text-white"></i><h3 class="text-lg font-bold font-serif-custom text-white">Pengaturan Detail & Materi KD</h3></div>
             <div class="overflow-y-auto pr-1 space-y-4 flex-1">
                 <div>
                     <span class="block text-xs font-bold text-white/50 tracking-wider uppercase mb-2">📄 Data Detail</span>
@@ -541,740 +277,68 @@
                     </div>
                 </form>
             </div>
-            <div class="border-t border-white/10 pt-3 mt-4 flex-shrink-0">
-                <button type="submit" form="formPengaturanKD" id="btnSimpanKD" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 theme-btn-primary font-bold text-sm rounded-xl shadow-md">
-                    <i data-lucide="check" class="w-4 h-4 theme-icon-active"></i> Simpan
-                </button>
-            </div>
+            <div class="border-t border-white/10 pt-3 mt-4 flex-shrink-0"><button type="submit" form="formPengaturanKD" id="btnSimpanKD" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 theme-btn-primary font-bold text-sm rounded-xl"><i data-lucide="check" class="w-4 h-4 theme-icon-active"></i> Simpan</button></div>
         </div>
     </div>
 
     <div id="modalGantiPassword" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
-        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
-            <button type="button" onclick="tutupModalGantiPassword()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative">
+            <button type="button" onclick="tutupModalGantiPassword()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none"><i data-lucide="x" class="w-5 h-5"></i></button>
             <div class="text-center mb-4 border-b border-white/10 pb-3">
-                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5">
-                    <i data-lucide="lock-keyhole" class="w-6 h-6 text-white"></i>
-                </div>
+                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5"><i data-lucide="lock-keyhole" class="w-6 h-6 text-white"></i></div>
                 <h3 class="text-base font-bold text-white font-serif-custom">Keamanan & Ganti Password</h3>
             </div>
             <form id="formGantiPassword" class="space-y-3.5">
                 <div>
-                    <label class="block text-xs font-bold text-white/50 mb-1 flex items-center gap-1">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-white/40"></i> Nama Lengkap Guru
-                    </label>
+                    <label class="block text-xs font-bold text-white/50 mb-1 flex items-center gap-1"><i data-lucide="user" class="w-3.5 h-3.5 text-white/40"></i> Nama Lengkap Guru</label>
                     <input type="text" id="modalPwGuruNama" readonly class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 font-bold text-white/40 cursor-not-allowed text-xs outline-none uppercase">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-white/80 mb-1 flex items-center gap-1">
-                        <i data-lucide="key" class="w-3.5 h-3.5 theme-icon-active"></i> Masukkan Password Baru
-                    </label>
+                    <label class="block text-xs font-bold text-white/80 mb-1 flex items-center gap-1"><i data-lucide="key" class="w-3.5 h-3.5 theme-icon-active"></i> Masukkan Password Baru</label>
                     <div class="relative">
-                        <input type="password" id="modalPwBaru" required placeholder="Sandi baru minimal 4 karakter" oninput="validasiKesesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs outline-none">
-                        <button type="button" onclick="toggleVisibilitasSandi('modalPwBaru', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
+                        <input type="password" id="modalPwBaru" required placeholder="Sandi baru minimal 4 karakter" oninput="validasiKesesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs">
+                        <button type="button" onclick="toggleVisibilitasSandi('modalPwBaru', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"><i data-lucide="eye" class="w-4 h-4"></i></button>
                     </div>
-                    <p id="msgSandiLemah" class="text-[11px] text-red-400 font-bold mt-1.5 hidden flex items-center gap-1">
-                        <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password minimal harus terdiri dari 4 karakter.
-                    </p>
+                    <p id="msgSandiLemah" class="text-[11px] text-red-400 font-bold mt-1.5 hidden flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password minimal harus terdiri dari 4 karakter.</p>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-white/80 mb-1 flex items-center gap-1">
-                        <i data-lucide="check-square" class="w-3.5 h-3.5 theme-icon-active"></i> Konfirmasi Password Baru
-                    </label>
+                    <label class="block text-xs font-bold text-white/80 mb-1 flex items-center gap-1"><i data-lucide="check-square" class="w-3.5 h-3.5 theme-icon-active"></i> Konfirmasi Password Baru</label>
                     <div class="relative">
-                        <input type="password" id="modalPwKonfirmasi" required placeholder="Ketik ulang sandi baru" oninput="validasiKesesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs outline-none">
-                        <button type="button" onclick="toggleVisibilitasSandi('modalPwKonfirmasi', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
+                        <input type="password" id="modalPwKonfirmasi" required placeholder="Ketik ulang sandi baru" oninput="validasiKesesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs">
+                        <button type="button" onclick="toggleVisibilitasSandi('modalPwKonfirmasi', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"><i data-lucide="eye" class="w-4 h-4"></i></button>
                     </div>
-                    <p id="msgErrorPassword" class="text-[11px] text-red-400 font-bold mt-1.5 hidden flex items-center gap-1">
-                        <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password tidak cocok.
-                    </p>
+                    <p id="msgErrorPassword" class="text-[11px] text-red-400 font-bold mt-1.5 hidden flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password tidak cocok.</p>
                 </div>
-                <button type="submit" id="btnSubmitGantiPw" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 theme-btn-primary font-bold text-xs rounded-xl shadow-md">
-                    <i data-lucide="save" class="w-4 h-4 theme-icon-active"></i> Perbarui Kata Sandi
-                </button>
+                <button type="submit" id="btnSubmitGantiPw" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 theme-btn-primary font-bold text-xs rounded-xl shadow-md"><i data-lucide="save" class="w-4 h-4 theme-icon-active"></i> Perbarui Kata Sandi</button>
             </form>
         </div>
     </div>
 
     <div id="modalKonfirmasiKeluar" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
-        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
-            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3">
-                <i data-lucide="log-out" class="w-8 h-8 text-red-400"></i>
-            </div>
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative text-center">
+            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3"><i data-lucide="log-out" class="w-8 h-8 text-red-400"></i></div>
             <h3 class="text-lg font-bold text-white font-serif-custom">Konfirmasi Keluar</h3>
             <p class="text-xs text-white/70 mt-2 leading-relaxed">Apakah Anda yakin ingin keluar dari sistem SmartGrader Az-Zahro?</p>
             <div class="flex gap-3 mt-5">
-                <button type="button" onclick="tutupModalKeluar()" class="w-1/2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition-all outline-none">
-                    Batal
-                </button>
-                <button type="button" onclick="prosesKeluarAkun()" class="w-1/2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none">
-                    Ya, Keluar
-                </button>
+                <button type="button" onclick="tutupModalKeluar()" class="w-1/2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl">Batal</button>
+                <button type="button" onclick="prosesKeluarAkun()" class="w-1/2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl">Ya, Keluar</button>
             </div>
         </div>
     </div>
 
     <div id="modalKonfirmasiKembali" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
-        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
-            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3">
-                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-400"></i>
-            </div>
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative text-center">
+            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3"><i data-lucide="alert-triangle" class="w-8 h-8 text-red-400"></i></div>
             <h3 class="text-lg font-bold text-red-400 font-serif-custom">Peringatan!</h3>
             <p class="text-xs text-white/70 mt-2 leading-relaxed">Anda tidak sengaja menekan tombol kembali atau keluar dari mode fokus. Ingin melanjutkan pengisian nilai?</p>
             <div class="flex flex-col gap-2 mt-5">
-                <button type="button" onclick="kembaliKeFullscreenUtama()" class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none flex items-center justify-center gap-2">
-                    <i data-lucide="expand" class="w-4 h-4 text-white"></i> Lanjut Mengisi Nilai
-                </button>
-                <button type="button" onclick="konfirmasiBenarKeluar()" class="w-full px-4 py-2 text-white/40 hover:text-red-400 font-semibold text-xs rounded-xl transition-all outline-none">
-                    Tidak, Saya Ingin Keluar
-                </button>
+                <button type="button" onclick="kembaliKeFullscreenUtama()" class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2"><i data-lucide="expand" class="w-4 h-4 text-white"></i> Lanjut Mengisi Nilai</button>
+                <button type="button" onclick="konfirmasiBenarKeluar()" class="w-full px-4 py-2 text-white/40 hover:text-red-400 font-semibold text-xs rounded-xl">Tidak, Saya Ingin Keluar</button>
             </div>
         </div>
     </div>
 
-    <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
-        
-        const DAFTAR_TEMA = {
-            "biru-ungu": {
-                bodyBg: "linear-gradient(135deg, #0b0f19, #1e1b4b, #111827)",
-                bodySolidBg: "#0b0f19",
-                glow1: "#3b82f6", glow2: "#7c3aed",
-                btnPrimaryBg: "linear-gradient(90deg, #4f46e5, #7c3aed)",
-                btnPrimaryHover: "linear-gradient(90deg, #6366f1, #8b5cf6)",
-                btnShadow: "rgba(124, 58, 237, 0.4)", accentIcon: "#818cf8",
-                glassBg: "rgba(255, 255, 255, 0.05)", glassBorder: "rgba(255, 255, 255, 0.12)",
-                scrollbarThumb: "rgba(129, 140, 248, 0.3)", themeColor: "#1e1b4b",
-                navDockBg: "rgba(11, 15, 25, 0.9)", iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#1e1b4b"
-            },
-            "emerald": {
-                bodyBg: "linear-gradient(135deg, #09331f, #146c43)",
-                bodySolidBg: "#09331f",
-                glow1: "#198754", glow2: "#D4AF37",
-                btnPrimaryBg: "linear-gradient(90deg, #146c43, #0F5132)",
-                btnPrimaryHover: "linear-gradient(90deg, #198754, #146c43)",
-                btnShadow: "rgba(20, 108, 67, 0.4)", accentIcon: "#D4AF37",
-                glassBg: "rgba(255, 255, 255, 0.08)", glassBorder: "rgba(255, 255, 255, 0.18)",
-                scrollbarThumb: "rgba(255, 255, 255, 0.25)", themeColor: "#0F5132",
-                navDockBg: "rgba(15, 81, 50, 0.95)", iconCirclePasif: "rgba(255, 255, 255, 0.1)", iconCircleAktif: "#ffffff", iconTextAktif: "#0F5132"
-            },
-            "electric-blue": {
-                bodyBg: "linear-gradient(135deg, #76c8ff, #d78bff)",
-                bodySolidBg: "#76c8ff",
-                glow1: "#4fa3ff", glow2: "#ff7cd5",
-                btnPrimaryBg: "linear-gradient(90deg, #2f7dff, #cb3dff)",
-                btnPrimaryHover: "linear-gradient(90deg, #1e6bf2, #b82ae6)",
-                btnShadow: "rgba(47, 125, 255, 0.4)", accentIcon: "#ffffff",
-                glassBg: "rgba(255, 255, 255, 0.18)", glassBorder: "rgba(255, 255, 255, 0.3)",
-                scrollbarThumb: "#2f7dff", themeColor: "#2f7dff",
-                navDockBg: "rgba(47, 125, 255, 0.95)", iconCirclePasif: "rgba(255, 255, 255, 0.2)", iconCircleAktif: "#ffffff", iconTextAktif: "#2f7dff"
-            },
-            "sunset-orange": {
-                bodyBg: "linear-gradient(135deg, #1a0f05, #3a1c05, #140b00)",
-                bodySolidBg: "#1a0f05",
-                glow1: "#ea580c", glow2: "#eab308",
-                btnPrimaryBg: "linear-gradient(90deg, #ea580c, #ca8a04)",
-                btnPrimaryHover: "linear-gradient(90deg, #f97316, #eab308)",
-                btnShadow: "rgba(234, 88, 12, 0.4)", accentIcon: "#f97316",
-                glassBg: "rgba(255, 255, 255, 0.05)", glassBorder: "rgba(255, 255, 255, 0.12)",
-                scrollbarThumb: "rgba(234, 88, 12, 0.3)", themeColor: "#3a1c05",
-                navDockBg: "rgba(58, 28, 5, 0.95)", iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#3a1c05"
-            }
-        };
-
-        function pilihSistemTema(namaTema) {
-            const konfigurasi = DAFTAR_TEMA[namaTema];
-            if (!konfigurasi) return;
-
-            const root = document.documentElement;
-            root.style.setProperty('--body-bg', konfigurasi.bodyBg);
-            root.style.setProperty('--body-solid-bg', konfigurasi.bodySolidBg);
-            root.style.setProperty('--glow-1', konfigurasi.glow1);
-            root.style.setProperty('--glow-2', konfigurasi.glow2);
-            root.style.setProperty('--btn-primary-bg', konfigurasi.btnPrimaryBg);
-            root.style.setProperty('--btn-primary-hover', konfigurasi.btnPrimaryHover);
-            root.style.setProperty('--btn-shadow', konfigurasi.btnShadow);
-            root.style.setProperty('--accent-icon', konfigurasi.accentIcon);
-            root.style.setProperty('--glass-bg', konfigurasi.glassBg);
-            root.style.setProperty('--glass-border', konfigurasi.glassBorder);
-            root.style.setProperty('--scrollbar-thumb', konfigurasi.scrollbarThumb);
-
-            // Injeksi Tema Tambahan untuk Nav Dock
-            root.style.setProperty('--nav-dock-bg', konfigurasi.navDockBg);
-            root.style.setProperty('--icon-circle-pasif', konfigurasi.iconCirclePasif);
-            root.style.setProperty('--icon-circle-aktif', konfigurasi.iconCircleAktif);
-            root.style.setProperty('--icon-text-aktif', konfigurasi.iconTextAktif);
-
-            if (namaTema === "electric-blue") {
-                root.style.setProperty('--text-main', '#0f172a');
-                root.style.setProperty('--text-muted', '#334155');
-                root.style.setProperty('--card-text', '#1e293b');
-                root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.5)');
-                root.style.setProperty('--input-text', '#0f172a');
-                root.style.setProperty('--input-border', 'rgba(0, 0, 0, 0.15)');
-                root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.8)');
-            } else {
-                root.style.setProperty('--text-main', '#ffffff');
-                root.style.setProperty('--text-muted', '#d1e7dd');
-                root.style.setProperty('--card-text', '#ffffff');
-                root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.1)');
-                root.style.setProperty('--input-text', '#ffffff');
-                root.style.setProperty('--input-border', 'rgba(255, 255, 255, 0.2)');
-                root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.2)');
-            }
-
-            const metaTag = document.getElementById('metaThemeColor');
-            if (metaTag) metaTag.setAttribute('content', konfigurasi.themeColor);
-            localStorage.setItem('smartgrader_theme', namaTema);
-        }
-        
-        let DATA_CACHED = { pengaturan: {}, siswa: [] };
-        let GURU_AKTIF = ""; let KELAS_AKTIF = ""; let MAPEL_AKTIF = "";
-        let LIST_HAK_MENGAJAR = []; let toastTimeout;
-
-        // JAVASCRIPT RINGAN PERPINDAHAN CLASS 'ACTIVE' DAN TRIGGER POPUP/LINK
-        function navKlikAksi(element, tipe) {
-            // Hapus class active dari semua item nav
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            // Tambahkan ke item yang diklik
-            element.classList.add('active');
-
-            // Eksekusi Aksi berdasarkan Menu
-            if (tipe === 'tema') {
-                bukaModalTemaCepat();
-            } else if (tipe === 'leger') {
-                setTimeout(() => { window.open("leger.html", "_blank"); }, 350);
-            } else if (tipe === 'materi') {
-                
-                bukaModalPengaturan();
-            } else if (tipe === 'akun') {
-                bukaModalAkunCepat();
-            }
-        }
-
-        // Reset state Class Active Nav saat modal-modal ditutup agar kembali ke kondisi pasif
-        function resetNavActiveState() {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        }
-
-        function kunciScrollLatar(apakahKunci) {
-            if (apakahKunci) {
-                document.body.classList.add('overflow-hidden-modal');
-            } else {
-                const modalAwal = !document.getElementById('modalAwal').classList.contains('hidden');
-                const modalPengaturan = !document.getElementById('modalPengaturan').classList.contains('hidden');
-                const modalGantiPassword = !document.getElementById('modalGantiPassword').classList.contains('hidden');
-                const modalKonfirmasiKeluar = !document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden');
-                const modalKonfirmasiKembali = !document.getElementById('modalKonfirmasiKembali').classList.contains('hidden');
-                const modalGagal = !document.getElementById('modalGagalMasuk').classList.contains('hidden');
-                const modalTema = !document.getElementById('modalPilihTemaCepat').classList.contains('hidden');
-                const modalAkun = !document.getElementById('modalMenuAkunCepat').classList.contains('hidden');
-
-                if (!modalAwal && !modalPengaturan && !modalGantiPassword && !modalKonfirmasiKeluar && !modalKonfirmasiKembali && !modalGagal && !modalTema && !modalAkun) {
-                    document.body.classList.remove('overflow-hidden-modal');
-                }
-            }
-        }
-
-        function bukaModalTemaCepat() {
-            document.getElementById('modalPilihTemaCepat').classList.remove('hidden');
-            kunciScrollLatar(true);
-        }
-        function tutupModalTemaCepat() {
-            document.getElementById('modalPilihTemaCepat').classList.add('hidden');
-            kunciScrollLatar(false);
-            resetNavActiveState();
-        }
-        function bukaModalAkunCepat() {
-            if (!GURU_AKTIF) { 
-                tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); 
-                resetNavActiveState();
-                return; 
-            }
-            document.getElementById('modalAkunTitle').innerText = GURU_AKTIF;
-            document.getElementById('modalMenuAkunCepat').classList.remove('hidden');
-            kunciScrollLatar(true);
-        }
-        function tutupModalAkunCepat() {
-            document.getElementById('modalMenuAkunCepat').classList.add('hidden');
-            kunciScrollLatar(false);
-            resetNavActiveState();
-        }
-
-        function bukaAplikasiLayarPenuh() {
-            const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
-            kunciScrollLatar(!modalAwalHidden);
-            
-            const docElm = document.documentElement;
-            if (docElm.requestFullscreen) docElm.requestFullscreen();
-            else if (docElm.webkitRequestFullscreen) docElm.webkitRequestFullscreen();
-
-            if (window.history.state !== "fullscreen-mode") {
-                window.history.pushState("fullscreen-mode", null, "#fullscreen");
-            }
-        }
-
-        function showToast(title, message, type = "success") {
-            const toast = document.getElementById('customToast');
-            const toastBorder = document.getElementById('toastBorder');
-            document.getElementById('toastTitle').innerText = title;
-            document.getElementById('toastMessage').innerText = message;
-
-            if (type === "error") {
-                toastBorder.className = "glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-red-500 text-white";
-            } else {
-                toastBorder.className = "glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-emerald-500 text-white";
-            }
-            
-            toast.classList.remove('hidden');
-            lucide.createIcons();
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-x-full', 'opacity-0');
-                toast.classList.add('translate-x-0', 'opacity-100');
-            }, 50);
-
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => { hideToast(); }, 5000);
-        }
-
-        function hideToast() {
-            const toast = document.getElementById('customToast');
-            if (toast) {
-                toast.classList.remove('translate-x-0', 'opacity-100');
-                toast.classList.add('translate-x-full', 'opacity-0');
-                setTimeout(() => { toast.add('hidden'); }, 300);
-            }
-        }
-
-        function toggleVisibilitasSandi(idInput, elemenTombol) {
-            const input = document.getElementById(idInput);
-            if (!input) return;
-            if (input.type === "password") {
-                input.type = "text";
-                elemenTombol.innerHTML = `<i data-lucide="eye-off" class="w-4 h-4"></i>`;
-            } else {
-                input.type = "password";
-                elemenTombol.innerHTML = `<i data-lucide="eye" class="w-4 h-4"></i>`;
-            }
-            lucide.createIcons();
-        }
-
-        function validasiKesesuaianSandi() {
-            const pwBaru = document.getElementById('modalPwBaru').value;
-            const pwKonf = document.getElementById('modalPwKonfirmasi').value;
-            const msgSandiLemah = document.getElementById('msgSandiLemah');
-            const errorMsg = document.getElementById('msgErrorPassword');
-            const btnSubmit = document.getElementById('btnSubmitGantiPw');
-
-            let apakahValid = true;
-            if (pwBaru.length > 0 && pwBaru.length < 4) {
-                msgSandiLemah.classList.remove('hidden');
-                apakahValid = false;
-            } else {
-                msgSandiLemah.classList.add('hidden');
-            }
-
-            if (pwKonf.length === 0) {
-                errorMsg.classList.add('hidden');
-            } else if (pwBaru !== pwKonf) {
-                errorMsg.classList.remove('hidden');
-                apakahValid = false;
-            } else {
-                errorMsg.classList.add('hidden');
-            }
-
-            btnSubmit.disabled = !apakahValid;
-            lucide.createIcons();
-        }
-
-        function bukaModalAwal() {
-            document.getElementById('modalAwal').classList.remove('hidden');
-            kunciScrollLatar(true);
-        }
-        function tutupModalAwal() {
-            document.getElementById('modalAwal').classList.add('hidden');
-            kunciScrollLatar(false);
-        }
-        function bukaModalPengaturan() {
-            if(!KELAS_AKTIF || !MAPEL_AKTIF) { 
-                tampilkanModalGagalMasuk("Akses Ditolak", "Pilih Kelas dan Mapel terlebih dahulu!"); 
-                resetNavActiveState();
-                return; 
-            }
-            document.getElementById('modalPengaturan').classList.remove('hidden');
-            kunciScrollLatar(true);
-        }
-        function tutupModalPengaturan() {
-            document.getElementById('modalPengaturan').classList.add('hidden');
-            kunciScrollLatar(false);
-            resetNavActiveState();
-        }
-
-        function tampilkanModalGagalMasuk(judul, pesan) {
-            document.getElementById('judulModalGagal').innerText = judul;
-            document.getElementById('pesanModalGagal').innerText = pesan;
-            document.getElementById('modalGagalMasuk').classList.remove('hidden');
-            kunciScrollLatar(true);
-            lucide.createIcons();
-        }
-        function tutupModalGagalMasuk() {
-            document.getElementById('modalGagalMasuk').classList.add('hidden');
-            kunciScrollLatar(false);
-            resetNavActiveState();
-        }
-
-        function bukaModalGantiPassword() {
-            if (!GURU_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); return; }
-            document.getElementById('modalPwGuruNama').value = GURU_AKTIF;
-            document.getElementById('modalPwBaru').value = "";
-            document.getElementById('modalPwKonfirmasi').value = "";
-            document.getElementById('msgSandiLemah').classList.add('hidden');
-            document.getElementById('msgErrorPassword').classList.add('hidden');
-            document.getElementById('btnSubmitGantiPw').disabled = false;
-            document.getElementById('modalGantiPassword').classList.remove('hidden');
-            kunciScrollLatar(true);
-        }
-        function tutupModalGantiPassword() {
-            document.getElementById('modalGantiPassword').classList.add('hidden');
-            kunciScrollLatar(false);
-            resetNavActiveState();
-        }
-
-        function tampilkanModalKeluar() {
-            document.getElementById('modalKonfirmasiKeluar').classList.remove('hidden');
-            kunciScrollLatar(true);
-            lucide.createIcons();
-        }
-        function tutupModalKeluar() {
-            document.getElementById('modalKonfirmasiKeluar').classList.add('hidden');
-            kunciScrollLatar(false);
-            resetNavActiveState();
-        }
-
-        function prosesKeluarAkun() { location.reload(); }
-
-        function bukaModalKonfirmasiKembali() {
-            document.getElementById('modalKonfirmasiKembali').classList.remove('hidden');
-            kunciScrollLatar(true);
-            lucide.createIcons();
-        }
-        function tutupModalKonfirmasiKembali() {
-            document.getElementById('modalKonfirmasiKembali').classList.add('hidden');
-            kunciScrollLatar(false);
-        }
-
-        function kembaliKeFullscreenUtama() {
-            tutupModalKonfirmasiKembali();
-            bukaAplikasiLayarPenuh();
-            kunciScrollLatar(false);
-        }
-
-        function konfirmasiBenarKeluar() {
-            tutupModalKonfirmasiKembali();
-            window.history.replaceState(null, null, " ");
-            prosesKeluarAkun();
-        }
-
-        document.getElementById('formGerbangAwal').addEventListener('submit', function(e) {
-            e.preventDefault();
-            GURU_AKTIF = document.getElementById('gerbangGuru').value.trim().toUpperCase();
-            let password = document.getElementById('gerbangPassword').value;
-            
-            const btnMasuk = document.getElementById('btnMasukGerbang');
-            if (btnMasuk) {
-                btnMasuk.disabled = true;
-                btnMasuk.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> <span>Memproses...</span>`;
-            }
-            
-            const overlay = document.getElementById('loadingOverlay');
-            if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="shield" class="w-4 h-4 animate-spin text-white"></i> Memverifikasi Akun...`;
-                overlay.classList.remove('hidden');
-            }
-            lucide.createIcons();
-
-            const urlAuth = `${WEB_APP_URL}?aksi=login&guru=${encodeURIComponent(GURU_AKTIF)}&password=${encodeURIComponent(password)}`;
-
-            fetch(urlAuth)
-                .then(res => res.json())
-                .then(hasil => {
-                    if(overlay) overlay.classList.add('hidden');
-                    if (btnMasuk) {
-                        btnMasuk.disabled = false;
-                        btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-white"></i> <span>Masuk</span>`;
-                        lucide.createIcons();
-                    }
-                    if (hasil.status === "success") {
-                        LIST_HAK_MENGAJAR = hasil.hakMengajar;
-                        if (LIST_HAK_MENGAJAR.length === 0) {
-                            tampilkanModalGagalMasuk("Hak Akses Kosong", "Nama Anda tidak terdaftar sebagai pengajar di mapel manapun.");
-                            bukaModalAwal();
-                            return;
-                        }
-
-                        tutupModalAwal();
-                        document.getElementById('panelAksesMengajar').classList.remove('hidden');
-                        document.getElementById('infoMateriAktif').classList.remove('hidden');
-                        document.getElementById('bottomNavDock').classList.remove('hidden'); 
-
-                        const selectJadwal = document.getElementById('pilihJadwalDinamis');
-                        selectJadwal.innerHTML = "";
-                        LIST_HAK_MENGAJAR.forEach(item => {
-                            selectJadwal.innerHTML += `<option value="${item.kelas}|${item.mapel}">Kelas ${item.kelas} — Mapel: ${item.mapel}</option>`;
-                        });
-
-                        gantiJadwalAktif();
-                    } else {
-                        tampilkanModalGagalMasuk("Gagal Masuk", hasil.message);
-                    }
-                })
-                .catch(err => {
-                    if(overlay) overlay.classList.add('hidden');
-                    if (btnMasuk) {
-                        btnMasuk.disabled = false;
-                        btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-white"></i> <span>Masuk</span>`;
-                        lucide.createIcons();
-                    }
-                    tampilkanModalGagalMasuk("Kesalahan Sistem", "Koneksi gagal.");
-                });
-        });
-
-        function gantiJadwalAktif() {
-            const jadwalPilihan = document.getElementById('pilihJadwalDinamis').value;
-            if(!jadwalPilihan) return;
-
-            const part = jadwalPilihan.split("|");
-            KELAS_AKTIF = part[0];
-            MAPEL_AKTIF = part[1];
-
-            document.getElementById('navJudulUtama').innerText = `SmartGrader`;
-            document.getElementById('badgeKelas').innerText = `Kelas: ${KELAS_AKTIF}`;
-            document.getElementById('badgeMapel').innerText = `Mapel: ${MAPEL_AKTIF}`;
-            
-            muatDataUtama(MAPEL_AKTIF, KELAS_AKTIF);
-        }
-
-        function muatDataUtama(namaSheet, tingkatKelas) {
-            const overlay = document.getElementById('loadingOverlay');
-            const btn = document.getElementById('btnSimpanNilai');
-            
-            if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Memuat Data...`;
-                overlay.classList.remove('hidden');
-            }
-            btn.disabled = true;
-            lucide.createIcons();
-
-            const urlTarget = `${WEB_APP_URL}?sheet=${encodeURIComponent(namaSheet)}&kelas=${encodeURIComponent(tingkatKelas)}`;
-
-            fetch(urlTarget)
-                .then(response => response.json())
-                .then(hasil => {
-                    if(overlay) overlay.classList.add('hidden');
-                    if (hasil.status === "success") {
-                        DATA_CACHED = hasil;
-                        document.getElementById('navDetailText').innerText = `Guru: ${GURU_AKTIF}`;
-                        document.getElementById('textMapel').innerHTML = "<b>Mata Pelajaran:</b> " + namaSheet;
-                        document.getElementById('textGuru').innerHTML = "<b>Nama Guru:</b> " + GURU_AKTIF;
-                        document.getElementById('textKkm').innerHTML = "<b>KKM:</b> " + (hasil.pengaturan.kkm || "-");
-                        document.getElementById('textKelas').innerHTML = "<b>Kelas:</b> " + tingkatKelas;
-
-                        for(let i=1; i<=8; i++) {
-                            document.getElementById('modal_kd' + i).value = hasil.pengaturan['kd' + i] || "";
-                        }
-                        renderTabelSiswa();
-                    } else {
-                        tampilkanModalGagalMasuk("Gagal Memuat Data", hasil.message);
-                        bukaModalAwal();
-                    }
-                })
-                .catch(err => {
-                    if(overlay) overlay.classList.add('hidden');
-                    tampilkanModalGagalMasuk("Kesalahan Koneksi", "Gagal menghubungkan ke database.");
-                    bukaModalAwal();
-                });
-        }
-
-        function renderTabelSiswa() {
-            const komponen = document.getElementById('pilihKomponen').value;
-            const tbody = document.getElementById('bodyTabelSiswa');
-            const thKomponen = document.getElementById('thKomponen');
-            const infoMateriAktif = document.getElementById('infoMateriAktif');
-            
-            tbody.innerHTML = "";
-            thKomponen.innerText = "Nilai " + komponen;
-            document.getElementById('judulTabel').innerHTML = `<i data-lucide="table-2" class="w-5 h-5 theme-icon-active"></i> Input Nilai: ${MAPEL_AKTIF}`;
-
-            let apakahKDValid = true;
-            if (komponen.startsWith("KD")) {
-                let nomorKD = komponen.replace("KD", "");
-                let judulMateri = DATA_CACHED.pengaturan['kd' + nomorKD] || "";
-                
-                if (judulMateri.trim() === "") {
-                    infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-red-400"></i><div class="text-red-400"><b>Peringatan:</b> Judul ringkasan materi belum diisi! Silakan isi di menu "Materi KD".</div>`;
-                    apakahKDValid = false;
-                } else {
-                    infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-400"></i><div><b>Materi Aktif (${komponen}):</b> ${judulMateri}</div>`;
-                }
-            } else {
-                infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-400"></i><div><b>Komponen Aktif:</b> Semester (${komponen})</div>`;
-            }
-
-            if (!DATA_CACHED.siswa || DATA_CACHED.siswa.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-white/40 font-medium">Tidak ada data siswa.</td></tr>`;
-                document.getElementById('btnSimpanNilai').disabled = true;
-                lucide.createIcons();
-                return;
-            }
-
-            DATA_CACHED.siswa.forEach((siswa, index) => {
-                let nilaiSekarang = siswa[komponen] !== undefined ? siswa[komponen] : "";
-                let tr = document.createElement('tr');
-                tr.className = "hover:bg-white/5 transition-colors divide-x divide-white/5";
-                let atributDisabled = !apakahKDValid ? "disabled" : "";
-
-                tr.innerHTML = `
-                    <td class="text-center py-3.5 font-bold text-white/30">${index + 1}</td>
-                    <td class="py-3.5 px-4 font-semibold">${siswa.nama}</td>
-                    <td class="py-3.5 px-3">
-                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center theme-input font-bold px-2 py-1.5 text-sm rounded-xl outline-none input-nilai-siswa disabled:opacity-30" 
-                               data-baris="${siswa.baris}" min="0" max="100" value="${nilaiSekarang}" ${atributDisabled}>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            document.getElementById('btnSimpanNilai').disabled = false;
-            kunciScrollLatar(false);
-            lucide.createIcons();
-        }
-
-        document.getElementById('formPengaturanKD').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSimpanKD');
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Menyimpan...`;
-            lucide.createIcons();
-
-            const dataKDSimpan = {
-                mapelTarget: MAPEL_AKTIF, kelasTarget: KELAS_AKTIF, tipeAksi: "simpanPengaturan"
-            };
-            for(let i=1; i<=8; i++) {
-                dataKDSimpan['kd'+i] = document.getElementById('modal_kd'+i).value;
-            }
-
-            tutupModalPengaturan();
-
-            fetch(WEB_APP_URL, {
-                method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(dataKDSimpan)
-            }).then(() => {
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-white"></i> Simpan`;
-                for(let i=1; i<=8; i++) { DATA_CACHED.pengaturan['kd'+i] = dataKDSimpan['kd'+i]; }
-                renderTabelSiswa();
-                showToast("Judul KD Berhasil Diperbarui!", `Data E-Nilai Kelas ${KELAS_AKTIF} updated.`);
-            }).catch(err => {
-                tampilkanModalGagalMasuk("Gagal Menyimpan", err.message);
-                btn.disabled = false;
-            });
-        });
-
-        document.getElementById('formGantiPassword').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const pwBaru = document.getElementById('modalPwBaru').value;
-            const pwKonf = document.getElementById('modalPwKonfirmasi').value;
-            if (pwBaru.length < 4 || pwBaru !== pwKonf) return;
-
-            const overlay = document.getElementById('loadingOverlay');
-            if(overlay) overlay.classList.remove('hidden');
-            tutupModalGantiPassword();
-
-            fetch(WEB_APP_URL, {
-                method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify({ tipeAksi: "gantiPassword", guruNama: GURU_AKTIF, passwordBaru: pwBaru })
-            }).then(() => {
-                if(overlay) overlay.classList.add('hidden');
-                showToast("Password Berhasil Diperbarui!", "Gunakan sandi baru pada sesi login berikutnya.");
-            });
-        });
-
-        document.getElementById('formNilaiSiswa').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSimpanNilai');
-            const komponen = document.getElementById('pilihKomponen').value;
-            
-            if (komponen.startsWith("KD")) {
-                let nomorKD = komponen.replace("KD", "");
-                if ((DATA_CACHED.pengaturan['kd' + nomorKD] || "").trim() === "") {
-                    tampilkanModalGagalMasuk("Penyimpanan Dibatalkan", `Judul ringkasan materi ${komponen} wajib diisi terlebih dahulu!`);
-                    return;
-                }
-            }
-
-            const elemenInputs = document.querySelectorAll('.input-nilai-siswa');
-            let dataNilaiArray = []; let adaKolomKosong = false;
-
-            elemenInputs.forEach(input => { if (input.value.trim() === "") adaKolomKosong = true; });
-            if (adaKolomKosong) {
-                showToast("Penyimpanan Dibatalkan!", "Nilai tidak boleh kosong. Gunakan angka 0 jika belum terisi.", "error");
-                return;
-            }
-            
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Menyimpan...`;
-            lucide.createIcons();
-
-            elemenInputs.forEach(input => {
-                dataNilaiArray.push({ baris: input.getAttribute('data-baris'), nilai: Number(input.value) });
-            });
-
-            fetch(WEB_APP_URL, {
-                method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify({ mapelTarget: MAPEL_AKTIF, kelasTarget: KELAS_AKTIF, tipeAksi: "simpanNilai", komponenPilihan: komponen, dataNilai: dataNilaiArray })
-            }).then(() => {
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-white"></i> Simpan Nilai`;
-                elemenInputs.forEach(input => {
-                    let targetSiswa = DATA_CACHED.siswa.find(s => s.baris == input.getAttribute('data-baris'));
-                    if(targetSiswa) targetSiswa[komponen] = Number(input.value);
-                });
-                showToast("Data Nilai Berhasil Disimpan!", `Seluruh Nilai ${komponen} sukses direkam.`);
-            }).catch(err => {
-                tampilkanModalGagalMasuk("Masalah Jaringan", err.message);
-                btn.disabled = false;
-            });
-        });
-
-        window.addEventListener('popstate', function(event) {
-            if (document.getElementById('modalAwal').classList.contains('hidden')) {
-                window.history.pushState("fullscreen-mode", null, "#fullscreen");
-                bukaModalKonfirmasiKembali();
-            }
-        });
-
-        const eventLayarPenuh = ['fullscreenchange', 'webkitfullscreenchange'];
-        eventLayarPenuh.forEach(eventName => {
-            document.addEventListener(eventName, () => {
-                const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
-                if (!isFullscreen && document.getElementById('modalAwal').classList.contains('hidden') && document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden')) {
-                    bukaModalKonfirmasiKembali();
-                }
-            });
-        });
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const temaTerakhir = localStorage.getItem('smartgrader_theme') || 'emerald';
-            pilihSistemTema(temaTerakhir);
-            bukaModalAwal();
-            lucide.createIcons();
-        });
-    </script>
+    <!-- File Script Eksternal -->
+    <script src="app.js"></script>
 </body>
 </html>
