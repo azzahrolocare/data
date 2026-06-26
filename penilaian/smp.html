@@ -41,10 +41,9 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* CSS Variabel untuk Manajemen Tema Dinamis */
         :root {
             --body-bg: linear-gradient(135deg, #09331f, #146c43);
-            --body-solid-bg: #09331f; /* Variabel Baru: Menjaga konsistensi warna flat saat overscroll */
+            --body-solid-bg: #09331f; 
             --glow-1: #198754;
             --glow-2: #D4AF37;
             --btn-primary-bg: linear-gradient(90deg, #146c43, #0F5132);
@@ -61,12 +60,19 @@
             --input-text: #ffffff;
             --input-border: rgba(255, 255, 255, 0.2);
             --input-focus-bg: rgba(255, 255, 255, 0.2);
+
+            /* Tema Variabel Tambahan Khusus Bottom Nav Dock */
+            --nav-dock-bg: rgba(15, 81, 50, 0.85); /* Menyesuaikan Latar Belakang Utama */
+            --nav-dock-border: rgba(255, 255, 255, 0.2);
+            --icon-circle-pasif: rgba(255, 255, 255, 0.1);
+            --icon-circle-aktif: #ffffff;
+            --icon-text-aktif: #0F5132;
         }
 
         html, body {
             overscroll-behavior-y: none;
             overscroll-behavior-x: none;
-            background-color: var(--body-solid-bg); /* Mencegah warna hitam muncul saat ditarik/scroll */
+            background-color: var(--body-solid-bg);
         }
 
         body { 
@@ -74,17 +80,12 @@
             color: var(--text-main);
             transition: background-color 0.5s ease, color 0.3s ease;
             position: relative;
-            min-h: 100vh;
         }
 
-        /* Menggunakan Lapisan Pseudo untuk gradasi agar tidak rusak/hitam saat di-scroll */
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: var(--body-bg);
             z-index: -2;
             pointer-events: none;
@@ -95,11 +96,10 @@
         .table-input { width: 80px; text-align: center; }
         .overflow-hidden-modal { overflow: hidden !important; height: 100vh !important; }
 
-        /* Komponen Efek Kaca Modern (Glassmorphism) */
         .glass-panel {
             background: var(--glass-bg);
-            backdrop-blur: 16px;
-            -webkit-backdrop-blur: 16px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
             color: var(--card-text);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
@@ -111,7 +111,6 @@
             border: 1px solid var(--glass-border);
         }
 
-        /* Desain Custom Input & Tombol Berbasis Variabel */
         .theme-input {
             background: var(--input-bg);
             color: var(--input-text);
@@ -139,15 +138,11 @@
             transform: translateY(-1px);
             box-shadow: 0 6px 20px var(--btn-shadow);
         }
-        .theme-btn-primary:active:not(:disabled) {
-            transform: scale(0.98);
-        }
 
         .theme-icon-active {
             color: var(--accent-icon) !important;
         }
 
-        /* Dekorasi Efek Cahaya Latar Belakang Digital */
         .glow-sphere-1 {
             position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
             background: radial-gradient(circle, var(--glow-1) 0%, transparent 70%);
@@ -159,10 +154,100 @@
             opacity: 0.2; z-index: -1; pointer-events: none; transition: background 0.5s ease;
         }
 
-        /* Kustomisasi Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
         ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 99px; }
+
+        /* DESIGN BOTTOM NAV DOCK CUSTOM DENGAN ELIPS LENGKUNG LANDAI */
+        .custom-bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 40;
+            background: var(--nav-dock-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--nav-dock-border);
+            border-bottom: none;
+            /* Trik kurva elips responsif bagian atas navbar */
+            border-radius: 50% 50% 0 0 / 25px 25px 0 0;
+            box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 1.5rem;
+        }
+
+        /* Struktur Item Navigasi */
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 65px;
+            height: 100%;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Wadah Lingkaran Permanen */
+        .icon-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--icon-circle-pasif);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+        }
+
+        .icon-circle i {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease, color 0.4s ease;
+        }
+
+        /* Tulisan/Teks Menu Hilang Total Saat Pasif */
+        .nav-text {
+            position: absolute;
+            bottom: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: #ffffff;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        /* MICRO-INTERACTIONS: KONDISI KETIKA MENU AKTIF */
+        .nav-item.active {
+            transform: translateY(-14px);
+        }
+
+        .nav-item.active .icon-circle {
+            background: var(--icon-circle-aktif);
+            color: var(--icon-text-aktif);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3), 0 0 0 4px rgba(255, 255, 255, 0.1);
+            transform: scale(1.08);
+        }
+
+        .nav-item.active .icon-circle i {
+            transform: scale(1.05);
+        }
+
+        .nav-item.active .nav-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="h-screen overflow-hidden flex flex-col justify-between select-none">
@@ -170,7 +255,6 @@
     <div class="glow-sphere-1"></div>
     <div class="glow-sphere-2"></div>
 
-    <!-- Modals & Overlay tetap berposisi Fixed di layer paling atas browser -->
     <div id="customToast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 max-w-md w-full hidden">
         <div id="toastBorder" class="glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-emerald-500">
             <div id="toastIconBg" class="p-2 bg-white/10 rounded-xl border border-white/10">
@@ -193,9 +277,8 @@
         </div>
     </div>
 
-    <!-- HEADER / NAVIGATION: Dikunci permanen di atas agar tidak bergeser -->
     <nav class="sticky top-0 z-40 glass-panel border-t-0 border-x-0 rounded-b-3xl shadow-lg flex-shrink-0">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3 min-w-0">
                 <div class="p-2 bg-white/10 rounded-xl border border-white/10 flex-shrink-0">
                     <i data-lucide="trending-up" class="w-5 h-5 sm:w-6 h-6 theme-icon-active"></i>
@@ -213,9 +296,8 @@
         </div>
     </nav>
 
-    <!-- PENGHALANG SCROLL UTAMA: Seluruh scroll konten diisolasi penuh di container flex-1 ini -->
-    <div class="flex-1 overflow-y-auto overscroll-none pb-24">
-        <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+    <div class="flex-1 overflow-y-auto overscroll-none pb-28">
+        <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             
             <div id="panelAksesMengajar" class="glass-panel rounded-3xl p-6 md:p-8 shadow-sm hidden mb-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4 mb-6">
@@ -262,7 +344,7 @@
                 <div id="textMateriAktif"><b>Materi Aktif:</b> Memuat informasi...</div>
             </div>
 
-            <div id="containerTabel" class="glass-panel rounded-3xl p-6 md:p-8 shadow-sm mt-6 transition-all duration-500 mb-12">
+            <div id="containerTabel" class="glass-panel rounded-3xl p-6 md:p-8 shadow-sm mt-6 transition-all duration-500 mb-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5 mb-6">
                     <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-white flex items-center gap-2">
                         <i data-lucide="table-2" class="w-5 h-5 theme-icon-active"></i> Daftar Siswa
@@ -294,7 +376,7 @@
             </div>
         </main>
 
-        <footer class="glass-panel border-b-0 border-x-0 rounded-t-3xl mt-12 py-6 px-4">
+        <footer class="glass-panel border-b-0 border-x-0 rounded-t-3xl mt-6 py-6 px-4">
             <div class="max-w-7xl mx-auto text-center text-[11px] text-white/40 leading-relaxed">
                 &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
                 SMP Islam Az-Zahro • SMK Az-Zahro
@@ -302,7 +384,36 @@
         </footer>
     </div>
 
-    <!-- MODAL POPUP SUB-MENU TEMA (DIPICU OLEH BOTTOM NAV) -->
+    <div id="bottomNavDock" class="custom-bottom-nav hidden max-w-lg mx-auto mb-safe">
+        <div id="navTema" onclick="navKlikAksi(this, 'tema')" class="nav-item pt-3">
+            <div class="icon-circle">
+                <i data-lucide="palette"></i>
+            </div>
+            <span class="nav-text">Pilih Tema</span>
+        </div>
+        
+        <div id="navLeger" onclick="navKlikAksi(this, 'leger')" class="nav-item pt-1">
+            <div class="icon-circle">
+                <i data-lucide="book-open"></i>
+            </div>
+            <span class="nav-text">Buka Leger</span>
+        </div>
+        
+        <div id="navMateri" onclick="navKlikAksi(this, 'materi')" class="nav-item pt-1">
+            <div class="icon-circle">
+                <i data-lucide="settings"></i>
+            </div>
+            <span class="nav-text">Materi KD</span>
+        </div>
+        
+        <div id="navAkun" onclick="navKlikAksi(this, 'akun')" class="nav-item pt-3">
+            <div class="icon-circle">
+                <i data-lucide="user"></i>
+            </div>
+            <span class="nav-text">Akun Guru</span>
+        </div>
+    </div>
+
     <div id="modalPilihTemaCepat" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
             <button type="button" onclick="tutupModalTemaCepat()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
@@ -323,7 +434,6 @@
         </div>
     </div>
 
-    <!-- MODAL POPUP DROPDOWN MENU AKUN (DIPICU OLEH BOTTOM NAV) -->
     <div id="modalMenuAkunCepat" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="glass-panel rounded-3xl max-w-sm w-full p-5 relative animate-in fade-in zoom-in-95 duration-200">
             <button type="button" onclick="tutupModalAkunCepat()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
@@ -346,30 +456,6 @@
         </div>
     </div>
 
-    <!-- MODERN NAVIGATION FOOTER (BAR ATAS PENGHALANG BAWAH MOBILE-FIRST) -->
-    <div id="bottomNavDock" class="fixed bottom-0 left-0 right-0 z-40 glass-panel border-b-0 border-x-0 rounded-t-3xl shadow-2xl px-6 py-2 flex items-center justify-between hidden max-w-lg mx-auto mb-safe">
-        <!-- 1. PILIH TEMA (UJUNG KIRI) -->
-        <button onclick="bukaModalTemaCepat()" class="flex flex-col items-center justify-center p-2.5 text-white/70 hover:text-white transition-all active:scale-90" title="Ubah Tema Warna">
-            <i data-lucide="palette" class="w-5 h-5 theme-icon-active"></i>
-        </button>
-        
-        <!-- 2. BUKA LEGER (KIRI) -->
-        <a href="smpleger.html" class="flex flex-col items-center justify-center p-2.5 text-white/70 hover:text-white transition-all active:scale-90" title="Buka Rekap Leger Nilai">
-            <i data-lucide="book-open" class="w-5 h-5"></i>
-        </a>
-        
-        <!-- 3. MATERI KD (TENGAH - UTAMA) -->
-        <button onclick="bukaModalPengaturan()" class="flex flex-col items-center justify-center p-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-2xl shadow-inner text-white transition-all active:scale-90 -translate-y-2" title="Kelola Ringkasan Materi KD">
-            <i data-lucide="settings" class="w-5 h-5 theme-icon-active"></i>
-        </button>
-        
-        <!-- 4. AKUN (SEBELAH KANAN) -->
-        <button onclick="bukaModalAkunCepat()" class="flex flex-col items-center justify-center p-2.5 text-white/70 hover:text-white transition-all active:scale-90" title="Menu Akun Guru">
-            <i data-lucide="user" class="w-5 h-5"></i>
-        </button>
-    </div>
-
-    <!-- Modals Struktural Tetap Berada di Paling Bawah Body -->
     <div id="modalAwal" class="fixed inset-0 bg-black/60 backdrop-blur-lg flex justify-center items-center z-50 p-4">
         <div class="glass-panel rounded-3xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
             <div class="text-center mb-5">
@@ -431,16 +517,13 @@
 
     <div id="modalPengaturan" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
         <div class="glass-panel rounded-3xl max-w-lg w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh]">
-            
             <button type="button" onclick="tutupModalPengaturan()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-
             <div class="flex items-center gap-2 border-b border-white/10 pb-3 mb-4 flex-shrink-0">
                 <i data-lucide="settings-2" class="w-5 h-5 text-white"></i>
                 <h3 class="text-lg font-bold font-serif-custom text-white">Pengaturan Detail & Materi KD</h3>
             </div>
-
             <div class="overflow-y-auto pr-1 space-y-4 flex-1">
                 <div>
                     <span class="block text-xs font-bold text-white/50 tracking-wider uppercase mb-2">📄 Data Detail</span>
@@ -451,7 +534,6 @@
                         <div id="textKelas"><b>Kelas:</b> -</div>
                     </div>
                 </div>
-
                 <form id="formPengaturanKD" class="space-y-3">
                     <span class="block text-xs font-bold text-white/60 tracking-wider uppercase mb-1">✏️ Kompetensi Dasar (KD)</span>
                     <div class="grid grid-cols-1 gap-2.5">
@@ -466,7 +548,6 @@
                     </div>
                 </form>
             </div>
-
             <div class="border-t border-white/10 pt-3 mt-4 flex-shrink-0">
                 <button type="submit" form="formPengaturanKD" id="btnSimpanKD" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 theme-btn-primary font-bold text-sm rounded-xl shadow-md">
                     <i data-lucide="check" class="w-4 h-4 theme-icon-active"></i> Simpan
@@ -480,14 +561,12 @@
             <button type="button" onclick="tutupModalGantiPassword()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-
             <div class="text-center mb-4 border-b border-white/10 pb-3">
                 <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5">
                     <i data-lucide="lock-keyhole" class="w-6 h-6 text-white"></i>
                 </div>
                 <h3 class="text-base font-bold text-white font-serif-custom">Keamanan & Ganti Password</h3>
             </div>
-
             <form id="formGantiPassword" class="space-y-3.5">
                 <div>
                     <label class="block text-xs font-bold text-white/50 mb-1 flex items-center gap-1">
@@ -495,7 +574,6 @@
                     </label>
                     <input type="text" id="modalPwGuruNama" readonly class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 font-bold text-white/40 cursor-not-allowed text-xs outline-none uppercase">
                 </div>
-
                 <div>
                     <label class="block text-xs font-bold text-white/80 mb-1 flex items-center gap-1">
                         <i data-lucide="key" class="w-3.5 h-3.5 theme-icon-active"></i> Masukkan Password Baru
@@ -510,7 +588,6 @@
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password minimal harus terdiri dari 4 karakter.
                     </p>
                 </div>
-
                 <div>
                     <label class="block text-xs font-bold text-white/80 mb-1 flex items-center gap-1">
                         <i data-lucide="check-square" class="w-3.5 h-3.5 theme-icon-active"></i> Konfirmasi Password Baru
@@ -525,7 +602,6 @@
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password tidak cocok.
                     </p>
                 </div>
-
                 <button type="submit" id="btnSubmitGantiPw" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 theme-btn-primary font-bold text-xs rounded-xl shadow-md">
                     <i data-lucide="save" class="w-4 h-4 theme-icon-active"></i> Perbarui Kata Sandi
                 </button>
@@ -572,67 +648,53 @@
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
         
-        // Database Konfigurasi Paket Skema Warna Tema Sistem
         const DAFTAR_TEMA = {
             "biru-ungu": {
                 bodyBg: "linear-gradient(135deg, #0b0f19, #1e1b4b, #111827)",
                 bodySolidBg: "#0b0f19",
-                glow1: "#3b82f6",
-                glow2: "#7c3aed",
+                glow1: "#3b82f6", glow2: "#7c3aed",
                 btnPrimaryBg: "linear-gradient(90deg, #4f46e5, #7c3aed)",
                 btnPrimaryHover: "linear-gradient(90deg, #6366f1, #8b5cf6)",
-                btnShadow: "rgba(124, 58, 237, 0.4)",
-                accentIcon: "#818cf8",
-                glassBg: "rgba(255, 255, 255, 0.05)",
-                glassBorder: "rgba(255, 255, 255, 0.12)",
-                scrollbarThumb: "rgba(129, 140, 248, 0.3)",
-                themeColor: "#1e1b4b"
+                btnShadow: "rgba(124, 58, 237, 0.4)", accentIcon: "#818cf8",
+                glassBg: "rgba(255, 255, 255, 0.05)", glassBorder: "rgba(255, 255, 255, 0.12)",
+                scrollbarThumb: "rgba(129, 140, 248, 0.3)", themeColor: "#1e1b4b",
+                navDockBg: "rgba(11, 15, 25, 0.9)", iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#1e1b4b"
             },
             "emerald": {
                 bodyBg: "linear-gradient(135deg, #09331f, #146c43)",
                 bodySolidBg: "#09331f",
-                glow1: "#198754",
-                glow2: "#D4AF37",
+                glow1: "#198754", glow2: "#D4AF37",
                 btnPrimaryBg: "linear-gradient(90deg, #146c43, #0F5132)",
                 btnPrimaryHover: "linear-gradient(90deg, #198754, #146c43)",
-                btnShadow: "rgba(20, 108, 67, 0.4)",
-                accentIcon: "#D4AF37",
-                glassBg: "rgba(255, 255, 255, 0.08)",
-                glassBorder: "rgba(255, 255, 255, 0.18)",
-                scrollbarThumb: "rgba(255, 255, 255, 0.25)",
-                themeColor: "#0F5132"
+                btnShadow: "rgba(20, 108, 67, 0.4)", accentIcon: "#D4AF37",
+                glassBg: "rgba(255, 255, 255, 0.08)", glassBorder: "rgba(255, 255, 255, 0.18)",
+                scrollbarThumb: "rgba(255, 255, 255, 0.25)", themeColor: "#0F5132",
+                navDockBg: "rgba(15, 81, 50, 0.95)", iconCirclePasif: "rgba(255, 255, 255, 0.1)", iconCircleAktif: "#ffffff", iconTextAktif: "#0F5132"
             },
             "electric-blue": {
                 bodyBg: "linear-gradient(135deg, #76c8ff, #d78bff)",
                 bodySolidBg: "#76c8ff",
-                glow1: "#4fa3ff",
-                glow2: "#ff7cd5",
+                glow1: "#4fa3ff", glow2: "#ff7cd5",
                 btnPrimaryBg: "linear-gradient(90deg, #2f7dff, #cb3dff)",
                 btnPrimaryHover: "linear-gradient(90deg, #1e6bf2, #b82ae6)",
-                btnShadow: "rgba(47, 125, 255, 0.4)",
-                accentIcon: "#ffffff",
-                glassBg: "rgba(255, 255, 255, 0.18)",
-                glassBorder: "rgba(255, 255, 255, 0.3)",
-                scrollbarThumb: "#2f7dff",
-                themeColor: "#2f7dff"
+                btnShadow: "rgba(47, 125, 255, 0.4)", accentIcon: "#ffffff",
+                glassBg: "rgba(255, 255, 255, 0.18)", glassBorder: "rgba(255, 255, 255, 0.3)",
+                scrollbarThumb: "#2f7dff", themeColor: "#2f7dff",
+                navDockBg: "rgba(47, 125, 255, 0.95)", iconCirclePasif: "rgba(255, 255, 255, 0.2)", iconCircleAktif: "#ffffff", iconTextAktif: "#2f7dff"
             },
             "sunset-orange": {
                 bodyBg: "linear-gradient(135deg, #1a0f05, #3a1c05, #140b00)",
                 bodySolidBg: "#1a0f05",
-                glow1: "#ea580c",
-                glow2: "#eab308",
+                glow1: "#ea580c", glow2: "#eab308",
                 btnPrimaryBg: "linear-gradient(90deg, #ea580c, #ca8a04)",
                 btnPrimaryHover: "linear-gradient(90deg, #f97316, #eab308)",
-                btnShadow: "rgba(234, 88, 12, 0.4)",
-                accentIcon: "#f97316",
-                glassBg: "rgba(255, 255, 255, 0.05)",
-                glassBorder: "rgba(255, 255, 255, 0.12)",
-                scrollbarThumb: "rgba(234, 88, 12, 0.3)",
-                themeColor: "#3a1c05"
+                btnShadow: "rgba(234, 88, 12, 0.4)", accentIcon: "#f97316",
+                glassBg: "rgba(255, 255, 255, 0.05)", glassBorder: "rgba(255, 255, 255, 0.12)",
+                scrollbarThumb: "rgba(234, 88, 12, 0.3)", themeColor: "#3a1c05",
+                navDockBg: "rgba(58, 28, 5, 0.95)", iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#3a1c05"
             }
         };
 
-        // Fungsi Inti untuk Mengubah CSS Variable Sesuai Pilihan Tema
         function pilihSistemTema(namaTema) {
             const konfigurasi = DAFTAR_TEMA[namaTema];
             if (!konfigurasi) return;
@@ -650,7 +712,12 @@
             root.style.setProperty('--glass-border', konfigurasi.glassBorder);
             root.style.setProperty('--scrollbar-thumb', konfigurasi.scrollbarThumb);
 
-            // Kondisional warna teks agar kontras pada tema benderang (electric-blue)
+            // Injeksi Tema Tambahan untuk Nav Dock
+            root.style.setProperty('--nav-dock-bg', konfigurasi.navDockBg);
+            root.style.setProperty('--icon-circle-pasif', konfigurasi.iconCirclePasif);
+            root.style.setProperty('--icon-circle-aktif', konfigurasi.iconCircleAktif);
+            root.style.setProperty('--icon-text-aktif', konfigurasi.iconTextAktif);
+
             if (namaTema === "electric-blue") {
                 root.style.setProperty('--text-main', '#0f172a');
                 root.style.setProperty('--text-muted', '#334155');
@@ -669,22 +736,39 @@
                 root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.2)');
             }
 
-            // Update meta theme warna browser HP
             const metaTag = document.getElementById('metaThemeColor');
             if (metaTag) metaTag.setAttribute('content', konfigurasi.themeColor);
-
-            // Simpan preferensi tema user di penyimpanan lokal browser
             localStorage.setItem('smartgrader_theme', namaTema);
         }
         
         let DATA_CACHED = { pengaturan: {}, siswa: [] };
-        let GURU_AKTIF = "";
-        let KELAS_AKTIF = "";
-        let MAPEL_AKTIF = "";
-        let LIST_HAK_MENGAJAR = [];
-        let toastTimeout;
+        let GURU_AKTIF = ""; let KELAS_AKTIF = ""; let MAPEL_AKTIF = "";
+        let LIST_HAK_MENGAJAR = []; let toastTimeout;
 
-        // FUNGSI UTAMA UNTUK MENGUNCI / MELEPAS SCROLL BODY
+        // JAVASCRIPT RINGAN PERPINDAHAN CLASS 'ACTIVE' DAN TRIGGER POPUP/LINK
+        function navKlikAksi(element, tipe) {
+            // Hapus class active dari semua item nav
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            // Tambahkan ke item yang diklik
+            element.classList.add('active');
+
+            // Eksekusi Aksi berdasarkan Menu
+            if (tipe === 'tema') {
+                bukaModalTemaCepat();
+            } else if (tipe === 'leger') {
+                setTimeout(() => { window.location.href = "smpleger.html"; }, 350);
+            } else if (tipe === 'materi') {
+                bukaModalPengaturan();
+            } else if (tipe === 'akun') {
+                bukaModalAkunCepat();
+            }
+        }
+
+        // Reset state Class Active Nav saat modal-modal ditutup agar kembali ke kondisi pasif
+        function resetNavActiveState() {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        }
+
         function kunciScrollLatar(apakahKunci) {
             if (apakahKunci) {
                 document.body.classList.add('overflow-hidden-modal');
@@ -704,7 +788,6 @@
             }
         }
 
-        // KONTROL POPUP MODAL BARU UNTUK BOTTOM NAV
         function bukaModalTemaCepat() {
             document.getElementById('modalPilihTemaCepat').classList.remove('hidden');
             kunciScrollLatar(true);
@@ -712,9 +795,14 @@
         function tutupModalTemaCepat() {
             document.getElementById('modalPilihTemaCepat').classList.add('hidden');
             kunciScrollLatar(false);
+            resetNavActiveState();
         }
         function bukaModalAkunCepat() {
-            if (!GURU_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); return; }
+            if (!GURU_AKTIF) { 
+                tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); 
+                resetNavActiveState();
+                return; 
+            }
             document.getElementById('modalAkunTitle').innerText = GURU_AKTIF;
             document.getElementById('modalMenuAkunCepat').classList.remove('hidden');
             kunciScrollLatar(true);
@@ -722,43 +810,25 @@
         function tutupModalAkunCepat() {
             document.getElementById('modalMenuAkunCepat').classList.add('hidden');
             kunciScrollLatar(false);
+            resetNavActiveState();
         }
 
-        // FUNGSI PEMICU LAYAR PENUH NATIVE (HTML5 FULLSCREEN API) + INJEKSI STATUS RIWAYAT
         function bukaAplikasiLayarPenuh() {
             const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
             kunciScrollLatar(!modalAwalHidden);
             
             const docElm = document.documentElement;
-            if (docElm.requestFullscreen) {
-                docElm.requestFullscreen();
-            } else if (docElm.mozRequestFullScreen) {
-                docElm.mozRequestFullScreen();
-            } else if (docElm.webkitRequestFullscreen) {
-                docElm.webkitRequestFullscreen();
-            } else if (docElm.msRequestFullscreen) {
-                docElm.msRequestFullscreen();
-            }
+            if (docElm.requestFullscreen) docElm.requestFullscreen();
+            else if (docElm.webkitRequestFullscreen) docElm.webkitRequestFullscreen();
 
             if (window.history.state !== "fullscreen-mode") {
                 window.history.pushState("fullscreen-mode", null, "#fullscreen");
             }
-
-            setTimeout(() => {
-                let currentTheme = localStorage.getItem('smartgrader_theme') || 'emerald';
-                let currentConfig = DAFTAR_TEMA[currentTheme];
-                let metaTheme = document.querySelector('meta[name="theme-color"]');
-                if (metaTheme && currentConfig) {
-                    metaTheme.setAttribute('content', currentConfig.themeColor);
-                }
-            }, 300);
         }
 
-        // FUNGSI UNTUK MENAMPILKAN NOTIFIKASI KUSTOM BERWARNA (TOAST)
         function showToast(title, message, type = "success") {
             const toast = document.getElementById('customToast');
             const toastBorder = document.getElementById('toastBorder');
-
             document.getElementById('toastTitle').innerText = title;
             document.getElementById('toastMessage').innerText = message;
 
@@ -777,9 +847,7 @@
             }, 50);
 
             clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                hideToast();
-            }, 5000);
+            toastTimeout = setTimeout(() => { hideToast(); }, 5000);
         }
 
         function hideToast() {
@@ -787,18 +855,13 @@
             if (toast) {
                 toast.classList.remove('translate-x-0', 'opacity-100');
                 toast.classList.add('translate-x-full', 'opacity-0');
-                
-                setTimeout(() => {
-                    toast.classList.add('hidden');
-                }, 300);
+                setTimeout(() => { toast.add('hidden'); }, 300);
             }
         }
 
-        // FUNGSI TOGGLE LIHAT/SEMBUNYIKAN PASSWORD (ICON MATA)
         function toggleVisibilitasSandi(idInput, elemenTombol) {
             const input = document.getElementById(idInput);
             if (!input) return;
-            
             if (input.type === "password") {
                 input.type = "text";
                 elemenTombol.innerHTML = `<i data-lucide="eye-off" class="w-4 h-4"></i>`;
@@ -809,7 +872,6 @@
             lucide.createIcons();
         }
 
-        // VALIDASI KESESUAIAN SANDI REAL-TIME DI BAWAH KOLOM
         function validasiKesesuaianSandi() {
             const pwBaru = document.getElementById('modalPwBaru').value;
             const pwKonf = document.getElementById('modalPwKonfirmasi').value;
@@ -818,7 +880,6 @@
             const btnSubmit = document.getElementById('btnSubmitGantiPw');
 
             let apakahValid = true;
-
             if (pwBaru.length > 0 && pwBaru.length < 4) {
                 msgSandiLemah.classList.remove('hidden');
                 apakahValid = false;
@@ -839,7 +900,6 @@
             lucide.createIcons();
         }
 
-        // KONTROL MODAL TAMPILAN
         function bukaModalAwal() {
             document.getElementById('modalAwal').classList.remove('hidden');
             kunciScrollLatar(true);
@@ -849,16 +909,20 @@
             kunciScrollLatar(false);
         }
         function bukaModalPengaturan() {
-            if(!KELAS_AKTIF || !MAPEL_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Pilih Kelas dan Mapel terlebih dahulu!"); return; }
+            if(!KELAS_AKTIF || !MAPEL_AKTIF) { 
+                tampilkanModalGagalMasuk("Akses Ditolak", "Pilih Kelas dan Mapel terlebih dahulu!"); 
+                resetNavActiveState();
+                return; 
+            }
             document.getElementById('modalPengaturan').classList.remove('hidden');
             kunciScrollLatar(true);
         }
         function tutupModalPengaturan() {
             document.getElementById('modalPengaturan').classList.add('hidden');
             kunciScrollLatar(false);
+            resetNavActiveState();
         }
 
-        // MODAL GAGAL MASUK KUSTOM
         function tampilkanModalGagalMasuk(judul, pesan) {
             document.getElementById('judulModalGagal').innerText = judul;
             document.getElementById('pesanModalGagal').innerText = pesan;
@@ -869,9 +933,9 @@
         function tutupModalGagalMasuk() {
             document.getElementById('modalGagalMasuk').classList.add('hidden');
             kunciScrollLatar(false);
+            resetNavActiveState();
         }
 
-        // MODAL GANTI PASSWORD
         function bukaModalGantiPassword() {
             if (!GURU_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); return; }
             document.getElementById('modalPwGuruNama').value = GURU_AKTIF;
@@ -886,9 +950,9 @@
         function tutupModalGantiPassword() {
             document.getElementById('modalGantiPassword').classList.add('hidden');
             kunciScrollLatar(false);
+            resetNavActiveState();
         }
 
-        // KONTROL MODAL KELUAR CUSTOM
         function tampilkanModalKeluar() {
             document.getElementById('modalKonfirmasiKeluar').classList.remove('hidden');
             kunciScrollLatar(true);
@@ -897,14 +961,11 @@
         function tutupModalKeluar() {
             document.getElementById('modalKonfirmasiKeluar').classList.add('hidden');
             kunciScrollLatar(false);
+            resetNavActiveState();
         }
 
-        // PROSES KELUAR AKUN (LOGOUT)
-        function prosesKeluarAkun() {
-            location.reload();
-        }
+        function prosesKeluarAkun() { location.reload(); }
 
-        // KONTROL MODAL INTERSEPSI KEMBALI
         function bukaModalKonfirmasiKembali() {
             document.getElementById('modalKonfirmasiKembali').classList.remove('hidden');
             kunciScrollLatar(true);
@@ -915,21 +976,18 @@
             kunciScrollLatar(false);
         }
 
-        // AKSI LANJUTKAN PENGISIAN NILAI
         function kembaliKeFullscreenUtama() {
             tutupModalKonfirmasiKembali();
             bukaAplikasiLayarPenuh();
             kunciScrollLatar(false);
         }
 
-        // AKSI KONFIRMASI BENAR-BENAR INGIN KELUAR HALAMAN
         function konfirmasiBenarKeluar() {
             tutupModalKonfirmasiKembali();
             window.history.replaceState(null, null, " ");
             prosesKeluarAkun();
         }
 
-        // INTERSEPSI FORM AUTHENTIKASI UTAMA GURU & SCAN JADWAL
         document.getElementById('formGerbangAwal').addEventListener('submit', function(e) {
             e.preventDefault();
             GURU_AKTIF = document.getElementById('gerbangGuru').value.trim().toUpperCase();
@@ -943,7 +1001,7 @@
             
             const overlay = document.getElementById('loadingOverlay');
             if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="shield" class="w-4 h-4 animate-spin text-white"></i> Memverifikasi Akun & Memindai Jadwal...`;
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="shield" class="w-4 h-4 animate-spin text-white"></i> Memverifikasi Akun...`;
                 overlay.classList.remove('hidden');
             }
             lucide.createIcons();
@@ -961,9 +1019,8 @@
                     }
                     if (hasil.status === "success") {
                         LIST_HAK_MENGAJAR = hasil.hakMengajar;
-                        
                         if (LIST_HAK_MENGAJAR.length === 0) {
-                            tampilkanModalGagalMasuk("Hak Akses Kosong", "Login sukses! Namun Nama Anda tidak terdaftar sebagai pengajar di mapel manapun pada Kelas VII, VIII, atau IX.");
+                            tampilkanModalGagalMasuk("Hak Akses Kosong", "Nama Anda tidak terdaftar sebagai pengajar di mapel manapun.");
                             bukaModalAwal();
                             return;
                         }
@@ -971,7 +1028,7 @@
                         tutupModalAwal();
                         document.getElementById('panelAksesMengajar').classList.remove('hidden');
                         document.getElementById('infoMateriAktif').classList.remove('hidden');
-                        document.getElementById('bottomNavDock').classList.remove('hidden'); // Membuka Bottom Nav Dock saat sukses login
+                        document.getElementById('bottomNavDock').classList.remove('hidden'); 
 
                         const selectJadwal = document.getElementById('pilihJadwalDinamis');
                         selectJadwal.innerHTML = "";
@@ -991,8 +1048,7 @@
                         btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-white"></i> <span>Masuk</span>`;
                         lucide.createIcons();
                     }
-                    console.error(err);
-                    tampilkanModalGagalMasuk("Kesalahan Sistem", "Koneksi gagal atau sistem otentikasi pusat bermasalah.");
+                    tampilkanModalGagalMasuk("Kesalahan Sistem", "Koneksi gagal.");
                 });
         });
 
@@ -1011,13 +1067,12 @@
             muatDataUtama(MAPEL_AKTIF, KELAS_AKTIF);
         }
 
-        // FUNGSI UTAMA MEMUAT DATA DARI SHEET GOOGLE VIA SCRIPT BACKEND
         function muatDataUtama(namaSheet, tingkatKelas) {
             const overlay = document.getElementById('loadingOverlay');
             const btn = document.getElementById('btnSimpanNilai');
             
             if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Memuat Data Kelas ${tingkatKelas} Mapel ${namaSheet}...`;
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Memuat Data...`;
                 overlay.classList.remove('hidden');
             }
             btn.disabled = true;
@@ -1031,9 +1086,7 @@
                     if(overlay) overlay.classList.add('hidden');
                     if (hasil.status === "success") {
                         DATA_CACHED = hasil;
-                        
                         document.getElementById('navDetailText').innerText = `Guru: ${GURU_AKTIF}`;
-
                         document.getElementById('textMapel').innerHTML = "<b>Mata Pelajaran:</b> " + namaSheet;
                         document.getElementById('textGuru').innerHTML = "<b>Nama Guru:</b> " + GURU_AKTIF;
                         document.getElementById('textKkm').innerHTML = "<b>KKM:</b> " + (hasil.pengaturan.kkm || "-");
@@ -1042,7 +1095,6 @@
                         for(let i=1; i<=8; i++) {
                             document.getElementById('modal_kd' + i).value = hasil.pengaturan['kd' + i] || "";
                         }
-
                         renderTabelSiswa();
                     } else {
                         tampilkanModalGagalMasuk("Gagal Memuat Data", hasil.message);
@@ -1051,13 +1103,11 @@
                 })
                 .catch(err => {
                     if(overlay) overlay.classList.add('hidden');
-                    console.error(err);
-                    tampilkanModalGagalMasuk("Kesalahan Koneksi", "Koneksi gagal atau konfigurasi ID Kelas salah.");
+                    tampilkanModalGagalMasuk("Kesalahan Koneksi", "Gagal menghubungkan ke database.");
                     bukaModalAwal();
                 });
         }
 
-        // RENDER DAFTAR TABEL SISWA SECARA DINAMIS
         function renderTabelSiswa() {
             const komponen = document.getElementById('pilihKomponen').value;
             const tbody = document.getElementById('bodyTabelSiswa');
@@ -1074,17 +1124,17 @@
                 let judulMateri = DATA_CACHED.pengaturan['kd' + nomorKD] || "";
                 
                 if (judulMateri.trim() === "") {
-                    infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-red-400"></i><div class="text-red-400"><b>Peringatan:</b> Judul ringkasan materi untuk ${komponen} belum diisi! Silakan isi terlebih dahulu pada menu "Materi KD".</div>`;
+                    infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-red-400"></i><div class="text-red-400"><b>Peringatan:</b> Judul ringkasan materi belum diisi! Silakan isi di menu "Materi KD".</div>`;
                     apakahKDValid = false;
                 } else {
                     infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-400"></i><div><b>Materi Aktif (${komponen}):</b> ${judulMateri}</div>`;
                 }
             } else {
-                infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-400"></i><div><b>Komponen Aktif:</b> Penilaian Tengah/Akhir Semester (${komponen})</div>`;
+                infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-400"></i><div><b>Komponen Aktif:</b> Semester (${komponen})</div>`;
             }
 
             if (!DATA_CACHED.siswa || DATA_CACHED.siswa.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-white/40 font-medium">Tidak ada data siswa ditemukan mulai baris C16.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-white/40 font-medium">Tidak ada data siswa.</td></tr>`;
                 document.getElementById('btnSimpanNilai').disabled = true;
                 lucide.createIcons();
                 return;
@@ -1094,14 +1144,13 @@
                 let nilaiSekarang = siswa[komponen] !== undefined ? siswa[komponen] : "";
                 let tr = document.createElement('tr');
                 tr.className = "hover:bg-white/5 transition-colors divide-x divide-white/5";
-                
-                let atributDisabled = !apakahKDValid ? "disabled title='Isi Judul KD Terlebih Dahulu'" : "";
+                let atributDisabled = !apakahKDValid ? "disabled" : "";
 
                 tr.innerHTML = `
                     <td class="text-center py-3.5 font-bold text-white/30">${index + 1}</td>
                     <td class="py-3.5 px-4 font-semibold">${siswa.nama}</td>
                     <td class="py-3.5 px-3">
-                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center theme-input font-bold px-2 py-1.5 text-sm rounded-xl outline-none input-nilai-siswa disabled:opacity-30 disabled:cursor-not-allowed" 
+                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center theme-input font-bold px-2 py-1.5 text-sm rounded-xl outline-none input-nilai-siswa disabled:opacity-30" 
                                data-baris="${siswa.baris}" min="0" max="100" value="${nilaiSekarang}" ${atributDisabled}>
                     </td>
                 `;
@@ -1113,113 +1162,55 @@
             lucide.createIcons();
         }
 
-        // PROSES SIMPAN PENGATURAN KD DARI MODAL DENGAN OPTIMASI CACHE LOKAL & TOAST
         document.getElementById('formPengaturanKD').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSimpanKD');
-            
             btn.disabled = true;
             btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Menyimpan...`;
             lucide.createIcons();
 
-            const kd1New = document.getElementById('modal_kd1').value;
-            const kd2New = document.getElementById('modal_kd2').value;
-            const kd3New = document.getElementById('modal_kd3').value;
-            const kd4New = document.getElementById('modal_kd4').value;
-            const kd5New = document.getElementById('modal_kd5').value;
-            const kd6New = document.getElementById('modal_kd6').value;
-            const kd7New = document.getElementById('modal_kd7').value;
-            const kd8New = document.getElementById('modal_kd8').value;
-
             const dataKDSimpan = {
-                mapelTarget: MAPEL_AKTIF,
-                kelasTarget: KELAS_AKTIF,
-                tipeAksi: "simpanPengaturan",
-                kd1: kd1New,
-                kd2: kd2New,
-                kd3: kd3New,
-                kd4: kd4New,
-                kd5: kd5New,
-                kd6: kd6New,
-                kd7: kd7New,
-                kd8: kd8New
+                mapelTarget: MAPEL_AKTIF, kelasTarget: KELAS_AKTIF, tipeAksi: "simpanPengaturan"
             };
+            for(let i=1; i<=8; i++) {
+                dataKDSimpan['kd'+i] = document.getElementById('modal_kd'+i).value;
+            }
 
             tutupModalPengaturan();
 
             fetch(WEB_APP_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify(dataKDSimpan)
+                method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify(dataKDSimpan)
             }).then(() => {
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-white"></i> Simpan`;
-                
-                DATA_CACHED.pengaturan.kd1 = kd1New;
-                DATA_CACHED.pengaturan.kd2 = kd2New;
-                DATA_CACHED.pengaturan.kd3 = kd3New;
-                DATA_CACHED.pengaturan.kd4 = kd4New;
-                DATA_CACHED.pengaturan.kd5 = kd5New;
-                DATA_CACHED.pengaturan.kd6 = kd6New;
-                DATA_CACHED.pengaturan.kd7 = kd7New;
-                DATA_CACHED.pengaturan.kd8 = kd8New;
-
+                for(let i=1; i<=8; i++) { DATA_CACHED.pengaturan['kd'+i] = dataKDSimpan['kd'+i]; }
                 renderTabelSiswa();
-
-                showToast(
-                    "Judul Kompetensi Dasar (KD) Sukses Diperbarui!", 
-                    `Sistem Penilaian Utama E-Nilai Siswa Az-Zahro Kelas ${KELAS_AKTIF} - [Mapel: ${MAPEL_AKTIF}]`
-                );
+                showToast("Judul KD Berhasil Diperbarui!", `Data E-Nilai Kelas ${KELAS_AKTIF} updated.`);
             }).catch(err => {
                 tampilkanModalGagalMasuk("Gagal Menyimpan", err.message);
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-white"></i> Simpan`;
             });
         });
 
-        // INTERSEPSI FORM SUBMIT GANTI PASSWORD KE BACKEND
         document.getElementById('formGantiPassword').addEventListener('submit', function(e) {
             e.preventDefault();
             const pwBaru = document.getElementById('modalPwBaru').value;
             const pwKonf = document.getElementById('modalPwKonfirmasi').value;
-
-            if (pwBaru.length < 4 || pwBaru !== pwKonf) {
-                return;
-            }
+            if (pwBaru.length < 4 || pwBaru !== pwKonf) return;
 
             const overlay = document.getElementById('loadingOverlay');
-            if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Memperbarui Kata Sandi Akun...`;
-                overlay.classList.remove('hidden');
-            }
+            if(overlay) overlay.classList.remove('hidden');
             tutupModalGantiPassword();
-            lucide.createIcons();
-
-            const paketGantiPw = {
-                tipeAksi: "gantiPassword",
-                guruNama: GURU_AKTIF,
-                passwordBaru: pwBaru
-            };
 
             fetch(WEB_APP_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify(paketGantiPw)
+                method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify({ tipeAksi: "gantiPassword", guruNama: GURU_AKTIF, passwordBaru: pwBaru })
             }).then(() => {
                 if(overlay) overlay.classList.add('hidden');
-                showToast(
-                    "Password Akun Berhasil Diperbarui!",
-                    "Gunakan password baru Anda untuk melakukan login sistem pada sesi berikutnya."
-                );
-            }).catch(err => {
-                if(overlay) overlay.classList.add('hidden');
-                tampilkanModalGagalMasuk("Gagal Memperbarui", "Terjadi kegagalan koneksi sistem: " + err.message);
+                showToast("Password Berhasil Diperbarui!", "Gunakan sandi baru pada sesi login berikutnya.");
             });
         });
 
-        // PROSES SIMPAN NILAI SISWA KE SHEETS
         document.getElementById('formNilaiSiswa').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSimpanNilai');
@@ -1227,107 +1218,66 @@
             
             if (komponen.startsWith("KD")) {
                 let nomorKD = komponen.replace("KD", "");
-                let judulMateri = DATA_CACHED.pengaturan['kd' + nomorKD] || "";
-                if (judulMateri.trim() === "") {
-                    tampilkanModalGagalMasuk("Penyimpanan Dibatalkan", `Gagal Menyimpan! Judul Materi untuk ${komponen} masih kosong. Anda dilarang menginput nilai sebelum mengisi Judul KD di menu bawah.`);
+                if ((DATA_CACHED.pengaturan['kd' + nomorKD] || "").trim() === "") {
+                    tampilkanModalGagalMasuk("Penyimpanan Dibatalkan", `Judul ringkasan materi ${komponen} wajib diisi terlebih dahulu!`);
                     return;
                 }
             }
 
             const elemenInputs = document.querySelectorAll('.input-nilai-siswa');
-            let dataNilaiArray = [];
-            let adaKolomKosong = false;
+            let dataNilaiArray = []; let adaKolomKosong = false;
 
-            elemenInputs.forEach(input => {
-                if (input.value.trim() === "") {
-                    adaKolomKosong = true;
-                }
-            });
-
+            elemenInputs.forEach(input => { if (input.value.trim() === "") adaKolomKosong = true; });
             if (adaKolomKosong) {
-                showToast(
-                    "Penyimpanan Dibatalkan!",
-                    "Kolom nilai tidak boleh ada yang kosong! Nilai yang belum terisi harus diisi dengan angka nol (0) terlebih dahulu.",
-                    "error"
-                );
+                showToast("Penyimpanan Dibatalkan!", "Nilai tidak boleh kosong. Gunakan angka 0 jika belum terisi.", "error");
                 return;
             }
             
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Menyimpan Nilai...`;
+            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Menyimpan...`;
             lucide.createIcons();
 
             elemenInputs.forEach(input => {
-                dataNilaiArray.push({
-                    baris: input.getAttribute('data-baris'),
-                    nilai: Number(input.value)
-                });
+                dataNilaiArray.push({ baris: input.getAttribute('data-baris'), nilai: Number(input.value) });
             });
 
-            const paketDataNilai = {
-                mapelTarget: MAPEL_AKTIF,
-                kelasTarget: KELAS_AKTIF,
-                tipeAksi: "simpanNilai",
-                komponenPilihan: komponen,
-                dataNilai: dataNilaiArray
-            };
-
             fetch(WEB_APP_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify(paketDataNilai)
+                method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify({ mapelTarget: MAPEL_AKTIF, kelasTarget: KELAS_AKTIF, tipeAksi: "simpanNilai", komponenPilihan: komponen, dataNilai: dataNilaiArray })
             }).then(() => {
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-white"></i> Simpan Nilai`;
-
                 elemenInputs.forEach(input => {
-                    let barisId = input.getAttribute('data-baris');
-                    let targetSiswa = DATA_CACHED.siswa.find(s => s.baris == barisId);
-                    if(targetSiswa) {
-                        targetSiswa[komponen] = Number(input.value);
-                    }
+                    let targetSiswa = DATA_CACHED.siswa.find(s => s.baris == input.getAttribute('data-baris'));
+                    if(targetSiswa) targetSiswa[komponen] = Number(input.value);
                 });
-
-                showToast(
-                    "Data Nilai Berhasil Disimpan!",
-                    `Seluruh Nilai ${komponen} Berhasil Disimpan Ke Database ${MAPEL_AKTIF} Kelas ${KELAS_AKTIF}!`
-                );
+                showToast("Data Nilai Berhasil Disimpan!", `Seluruh Nilai ${komponen} sukses direkam.`);
             }).catch(err => {
-                tampilkanModalGagalMasuk("Masalah Jaringan", "Terjadi masalah jaringan: " + err.message);
+                tampilkanModalGagalMasuk("Masalah Jaringan", err.message);
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-white"></i> Simpan Nilai`;
             });
         });
 
-        // DETEKSI GESTURE TOMBOL KEMBALI MOBILE
         window.addEventListener('popstate', function(event) {
-            const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
-            if (modalAwalHidden) {
+            if (document.getElementById('modalAwal').classList.contains('hidden')) {
                 window.history.pushState("fullscreen-mode", null, "#fullscreen");
                 bukaModalKonfirmasiKembali();
             }
         });
 
-        // DETEKSI LOG Keluar NATIVE FULLSCREEN API (ESC / SWIPE GESTURE)
-        const eventLayarPenuh = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
+        const eventLayarPenuh = ['fullscreenchange', 'webkitfullscreenchange'];
         eventLayarPenuh.forEach(eventName => {
             document.addEventListener(eventName, () => {
-                const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-                const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
-                const modalKeluarHidden = document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden');
-                
-                if (!isFullscreen && modalAwalHidden && modalKeluarHidden) {
+                const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
+                if (!isFullscreen && document.getElementById('modalAwal').classList.contains('hidden') && document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden')) {
                     bukaModalKonfirmasiKembali();
                 }
             });
         });
 
-        // Saat halaman selesai dimuat, ambil tema terakhir yang disimpan user
         window.addEventListener('DOMContentLoaded', () => {
             const temaTerakhir = localStorage.getItem('smartgrader_theme') || 'emerald';
             pilihSistemTema(temaTerakhir);
-            
             bukaModalAwal();
             lucide.createIcons();
         });
