@@ -1,15 +1,15 @@
 :root {
-    --body-bg: linear-gradient(135deg, #09331f, #146c43);
-    --body-solid-bg: #09331f; 
-    --glow-1: #198754;
-    --glow-2: #D4AF37;
-    --btn-primary-bg: linear-gradient(90deg, #146c43, #0F5132);
-    --btn-primary-hover: linear-gradient(90deg, #198754, #146c43);
-    --btn-shadow: rgba(20, 108, 67, 0.4);
-    --accent-icon: #D4AF37;
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.18);
-    --scrollbar-thumb: rgba(255, 255, 255, 0.25);
+    --body-bg: linear-gradient(135deg, #061f14, #0b3a24, #05140e);
+    --body-solid-bg: #061f14; 
+    --glow-1: #10b981;
+    --glow-2: #f59e0b;
+    --btn-primary-bg: linear-gradient(90deg, #059669, #10b981);
+    --btn-primary-hover: linear-gradient(90deg, #10b981, #34d399);
+    --btn-shadow: rgba(16, 185, 129, 0.3);
+    --accent-icon: #f59e0b;
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --scrollbar-thumb: rgba(16, 185, 129, 0.25);
     --text-main: #ffffff;
     --text-muted: #d1e7dd;
     --card-text: #ffffff;
@@ -18,11 +18,11 @@
     --input-border: rgba(255, 255, 255, 0.2);
     --input-focus-bg: rgba(255, 255, 255, 0.2);
 
-    --nav-dock-bg: rgba(15, 81, 50, 0.85); 
+    --nav-dock-bg: rgba(6, 31, 20, 0.93); 
     --nav-dock-border: rgba(255, 255, 255, 0.2);
     --icon-circle-pasif: rgba(255, 255, 255, 0.1);
     --icon-circle-aktif: #ffffff;
-    --icon-text-aktif: #0F5132;
+    --icon-text-aktif: #0b3a24;
 }
 
 html, body {
@@ -59,7 +59,7 @@ body::before {
     border: 1px solid var(--glass-border);
     color: var(--card-text);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+    transition: background 0.5s ease, border 0.5s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .glass-card-dark {
@@ -131,6 +131,7 @@ body::before {
     align-items: center;
     justify-content: space-around;
     padding: 0 1.5rem;
+    transition: background 0.5s ease, border 0.5s ease;
 }
 
 .nav-item {
@@ -166,14 +167,13 @@ body::before {
     transition: transform 0.3s ease, color 0.4s ease;
 }
 
-/* Bagian Teks Navigasi Bawah */
 .nav-text {
     position: absolute;
-    bottom: -6px; /* DIUBAH: Menaikkan teks lebih dekat ke area tengah navbar saat pasif */
+    bottom: -6px; 
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
-    color: #ffffff;
+    color: inherit;
     opacity: 0;
     transform: translateY(5px);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -181,16 +181,14 @@ body::before {
     z-index: 1;
 }
 
-/* Mengangkat seluruh item menu ke atas saat aktif */
 .nav-item.active {
     transform: translateY(-30px); 
 }
 
-/* Mengubah tampilan lingkaran putih ikon saat aktif */
 .nav-item.active .icon-circle {
     background: var(--icon-circle-aktif);
     color: var(--icon-text-aktif);
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3), 0 0 0 4px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15), 0 0 0 4px rgba(255, 255, 255, 0.05);
     transform: scale(1.08);
 }
 
@@ -198,8 +196,7 @@ body::before {
     transform: scale(1.05);
 }
 
-/* Menampilkan teks dengan space renggang yang ideal saat aktif */
 .nav-item.active .nav-text {
     opacity: 1;
-    transform: translateY(4px); /* DIUBAH: Dikurangi jadi 4px agar teks ikut naik dan tidak terlalu ke bawah */
+    transform: translateY(4px); 
 }
