@@ -169,7 +169,7 @@ body::before {
 /* Bagian Teks Navigasi Bawah */
 .nav-text {
     position: absolute;
-    bottom: -15px; /* Jarak awal teks yang aman saat menu pasif */
+    bottom: -10px; /* Jarak awal teks yang aman saat menu pasif */
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -201,5 +201,5 @@ body::before {
 /* Menampilkan teks dengan space renggang yang ideal saat aktif */
 .nav-item.active .nav-text {
     opacity: 1;
-    transform: translateY(12px); /* Mendorong teks turun 12px ke bawah agar ada jarak renggang dari ikon putih */
+    transform: translateY(8px); /* Mendorong teks turun 12px ke bawah agar ada jarak renggang dari ikon putih */
 }
