@@ -169,7 +169,7 @@ body::before {
 /*Bottom icon Navigasi*/
 .nav-text {
     position: absolute;
-    bottom: -48px;
+    bottom: -80px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
