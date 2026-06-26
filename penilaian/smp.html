@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth overscroll-none">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0F5132">
+    <meta id="metaThemeColor" name="theme-color" content="#0F5132">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Sistem Input Nilai Wali Kelas / Guru - Az-Zahro</title>
     <script src="security-lock.js"></script>
     
@@ -41,50 +41,170 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
+        /* CSS Variabel untuk Manajemen Tema Dinamis */
+        :root {
+            --body-bg: linear-gradient(135deg, #09331f, #146c43);
+            --body-solid-bg: #09331f; /* Variabel Baru: Menjaga konsistensi warna flat saat overscroll */
+            --glow-1: #198754;
+            --glow-2: #D4AF37;
+            --btn-primary-bg: linear-gradient(90deg, #146c43, #0F5132);
+            --btn-primary-hover: linear-gradient(90deg, #198754, #146c43);
+            --btn-shadow: rgba(20, 108, 67, 0.4);
+            --accent-icon: #D4AF37;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --scrollbar-thumb: rgba(255, 255, 255, 0.25);
+            --text-main: #ffffff;
+            --text-muted: #d1e7dd;
+            --card-text: #ffffff;
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --input-text: #ffffff;
+            --input-border: rgba(255, 255, 255, 0.2);
+            --input-focus-bg: rgba(255, 255, 255, 0.2);
+        }
+
+        html, body {
+            overscroll-behavior-y: none;
+            overscroll-behavior-x: none;
+            background-color: var(--body-solid-bg); /* Mencegah warna hitam muncul saat ditarik/scroll */
+        }
+
+        body { 
+            font-family: 'Inter', system-ui, sans-serif; 
+            color: var(--text-main);
+            transition: background-color 0.5s ease, color 0.3s ease;
+            position: relative;
+            min-h: 100vh;
+        }
+
+        /* Menggunakan Lapisan Pseudo untuk gradasi agar tidak rusak/hitam saat di-scroll */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--body-bg);
+            z-index: -2;
+            pointer-events: none;
+            transition: background 0.5s ease;
+        }
+        
         .font-serif-custom { font-family: 'Playfair Display', Georgia, serif; }
         .table-input { width: 80px; text-align: center; }
-        /* Kunci scroll latar belakang */
         .overflow-hidden-modal { overflow: hidden !important; height: 100vh !important; }
+
+        /* Komponen Efek Kaca Modern (Glassmorphism) */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-blur: 16px;
+            -webkit-backdrop-blur: 16px;
+            border: 1px solid var(--glass-border);
+            color: var(--card-text);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card-dark {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Desain Custom Input & Tombol Berbasis Variabel */
+        .theme-input {
+            background: var(--input-bg);
+            color: var(--input-text);
+            border: 1px solid var(--input-border);
+            transition: all 0.3s ease;
+        }
+        .theme-input:focus {
+            background: var(--input-focus-bg);
+            border-color: var(--glow-1);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+        }
+        .theme-input option {
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .theme-btn-primary {
+            background: var(--btn-primary-bg);
+            box-shadow: 0 4px 14px var(--btn-shadow);
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+        .theme-btn-primary:hover:not(:disabled) {
+            background: var(--btn-primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px var(--btn-shadow);
+        }
+        .theme-btn-primary:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .theme-icon-active {
+            color: var(--accent-icon) !important;
+        }
+
+        /* Dekorasi Efek Cahaya Latar Belakang Digital */
+        .glow-sphere-1 {
+            position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--glow-1) 0%, transparent 70%);
+            opacity: 0.25; z-index: -1; pointer-events: none; transition: background 0.5s ease;
+        }
+        .glow-sphere-2 {
+            position: fixed; bottom: -10%; right: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--glow-2) 0%, transparent 70%);
+            opacity: 0.2; z-index: -1; pointer-events: none; transition: background 0.5s ease;
+        }
+
+        /* Kustomisasi Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 99px; }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col justify-between text-gray-800">
+<body class="min-h-screen flex flex-col justify-between">
+
+    <div class="glow-sphere-1"></div>
+    <div class="glow-sphere-2"></div>
 
     <div>
         <div id="customToast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 max-w-md w-full hidden">
-            <div id="toastBorder" class="bg-white border-l-4 border-emerald-deep rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-emerald-soft/30 border border-gray-100">
-                <div id="toastIconBg" class="p-2 bg-emerald-soft text-emerald-deep rounded-xl border border-emerald-light">
-                    <i id="toastIcon" data-lucide="check-circle-2" class="w-5 h-5 text-emerald-medium"></i>
+            <div id="toastBorder" class="glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-emerald-500">
+                <div id="toastIconBg" class="p-2 bg-white/10 rounded-xl border border-white/10">
+                    <i id="toastIcon" data-lucide="check-circle-2" class="w-5 h-5 text-white"></i>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h4 id="toastTitle" class="text-sm font-bold text-gray-900 font-serif-custom">Notifikasi</h4>
-                    <p id="toastMessage" class="text-xs text-gray-600 mt-0.5 leading-relaxed"></p>
+                    <h4 id="toastTitle" class="text-sm font-bold text-white font-serif-custom">Notifikasi</h4>
+                    <p id="toastMessage" class="text-xs text-white/80 mt-0.5 leading-relaxed"></p>
                 </div>
-                <button onclick="hideToast()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <button onclick="hideToast()" class="text-white/60 hover:text-white transition-colors">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
 
-        <div id="loadingOverlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm hidden flex flex-col justify-center items-center z-50">
-            <div class="text-center p-6 max-w-sm">
-                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-deep border-t-transparent mb-4"></div>
-                <div id="loadingText" class="font-bold text-emerald-deep flex items-center justify-center gap-2 text-sm"></div>
+        <div id="loadingOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex flex-col justify-center items-center z-50">
+            <div class="glass-panel text-center p-6 max-w-sm rounded-3xl">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white/30 border-t-white mb-4"></div>
+                <div id="loadingText" class="font-bold text-white flex items-center justify-center gap-2 text-sm"></div>
             </div>
         </div>
 
-        <nav class="sticky top-0 z-40 bg-emerald-deep/95 backdrop-blur-md shadow-lg border-b border-emerald-medium/50 text-white">
+        <nav class="sticky top-0 z-40 glass-panel border-t-0 border-x-0 rounded-b-3xl shadow-lg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="p-2 bg-emerald-medium rounded-xl border border-emerald-light/20 flex-shrink-0">
-                        <i data-lucide="trending-up" class="w-5 h-5 sm:w-6 h-6 text-gold-accent"></i>
+                    <div class="p-2 bg-white/10 rounded-xl border border-white/10 flex-shrink-0">
+                        <i data-lucide="trending-up" class="w-5 h-5 sm:w-6 h-6 theme-icon-active"></i>
                     </div>
                     <div class="flex flex-col min-w-0">
-                        <h1 id="navJudulUtama" class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate">
+                        <h1 id="navJudulUtama" class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate text-white">
                             SmartGrader Az-Zahro
                         </h1>
-                        <div id="subInfoNav" class="text-[11px] sm:text-xs text-emerald-light/90 font-medium tracking-wide mt-0.5 truncate flex items-center gap-1.5">
-                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-gold-accent animate-pulse"></span>
+                        <div id="subInfoNav" class="text-[11px] sm:text-xs text-white/70 font-medium tracking-wide mt-0.5 truncate flex items-center gap-1.5">
+                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                             <span id="navDetailText">Silahkan login akun guru terlebih dahulu...</span>
                         </div>
                     </div>
@@ -92,18 +212,34 @@
                 
                 <div class="flex items-center gap-2 flex-shrink-0 relative">
                     <div class="relative inline-block text-left">
-                        <button type="button" onclick="toggleDropdownAkun()" id="btnMenuAkun" class="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-medium hover:bg-emerald-deep text-white font-semibold text-xs rounded-xl border border-emerald-light/20 transition-all shadow-sm active:scale-95">
-                            <i data-lucide="user" class="w-3.5 h-3.5 text-gold-accent"></i> <span>Akun</span> <i data-lucide="chevron-down" class="w-3 h-3 opacity-70"></i>
+                        <button type="button" onclick="toggleDropdownAkun()" id="btnMenuAkun" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl border border-white/10 transition-all shadow-sm active:scale-95">
+                            <i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> <span>Akun</span> <i data-lucide="chevron-down" class="w-3 h-3 opacity-70"></i>
                         </button>
                         
-                        <div id="dropdownAkunMenu" class="origin-top-right absolute right-0 mt-2 w-44 rounded-2xl shadow-xl bg-white ring-1 ring-black/5 hidden border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                            <div class="py-1">
-                                <button type="button" onclick="bukaModalGantiPassword()" class="w-full text-left px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors">
-                                    <i data-lucide="key-round" class="w-3.5 h-3.5 text-emerald-medium"></i> Ganti Password
+                        <div id="dropdownAkunMenu" class="origin-top-right absolute right-0 mt-2 w-52 rounded-2xl shadow-xl bg-gray-900 border border-white/10 hidden overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                            <div class="py-1 text-white">
+                                <button type="button" onclick="bukaModalGantiPassword()" class="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-white/10 flex items-center gap-2 transition-colors">
+                                    <i data-lucide="key-round" class="w-3.5 h-3.5 theme-icon-active"></i> Ganti Password
                                 </button>
-                                <hr class="border-gray-100">
-                                <button type="button" onclick="tampilkanModalKeluar()" class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors">
-                                    <i data-lucide="log-out" class="w-3.5 h-3.5 text-red-500"></i> Keluar
+                                
+                                <hr class="border-white/10">
+                                
+                                <div class="px-4 py-2">
+                                    <span class="block text-[10px] font-bold uppercase tracking-wider text-white/50 mb-1.5 flex items-center gap-1">
+                                        <i data-lucide="palette" class="w-3 h-3"></i> Pilih Tema Sistem
+                                    </span>
+                                    <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+                                        <button onclick="pilihSistemTema('emerald')" class="px-2 py-1 rounded-lg bg-emerald-800 border border-emerald-600 font-medium text-left text-white hover:brightness-110">Emerald</button>
+                                        <button onclick="pilihSistemTema('biru-ungu')" class="px-2 py-1 rounded-lg bg-indigo-900 border border-indigo-600 font-medium text-left text-white hover:brightness-110">Blue-Violet</button>
+                                        <button onclick="pilihSistemTema('electric-blue')" class="px-2 py-1 rounded-lg bg-blue-500 border border-blue-400 font-medium text-left text-gray-900 hover:brightness-110">Electric</button>
+                                        <button onclick="pilihSistemTema('sunset-orange')" class="px-2 py-1 rounded-lg bg-amber-950 border border-orange-700 font-medium text-left text-white hover:brightness-110">Sunset</button>
+                                    </div>
+                                </div>
+
+                                <hr class="border-white/10">
+
+                                <button type="button" onclick="tampilkanModalKeluar()" class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors">
+                                    <i data-lucide="log-out" class="w-3.5 h-3.5 text-red-400"></i> Keluar
                                 </button>
                             </div>
                         </div>
@@ -114,31 +250,31 @@
 
         <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             
-            <div id="panelAksesMengajar" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 hidden mb-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-6">
+            <div id="panelAksesMengajar" class="glass-panel rounded-3xl p-6 md:p-8 shadow-sm hidden mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4 mb-6">
                     <div class="flex items-center gap-2.5">
-                        <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-deep"></i>
-                        <h5 class="text-lg font-bold text-gray-900 font-serif-custom">Panel Kontrol Penilaian</h5>
+                        <i data-lucide="sliders-horizontal" class="w-5 h-5 text-white"></i>
+                        <h5 class="text-lg font-bold font-serif-custom">Panel Kontrol Penilaian</h5>
                     </div>
                     <div class="flex gap-2">
-                        <span id="badgeKelas" class="bg-emerald-soft text-emerald-deep px-3 py-1 rounded-lg text-xs font-bold border border-emerald-light/50">-</span>
-                        <span id="badgeMapel" class="bg-gold-light text-gold-muted px-3 py-1 rounded-lg text-xs font-bold border border-gold-accent/20">-</span>
+                        <span id="badgeKelas" class="bg-white/10 px-3 py-1 rounded-lg text-xs font-bold border border-white/10">-</span>
+                        <span id="badgeMapel" class="bg-white/10 px-3 py-1 rounded-lg text-xs font-bold border border-white/10 theme-icon-active">-</span>
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-                            <i data-lucide="calendar" class="w-4 h-4 text-emerald-medium"></i> Pilih Kelas & Mapel Anda
+                        <label class="block text-sm font-semibold text-white/90 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-4 h-4 theme-icon-active"></i> Pilih Kelas & Mapel Anda
                         </label>
-                        <select id="pilihJadwalDinamis" onchange="gantiJadwalAktif()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                        <select id="pilihJadwalDinamis" onchange="gantiJadwalAktif()" class="w-full theme-input rounded-xl px-4 py-3 font-semibold focus:bg-gray-900/40 outline-none text-sm">
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-                            <i data-lucide="award" class="w-4 h-4 text-emerald-medium"></i> Input Komponen Nilai
+                        <label class="block text-sm font-semibold text-white/90 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="award" class="w-4 h-4 theme-icon-active"></i> Input Komponen Nilai
                         </label>
-                        <select id="pilihKomponen" onchange="renderTabelSiswa()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                        <select id="pilihKomponen" onchange="renderTabelSiswa()" class="w-full theme-input rounded-xl px-4 py-3 font-semibold focus:bg-gray-900/40 outline-none text-sm">
                             <option value="KD1" selected>KD 1</option>
                             <option value="KD2">KD 2</option>
                             <option value="KD3">KD 3</option>
@@ -152,49 +288,49 @@
                         </select>
                     </div>
                     <div>
-                        <button type="button" onclick="bukaModalPengaturan()" class="w-full inline-flex items-center justify-center gap-2 h-[46px] bg-emerald-medium hover:bg-emerald-deep text-white font-bold text-sm rounded-xl border border-emerald-light/20 transition-all shadow-md active:scale-95">
-                            <i data-lucide="settings" class="w-4 h-4 text-gold-accent"></i> <span>Materi KD</span>
+                        <button type="button" onclick="bukaModalPengaturan()" class="w-full inline-flex items-center justify-center gap-2 h-[46px] theme-btn-primary font-bold text-sm rounded-xl border border-white/10 shadow-md">
+                            <i data-lucide="settings" class="w-4 h-4 theme-icon-active"></i> <span>Materi KD</span>
                         </button>
                     </div>
                     <div>
-                        <a href="smpleger.html" class="w-full inline-flex items-center justify-center gap-2 h-[46px] bg-gold-accent hover:bg-gold-muted text-emerald-deep font-bold text-sm rounded-xl border border-gold-muted/20 transition-all shadow-md active:scale-95 group" title="Lihat rekapitulasi seluruh nilai siswa">
-                            <i data-lucide="book-open" class="w-4 h-4 text-emerald-deep transition-transform group-hover:scale-110"></i> <span>Buka Leger</span>
+                        <a href="smpleger.html" class="w-full inline-flex items-center justify-center gap-2 h-[46px] bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl border border-white/10 transition-all shadow-md active:scale-95 group" title="Lihat rekapitulasi seluruh nilai siswa">
+                            <i data-lucide="book-open" class="w-4 h-4 text-white transition-transform group-hover:scale-110"></i> <span>Buka Leger</span>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <div id="infoMateriAktif" class="p-4 rounded-2xl shadow-sm border mt-5 transition-all duration-300 text-sm font-medium flex items-center gap-3 bg-blue-50 text-blue-700 border-blue-100 hidden">
-                <i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i>
+            <div id="infoMateriAktif" class="p-4 rounded-2xl shadow-sm border mt-5 transition-all duration-300 text-sm font-medium flex items-center gap-3 bg-white/5 text-white border-white/10 hidden">
+                <i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-400"></i>
                 <div id="textMateriAktif"><b>Materi Aktif:</b> Memuat informasi...</div>
             </div>
 
-            <div id="containerTabel" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mt-6 transition-all duration-500 mb-12">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-5 mb-6">
-                    <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-gray-900 flex items-center gap-2">
-                        <i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Daftar Siswa
+            <div id="containerTabel" class="glass-panel rounded-3xl p-6 md:p-8 shadow-sm mt-6 transition-all duration-500 mb-12">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5 mb-6">
+                    <h4 id="judulTabel" class="text-xl font-serif-custom font-bold text-white flex items-center gap-2">
+                        <i data-lucide="table-2" class="w-5 h-5 theme-icon-active"></i> Daftar Siswa
                     </h4>
                 </div>
 
                 <form id="formNilaiSiswa">
-                    <div class="overflow-x-auto rounded-2xl border border-gray-100">
+                    <div class="overflow-x-auto rounded-2xl border border-white/10 glass-card-dark">
                         <table class="w-full text-left border-collapse">
-                            <thead class="bg-emerald-deep text-white text-xs font-semibold uppercase tracking-wider text-center">
+                            <thead class="bg-black/40 text-white text-xs font-semibold uppercase tracking-wider text-center border-b border-white/10">
                                 <tr>
                                     <th class="py-4 px-3 w-[12%]">No</th>
                                     <th class="py-4 px-4 text-left">Nama Lengkap Siswa</th>
                                     <th class="py-4 px-3 w-[25%]" id="thKomponen">Nilai</th>
                                 </tr>
                             </thead>
-                            <tbody id="bodyTabelSiswa" class="divide-y divide-gray-100 text-sm font-medium text-gray-700">
-                                <tr><td colspan="3" class="text-center py-8 text-gray-400 font-medium">Silahkan melakukan login akses guru terlebih dahulu.</td></tr>
+                            <tbody id="bodyTabelSiswa" class="divide-y divide-white/5 text-sm font-medium text-white/90">
+                                <tr><td colspan="3" class="text-center py-8 text-white/40 font-medium">Silahkan melakukan login akses guru terlebih dahulu.</td></tr>
                             </tbody>
                         </table>
                     </div>
                     
                     <div class="mt-6 flex justify-end">
-                        <button type="submit" id="btnSimpanNilai" disabled class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]">
-                            <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai
+                        <button type="submit" id="btnSimpanNilai" disabled class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 theme-btn-primary font-bold text-sm rounded-xl disabled:opacity-40 disabled:pointer-events-none">
+                            <i data-lucide="save" class="w-4 h-4 theme-icon-active"></i> Simpan Nilai
                         </button>
                     </div>
                 </form>
@@ -202,20 +338,20 @@
         </main>
     </div>
 
-    <div id="modalAwal" class="fixed inset-0 bg-emerald-deep/40 backdrop-blur-md flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200">
+    <div id="modalAwal" class="fixed inset-0 bg-black/60 backdrop-blur-lg flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
             <div class="text-center mb-5">
-                <div class="p-3 bg-emerald-soft rounded-2xl inline-block border border-emerald-light mb-2">
-                    <i data-lucide="shield-check" class="w-8 h-8 text-emerald-deep"></i>
+                <div class="p-3 bg-white/10 rounded-2xl inline-block border border-white/10 mb-2">
+                    <i data-lucide="shield-check" class="w-8 h-8 theme-icon-active"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 font-serif-custom">SmartGrader SMPI Az-Zahro</h3>
-                <p class="text-xs text-gray-500 mt-1">Autentikasi & Pemindaian Data Guru Otomatis</p>
+                <h3 class="text-xl font-bold text-white font-serif-custom">SmartGrader SMPI Az-Zahro</h3>
+                <p class="text-xs text-white/60 mt-1">Autentikasi & Pemindaian Data Guru Otomatis</p>
             </div>
 
             <form id="formGerbangAwal" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-emerald-medium"></i> Nama Lengkap Guru
+                    <label class="block text-xs font-bold text-white/70 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                        <i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> Nama Lengkap Guru
                     </label>
                     <div class="relative">
                         <input type="text" id="gerbangGuru" required placeholder=" " onclick="bukaAplikasiLayarPenuh()" 
@@ -223,60 +359,60 @@
                                autocorrect="off" 
                                autocapitalize="characters" 
                                spellcheck="false" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase cursor-pointer">
+                               class="w-full theme-input rounded-xl px-4 py-3 font-semibold focus:bg-gray-900/40 outline-none text-sm uppercase cursor-pointer">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                        <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-medium"></i> Password
+                    <label class="block text-xs font-bold text-white/70 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 theme-icon-active"></i> Password
                     </label>
                     <div class="relative">
-                        <input type="password" id="gerbangPassword" required placeholder=" " class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-11 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
-                        <button type="button" onclick="toggleVisibilitasSandi('gerbangPassword', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 outline-none transition-colors">
+                        <input type="password" id="gerbangPassword" required placeholder=" " class="w-full theme-input rounded-xl pl-4 pr-11 py-3 font-semibold focus:bg-gray-900/40 outline-none text-sm">
+                        <button type="button" onclick="toggleVisibilitasSandi('gerbangPassword', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors">
                             <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
 
-                <button type="submit" id="btnMasukGerbang" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md mt-2 disabled:opacity-75 disabled:pointer-events-none">
-                    <i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> <span>Masuk</span>
+                <button type="submit" id="btnMasukGerbang" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 theme-btn-primary font-bold text-sm rounded-xl mt-2 disabled:opacity-75 disabled:pointer-events-none">
+                    <i data-lucide="log-in" class="w-4 h-4 theme-icon-active"></i> <span>Masuk</span>
                 </button>
             </form>
         </div>
     </div>
 
-    <div id="modalGagalMasuk" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
-            <div class="p-3 bg-red-50 text-red-600 rounded-2xl inline-block border border-red-100 mb-3">
-                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>
+    <div id="modalGagalMasuk" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
+            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-400"></i>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 font-serif-custom" id="judulModalGagal">Gagal Masuk</h3>
-            <p class="text-xs text-gray-500 mt-2 leading-relaxed" id="pesanModalGagal"></p>
+            <h3 class="text-lg font-bold text-white font-serif-custom" id="judulModalGagal">Gagal Masuk</h3>
+            <p class="text-xs text-white/70 mt-2 leading-relaxed" id="pesanModalGagal"></p>
             <div class="mt-5">
-                <button type="button" onclick="tutupModalGagalMasuk()" class="w-full px-4 py-2.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none">
+                <button type="button" onclick="tutupModalGagalMasuk()" class="w-full px-4 py-2.5 theme-btn-primary font-bold text-xs rounded-xl outline-none shadow-md">
                     Tutup
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="modalPengaturan" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh]">
+    <div id="modalPengaturan" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-lg w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh]">
             
-            <button type="button" onclick="tutupModalPengaturan()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-100 rounded-xl transition-all outline-none">
+            <button type="button" onclick="tutupModalPengaturan()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
 
-            <div class="flex items-center gap-2 border-b border-gray-100 pb-3 mb-4 flex-shrink-0">
-                <i data-lucide="settings-2" class="w-5 h-5 text-emerald-deep"></i>
-                <h3 class="text-lg font-bold text-gray-900 font-serif-custom">Pengaturan Detail & Materi KD</h3>
+            <div class="flex items-center gap-2 border-b border-white/10 pb-3 mb-4 flex-shrink-0">
+                <i data-lucide="settings-2" class="w-5 h-5 text-white"></i>
+                <h3 class="text-lg font-bold font-serif-custom text-white">Pengaturan Detail & Materi KD</h3>
             </div>
 
             <div class="overflow-y-auto pr-1 space-y-4 flex-1">
                 <div>
-                    <span class="block text-xs font-bold text-emerald-deep tracking-wider uppercase mb-2">📄 Data Detail</span>
-                    <div class="bg-gray-50 border-l-4 border-emerald-deep p-3 text-xs space-y-1.5 rounded-r-xl">
+                    <span class="block text-xs font-bold text-white/50 tracking-wider uppercase mb-2">📄 Data Detail</span>
+                    <div class="bg-black/30 border-l-4 border-l-indigo-500 p-3 text-xs space-y-1.5 rounded-r-xl text-white/80">
                         <div id="textMapel"><b>Mata Pelajaran:</b> -</div>
                         <div id="textGuru"><b>Nama Guru:</b> -</div>
                         <div id="textKkm"><b>KKM:</b> -</div>
@@ -285,95 +421,95 @@
                 </div>
 
                 <form id="formPengaturanKD" class="space-y-3">
-                    <span class="block text-xs font-bold text-emerald-medium tracking-wider uppercase mb-1">✏️ Kompetensi Dasar (KD)</span>
+                    <span class="block text-xs font-bold text-white/60 tracking-wider uppercase mb-1">✏️ Kompetensi Dasar (KD)</span>
                     <div class="grid grid-cols-1 gap-2.5">
-                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 1:</label><input type="text" id="modal_kd1" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
-                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 2:</label><input type="text" id="modal_kd2" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
-                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 3:</label><input type="text" id="modal_kd3" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
-                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 4:</label><input type="text" id="modal_kd4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
-                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 5:</label><input type="text" id="modal_kd5" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
-                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 6:</label><input type="text" id="modal_kd6" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
-                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 7:</label><input type="text" id="modal_kd7" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
-                        <div><label class="block text-[11px] font-bold text-gray-500 mb-1">KD 8:</label><input type="text" id="modal_kd8" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none transition-all"></div>
+                        <div><label class="block text-[11px] font-bold text-white/40 mb-1">KD 1:</label><input type="text" id="modal_kd1" class="w-full theme-input rounded-xl px-3 py-2 text-xs outline-none"></div>
+                        <div><label class="block text-[11px] font-bold text-white/40 mb-1">KD 2:</label><input type="text" id="modal_kd2" class="w-full theme-input rounded-xl px-3 py-2 text-xs outline-none"></div>
+                        <div><label class="block text-[11px] font-bold text-white/40 mb-1">KD 3:</label><input type="text" id="modal_kd3" class="w-full theme-input rounded-xl px-3 py-2 text-xs outline-none"></div>
+                        <div><label class="block text-[11px] font-bold text-white/40 mb-1">KD 4:</label><input type="text" id="modal_kd4" class="w-full theme-input rounded-xl px-3 py-2 text-xs outline-none"></div>
+                        <div><label class="block text-[11px] font-bold text-white/40 mb-1">KD 5:</label><input type="text" id="modal_kd5" class="w-full theme-input rounded-xl px-3 py-2 text-xs outline-none"></div>
+                        <div><label class="block text-[11px] font-bold text-white/40 mb-1">KD 6:</label><input type="text" id="modal_kd6" class="w-full theme-input rounded-xl px-3 py-2 text-xs outline-none"></div>
+                        <div><label class="block text-[11px] font-bold text-white/40 mb-1">KD 7:</label><input type="text" id="modal_kd7" class="w-full theme-input rounded-xl px-3 py-2 text-xs outline-none"></div>
+                        <div><label class="block text-[11px] font-bold text-white/40 mb-1">KD 8:</label><input type="text" id="modal_kd8" class="w-full theme-input rounded-xl px-3 py-2 text-xs outline-none"></div>
                     </div>
                 </form>
             </div>
 
-            <div class="border-t border-gray-100 pt-3 mt-4 flex-shrink-0">
-                <button type="submit" form="formPengaturanKD" id="btnSimpanKD" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md">
-                    <i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Simpan
+            <div class="border-t border-white/10 pt-3 mt-4 flex-shrink-0">
+                <button type="submit" form="formPengaturanKD" id="btnSimpanKD" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 theme-btn-primary font-bold text-sm rounded-xl shadow-md">
+                    <i data-lucide="check" class="w-4 h-4 theme-icon-active"></i> Simpan
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="modalGantiPassword" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200">
-            <button type="button" onclick="tutupModalGantiPassword()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-100 rounded-xl transition-all outline-none">
+    <div id="modalGantiPassword" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
+            <button type="button" onclick="tutupModalGantiPassword()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
 
-            <div class="text-center mb-4 border-b border-gray-100 pb-3">
-                <div class="p-2.5 bg-emerald-soft rounded-2xl inline-block border border-emerald-light mb-1.5">
-                    <i data-lucide="lock-keyhole" class="w-6 h-6 text-emerald-deep"></i>
+            <div class="text-center mb-4 border-b border-white/10 pb-3">
+                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5">
+                    <i data-lucide="lock-keyhole" class="w-6 h-6 text-white"></i>
                 </div>
-                <h3 class="text-base font-bold text-gray-900 font-serif-custom">Keamanan & Ganti Password</h3>
+                <h3 class="text-base font-bold text-white font-serif-custom">Keamanan & Ganti Password</h3>
             </div>
 
             <form id="formGantiPassword" class="space-y-3.5">
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 mb-1 flex items-center gap-1">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-gray-400"></i> Nama Lengkap Guru
+                    <label class="block text-xs font-bold text-white/50 mb-1 flex items-center gap-1">
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-white/40"></i> Nama Lengkap Guru
                     </label>
-                    <input type="text" id="modalPwGuruNama" readonly class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3.5 py-2.5 font-bold text-gray-500 cursor-not-allowed text-xs outline-none uppercase">
+                    <input type="text" id="modalPwGuruNama" readonly class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 font-bold text-white/40 cursor-not-allowed text-xs outline-none uppercase">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
-                        <i data-lucide="key" class="w-3.5 h-3.5 text-emerald-medium"></i> Masukkan Password Baru
+                    <label class="block text-xs font-bold text-white/80 mb-1 flex items-center gap-1">
+                        <i data-lucide="key" class="w-3.5 h-3.5 theme-icon-active"></i> Masukkan Password Baru
                     </label>
                     <div class="relative">
-                        <input type="password" id="modalPwBaru" required placeholder="Sandi baru minimal 4 karakter" oninput="validasiKesesuaianSandi()" class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none text-xs transition-all">
-                        <button type="button" onclick="toggleVisibilitasSandi('modalPwBaru', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 outline-none transition-colors">
+                        <input type="password" id="modalPwBaru" required placeholder="Sandi baru minimal 4 karakter" oninput="validasiKesesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs outline-none">
+                        <button type="button" onclick="toggleVisibilitasSandi('modalPwBaru', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors">
                             <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
-                    <p id="msgSandiLemah" class="text-[11px] text-red-600 font-bold mt-1.5 hidden flex items-center gap-1">
+                    <p id="msgSandiLemah" class="text-[11px] text-red-400 font-bold mt-1.5 hidden flex items-center gap-1">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password minimal harus terdiri dari 4 karakter.
                     </p>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
-                        <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-medium"></i> Konfirmasi Password Baru
+                    <label class="block text-xs font-bold text-white/80 mb-1 flex items-center gap-1">
+                        <i data-lucide="check-square" class="w-3.5 h-3.5 theme-icon-active"></i> Konfirmasi Password Baru
                     </label>
                     <div class="relative">
-                        <input type="password" id="modalPwKonfirmasi" required placeholder="Ketik ulang sandi baru" oninput="validasiKesesuaianSandi()" class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep outline-none text-xs transition-all">
-                        <button type="button" onclick="toggleVisibilitasSandi('modalPwKonfirmasi', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 outline-none transition-colors">
+                        <input type="password" id="modalPwKonfirmasi" required placeholder="Ketik ulang sandi baru" oninput="validasiKesesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs outline-none">
+                        <button type="button" onclick="toggleVisibilitasSandi('modalPwKonfirmasi', this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors">
                             <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
                     </div>
-                    <p id="msgErrorPassword" class="text-[11px] text-red-600 font-bold mt-1.5 hidden flex items-center gap-1">
+                    <p id="msgErrorPassword" class="text-[11px] text-red-400 font-bold mt-1.5 hidden flex items-center gap-1">
                         <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password tidak cocok.
                     </p>
                 </div>
 
-                <button type="submit" id="btnSubmitGantiPw" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-xs rounded-xl transition-all duration-300 shadow-md">
-                    <i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Perbarui Kata Sandi
+                <button type="submit" id="btnSubmitGantiPw" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 theme-btn-primary font-bold text-xs rounded-xl shadow-md">
+                    <i data-lucide="save" class="w-4 h-4 theme-icon-active"></i> Perbarui Kata Sandi
                 </button>
             </form>
         </div>
     </div>
 
-    <div id="modalKonfirmasiKeluar" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
-            <div class="p-3 bg-red-50 text-red-600 rounded-2xl inline-block border border-red-100 mb-3">
-                <i data-lucide="log-out" class="w-8 h-8 text-red-600"></i>
+    <div id="modalKonfirmasiKeluar" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
+            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3">
+                <i data-lucide="log-out" class="w-8 h-8 text-red-400"></i>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 font-serif-custom">Konfirmasi Keluar</h3>
-            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Apakah Anda yakin ingin keluar dari sistem SmartGrader Az-Zahro?</p>
+            <h3 class="text-lg font-bold text-white font-serif-custom">Konfirmasi Keluar</h3>
+            <p class="text-xs text-white/70 mt-2 leading-relaxed">Apakah Anda yakin ingin keluar dari sistem SmartGrader Az-Zahro?</p>
             <div class="flex gap-3 mt-5">
-                <button type="button" onclick="tutupModalKeluar()" class="w-1/2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition-all outline-none">
+                <button type="button" onclick="tutupModalKeluar()" class="w-1/2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition-all outline-none">
                     Batal
                 </button>
                 <button type="button" onclick="prosesKeluarAkun()" class="w-1/2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none">
@@ -383,26 +519,26 @@
         </div>
     </div>
 
-    <div id="modalKonfirmasiKembali" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl border border-gray-100 p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
-            <div class="p-3 bg-red-50 text-red-600 rounded-2xl inline-block border border-red-100 mb-3">
-                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>
+    <div id="modalKonfirmasiKembali" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200 text-center">
+            <div class="p-3 bg-red-500/10 text-red-400 rounded-2xl inline-block border border-red-500/20 mb-3">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-400"></i>
             </div>
-            <h3 class="text-lg font-bold text-red-600 font-serif-custom">Peringatan!</h3>
-            <p class="text-xs text-gray-500 mt-2 leading-relaxed">Anda tidak sengaja menekan tombol kembali atau keluar dari mode fokus. Ingin melanjutkan pengisian nilai?</p>
+            <h3 class="text-lg font-bold text-red-400 font-serif-custom">Peringatan!</h3>
+            <p class="text-xs text-white/70 mt-2 leading-relaxed">Anda tidak sengaja menekan tombol kembali atau keluar dari mode fokus. Ingin melanjutkan pengisian nilai?</p>
             <div class="flex flex-col gap-2 mt-5">
                 <button type="button" onclick="kembaliKeFullscreenUtama()" class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none flex items-center justify-center gap-2">
                     <i data-lucide="expand" class="w-4 h-4 text-white"></i> Lanjut Mengisi Nilai
                 </button>
-                <button type="button" onclick="konfirmasiBenarKeluar()" class="w-full px-4 py-2 text-gray-400 hover:text-red-600 font-semibold text-xs rounded-xl transition-all outline-none">
+                <button type="button" onclick="konfirmasiBenarKeluar()" class="w-full px-4 py-2 text-white/40 hover:text-red-400 font-semibold text-xs rounded-xl transition-all outline-none">
                     Tidak, Saya Ingin Keluar
                 </button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-emerald-deep text-gray-200 border-t-2 border-gold-accent/40 mt-12 py-6 px-4">
-        <div class="max-w-7xl mx-auto text-center text-[11px] text-gray-400">
+    <footer class="glass-panel border-b-0 border-x-0 rounded-t-3xl mt-12 py-6 px-4">
+        <div class="max-w-7xl mx-auto text-center text-[11px] text-white/40 leading-relaxed">
             &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
             SMP Islam Az-Zahro • SMK Az-Zahro
         </div>
@@ -410,6 +546,111 @@
 
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
+        
+        // Database Konfigurasi Paket Skema Warna Tema Sistem
+        const DAFTAR_TEMA = {
+            "biru-ungu": {
+                bodyBg: "linear-gradient(135deg, #0b0f19, #1e1b4b, #111827)",
+                bodySolidBg: "#0b0f19",
+                glow1: "#3b82f6",
+                glow2: "#7c3aed",
+                btnPrimaryBg: "linear-gradient(90deg, #4f46e5, #7c3aed)",
+                btnPrimaryHover: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+                btnShadow: "rgba(124, 58, 237, 0.4)",
+                accentIcon: "#818cf8",
+                glassBg: "rgba(255, 255, 255, 0.05)",
+                glassBorder: "rgba(255, 255, 255, 0.12)",
+                scrollbarThumb: "rgba(129, 140, 248, 0.3)",
+                themeColor: "#1e1b4b"
+            },
+            "emerald": {
+                bodyBg: "linear-gradient(135deg, #09331f, #146c43)",
+                bodySolidBg: "#09331f",
+                glow1: "#198754",
+                glow2: "#D4AF37",
+                btnPrimaryBg: "linear-gradient(90deg, #146c43, #0F5132)",
+                btnPrimaryHover: "linear-gradient(90deg, #198754, #146c43)",
+                btnShadow: "rgba(20, 108, 67, 0.4)",
+                accentIcon: "#D4AF37",
+                glassBg: "rgba(255, 255, 255, 0.08)",
+                glassBorder: "rgba(255, 255, 255, 0.18)",
+                scrollbarThumb: "rgba(255, 255, 255, 0.25)",
+                themeColor: "#0F5132"
+            },
+            "electric-blue": {
+                bodyBg: "linear-gradient(135deg, #76c8ff, #d78bff)",
+                bodySolidBg: "#76c8ff",
+                glow1: "#4fa3ff",
+                glow2: "#ff7cd5",
+                btnPrimaryBg: "linear-gradient(90deg, #2f7dff, #cb3dff)",
+                btnPrimaryHover: "linear-gradient(90deg, #1e6bf2, #b82ae6)",
+                btnShadow: "rgba(47, 125, 255, 0.4)",
+                accentIcon: "#ffffff",
+                glassBg: "rgba(255, 255, 255, 0.18)",
+                glassBorder: "rgba(255, 255, 255, 0.3)",
+                scrollbarThumb: "#2f7dff",
+                themeColor: "#2f7dff"
+            },
+            "sunset-orange": {
+                bodyBg: "linear-gradient(135deg, #1a0f05, #3a1c05, #140b00)",
+                bodySolidBg: "#1a0f05",
+                glow1: "#ea580c",
+                glow2: "#eab308",
+                btnPrimaryBg: "linear-gradient(90deg, #ea580c, #ca8a04)",
+                btnPrimaryHover: "linear-gradient(90deg, #f97316, #eab308)",
+                btnShadow: "rgba(234, 88, 12, 0.4)",
+                accentIcon: "#f97316",
+                glassBg: "rgba(255, 255, 255, 0.05)",
+                glassBorder: "rgba(255, 255, 255, 0.12)",
+                scrollbarThumb: "rgba(234, 88, 12, 0.3)",
+                themeColor: "#3a1c05"
+            }
+        };
+
+        // Fungsi Inti untuk Mengubah CSS Variable Sesuai Pilihan Tema
+        function pilihSistemTema(namaTema) {
+            const konfigurasi = DAFTAR_TEMA[namaTema];
+            if (!konfigurasi) return;
+
+            const root = document.documentElement;
+            root.style.setProperty('--body-bg', konfigurasi.bodyBg);
+            root.style.setProperty('--body-solid-bg', konfigurasi.bodySolidBg);
+            root.style.setProperty('--glow-1', konfigurasi.glow1);
+            root.style.setProperty('--glow-2', konfigurasi.glow2);
+            root.style.setProperty('--btn-primary-bg', konfigurasi.btnPrimaryBg);
+            root.style.setProperty('--btn-primary-hover', konfigurasi.btnPrimaryHover);
+            root.style.setProperty('--btn-shadow', konfigurasi.btnShadow);
+            root.style.setProperty('--accent-icon', konfigurasi.accentIcon);
+            root.style.setProperty('--glass-bg', konfigurasi.glassBg);
+            root.style.setProperty('--glass-border', konfigurasi.glassBorder);
+            root.style.setProperty('--scrollbar-thumb', konfigurasi.scrollbarThumb);
+
+            // Kondisional warna teks agar kontras pada tema benderang (electric-blue)
+            if (namaTema === "electric-blue") {
+                root.style.setProperty('--text-main', '#0f172a');
+                root.style.setProperty('--text-muted', '#334155');
+                root.style.setProperty('--card-text', '#1e293b');
+                root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.5)');
+                root.style.setProperty('--input-text', '#0f172a');
+                root.style.setProperty('--input-border', 'rgba(0, 0, 0, 0.15)');
+                root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.8)');
+            } else {
+                root.style.setProperty('--text-main', '#ffffff');
+                root.style.setProperty('--text-muted', '#d1e7dd');
+                root.style.setProperty('--card-text', '#ffffff');
+                root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.1)');
+                root.style.setProperty('--input-text', '#ffffff');
+                root.style.setProperty('--input-border', 'rgba(255, 255, 255, 0.2)');
+                root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.2)');
+            }
+
+            // Update meta theme warna browser HP
+            const metaTag = document.getElementById('metaThemeColor');
+            if (metaTag) metaTag.setAttribute('content', konfigurasi.themeColor);
+
+            // Simpan preferensi tema user di penyimpanan lokal browser
+            localStorage.setItem('smartgrader_theme', namaTema);
+        }
         
         let DATA_CACHED = { pengaturan: {}, siswa: [] };
         let GURU_AKTIF = "";
@@ -438,31 +679,30 @@
 
         // FUNGSI PEMICU LAYAR PENUH NATIVE (HTML5 FULLSCREEN API) + INJEKSI STATUS RIWAYAT
         function bukaAplikasiLayarPenuh() {
-            // Jika modal awal masih terbuka, kunci scroll. Jika sudah login, bebaskan scroll halaman utama.
             const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
             kunciScrollLatar(!modalAwalHidden);
             
             const docElm = document.documentElement;
             if (docElm.requestFullscreen) {
                 docElm.requestFullscreen();
-            } else if (docElm.mozRequestFullScreen) { /* Firefox */
+            } else if (docElm.mozRequestFullScreen) {
                 docElm.mozRequestFullScreen();
-            } else if (docElm.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            } else if (docElm.webkitRequestFullscreen) {
                 docElm.webkitRequestFullscreen();
-            } else if (docElm.msRequestFullscreen) { /* IE/Edge */
+            } else if (docElm.msRequestFullscreen) {
                 docElm.msRequestFullscreen();
             }
 
-            // Kunci Tombol Kembali: Dorong state baru ke riwayat browser jika belum ada
             if (window.history.state !== "fullscreen-mode") {
                 window.history.pushState("fullscreen-mode", null, "#fullscreen");
             }
 
-            // Trik Optimal: Paksa penulisan ulang meta tag theme-color agar diprioritaskan peramban mobile saat layar penuh
             setTimeout(() => {
+                let currentTheme = localStorage.getItem('smartgrader_theme') || 'emerald';
+                let currentConfig = DAFTAR_TEMA[currentTheme];
                 let metaTheme = document.querySelector('meta[name="theme-color"]');
-                if (metaTheme) {
-                    metaTheme.setAttribute('content', '#0F5132');
+                if (metaTheme && currentConfig) {
+                    metaTheme.setAttribute('content', currentConfig.themeColor);
                 }
             }, 300);
         }
@@ -471,22 +711,14 @@
         function showToast(title, message, type = "success") {
             const toast = document.getElementById('customToast');
             const toastBorder = document.getElementById('toastBorder');
-            const toastIconBg = document.getElementById('toastIconBg');
-            const toastIcon = document.getElementById('toastIcon');
 
             document.getElementById('toastTitle').innerText = title;
             document.getElementById('toastMessage').innerText = message;
 
             if (type === "error") {
-                toastBorder.className = "bg-white border-l-4 border-red-600 rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-red-50/30 border border-gray-100";
-                toastIconBg.className = "p-2 bg-red-50 text-red-600 rounded-xl border border-red-100";
-                toastIcon.setAttribute("data-lucide", "alert-triangle");
-                toastIcon.className = "w-5 h-5 text-red-600";
+                toastBorder.className = "glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-red-500 text-white";
             } else {
-                toastBorder.className = "bg-white border-l-4 border-emerald-deep rounded-2xl shadow-xl p-4 flex items-start gap-3 bg-gradient-to-r from-white to-emerald-soft/30 border border-gray-100";
-                toastIconBg.className = "p-2 bg-emerald-soft text-emerald-deep rounded-xl border border-emerald-light";
-                toastIcon.setAttribute("data-lucide", "check-circle-2");
-                toastIcon.className = "w-5 h-5 text-emerald-medium";
+                toastBorder.className = "glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-emerald-500 text-white";
             }
             
             toast.classList.remove('hidden');
@@ -593,7 +825,7 @@
             kunciScrollLatar(false);
         }
 
-        // MODAL GAGAL MASUK KUSTOM TAILWIND
+        // MODAL GAGAL MASUK KUSTOM
         function tampilkanModalGagalMasuk(judul, pesan) {
             document.getElementById('judulModalGagal').innerText = judul;
             document.getElementById('pesanModalGagal').innerText = pesan;
@@ -656,7 +888,6 @@
         function kembaliKeFullscreenUtama() {
             tutupModalKonfirmasiKembali();
             bukaAplikasiLayarPenuh();
-            // Paksa pembukaan kunci scroll agar halaman daftar siswa bisa digeser kembali
             kunciScrollLatar(false);
         }
 
@@ -676,12 +907,12 @@
             const btnMasuk = document.getElementById('btnMasukGerbang');
             if (btnMasuk) {
                 btnMasuk.disabled = true;
-                btnMasuk.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> <span>Memproses...</span>`;
+                btnMasuk.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> <span>Memproses...</span>`;
             }
             
             const overlay = document.getElementById('loadingOverlay');
             if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="shield" class="w-4 h-4 animate-spin text-gold-accent"></i> Memverifikasi Akun & Memindai Jadwal...`;
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="shield" class="w-4 h-4 animate-spin text-white"></i> Memverifikasi Akun & Memindai Jadwal...`;
                 overlay.classList.remove('hidden');
             }
             lucide.createIcons();
@@ -694,7 +925,7 @@
                     if(overlay) overlay.classList.add('hidden');
                     if (btnMasuk) {
                         btnMasuk.disabled = false;
-                        btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> <span>Masuk</span>`;
+                        btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-white"></i> <span>Masuk</span>`;
                         lucide.createIcons();
                     }
                     if (hasil.status === "success") {
@@ -725,7 +956,7 @@
                     if(overlay) overlay.classList.add('hidden');
                     if (btnMasuk) {
                         btnMasuk.disabled = false;
-                        btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-gold-accent"></i> <span>Masuk</span>`;
+                        btnMasuk.innerHTML = `<i data-lucide="log-in" class="w-4 h-4 text-white"></i> <span>Masuk</span>`;
                         lucide.createIcons();
                     }
                     console.error(err);
@@ -754,7 +985,7 @@
             const btn = document.getElementById('btnSimpanNilai');
             
             if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Memuat Data Kelas ${tingkatKelas} Mapel ${namaSheet}...`;
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Memuat Data Kelas ${tingkatKelas} Mapel ${namaSheet}...`;
                 overlay.classList.remove('hidden');
             }
             btn.disabled = true;
@@ -803,7 +1034,7 @@
             
             tbody.innerHTML = "";
             thKomponen.innerText = "Nilai " + komponen;
-            document.getElementById('judulTabel').innerHTML = `<i data-lucide="table-2" class="w-5 h-5 text-emerald-deep"></i> Input Nilai: ${MAPEL_AKTIF}`;
+            document.getElementById('judulTabel').innerHTML = `<i data-lucide="table-2" class="w-5 h-5 theme-icon-active"></i> Input Nilai: ${MAPEL_AKTIF}`;
 
             let apakahKDValid = true;
             if (komponen.startsWith("KD")) {
@@ -811,17 +1042,17 @@
                 let judulMateri = DATA_CACHED.pengaturan['kd' + nomorKD] || "";
                 
                 if (judulMateri.trim() === "") {
-                    infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-red-600"></i><div class="text-red-600"><b>Peringatan:</b> Judul ringkasan materi untuk ${komponen} belum diisi! Silakan isi terlebih dahulu pada menu "Materi KD".</div>`;
+                    infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-red-400"></i><div class="text-red-400"><b>Peringatan:</b> Judul ringkasan materi untuk ${komponen} belum diisi! Silakan isi terlebih dahulu pada menu "Materi KD".</div>`;
                     apakahKDValid = false;
                 } else {
-                    infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i><div><b>Materi Aktif (${komponen}):</b> ${judulMateri}</div>`;
+                    infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-400"></i><div><b>Materi Aktif (${komponen}):</b> ${judulMateri}</div>`;
                 }
             } else {
-                infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-600"></i><div><b>Komponen Aktif:</b> Penilaian Tengah/Akhir Semester (${komponen})</div>`;
+                infoMateriAktif.innerHTML = `<i data-lucide="info" class="w-5 h-5 flex-shrink-0 text-blue-400"></i><div><b>Komponen Aktif:</b> Penilaian Tengah/Akhir Semester (${komponen})</div>`;
             }
 
             if (!DATA_CACHED.siswa || DATA_CACHED.siswa.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-gray-400 font-medium">Tidak ada data siswa ditemukan mulai baris C16.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-white/40 font-medium">Tidak ada data siswa ditemukan mulai baris C16.</td></tr>`;
                 document.getElementById('btnSimpanNilai').disabled = true;
                 lucide.createIcons();
                 return;
@@ -830,15 +1061,15 @@
             DATA_CACHED.siswa.forEach((siswa, index) => {
                 let nilaiSekarang = siswa[komponen] !== undefined ? siswa[komponen] : "";
                 let tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-50/80 transition-colors divide-x divide-gray-100";
+                tr.className = "hover:bg-white/5 transition-colors divide-x divide-white/5";
                 
                 let atributDisabled = !apakahKDValid ? "disabled title='Isi Judul KD Terlebih Dahulu'" : "";
 
                 tr.innerHTML = `
-                    <td class="text-center py-3.5 font-bold text-gray-400">${index + 1}</td>
-                    <td class="py-3.5 px-4 font-semibold text-gray-900">${siswa.nama}</td>
+                    <td class="text-center py-3.5 font-bold text-white/30">${index + 1}</td>
+                    <td class="py-3.5 px-4 font-semibold">${siswa.nama}</td>
                     <td class="py-3.5 px-3">
-                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-emerald-medium/10 focus:border-emerald-deep font-bold px-2 py-1.5 text-sm rounded-xl outline-none transition-all input-nilai-siswa disabled:opacity-40 disabled:cursor-not-allowed" 
+                        <input type="number" class="w-full max-w-[100px] mx-auto block text-center theme-input font-bold px-2 py-1.5 text-sm rounded-xl outline-none input-nilai-siswa disabled:opacity-30 disabled:cursor-not-allowed" 
                                data-baris="${siswa.baris}" min="0" max="100" value="${nilaiSekarang}" ${atributDisabled}>
                     </td>
                 `;
@@ -846,7 +1077,6 @@
             });
 
             document.getElementById('btnSimpanNilai').disabled = false;
-            // Pastikan scroll aktif kembali setelah data siswa berhasil tampil di layar
             kunciScrollLatar(false);
             lucide.createIcons();
         }
@@ -857,7 +1087,7 @@
             const btn = document.getElementById('btnSimpanKD');
             
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Menyimpan...`;
+            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Menyimpan...`;
             lucide.createIcons();
 
             const kd1New = document.getElementById('modal_kd1').value;
@@ -892,7 +1122,7 @@
                 body: JSON.stringify(dataKDSimpan)
             }).then(() => {
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Simpan`;
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-white"></i> Simpan`;
                 
                 DATA_CACHED.pengaturan.kd1 = kd1New;
                 DATA_CACHED.pengaturan.kd2 = kd2New;
@@ -912,7 +1142,7 @@
             }).catch(err => {
                 tampilkanModalGagalMasuk("Gagal Menyimpan", err.message);
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-gold-accent"></i> Simpan`;
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-white"></i> Simpan`;
             });
         });
 
@@ -928,7 +1158,7 @@
 
             const overlay = document.getElementById('loadingOverlay');
             if(overlay) {
-                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Memperbarui Kata Sandi Akun...`;
+                document.getElementById('loadingText').innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Memperbarui Kata Sandi Akun...`;
                 overlay.classList.remove('hidden');
             }
             tutupModalGantiPassword();
@@ -992,7 +1222,7 @@
             }
             
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-gold-accent"></i> Menyimpan Nilai...`;
+            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-4 h-4 animate-spin text-white"></i> Menyimpan Nilai...`;
             lucide.createIcons();
 
             elemenInputs.forEach(input => {
@@ -1017,7 +1247,7 @@
                 body: JSON.stringify(paketDataNilai)
             }).then(() => {
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai`;
+                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-white"></i> Simpan Nilai`;
 
                 elemenInputs.forEach(input => {
                     let barisId = input.getAttribute('data-baris');
@@ -1034,24 +1264,20 @@
             }).catch(err => {
                 tampilkanModalGagalMasuk("Masalah Jaringan", "Terjadi masalah jaringan: " + err.message);
                 btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-gold-accent"></i> Simpan Nilai`;
+                btn.innerHTML = `<i data-lucide="save" class="w-4 h-4 text-white"></i> Simpan Nilai`;
             });
         });
 
-        // EVENT LISTENER DETEKSI TOMBOL KEMBALI FISIK / GESTURE HP
+        // DETEKSI GESTURE TOMBOL KEMBALI MOBILE
         window.addEventListener('popstate', function(event) {
             const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
-            
-            // Jika user menekan tombol back saat posisi sudah berhasil masuk (modal awal tertutup)
             if (modalAwalHidden) {
-                // Dorong kembali status hash agar browser tidak berpindah halaman mundur
                 window.history.pushState("fullscreen-mode", null, "#fullscreen");
-                // Munculkan dialog penyelamat pengisian nilai
                 bukaModalKonfirmasiKembali();
             }
         });
 
-        // EVENT LISTENER DETEKSI PERUBAHAN FULLSCREEN SECARA NATIVE (SWIPE GESTURE KELUAR NATIVE, ESC, DLL)
+        // DETEKSI LOG Keluar NATIVE FULLSCREEN API (ESC / SWIPE GESTURE)
         const eventLayarPenuh = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
         eventLayarPenuh.forEach(eventName => {
             document.addEventListener(eventName, () => {
@@ -1059,14 +1285,17 @@
                 const modalAwalHidden = document.getElementById('modalAwal').classList.contains('hidden');
                 const modalKeluarHidden = document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden');
                 
-                // Jika tidak sedang fullscreen, tetapi guru telah login dan tidak berniat keluar via menu resmi
                 if (!isFullscreen && modalAwalHidden && modalKeluarHidden) {
                     bukaModalKonfirmasiKembali();
                 }
             });
         });
 
+        // Saat halaman selesai dimuat, ambil tema terakhir yang disimpan user
         window.addEventListener('DOMContentLoaded', () => {
+            const temaTerakhir = localStorage.getItem('smartgrader_theme') || 'emerald';
+            pilihSistemTema(temaTerakhir);
+            
             bukaModalAwal();
             lucide.createIcons();
         });
