@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <meta name="theme-color" content="#1e1b4b" id="metaThemeColor">
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Leger Az-Zahro">
+    
+    <title>Monitoring Rekap Nilai Keseluruhan (Leger) - Az-Zahro</title>
+    <script src="security-lock.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        glass: {
+                            input: 'rgba(255, 255, 255, 0.15)',
+                            border: 'rgba(255, 255, 255, 0.25)',
+                            card: 'rgba(255, 255, 255, 0.12)'
+                        },
+                        gold: {
+                            accent: '#D4AF37',
+                            muted: '#c5a059',
+                            light: '#fbf7eb'
+                        },
+                        emerald: {
+                            deep: '#0F5132',
+                            medium: '#146c43',
+                            light: '#d1e7dd',
+                            soft: '#f0fdf4'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Segoe UI', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Pengaturan Default Variabel CSS Tema (Akan Diubah Dinamis Lewat JS) */
+        :root {
+            --body-bg: linear-gradient(135deg, #0b0f19, #1e1b4b, #111827);
+            --glow-1: #3b82f6;
+            --glow-2: #7c3aed;
+            --btn-primary-bg: linear-gradient(90deg, #4f46e5, #7c3aed);
+            --btn-primary-hover: linear-gradient(90deg, #6366f1, #8b5cf6);
+            --btn-shadow: rgba(124, 58, 237, 0.4);
+            --accent-icon: #818cf8;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --scrollbar-thumb: rgba(129, 140, 248, 0.3);
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--body-bg);
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+        .font-serif-custom { font-family: 'Playfair Display', Georgia, serif; }
+        .overflow-hidden-modal { overflow: hidden !important; height: 100vh !important; }
+        
+        /* Custom scrollbar dinamis */
+        .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
+        
+        /* Bulatan Pendaran Latar Belakang (Glowing Blur Objects) */
+        body::before,
+        body::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.5;
+            transition: background 0.5s ease;
+        }
+        body::before {
+            background: var(--glow-1);
+            top: -150px;
+            left: -150px;
+        }
+        body::after {
+            background: var(--glow-2);
+            bottom: 50px;
+            right: -150px;
+        }
+        
+        /* Efek Lapisan Kaca Premium (Glassmorphism) */
+        .glass-panel {
+            background: var(--glass-bg) !important;
+            border: 1px solid var(--glass-border) !important;
+            backdrop-filter: blur(30px) !important;
+            -webkit-backdrop-filter: blur(30px) !important;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4) !important;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Kotak Input Glassmorphism */
+        .glass-input-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        .glass-input-box:focus-within {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Avatar Box */
+        .glass-avatar {
+            width: 95px;
+            height: 95px;
+            margin: auto;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            font-size: 36px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        /* Tombol Utama Gradasi Dinamis */
+        .glass-btn-primary {
+            background: var(--btn-primary-bg);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+        .glass-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px var(--btn-shadow);
+            background: var(--btn-primary-hover);
+        }
+        .glass-btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* Dinamis Warna Icon */
+        .theme-accent-icon {
+            color: var(--accent-icon) !important;
+            transition: color 0.3s ease;
+        }
+
+        /* Fullscreen Layout Overrides */
+        :fullscreen nav, :-webkit-full-screen nav {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+        }
+        :fullscreen main, :-webkit-full-screen main {
+            margin-top: 8rem !important;
+            padding-top: env(safe-area-inset-top);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-white">
+
+    <div>
+        <nav class="sticky top-0 z-40 glass-panel border-b text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="p-2 bg-white/5 rounded-xl border border-white/15 flex-shrink-0">
+                        <i data-lucide="book-open-check" class="w-5 h-5 sm:w-6 h-6 theme-accent-icon"></i>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                        <h1 class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate text-white">
+                            Leger Monitor Az-Zahro
+                        </h1>
+                        <div class="text-[11px] sm:text-xs text-white/70 font-medium tracking-wide mt-0.5 truncate flex items-center gap-1.5">
+                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                            <span id="navDetailText">Silahkan masuk menggunakan akun guru Anda...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3 flex-shrink-0">
+                    <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-xl px-2.5 py-1.5">
+                        <i data-lucide="palette" class="w-3.5 h-3.5 theme-accent-icon"></i>
+                        <select id="themeSelector" onchange="gantiTemaSitus(this.value)" class="bg-transparent text-white text-xs font-bold border-none outline-none cursor-pointer focus:ring-0 [&>option]:text-gray-900">
+                            <option value="emerald">Emerald Gold</option>
+                            <option value="sunset-orange">Sunset Orange</option>
+                            <option value="biru-ungu">Biru-Ungu Neon</option>
+                            <option value="electric-blue">Electric Light</option>  
+                        </select>
+                    </div>
+
+                    <button type="button" onclick="prosesKeluarAkun()" id="btnKeluar" class="hidden inline-flex items-center gap-1.5 px-3 py-2 bg-red-600/60 hover:bg-red-700 text-white font-bold text-xs rounded-xl border border-white/10 transition-all shadow-sm active:scale-95">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i> <span>Keluar</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+            
+            <div id="panelFilterLeger" class="glass-panel rounded-3xl p-6 md:p-8 hidden mb-6 text-white">
+                <div class="flex items-center gap-2.5 border-b border-white/10 pb-4 mb-6">
+                    <i data-lucide="layers" class="w-5 h-5 theme-accent-icon"></i>
+                    <h5 class="text-base sm:text-lg font-bold font-serif-custom text-white">Filter Otoritas Transkrip Leger</h5>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-end">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs sm:text-sm font-semibold text-white/80 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-4 h-4 theme-accent-icon"></i> Hak Mengajar Terpetakan
+                        </label>
+                        <select id="pilihLegerMapel" onchange="aksiDropdownPilihan()" class="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 font-semibold text-white focus:bg-white/15 focus:border-white/25 transition-all outline-none text-xs sm:text-sm [&>option]:text-gray-900">
+                        </select>
+                    </div>
+                    <div>
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-xl flex items-center justify-between">
+                            <span class="text-xs font-bold text-white/70">KKM Target:</span>
+                            <span id="labelKkmLeger" class="bg-white/10 text-white border border-white/20 px-3 py-1 rounded-lg text-xs font-black shadow-sm">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="alertBox" class="p-4 rounded-2xl border text-xs sm:text-sm font-medium flex items-center gap-3 hidden mb-6"></div>
+
+            <div id="wrapperHasilTabel" class="hidden space-y-6 mb-12">
+                
+                <div class="glass-panel rounded-3xl p-5 md:p-7 text-white">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+                        <h4 class="text-md sm:text-lg font-serif-custom font-bold text-white flex items-center gap-2">
+                            <i data-lucide="table-2" class="w-5 h-5 theme-accent-icon"></i> Lembar Transkrip Leger Kelas
+                        </h4>
+                        <div class="flex items-center gap-2 print:hidden">
+                            <button onclick="tarikDataLegerPusat()" class="px-4 py-2 glass-btn-primary text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 active:scale-95">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-white/10 custom-scroll">
+                        <table class="w-full text-left border-collapse text-xs text-white">
+                            <thead class="bg-white/5 font-bold uppercase tracking-wider text-center border-b border-white/15">
+                                <tr class="divide-x divide-white/10">
+                                    <th class="py-3 px-2 w-[3%]" rowspan="2">No</th>
+                                    <th class="py-3 px-4 text-left min-w-[180px]" rowspan="2">Nama Lengkap Siswa</th>
+                                    <th class="py-2 px-1" colspan="8">CAPAIAN KOMPETENSI DASAR</th>
+                                    <th class="py-2 px-1 bg-amber-600/20" colspan="2">Pengetahuan</th>
+                                    <th class="py-2 px-1 bg-blue-600/20" colspan="2">Ujian</th>
+                                    <th class="py-2 px-1 bg-purple-600/20" colspan="2">Keterampilan</th>
+                                </tr>
+                                <tr class="bg-white/5 text-[10px] divide-x divide-white/10 border-t border-white/10">
+                                    <th class="py-1.5 w-[4%]">KD1</th>
+                                    <th class="py-1.5 w-[4%]">KD2</th>
+                                    <th class="py-1.5 w-[4%]">KD3</th>
+                                    <th class="py-1.5 w-[4%]">KD4</th>
+                                    <th class="py-1.5 w-[4%]">KD5</th>
+                                    <th class="py-1.5 w-[4%]">KD6</th>
+                                    <th class="py-1.5 w-[4%]">KD7</th>
+                                    <th class="py-1.5 w-[4%]">KD8</th>
+                                    <th class="py-1.5 bg-amber-500/10 w-[5%]">Total</th>
+                                    <th class="py-1.5 bg-amber-500/30 w-[6%] font-black">Hasil</th>
+                                    <th class="py-1.5 bg-blue-500/10 w-[5%]">UTS</th>
+                                    <th class="py-1.5 bg-blue-500/30 w-[5%]">PAS</th>
+                                    <th class="py-1.5 bg-purple-500/10 w-[5%]">Total</th>
+                                    <th class="py-1.5 bg-purple-500/30 w-[6%] font-black">Hasil</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyLeger" class="divide-y divide-white/5 text-center font-medium">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-3xl p-5 md:p-7 text-white">
+                    <div class="flex items-center gap-2 border-b border-white/10 pb-3 mb-4">
+                        <i data-lucide="info" class="w-5 h-5 theme-accent-icon"></i>
+                        <h4 class="text-md font-serif-custom font-bold text-white">Deskripsi Ringkasan Materi KD</h4>
+                    </div>
+                    <div id="containerMateriKD" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div id="modalAwal" class="fixed inset-0 bg-black/50 backdrop-blur-lg flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-8 text-center text-white animate-in fade-in zoom-in-95 duration-200">
+            <div class="text-center mb-5">
+                <div class="glass-avatar theme-accent-icon">
+                    <i data-lucide="folder-search" class="w-10 h-10"></i>
+                </div>
+                <h3 class="text-2xl font-bold font-serif-custom text-white tracking-wide">Portal Gateway Leger</h3>
+                <p class="text-xs text-white/60 mt-1">Login dengan Akun SmartGrader</p>
+            </div>
+
+            <form id="formGerbangAwal" class="space-y-4 text-left">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-white/80 flex items-center gap-1">
+                        <i data-lucide="user" class="w-3.5 h-3.5 theme-accent-icon"></i> Nama Lengkap Guru
+                    </label>
+                    <div class="glass-input-box">
+                        <input type="text" id="gerbangGuru" onclick="aktifkanMaksimalLayan()" required placeholder="Nama Lengkap..." autocomplete="off" autocapitalize="characters" class="w-full bg-transparent border-none outline-none text-white text-sm font-semibold uppercase placeholder:text-white/30">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-white/80 flex items-center gap-1">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 theme-accent-icon"></i> Password
+                    </label>
+                    <div class="glass-input-box relative">
+                        <input type="password" id="gerbangPassword" onclick="aktifkanMaksimalLayan()" required placeholder="Kata Sandi..." class="w-full bg-transparent border-none outline-none text-white text-sm font-semibold placeholder:text-white/30 pr-10">
+                        <button type="button" onclick="toggleVisibilitasPassword()" class="absolute inset-y-0 right-4 flex items-center text-white/30 hover:text-white transition-colors focus:outline-none">
+                            <i id="ikonMata" data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" id="btnMasukGerbang" class="glass-btn-primary w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md mt-2">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> <span>Buka Akses Leger</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalGagalMasuk" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative text-center text-white">
+            <div class="p-3 bg-red-500/10 text-white rounded-2xl inline-block border border-red-500/20 mb-3">
+                <i data-lucide="alert-triangle" class="w-8 h-8 text-red-400"></i>
+            </div>
+            <h3 class="text-lg font-bold font-serif-custom text-white" id="judulModalGagal">Gagal Masuk</h3>
+            <p class="text-xs text-white/70 mt-2 leading-relaxed" id="pesanModalGagal"></p>
+            <div class="mt-5">
+                <button type="button" onclick="tutupModalGagalMasuk()" class="w-full px-4 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold text-xs rounded-xl transition-all shadow-md outline-none border border-white/10">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex flex-col justify-center items-center z-50">
+        <div class="text-center p-6">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mb-4" id="loadingSpinner"></div>
+            <div id="loadingText" class="font-bold text-white flex items-center justify-center gap-2 text-sm">Memuat data leger...</div>
+        </div>
+    </div>
+
+    <footer class="glass-panel border-t mt-12 py-6 px-4 print:hidden text-center">
+        <div class="max-w-7xl mx-auto text-center text-[11px] text-white/50">
+            &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
+            SMP Islam Az-Zahro • SMK Az-Zahro
+        </div>
+    </footer>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
+        
+        let GURU_LOGIN = "";
+        let LIST_HAK_MENGAJAR = [];
+
+        // KUMPULAN LOGIK CONFIG TEMA RUANG DESIGN
+        const DAFTAR_KONFIG_TEMA = {
+            "biru-ungu": {
+                bodyBg: "linear-gradient(135deg, #0b0f19, #1e1b4b, #111827)",
+                glow1: "#3b82f6",
+                glow2: "#7c3aed",
+                btnPrimaryBg: "linear-gradient(90deg, #4f46e5, #7c3aed)",
+                btnPrimaryHover: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+                btnShadow: "rgba(124, 58, 237, 0.4)",
+                accentIcon: "#818cf8",
+                glassBg: "rgba(255, 255, 255, 0.05)",
+                glassBorder: "rgba(255, 255, 255, 0.12)",
+                scrollbarThumb: "rgba(129, 140, 248, 0.3)",
+                themeColor: "#1e1b4b"
+            },
+            "emerald": {
+                bodyBg: "linear-gradient(135deg, #09331f, #146c43)",
+                glow1: "#198754",
+                glow2: "#D4AF37",
+                btnPrimaryBg: "linear-gradient(90deg, #146c43, #0F5132)",
+                btnPrimaryHover: "linear-gradient(90deg, #198754, #146c43)",
+                btnShadow: "rgba(20, 108, 67, 0.4)",
+                accentIcon: "#D4AF37",
+                glassBg: "rgba(255, 255, 255, 0.08)",
+                glassBorder: "rgba(255, 255, 255, 0.18)",
+                scrollbarThumb: "rgba(255, 255, 255, 0.25)",
+                themeColor: "#0F5132"
+            },
+            "electric-blue": {
+                bodyBg: "linear-gradient(135deg, #76c8ff, #d78bff)",
+                glow1: "#4fa3ff",
+                glow2: "#ff7cd5",
+                btnPrimaryBg: "linear-gradient(90deg, #2f7dff, #cb3dff)",
+                btnPrimaryHover: "linear-gradient(90deg, #1e6bf2, #b82ae6)",
+                btnShadow: "rgba(47, 125, 255, 0.4)",
+                accentIcon: "#ffffff",
+                glassBg: "rgba(255, 255, 255, 0.18)",
+                glassBorder: "rgba(255, 255, 255, 0.3)",
+                scrollbarThumb: "#2f7dff",
+                themeColor: "#2f7dff"
+            },
+            "sunset-orange": {
+                bodyBg: "linear-gradient(135deg, #1a0f05, #3a1c05, #140b00)", // Background web
+                glow1: "#ea580c", // Bulatan cahaya 1 (Orange)
+                glow2: "#eab308", // Bulatan cahaya 2 (Kuning)
+                btnPrimaryBg: "linear-gradient(90deg, #ea580c, #ca8a04)", // Tombol utama
+                btnPrimaryHover: "linear-gradient(90deg, #f97316, #eab308)", // Tombol saat disentuh
+                btnShadow: "rgba(234, 88, 12, 0.4)", // Bayangan tombol
+                accentIcon: "#f97316", // Warna icon aktif
+                glassBg: "rgba(255, 255, 255, 0.05)", // Transparansi kaca
+                glassBorder: "rgba(255, 255, 255, 0.12)", // Garis tepi kaca
+                scrollbarThumb: "rgba(234, 88, 12, 0.3)", // Scrollbar
+                themeColor: "#3a1c05" // Warna browser HP
+             }
+        };
+
+        function gantiTemaSitus(namaTema) {
+            const cfg = DAFTAR_KONFIG_TEMA[namaTema] || DAFTAR_KONFIG_TEMA["biru-ungu"];
+            const root = document.documentElement;
+
+            // Update Variabel CSS global secara realtime
+            root.style.setProperty('--body-bg', cfg.bodyBg);
+            root.style.setProperty('--glow-1', cfg.glow1);
+            root.style.setProperty('--glow-2', cfg.glow2);
+            root.style.setProperty('--btn-primary-bg', cfg.btnPrimaryBg);
+            root.style.setProperty('--btn-primary-hover', cfg.btnPrimaryHover);
+            root.style.setProperty('--btn-shadow', cfg.btnShadow);
+            root.style.setProperty('--accent-icon', cfg.accentIcon);
+            root.style.setProperty('--glass-bg', cfg.glassBg);
+            root.style.setProperty('--glass-border', cfg.glassBorder);
+            root.style.setProperty('--scrollbar-thumb', cfg.scrollbarThumb);
+            
+            // Perbarui warna status bar seluler
+            document.getElementById('metaThemeColor').setAttribute('content', cfg.themeColor);
+            
+            // Simpan preferensi agar tidak hilang setelah refresh halaman
+            localStorage.setItem('preferensi_tema_leger', namaTema);
+            document.getElementById('themeSelector').value = namaTema;
+        }
+
+        function setKunciScroll(statusKunci) {
+            if (statusKunci) document.body.classList.add('overflow-hidden-modal');
+            else document.body.classList.remove('overflow-hidden-modal');
+        }
+
+        function bukaModalGagalMasuk(judul, pesan) {
+            document.getElementById('judulModalGagal').innerText = judul;
+            document.getElementById('pesanModalGagal').innerText = pesan;
+            document.getElementById('modalGagalMasuk').classList.remove('hidden');
+            setKunciScroll(true);
+        }
+
+        function tutupModalGagalMasuk() {
+            document.getElementById('modalGagalMasuk').classList.add('hidden');
+            if (document.getElementById('modalAwal').classList.contains('hidden')) {
+                setKunciScroll(false);
+            }
+        }
+
+        function aktifkanMaksimalLayan() {
+            let elem = document.documentElement;
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            }
+        }
+
+        function toggleVisibilitasPassword() {
+            const inputPassword = document.getElementById('gerbangPassword');
+            const ikonMata = document.getElementById('ikonMata');
+            
+            if (inputPassword.type === 'password') {
+                inputPassword.type = 'text';
+                ikonMata.setAttribute('data-lucide', 'eye-off');
+            } else {
+                inputPassword.type = 'password';
+                ikonMata.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        function aksiDropdownPilihan() {
+            aktifkanMaksimalLayan();
+            tarikDataLegerPusat();
+        }
+
+        document.getElementById('formGerbangAwal').addEventListener('submit', function(e) {
+            e.preventDefault();
+            GURU_LOGIN = document.getElementById('gerbangGuru').value.trim().toUpperCase();
+            let password = document.getElementById('gerbangPassword').value;
+
+            showLoading(true, "Memverifikasi Kredensial & Otoritas Leger...");
+
+            const urlAuth = `${WEB_APP_URL}?aksi=login&guru=${encodeURIComponent(GURU_LOGIN)}&password=${encodeURIComponent(password)}`;
+
+            fetch(urlAuth)
+                .then(res => res.json())
+                .then(hasil => {
+                    showLoading(false);
+                    if (hasil.status === "success") {
+                        LIST_HAK_MENGAJAR = hasil.hakMengajar;
+                        
+                        if (LIST_HAK_MENGAJAR.length === 0) {
+                            bukaModalGagalMasuk("Akses Terbatas", "Login sukses! Namun Nama Anda tidak tercatat memegang mata pelajaran apapun di database.");
+                            return;
+                        }
+
+                        document.getElementById('modalAwal').classList.add('hidden');
+                        setKunciScroll(false);
+                        document.getElementById('panelFilterLeger').classList.remove('hidden');
+                        document.getElementById('btnKeluar').classList.remove('hidden');
+                        document.getElementById('navDetailText').innerText = `Guru: ${GURU_LOGIN}`;
+
+                        const dropdown = document.getElementById('pilihLegerMapel');
+                        dropdown.innerHTML = "";
+                        LIST_HAK_MENGAJAR.forEach(item => {
+                            dropdown.innerHTML += `<option value="${item.kelas}|${item.mapel}">Kelas ${item.kelas} — Mapel: ${item.mapel}</option>`;
+                        });
+
+                        tarikDataLegerPusat();
+                    } else {
+                        bukaModalGagalMasuk("Gagal Masuk", hasil.message || "Nama Guru atau Password Anda salah. Silakan periksa kembali!");
+                    }
+                })
+                .catch(err => {
+                    showLoading(false);
+                    console.error(err);
+                    bukaModalGagalMasuk("Gangguan Sistem", "Gagal terhubung dengan server pusat otentikasi.");
+                });
+        });
+
+        function tarikDataLegerPusat() {
+            const filterValue = document.getElementById('pilihLegerMapel').value;
+            if(!filterValue) return;
+
+            const part = filterValue.split("|");
+            const kelasTarget = part[0];
+            const mapelTarget = part[1];
+
+            showLoading(true, `Memuat Lembar Transkrip Leger Kelas ${kelasTarget} [${mapelTarget}]...`);
+
+            const urlLeger = `${WEB_APP_URL}?aksi=baca&sheet=${encodeURIComponent(mapelTarget)}&kelas=${encodeURIComponent(kelasTarget)}`;
+
+            fetch(urlLeger)
+                .then(res => res.json())
+                .then(res => {
+                    showLoading(false);
+                    if(res.status === "success") {
+                        document.getElementById('labelKkmLeger').innerText = res.kkm || "-";
+                        renderTabelLegerDinamis(res.dataLeger, res.kkm);
+                        renderPanelMateriKD(res.materiKD);
+                    } else {
+                        showAlertBox("danger", "Gagal Memuat Leger: " + res.message);
+                    }
+                })
+                .catch(err => {
+                    showLoading(false);
+                    console.error(err);
+                    showAlertBox("danger", "Koneksi terputus saat mengambil data transkrip leger.");
+                });
+        }
+
+        function renderTabelLegerDinamis(dataSiswa, kkm) {
+            const tbody = document.getElementById('tbodyLeger');
+            const wrapper = document.getElementById('wrapperHasilTabel');
+            tbody.innerHTML = "";
+
+            if(!dataSiswa || dataSiswa.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="16" class="py-8 text-center text-white/40 font-bold">Tidak ada data records nilai siswa ditemukan.</td></tr>`;
+                wrapper.classList.remove('hidden');
+                return;
+            }
+
+            dataSiswa.forEach(s => {
+                let tr = document.createElement('tr');
+                tr.className = "hover:bg-white/5 divide-x divide-white/5 transition-colors text-center";
+                
+                let kelasWarnaM = "text-white font-bold bg-amber-500/5";
+                if(s.hasil_pengetahuan && Number(s.hasil_pengetahuan) < Number(kkm)) {
+                    kelasWarnaM = "text-red-300 font-black bg-red-600/20";
+                }
+
+                let kelasWarnaR = "text-white font-bold bg-purple-500/5";
+                if(s.hasil_keterampilan && Number(s.hasil_keterampilan) < Number(kkm)) {
+                    kelasWarnaR = "text-red-300 font-black bg-red-600/20";
+                }
+
+                tr.innerHTML = `
+                    <td class="py-3 px-1 font-bold text-white/40 bg-white/5">${s.no}</td>
+                    <td class="py-3 px-3 text-left font-bold text-white uppercase truncate max-w-[180px]">${s.nama}</td>
+                    <td class="py-2 px-1 text-white/80">${s.KD1 ?? '-'}</td>
+                    <td class="py-2 px-1 text-white/80">${s.KD2 ?? '-'}</td>
+                    <td class="py-2 px-1 text-white/80">${s.KD3 ?? '-'}</td>
+                    <td class="py-2 px-1 text-white/80">${s.KD4 ?? '-'}</td>
+                    <td class="py-2 px-1 text-white/80">${s.KD5 ?? '-'}</td>
+                    <td class="py-2 px-1 text-white/80">${s.KD6 ?? '-'}</td>
+                    <td class="py-2 px-1 text-white/80">${s.KD7 ?? '-'}</td>
+                    <td class="py-2 px-1 text-white/80">${s.KD8 ?? '-'}</td>
+                    <td class="py-2 px-1 text-amber-200 bg-amber-500/5 font-medium">${s.tot_kd_pengetahuan ?? '-'}</td>
+                    <td class="py-2 px-1 ${kelasWarnaM}">${s.hasil_pengetahuan ? Number(s.hasil_pengetahuan).toFixed(0) : '-'}</td>
+                    <td class="py-2 px-1 font-semibold text-blue-200 bg-blue-500/5">${s.uts ?? '-'}</td>
+                    <td class="py-2 px-1 font-semibold text-blue-200 bg-blue-500/5">${s.pas ?? '-'}</td>
+                    <td class="py-2 px-1 text-purple-200 bg-purple-500/5 font-medium">${s.tot_keterampilan ?? '-'}</td>
+                    <td class="py-2 px-1 ${kelasWarnaR}">${s.hasil_keterampilan ? Number(s.hasil_keterampilan).toFixed(0) : '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('alertBox').classList.add('hidden');
+            wrapper.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function renderPanelMateriKD(materiKD) {
+            const container = document.getElementById('containerMateriKD');
+            container.innerHTML = "";
+            if(!materiKD) return;
+
+            for(let i = 1; i <= 8; i++) {
+                let textMateri = materiKD["KD" + i] || "";
+                let card = document.createElement('div');
+                
+                if(textMateri.trim() === "") {
+                    card.className = "p-3 bg-white/5 border border-white/5 rounded-2xl text-xs opacity-40";
+                    card.innerHTML = `<b class="text-white/30 block mb-0.5">KD ${i}:</b> <span class="text-white/30 italic">Belum diisi guru</span>`;
+                } else {
+                    card.className = "p-3 bg-white/5 border border-white/10 rounded-2xl text-xs";
+                    card.innerHTML = `<b class="theme-accent-icon block mb-0.5">KD ${i}:</b> <span class="text-white/80 font-medium leading-relaxed">${textMateri}</span>`;
+                }
+                container.appendChild(card);
+            }
+        }
+
+        function showLoading(show, text = "") {
+            const overlay = document.getElementById('loadingOverlay');
+            if(show) {
+                document.getElementById('loadingText').innerText = text;
+                overlay.classList.remove('hidden');
+            } else {
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function showAlertBox(type, msg) {
+            const box = document.getElementById('alertBox');
+            if(type === "danger") {
+                box.className = "p-4 rounded-2xl border text-xs sm:text-sm font-medium flex items-center gap-3 bg-red-500/10 text-white border-red-500/20 mb-6 backdrop-blur-md";
+                box.innerHTML = `<i data-lucide="alert-octagon" class="w-5 h-5 flex-shrink-0 text-red-400"></i> <div>${msg}</div>`;
+            }
+            box.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function prosesKeluarAkun() {
+            location.reload();
+        }
+
+        // Jalankan inisialisasi pengecekan tema tersimpan saat web dimuat pertama kali
+        window.addEventListener('DOMContentLoaded', () => {
+            setKunciScroll(true);
+            
+            // Ambil tema yang terakhir digunakan atau gunakan default 'biru-ungu'
+            const temaTersimpan = localStorage.getItem('preferensi_tema_leger') || 'emerald';
+            gantiTemaSitus(temaTersimpan);
+            
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
