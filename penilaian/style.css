@@ -1,4 +1,3 @@
-
 :root {
     --body-bg: linear-gradient(135deg, #09331f, #146c43);
     --body-solid-bg: #09331f; 
@@ -21,9 +20,9 @@
 
     --nav-dock-bg: rgba(15, 81, 50, 0.85); 
     --nav-dock-border: rgba(255, 255, 255, 0.2);
-    ---circle-pasif: rgba(255, 255, 255, 0.1);
-    ---circle-aktif: #ffffff;
-    ---text-aktif: #0F5132;
+    --icon-circle-pasif: rgba(255, 255, 255, 0.1);
+    --icon-circle-aktif: #ffffff;
+    --icon-text-aktif: #0F5132;
 }
 
 html, body {
@@ -96,8 +95,8 @@ body::before {
     box-shadow: 0 6px 20px var(--btn-shadow);
 }
 
-.theme--active {
-    color: var(--accent-) !important;
+.theme-icon-active {
+    color: var(--accent-icon) !important;
 }
 
 .glow-sphere-1 {
@@ -143,10 +142,11 @@ body::before {
     width: 65px;
     height: 100%;
     cursor: pointer;
+    padding-top: 6px !important;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.-circle {
+.icon-circle {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -166,26 +166,27 @@ body::before {
     transition: transform 0.3s ease, color 0.4s ease;
 }
 
-/*Bottom icon Navigasi*/
+/* Bagian Teks Navigasi Bawah */
 .nav-text {
     position: absolute;
-    bottom: -80px;
+    bottom: -15px; /* Jarak awal teks yang aman saat menu pasif */
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
     color: #ffffff;
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(5px);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     white-space: nowrap;
     z-index: 1;
 }
 
-/* Cari kode ini di style.css Anda */
+/* Mengangkat seluruh item menu ke atas saat aktif */
 .nav-item.active {
-    transform: translateY(-30px); /* Mengangkat lingkaran ikon putih lebih tinggi ke atas Semakin besar angka minusnya (negatif), maka ikon akan semakin terangkat ke atas.*/
+    transform: translateY(-30px); 
 }
 
+/* Mengubah tampilan lingkaran putih ikon saat aktif */
 .nav-item.active .icon-circle {
     background: var(--icon-circle-aktif);
     color: var(--icon-text-aktif);
@@ -197,7 +198,8 @@ body::before {
     transform: scale(1.05);
 }
 
+/* Menampilkan teks dengan space renggang yang ideal saat aktif */
 .nav-item.active .nav-text {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(12px); /* Mendorong teks turun 12px ke bawah agar ada jarak renggang dari ikon putih */
 }
