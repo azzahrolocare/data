@@ -7,9 +7,12 @@ const DAFTAR_TEMA = {
         glow1: "#3b82f6", glow2: "#7c3aed", 
         btnPrimaryBg: "linear-gradient(90deg, #4f46e5, #7c3aed)",
         btnPrimaryHover: "linear-gradient(90deg, #6366f1, #8b5cf6)", btnShadow: "rgba(124, 58, 237, 0.4)",
-        accentIcon: "#818cf8", glassBg: "rgba(255, 255, 255, 0.05)", glassBorder: "rgba(255, 255, 255, 0.12)",
-        scrollbarThumb: "rgba(129, 140, 248, 0.3)", themeColor: "#1e1b4b", navDockBg: "rgba(11, 15, 25, 0.9)",
-        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#1e1b4b"
+        accentIcon: "#818cf8", 
+        glassBg: "linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.3))", 
+        glassBorder: "rgba(255, 255, 255, 0.12)",
+        scrollbarThumb: "rgba(129, 140, 248, 0.3)", themeColor: "#1e1b4b", 
+        navDockBg: "linear-gradient(180deg, rgba(11, 15, 25, 0.85), rgba(7, 10, 18, 0.95))",
+        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "linear-gradient(135deg, #ffffff, #e2e8f0)", iconTextAktif: "#1e1b4b"
     },
     "emerald": {
         bodyBg: "linear-gradient(135deg, #061f14, #0b3a24, #05140e)", 
@@ -17,9 +20,12 @@ const DAFTAR_TEMA = {
         glow1: "#10b981", glow2: "#f59e0b", 
         btnPrimaryBg: "linear-gradient(90deg, #059669, #10b981)",
         btnPrimaryHover: "linear-gradient(90deg, #10b981, #34d399)", btnShadow: "rgba(16, 185, 129, 0.3)",
-        accentIcon: "#f59e0b", glassBg: "rgba(255, 255, 255, 0.04)", glassBorder: "rgba(255, 255, 255, 0.12)",
-        scrollbarThumb: "rgba(16, 185, 129, 0.25)", themeColor: "#0b3a24", navDockBg: "rgba(6, 31, 20, 0.93)",
-        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#0b3a24"
+        accentIcon: "#f59e0b", 
+        glassBg: "linear-gradient(135deg, rgba(11, 58, 36, 0.35), rgba(5, 20, 14, 0.25))", 
+        glassBorder: "rgba(255, 255, 255, 0.12)",
+        scrollbarThumb: "rgba(16, 185, 129, 0.25)", themeColor: "#0b3a24", 
+        navDockBg: "linear-gradient(180deg, rgba(6, 31, 20, 0.85), rgba(4, 20, 13, 0.95))",
+        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "linear-gradient(135deg, #ffffff, #e2e8f0)", iconTextAktif: "#0b3a24"
     },
     "electric-blue": {
         bodyBg: "linear-gradient(135deg, #a2d2ff, #c7d2fe, #e0e7ff)", 
@@ -27,9 +33,12 @@ const DAFTAR_TEMA = {
         glow1: "#3b82f6", glow2: "#a855f7", 
         btnPrimaryBg: "linear-gradient(90deg, #3b82f6, #6366f1)",
         btnPrimaryHover: "linear-gradient(90deg, #2563eb, #4f46e5)", btnShadow: "rgba(59, 130, 246, 0.3)",
-        accentIcon: "#3b82f6", glassBg: "rgba(255, 255, 255, 0.45)", glassBorder: "rgba(255, 255, 255, 0.6)",
-        scrollbarThumb: "#3b82f6", themeColor: "#3b82f6", navDockBg: "rgba(219, 234, 254, 0.95)",
-        iconCirclePasif: "rgba(0, 0, 0, 0.08)", iconCircleAktif: "#3b82f6", iconTextAktif: "#ffffff"
+        accentIcon: "#3b82f6", 
+        glassBg: "linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(219, 234, 254, 0.4))", 
+        glassBorder: "rgba(255, 255, 255, 0.6)",
+        scrollbarThumb: "#3b82f6", themeColor: "#3b82f6", 
+        navDockBg: "linear-gradient(180deg, rgba(219, 234, 254, 0.9), rgba(191, 219, 254, 0.95))",
+        iconCirclePasif: "rgba(0, 0, 0, 0.08)", iconCircleAktif: "linear-gradient(135deg, #3b82f6, #2563eb)", iconTextAktif: "#ffffff"
     },
     "sunset-orange": {
         bodyBg: "linear-gradient(135deg, #1e0b01, #4c1d05, #140500)", 
@@ -37,9 +46,12 @@ const DAFTAR_TEMA = {
         glow1: "#f97316", glow2: "#f59e0b", 
         btnPrimaryBg: "linear-gradient(90deg, #ea580c, #f97316)",
         btnPrimaryHover: "linear-gradient(90deg, #f97316, #fb923c)", btnShadow: "rgba(249, 115, 22, 0.3)",
-        accentIcon: "#f97316", glassBg: "rgba(255, 255, 255, 0.03)", glassBorder: "rgba(255, 255, 255, 0.1|)",
-        scrollbarThumb: "rgba(249, 115, 22, 0.25)", themeColor: "#4c1d05", navDockBg: "rgba(30, 11, 1, 0.93)",
-        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#4c1d05"
+        accentIcon: "#f97316", 
+        glassBg: "linear-gradient(135deg, rgba(76, 29, 5, 0.35), rgba(20, 5, 0, 0.25))", 
+        glassBorder: "rgba(255, 255, 255, 0.12)",
+        scrollbarThumb: "rgba(249, 115, 22, 0.25)", themeColor: "#4c1d05", 
+        navDockBg: "linear-gradient(180deg, rgba(30, 11, 1, 0.85), rgba(20, 5, 0, 0.95))",
+        iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "linear-gradient(135deg, #ffffff, #e2e8f0)", iconTextAktif: "#4c1d05"
     },
     "pastel-cotton": {
         bodyBg: "linear-gradient(135deg, #e0f2fe, #fce7f3, #f0fdf4)", 
@@ -47,9 +59,12 @@ const DAFTAR_TEMA = {
         glow1: "#38bdf8", glow2: "#f472b6", 
         btnPrimaryBg: "linear-gradient(90deg, #0ea5e9, #ec4899)",
         btnPrimaryHover: "linear-gradient(90deg, #0284c7, #db2777)", btnShadow: "rgba(14, 165, 233, 0.25)",
-        accentIcon: "#db2777", glassBg: "rgba(255, 255, 255, 0.5)", glassBorder: "rgba(255, 255, 255, 0.65)",
-        scrollbarThumb: "#0ea5e9", themeColor: "#0ea5e9", navDockBg: "rgba(240, 249, 255, 0.95)",
-        iconCirclePasif: "rgba(0, 0, 0, 0.08)", iconCircleAktif: "#0ea5e9", iconTextAktif: "#ffffff"
+        accentIcon: "#db2777", 
+        glassBg: "linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(252, 231, 243, 0.45))", 
+        glassBorder: "rgba(255, 255, 255, 0.65)",
+        scrollbarThumb: "#0ea5e9", themeColor: "#0ea5e9", 
+        navDockBg: "linear-gradient(180deg, rgba(240, 249, 255, 0.9), rgba(252, 231, 243, 0.9))",
+        iconCirclePasif: "rgba(0, 0, 0, 0.08)", iconCircleAktif: "linear-gradient(135deg, #0ea5e9, #0284c7)", iconTextAktif: "#ffffff"
     }
 };
 
@@ -80,14 +95,14 @@ function pilihSistemTema(namaTema) {
 
     if (namaTema === "electric-blue" || namaTema === "pastel-cotton") {
         root.style.setProperty('--text-main', '#0f172a'); root.style.setProperty('--text-muted', '#334155');
-        root.style.setProperty('--card-text', '#1e293b'); root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.6)');
+        root.style.setProperty('--card-text', '#1e293b'); root.style.setProperty('--input-bg', 'linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4))');
         root.style.setProperty('--input-text', '#0f172a'); root.style.setProperty('--input-border', 'rgba(0, 0, 0, 0.12)');
-        root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.85)');
+        root.style.setProperty('--input-focus-bg', 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.75))');
     } else {
         root.style.setProperty('--text-main', '#ffffff'); root.style.setProperty('--text-muted', '#d1e7dd');
-        root.style.setProperty('--card-text', '#ffffff'); root.style.setProperty('--input-bg', 'rgba(255, 255, 255, 0.1)');
-        root.style.setProperty('--input-text', '#ffffff'); root.style.setProperty('--input-border', 'rgba(255, 255, 255, 0.2)');
-        root.style.setProperty('--input-focus-bg', 'rgba(255, 255, 255, 0.2)');
+        root.style.setProperty('--card-text', '#ffffff'); root.style.setProperty('--input-bg', 'linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02))');
+        root.style.setProperty('--input-text', '#ffffff'); root.style.setProperty('--input-border', 'rgba(255, 255, 255, 0.18)');
+        root.style.setProperty('--input-focus-bg', 'linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06))');
     }
 
     const metaTag = document.getElementById('metaThemeColor');
