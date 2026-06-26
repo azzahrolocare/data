@@ -199,14 +199,19 @@
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                         <i data-lucide="user" class="w-3.5 h-3.5 text-emerald-medium"></i> Nama Lengkap Guru
                     </label>
-                    <input type="text" id="gerbangGuru" required placeholder=" " autocomplete="off" autocapitalize="characters" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase">
+                    <input type="text" id="gerbangGuru" onclick="aktifkanMaksimalLayan()" required placeholder=" " autocomplete="off" autocapitalize="characters" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm uppercase">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                         <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-medium"></i> Password
                     </label>
-                    <input type="password" id="gerbangPassword" required placeholder=" " class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                    <div class="relative">
+                        <input type="password" id="gerbangPassword" onclick="aktifkanMaksimalLayan()" required placeholder=" " class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-4 pr-12 py-3 font-semibold text-gray-900 focus:bg-white focus:ring-2 focus:ring-emerald-medium/20 focus:border-emerald-deep transition-all outline-none text-sm">
+                        <button type="button" onclick="toggleVisibilitasPassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-emerald-deep transition-colors focus:outline-none">
+                            <i id="ikonMata" data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" id="btnMasukGerbang" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-emerald-deep hover:bg-emerald-medium text-white font-bold text-sm rounded-xl transition-all duration-300 shadow-md mt-2">
@@ -284,6 +289,22 @@
                     elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
                 }
             }
+        }
+
+        // Fungsi untuk melihat dan menyembunyikan password secara dinamis
+        function toggleVisibilitasPassword() {
+            const inputPassword = document.getElementById('gerbangPassword');
+            const ikonMata = document.getElementById('ikonMata');
+            
+            if (inputPassword.type === 'password') {
+                inputPassword.type = 'text';
+                ikonMata.setAttribute('data-lucide', 'eye-off');
+            } else {
+                inputPassword.type = 'password';
+                ikonMata.setAttribute('data-lucide', 'eye');
+            }
+            // Render ulang ikon Lucide agar grafis berganti secara instan
+            lucide.createIcons();
         }
 
         // Fungsi trigger gabungan saat dropdown Mapel/Kelas dipilih
