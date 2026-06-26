@@ -182,7 +182,7 @@ body::before {
 
 /* Cari kode ini di style.css Anda */
 .nav-item.active {
-    transform: translateY(-10px); /* Diubah dari -14px menjadi -10px agar tidak terlalu menempel ke atas */
+    transform: translateY(-28px); /* Mengangkat lingkaran ikon putih lebih tinggi ke atas Semakin besar angka minusnya (negatif), maka ikon akan semakin terangkat ke atas.*/
 }
 
 .nav-item.active .icon-circle {
