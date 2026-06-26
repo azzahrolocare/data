@@ -1,10 +1,40 @@
 /**
  * SmartGrader Az-Zahro - Layout Lockdown Script (Clean Version)
  * Fitur: Anti-Klik Kanan, Anti-Copy, Anti-Select, Anti-Keyboard Inspect, Hidden Scrollbar
- * (Fungsi Akses Ditolak / Hancurkan Halaman Telah Dihapus)
+ * Tambahan: Manajemen Sesi Otomatis (Keluar/Reload dalam 3 Jam Idle)
  */
 
 (function() {
+    // ==========================================
+    // TAMBAHAN FITUR: TIMER OTOMATIS 3 JAM
+    // ==========================================
+    const DURASI_3_JAM = 3 * 60 * 60 * 1000; // 10.800.000 milidetik
+    let timerKeluarSesi;
+
+    function resetTimerSesi() {
+        // Hapus timer lama yang sedang berjalan
+        clearTimeout(timerKeluarSesi);
+        
+        // Buat timer baru untuk melakukan refresh/keluar setelah 3 jam kosong aktivitas
+        timerKeluarSesi = setTimeout(function() {
+            alert("Sesi Anda telah berakhir setelah 3 jam tidak ada aktivitas. Halaman akan dimuat ulang.");
+            location.reload(); // Memuat ulang halaman untuk memaksa login kembali
+        }, DURASI_3_JAM);
+    }
+
+    // Aktifkan pemantauan aktivitas pengguna
+    function mulaiPantauAktivitas() {
+        resetTimerSesi(); // Jalankan pertama kali saat sistem siap
+
+        // Daftar aktivitas yang menandakan pengguna masih aktif bekerja
+        const eventAktivitas = ['mousemove', 'keydown', 'click', 'touchstart', 'scroll'];
+        
+        eventAktivitas.forEach(function(namaEvent) {
+            document.addEventListener(namaEvent, resetTimerSesi, { passive: true });
+        });
+    }
+    // ==========================================
+
     // 1. MENYUNTIKKAN CSS UNTUK MENYEMBUNYIKAN SCROLLBAR & SELEKSI SECARA VISUAL
     const injeksiCSS = () => {
         if (document.getElementById('security-lock-style')) return;
@@ -35,6 +65,9 @@
     // 2. AKTIFKAN PROTEKSI JAVASCRIPT STANDAR SETELAH DOM SELESAI DIMUAT
     document.addEventListener('DOMContentLoaded', () => {
         
+        // Jalankan pelacak aktivitas untuk menjaga sesi 3 jam tetap aktif
+        mulaiPantauAktivitas();
+
         // A. Memblokir Klik Kanan
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
