@@ -7,21 +7,21 @@
     --btn-primary-hover: linear-gradient(90deg, #10b981, #34d399);
     --btn-shadow: rgba(16, 185, 129, 0.3);
     --accent-icon: #f59e0b;
-    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
     --glass-border: rgba(255, 255, 255, 0.12);
     --scrollbar-thumb: rgba(16, 185, 129, 0.25);
     --text-main: #ffffff;
     --text-muted: #d1e7dd;
     --card-text: #ffffff;
-    --input-bg: rgba(255, 255, 255, 0.1);
+    --input-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
     --input-text: #ffffff;
-    --input-border: rgba(255, 255, 255, 0.2);
-    --input-focus-bg: rgba(255, 255, 255, 0.2);
+    --input-border: rgba(255, 255, 255, 0.15);
+    --input-focus-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 
-    --nav-dock-bg: rgba(6, 31, 20, 0.93); 
-    --nav-dock-border: rgba(255, 255, 255, 0.2);
-    --icon-circle-pasif: rgba(255, 255, 255, 0.1);
-    --icon-circle-aktif: #ffffff;
+    --nav-dock-bg: linear-gradient(180deg, rgba(6, 31, 20, 0.85), rgba(4, 20, 13, 0.95)); 
+    --nav-dock-border: rgba(255, 255, 255, 0.15);
+    --icon-circle-pasif: rgba(255, 255, 255, 0.08);
+    --icon-circle-aktif: linear-gradient(135deg, #ffffff, #e2e8f0);
     --icon-text-aktif: #0b3a24;
 }
 
@@ -52,47 +52,52 @@ body::before {
 .table-input { width: 80px; text-align: center; }
 .overflow-hidden-modal { overflow: hidden !important; height: 100vh !important; }
 
+/* PANEL & LAYOUT GRADIEN MODERN */
 .glass-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     color: var(--card-text);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
     transition: background 0.5s ease, border 0.5s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .glass-card-dark {
-    background: rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2));
     border: 1px solid var(--glass-border);
 }
 
+/* INPUT FIELD GRADIEN */
 .theme-input {
     background: var(--input-bg);
     color: var(--input-text);
     border: 1px solid var(--input-border);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     transition: all 0.3s ease;
 }
 .theme-input:focus {
     background: var(--input-focus-bg);
     border-color: var(--glow-1);
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
 }
 .theme-input option {
     background: #111827;
     color: #ffffff;
 }
 
+/* TOMBOL GRADIEN */
 .theme-btn-primary {
     background: var(--btn-primary-bg);
-    box-shadow: 0 4px 14px var(--btn-shadow);
+    box-shadow: 0 4px 15px var(--btn-shadow);
     color: #ffffff;
     transition: all 0.3s ease;
 }
 .theme-btn-primary:hover:not(:disabled) {
     background: var(--btn-primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px var(--btn-shadow);
+    box-shadow: 0 6px 22px var(--btn-shadow);
 }
 
 .theme-icon-active {
@@ -102,18 +107,19 @@ body::before {
 .glow-sphere-1 {
     position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
     background: radial-gradient(circle, var(--glow-1) 0%, transparent 70%);
-    opacity: 0.25; z-index: -1; pointer-events: none; transition: background 0.5s ease;
+    opacity: 0.22; z-index: -1; pointer-events: none; transition: background 0.5s ease;
 }
 .glow-sphere-2 {
     position: fixed; bottom: -10%; right: -10%; width: 50vw; height: 50vw;
     background: radial-gradient(circle, var(--glow-2) 0%, transparent 70%);
-    opacity: 0.2; z-index: -1; pointer-events: none; transition: background 0.5s ease;
+    opacity: 0.18; z-index: -1; pointer-events: none; transition: background 0.5s ease;
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 99px; }
 
+/* NAV DOCK GRADIEN */
 .custom-bottom-nav {
     position: fixed;
     bottom: 0; left: 0; right: 0;
@@ -121,12 +127,12 @@ body::before {
     height: 80px;
     z-index: 40;
     background: var(--nav-dock-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid var(--nav-dock-border);
     border-bottom: none;
     border-radius: 50% 50% 0 0 / 25px 25px 0 0;
-    box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45);
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -152,7 +158,7 @@ body::before {
     height: 44px;
     border-radius: 50%;
     background: var(--icon-circle-pasif);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -188,7 +194,7 @@ body::before {
 .nav-item.active .icon-circle {
     background: var(--icon-circle-aktif);
     color: var(--icon-text-aktif);
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15), 0 0 0 4px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2), 0 0 0 4px rgba(255, 255, 255, 0.05);
     transform: scale(1.08);
 }
 
