@@ -165,89 +165,89 @@
         ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 99px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="h-screen overflow-hidden flex flex-col justify-between">
 
     <div class="glow-sphere-1"></div>
     <div class="glow-sphere-2"></div>
 
-    <div>
-        <div id="customToast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 max-w-md w-full hidden">
-            <div id="toastBorder" class="glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-emerald-500">
-                <div id="toastIconBg" class="p-2 bg-white/10 rounded-xl border border-white/10">
-                    <i id="toastIcon" data-lucide="check-circle-2" class="w-5 h-5 text-white"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h4 id="toastTitle" class="text-sm font-bold text-white font-serif-custom">Notifikasi</h4>
-                    <p id="toastMessage" class="text-xs text-white/80 mt-0.5 leading-relaxed"></p>
-                </div>
-                <button onclick="hideToast()" class="text-white/60 hover:text-white transition-colors">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
+    <div id="customToast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 max-w-md w-full hidden">
+        <div id="toastBorder" class="glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-emerald-500">
+            <div id="toastIconBg" class="p-2 bg-white/10 rounded-xl border border-white/10">
+                <i id="toastIcon" data-lucide="check-circle-2" class="w-5 h-5 text-white"></i>
             </div>
-        </div>
-
-        <div id="loadingOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex flex-col justify-center items-center z-50">
-            <div class="glass-panel text-center p-6 max-w-sm rounded-3xl">
-                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white/30 border-t-white mb-4"></div>
-                <div id="loadingText" class="font-bold text-white flex items-center justify-center gap-2 text-sm"></div>
+            <div class="flex-1 min-w-0">
+                <h4 id="toastTitle" class="text-sm font-bold text-white font-serif-custom">Notifikasi</h4>
+                <p id="toastMessage" class="text-xs text-white/80 mt-0.5 leading-relaxed"></p>
             </div>
+            <button onclick="hideToast()" class="text-white/60 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
         </div>
+    </div>
 
-        <nav class="sticky top-0 z-40 glass-panel border-t-0 border-x-0 rounded-b-3xl shadow-lg">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
-                <div class="flex items-center gap-3 min-w-0">
-                    <div class="p-2 bg-white/10 rounded-xl border border-white/10 flex-shrink-0">
-                        <i data-lucide="trending-up" class="w-5 h-5 sm:w-6 h-6 theme-icon-active"></i>
-                    </div>
-                    <div class="flex flex-col min-w-0">
-                        <h1 id="navJudulUtama" class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate text-white">
-                            SmartGrader Az-Zahro
-                        </h1>
-                        <div id="subInfoNav" class="text-[11px] sm:text-xs text-white/70 font-medium tracking-wide mt-0.5 truncate flex items-center gap-1.5">
-                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span id="navDetailText">Silahkan login akun guru terlebih dahulu...</span>
-                        </div>
+    <div id="loadingOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden flex flex-col justify-center items-center z-50">
+        <div class="glass-panel text-center p-6 max-w-sm rounded-3xl">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white/30 border-t-white mb-4"></div>
+            <div id="loadingText" class="font-bold text-white flex items-center justify-center gap-2 text-sm"></div>
+        </div>
+    </div>
+
+    <nav class="sticky top-0 z-40 glass-panel border-t-0 border-x-0 rounded-b-3xl shadow-lg flex-shrink-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="p-2 bg-white/10 rounded-xl border border-white/10 flex-shrink-0">
+                    <i data-lucide="trending-up" class="w-5 h-5 sm:w-6 h-6 theme-icon-active"></i>
+                </div>
+                <div class="flex flex-col min-w-0">
+                    <h1 id="navJudulUtama" class="text-base sm:text-lg md:text-xl font-serif-custom font-bold tracking-wide truncate text-white">
+                        SmartGrader Az-Zahro
+                    </h1>
+                    <div id="subInfoNav" class="text-[11px] sm:text-xs text-white/70 font-medium tracking-wide mt-0.5 truncate flex items-center gap-1.5">
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span id="navDetailText">Silahkan login akun guru terlebih dahulu...</span>
                     </div>
                 </div>
-                
-                <div class="flex items-center gap-2 flex-shrink-0 relative">
-                    <div class="relative inline-block text-left">
-                        <button type="button" onclick="toggleDropdownAkun()" id="btnMenuAkun" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl border border-white/10 transition-all shadow-sm active:scale-95">
-                            <i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> <span>Akun</span> <i data-lucide="chevron-down" class="w-3 h-3 opacity-70"></i>
-                        </button>
-                        
-                        <div id="dropdownAkunMenu" class="origin-top-right absolute right-0 mt-2 w-52 rounded-2xl shadow-xl bg-gray-900 border border-white/10 hidden overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                            <div class="py-1 text-white">
-                                <button type="button" onclick="bukaModalGantiPassword()" class="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-white/10 flex items-center gap-2 transition-colors">
-                                    <i data-lucide="key-round" class="w-3.5 h-3.5 theme-icon-active"></i> Ganti Password
-                                </button>
-                                
-                                <hr class="border-white/10">
-                                
-                                <div class="px-4 py-2">
-                                    <span class="block text-[10px] font-bold uppercase tracking-wider text-white/50 mb-1.5 flex items-center gap-1">
-                                        <i data-lucide="palette" class="w-3 h-3"></i> Pilih Tema Sistem
-                                    </span>
-                                    <div class="grid grid-cols-2 gap-1.5 text-[11px]">
-                                        <button onclick="pilihSistemTema('emerald')" class="px-2 py-1 rounded-lg bg-emerald-800 border border-emerald-600 font-medium text-left text-white hover:brightness-110">Emerald</button>
-                                        <button onclick="pilihSistemTema('biru-ungu')" class="px-2 py-1 rounded-lg bg-indigo-900 border border-indigo-600 font-medium text-left text-white hover:brightness-110">Blue-Violet</button>
-                                        <button onclick="pilihSistemTema('electric-blue')" class="px-2 py-1 rounded-lg bg-blue-500 border border-blue-400 font-medium text-left text-gray-900 hover:brightness-110">Electric</button>
-                                        <button onclick="pilihSistemTema('sunset-orange')" class="px-2 py-1 rounded-lg bg-amber-950 border border-orange-700 font-medium text-left text-white hover:brightness-110">Sunset</button>
-                                    </div>
+            </div>
+            
+            <div class="flex items-center gap-2 flex-shrink-0 relative">
+                <div class="relative inline-block text-left">
+                    <button type="button" onclick="toggleDropdownAkun()" id="btnMenuAkun" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl border border-white/10 transition-all shadow-sm active:scale-95">
+                        <i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> <span>Akun</span> <i data-lucide="chevron-down" class="w-3 h-3 opacity-70"></i>
+                    </button>
+                    
+                    <div id="dropdownAkunMenu" class="origin-top-right absolute right-0 mt-2 w-52 rounded-2xl shadow-xl bg-gray-900 border border-white/10 hidden overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                        <div class="py-1 text-white">
+                            <button type="button" onclick="bukaModalGantiPassword()" class="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-white/10 flex items-center gap-2 transition-colors">
+                                <i data-lucide="key-round" class="w-3.5 h-3.5 theme-icon-active"></i> Ganti Password
+                            </button>
+                            
+                            <hr class="border-white/10">
+                            
+                            <div class="px-4 py-2">
+                                <span class="block text-[10px] font-bold uppercase tracking-wider text-white/50 mb-1.5 flex items-center gap-1">
+                                    <i data-lucide="palette" class="w-3 h-3"></i> Pilih Tema Sistem
+                                </span>
+                                <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+                                    <button onclick="pilihSistemTema('emerald')" class="px-2 py-1 rounded-lg bg-emerald-800 border border-emerald-600 font-medium text-left text-white hover:brightness-110">Emerald</button>
+                                    <button onclick="pilihSistemTema('biru-ungu')" class="px-2 py-1 rounded-lg bg-indigo-900 border border-indigo-600 font-medium text-left text-white hover:brightness-110">Blue-Violet</button>
+                                    <button onclick="pilihSistemTema('electric-blue')" class="px-2 py-1 rounded-lg bg-blue-500 border border-blue-400 font-medium text-left text-gray-900 hover:brightness-110">Electric</button>
+                                    <button onclick="pilihSistemTema('sunset-orange')" class="px-2 py-1 rounded-lg bg-amber-950 border border-orange-700 font-medium text-left text-white hover:brightness-110">Sunset</button>
                                 </div>
-
-                                <hr class="border-white/10">
-
-                                <button type="button" onclick="tampilkanModalKeluar()" class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors">
-                                    <i data-lucide="log-out" class="w-3.5 h-3.5 text-red-400"></i> Keluar
-                                </button>
                             </div>
+
+                            <hr class="border-white/10">
+
+                            <button type="button" onclick="tampilkanModalKeluar()" class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors">
+                                <i data-lucide="log-out" class="w-3.5 h-3.5 text-red-400"></i> Keluar
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
+    <div class="flex-1 overflow-y-auto overscroll-none pb-4">
         <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             
             <div id="panelAksesMengajar" class="glass-panel rounded-3xl p-6 md:p-8 shadow-sm hidden mb-6">
@@ -336,6 +336,13 @@
                 </form>
             </div>
         </main>
+
+        <footer class="glass-panel border-b-0 border-x-0 rounded-t-3xl mt-12 py-6 px-4">
+            <div class="max-w-7xl mx-auto text-center text-[11px] text-white/40 leading-relaxed">
+                &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
+                SMP Islam Az-Zahro • SMK Az-Zahro
+            </div>
+        </footer>
     </div>
 
     <div id="modalAwal" class="fixed inset-0 bg-black/60 backdrop-blur-lg flex justify-center items-center z-50 p-4">
@@ -536,13 +543,6 @@
             </div>
         </div>
     </div>
-
-    <footer class="glass-panel border-b-0 border-x-0 rounded-t-3xl mt-12 py-6 px-4">
-        <div class="max-w-7xl mx-auto text-center text-[11px] text-white/40 leading-relaxed">
-            &copy; 2026 Yayasan Ponpes Salafiyah Syafi'iyah Az-Zahro<br>
-            SMP Islam Az-Zahro • SMK Az-Zahro
-        </div>
-    </footer>
 
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
