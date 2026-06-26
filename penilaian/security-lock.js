@@ -1,7 +1,7 @@
 /**
- * SmartGrader Az-Zahro - Ultimate Security & Layout Lockdown Script
- * Fitur: Anti-Klik Kanan, Anti-Copy, Anti-Select, Anti-Keyboard Inspect, Hidden Scrollbar,
- * & DevTools Detection via Timing Attack (Mendeteksi DevTools yang dibuka duluan)
+ * SmartGrader Az-Zahro - Layout Lockdown Script (Clean Version)
+ * Fitur: Anti-Klik Kanan, Anti-Copy, Anti-Select, Anti-Keyboard Inspect, Hidden Scrollbar
+ * (Fungsi Akses Ditolak / Hancurkan Halaman Telah Dihapus)
  */
 
 (function() {
@@ -32,35 +32,7 @@
 
     if (document.head) { injeksiCSS(); } else { document.addEventListener('DOMContentLoaded', injeksiCSS); }
 
-    // 2. FUNGSI UNTUK MENGHANCURKAN HALAMAN JIKA TERDETEKSI KECURANGAN
-    const hancurkanHalaman = () => {
-        document.body.innerHTML = `
-            <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background-color:#f8fafc; font-family:'Inter', sans-serif; text-align:center; padding:20px; direction:ltr;">
-                <h1 style="color:#dc2626; font-size:24px; font-weight:bold; margin-bottom:10px;">AKSES DITOLAK</h1>
-                <p style="color:#475569; font-size:16px; max-width:500px;">Sistem mendeteksi aktivitas analisis perangkat pengembang (Developer Tools) yang aktif. Silakan tutup jendela Inspect Element Anda dan muat ulang halaman ini.</p>
-            </div>
-        `;
-    };
-
-    // 3. DETEKSI AMBANG BATAS WAKTU (TIMING ATTACK DETECTOR)
-    // Menangkap pengguna yang membuka Inspect Element duluan sebelum memuat link
-    setInterval(function() {
-        const waktuMulai = new Date().getTime();
-        
-        // Memicu debugger dinamis
-        (function() {}.constructor("debugger")());
-        
-        const waktuSelesai = new Date().getTime();
-        const selisihWaktu = waktuSelesai - waktuMulai;
-        
-        // Jika DevTools tertutup, selisih waktu hampir 0ms. 
-        // Jika DevTools terbuka, perintah debugger akan menunda eksekusi > 20ms.
-        if (selisihWaktu > 20) {
-            hancurkanHalaman();
-        }
-    }, 500);
-
-    // 4. AKTIFKAN PROTEKSI JAVASCRIPT STANDAR SETELAH DOM SELESAI DIMUAT
+    // 2. AKTIFKAN PROTEKSI JAVASCRIPT STANDAR SETELAH DOM SELESAI DIMUAT
     document.addEventListener('DOMContentLoaded', () => {
         
         // A. Memblokir Klik Kanan
@@ -101,19 +73,4 @@
             }
         });
     });
-
-    // 5. DETEKSI UKURAN LAYAR KHUSUS DESKTOP (Sebagai backup pelapis)
-    setInterval(function() {
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.matchMedia("(max-width: 767px)").matches;
-        
-        if (!isMobile) {
-            const threshold = 160; 
-            const selisihLebar = window.outerWidth - window.innerWidth > threshold;
-            const selisihTinggi = window.outerHeight - window.innerHeight > threshold;
-            
-            if (selisihLebar || selisihTinggi) {
-                hancurkanHalaman();
-            }
-        }
-    }, 1000);
 })();
