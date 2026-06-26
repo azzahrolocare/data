@@ -168,7 +168,7 @@ body::before {
 
 .nav-text {
     position: absolute;
-    bottom: 6px;
+    bottom: 2px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -181,7 +181,7 @@ body::before {
 }
 
 .nav-item.active {
-    transform: translateY(-14px);
+    transform: translateY(-10px);
 }
 
 .nav-item.active .icon-circle {
