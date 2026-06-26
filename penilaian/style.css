@@ -168,7 +168,7 @@ body::before {
 
 .nav-text {
     position: absolute;
-    bottom: 2px;
+    bottom: -2px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -180,8 +180,9 @@ body::before {
     z-index: 1;
 }
 
+/* Cari kode ini di style.css Anda */
 .nav-item.active {
-    transform: translateY(-10px);
+    transform: translateY(-10px); /* Diubah dari -14px menjadi -10px agar tidak terlalu menempel ke atas */
 }
 
 .nav-item.active .icon-circle {
