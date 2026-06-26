@@ -168,7 +168,7 @@ body::before {
 
 .nav-text {
     position: absolute;
-    bottom: -2px;
+    bottom: -12px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
