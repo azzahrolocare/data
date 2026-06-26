@@ -169,7 +169,7 @@ body::before {
 /*Bottom icon Navigasi*/
 .nav-text {
     position: absolute;
-    bottom: -35px;
+    bottom: -38px;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -183,7 +183,7 @@ body::before {
 
 /* Cari kode ini di style.css Anda */
 .nav-item.active {
-    transform: translateY(-35px); /* Mengangkat lingkaran ikon putih lebih tinggi ke atas Semakin besar angka minusnya (negatif), maka ikon akan semakin terangkat ke atas.*/
+    transform: translateY(-30px); /* Mengangkat lingkaran ikon putih lebih tinggi ke atas Semakin besar angka minusnya (negatif), maka ikon akan semakin terangkat ke atas.*/
 }
 
 .nav-item.active .icon-circle {
