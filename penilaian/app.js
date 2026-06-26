@@ -32,7 +32,25 @@ const DAFTAR_TEMA = {
         accentIcon: "#f97316", glassBg: "rgba(255, 255, 255, 0.05)", glassBorder: "rgba(255, 255, 255, 0.12)",
         scrollbarThumb: "rgba(234, 88, 12, 0.3)", themeColor: "#3a1c05", navDockBg: "rgba(58, 28, 5, 0.95)",
         iconCirclePasif: "rgba(255, 255, 255, 0.08)", iconCircleAktif: "#ffffff", iconTextAktif: "#3a1c05"
-    }
+    },
+    "pastel-cotton": {
+    "bodyBg": "linear-gradient(135deg, #a2d2ff, #ffafcc)", 
+    "bodySolidBg": "#a2d2ff",
+    "glow1": "#bde0fe", 
+    "glow2": "#ffc8dd", 
+    "btnPrimaryBg": "linear-gradient(90deg, #4ea8de, #ff70a6)",
+    "btnPrimaryHover": "linear-gradient(90deg, #3a92c8, #e05387)", 
+    "btnShadow": "rgba(78, 168, 222, 0.4)",
+    "accentIcon": "#ffffff", 
+    "glassBg": "rgba(255, 255, 255, 0.25)", 
+    "glassBorder": "rgba(255, 255, 255, 0.4)",
+    "scrollbarThumb": "#4ea8de", 
+    "themeColor": "#4ea8de", 
+    "navDockBg": "rgba(162, 210, 255, 0.95)",
+    "iconCirclePasif": "rgba(255, 255, 255, 0.3)", 
+    "iconCircleAktif": "#ffffff", 
+    "iconTextAktif": "#4ea8de"
+}
 };
 
 let DATA_CACHED = { pengaturan: {}, siswa: [] };
