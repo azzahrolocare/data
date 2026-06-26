@@ -165,11 +165,12 @@
         ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 99px; }
     </style>
 </head>
-<body class="h-screen overflow-hidden flex flex-col justify-between">
+<body class="h-screen overflow-hidden flex flex-col justify-between select-none">
 
     <div class="glow-sphere-1"></div>
     <div class="glow-sphere-2"></div>
 
+    <!-- Modals & Overlay tetap berposisi Fixed di layer paling atas browser -->
     <div id="customToast" class="fixed top-5 right-5 z-50 transform translate-x-full opacity-0 transition-all duration-300 max-w-md w-full hidden">
         <div id="toastBorder" class="glass-panel rounded-2xl p-4 flex items-start gap-3 border-l-4 border-l-emerald-500">
             <div id="toastIconBg" class="p-2 bg-white/10 rounded-xl border border-white/10">
@@ -192,6 +193,7 @@
         </div>
     </div>
 
+    <!-- HEADER / NAVIGATION: Dikunci permanen di atas agar tidak bergeser -->
     <nav class="sticky top-0 z-40 glass-panel border-t-0 border-x-0 rounded-b-3xl shadow-lg flex-shrink-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3 min-w-0">
@@ -208,46 +210,11 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="flex items-center gap-2 flex-shrink-0 relative">
-                <div class="relative inline-block text-left">
-                    <button type="button" onclick="toggleDropdownAkun()" id="btnMenuAkun" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl border border-white/10 transition-all shadow-sm active:scale-95">
-                        <i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> <span>Akun</span> <i data-lucide="chevron-down" class="w-3 h-3 opacity-70"></i>
-                    </button>
-                    
-                    <div id="dropdownAkunMenu" class="origin-top-right absolute right-0 mt-2 w-52 rounded-2xl shadow-xl bg-gray-900 border border-white/10 hidden overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                        <div class="py-1 text-white">
-                            <button type="button" onclick="bukaModalGantiPassword()" class="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-white/10 flex items-center gap-2 transition-colors">
-                                <i data-lucide="key-round" class="w-3.5 h-3.5 theme-icon-active"></i> Ganti Password
-                            </button>
-                            
-                            <hr class="border-white/10">
-                            
-                            <div class="px-4 py-2">
-                                <span class="block text-[10px] font-bold uppercase tracking-wider text-white/50 mb-1.5 flex items-center gap-1">
-                                    <i data-lucide="palette" class="w-3 h-3"></i> Pilih Tema Sistem
-                                </span>
-                                <div class="grid grid-cols-2 gap-1.5 text-[11px]">
-                                    <button onclick="pilihSistemTema('emerald')" class="px-2 py-1 rounded-lg bg-emerald-800 border border-emerald-600 font-medium text-left text-white hover:brightness-110">Emerald</button>
-                                    <button onclick="pilihSistemTema('biru-ungu')" class="px-2 py-1 rounded-lg bg-indigo-900 border border-indigo-600 font-medium text-left text-white hover:brightness-110">Blue-Violet</button>
-                                    <button onclick="pilihSistemTema('electric-blue')" class="px-2 py-1 rounded-lg bg-blue-500 border border-blue-400 font-medium text-left text-gray-900 hover:brightness-110">Electric</button>
-                                    <button onclick="pilihSistemTema('sunset-orange')" class="px-2 py-1 rounded-lg bg-amber-950 border border-orange-700 font-medium text-left text-white hover:brightness-110">Sunset</button>
-                                </div>
-                            </div>
-
-                            <hr class="border-white/10">
-
-                            <button type="button" onclick="tampilkanModalKeluar()" class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors">
-                                <i data-lucide="log-out" class="w-3.5 h-3.5 text-red-400"></i> Keluar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </nav>
 
-    <div class="flex-1 overflow-y-auto overscroll-none pb-4">
+    <!-- PENGHALANG SCROLL UTAMA: Seluruh scroll konten diisolasi penuh di container flex-1 ini -->
+    <div class="flex-1 overflow-y-auto overscroll-none pb-24">
         <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             
             <div id="panelAksesMengajar" class="glass-panel rounded-3xl p-6 md:p-8 shadow-sm hidden mb-6">
@@ -262,7 +229,7 @@
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                     <div>
                         <label class="block text-sm font-semibold text-white/90 mb-2 flex items-center gap-1.5">
                             <i data-lucide="calendar" class="w-4 h-4 theme-icon-active"></i> Pilih Kelas & Mapel Anda
@@ -286,16 +253,6 @@
                             <option value="UTS">UTS</option>
                             <option value="PAS">PAS</option>
                         </select>
-                    </div>
-                    <div>
-                        <button type="button" onclick="bukaModalPengaturan()" class="w-full inline-flex items-center justify-center gap-2 h-[46px] theme-btn-primary font-bold text-sm rounded-xl border border-white/10 shadow-md">
-                            <i data-lucide="settings" class="w-4 h-4 theme-icon-active"></i> <span>Materi KD</span>
-                        </button>
-                    </div>
-                    <div>
-                        <a href="smpleger.html" class="w-full inline-flex items-center justify-center gap-2 h-[46px] bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl border border-white/10 transition-all shadow-md active:scale-95 group" title="Lihat rekapitulasi seluruh nilai siswa">
-                            <i data-lucide="book-open" class="w-4 h-4 text-white transition-transform group-hover:scale-110"></i> <span>Buka Leger</span>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -345,6 +302,74 @@
         </footer>
     </div>
 
+    <!-- MODAL POPUP SUB-MENU TEMA (DIPICU OLEH BOTTOM NAV) -->
+    <div id="modalPilihTemaCepat" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
+            <button type="button" onclick="tutupModalTemaCepat()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-4 border-b border-white/10 pb-3">
+                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5">
+                    <i data-lucide="palette" class="w-6 h-6 theme-icon-active"></i>
+                </div>
+                <h3 class="text-base font-bold text-white font-serif-custom">Kustomisasi Tema Sistem</h3>
+            </div>
+            <div class="grid grid-cols-1 gap-2.5 text-xs">
+                <button onclick="pilihSistemTema('emerald'); tutupModalTemaCepat();" class="w-full px-4 py-3 rounded-xl bg-emerald-800 border border-emerald-600 font-bold text-left text-white hover:brightness-110 flex justify-between items-center"><span>Emerald Green</span><span class="w-3 h-3 rounded-full bg-emerald-400"></span></button>
+                <button onclick="pilihSistemTema('biru-ungu'); tutupModalTemaCepat();" class="w-full px-4 py-3 rounded-xl bg-indigo-900 border border-indigo-600 font-bold text-left text-white hover:brightness-110 flex justify-between items-center"><span>Blue Violet</span><span class="w-3 h-3 rounded-full bg-indigo-400"></span></button>
+                <button onclick="pilihSistemTema('electric-blue'); tutupModalTemaCepat();" class="w-full px-4 py-3 rounded-xl bg-blue-500 border border-blue-400 font-bold text-left text-gray-900 hover:brightness-110 flex justify-between items-center"><span>Electric Blue</span><span class="w-3 h-3 rounded-full bg-blue-600"></span></button>
+                <button onclick="pilihSistemTema('sunset-orange'); tutupModalTemaCepat();" class="w-full px-4 py-3 rounded-xl bg-amber-950 border border-orange-700 font-bold text-left text-white hover:brightness-110 flex justify-between items-center"><span>Sunset Gold</span><span class="w-3 h-3 rounded-full bg-orange-500"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP DROPDOWN MENU AKUN (DIPICU OLEH BOTTOM NAV) -->
+    <div id="modalMenuAkunCepat" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-5 relative animate-in fade-in zoom-in-95 duration-200">
+            <button type="button" onclick="tutupModalAkunCepat()" class="absolute top-4 right-4 text-white/40 hover:text-white p-1.5 hover:bg-white/10 rounded-xl transition-all outline-none">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-4 border-b border-white/10 pb-3">
+                <div class="p-2.5 bg-white/10 rounded-2xl inline-block border border-white/10 mb-1.5">
+                    <i data-lucide="user" class="w-6 h-6 theme-icon-active"></i>
+                </div>
+                <h3 id="modalAkunTitle" class="text-base font-bold text-white font-serif-custom">Manajemen Akun</h3>
+            </div>
+            <div class="space-y-2 text-xs">
+                <button type="button" onclick="tutupModalAkunCepat(); bukaModalGantiPassword();" class="w-full text-left px-4 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-white flex items-center gap-2.5 transition-colors">
+                    <i data-lucide="key-round" class="w-4 h-4 theme-icon-active"></i> Ganti Password Akun
+                </button>
+                <button type="button" onclick="tutupModalAkunCepat(); tampilkanModalKeluar();" class="w-full text-left px-4 py-3.5 bg-red-500/5 hover:bg-red-500/10 border border-red-500/20 rounded-xl font-bold text-red-400 flex items-center gap-2.5 transition-colors">
+                    <i data-lucide="log-out" class="w-4 h-4 text-red-400"></i> Keluar / Log Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODERN NAVIGATION FOOTER (BAR ATAS PENGHALANG BAWAH MOBILE-FIRST) -->
+    <div id="bottomNavDock" class="fixed bottom-0 left-0 right-0 z-40 glass-panel border-b-0 border-x-0 rounded-t-3xl shadow-2xl px-6 py-2 flex items-center justify-between hidden max-w-lg mx-auto mb-safe">
+        <!-- 1. PILIH TEMA (UJUNG KIRI) -->
+        <button onclick="bukaModalTemaCepat()" class="flex flex-col items-center justify-center p-2.5 text-white/70 hover:text-white transition-all active:scale-90" title="Ubah Tema Warna">
+            <i data-lucide="palette" class="w-5 h-5 theme-icon-active"></i>
+        </button>
+        
+        <!-- 2. BUKA LEGER (KIRI) -->
+        <a href="smpleger.html" class="flex flex-col items-center justify-center p-2.5 text-white/70 hover:text-white transition-all active:scale-90" title="Buka Rekap Leger Nilai">
+            <i data-lucide="book-open" class="w-5 h-5"></i>
+        </a>
+        
+        <!-- 3. MATERI KD (TENGAH - UTAMA) -->
+        <button onclick="bukaModalPengaturan()" class="flex flex-col items-center justify-center p-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-2xl shadow-inner text-white transition-all active:scale-90 -translate-y-2" title="Kelola Ringkasan Materi KD">
+            <i data-lucide="settings" class="w-5 h-5 theme-icon-active"></i>
+        </button>
+        
+        <!-- 4. AKUN (SEBELAH KANAN) -->
+        <button onclick="bukaModalAkunCepat()" class="flex flex-col items-center justify-center p-2.5 text-white/70 hover:text-white transition-all active:scale-90" title="Menu Akun Guru">
+            <i data-lucide="user" class="w-5 h-5"></i>
+        </button>
+    </div>
+
+    <!-- Modals Struktural Tetap Berada di Paling Bawah Body -->
     <div id="modalAwal" class="fixed inset-0 bg-black/60 backdrop-blur-lg flex justify-center items-center z-50 p-4">
         <div class="glass-panel rounded-3xl max-w-md w-full p-6 relative animate-in fade-in zoom-in-95 duration-200">
             <div class="text-center mb-5">
@@ -670,11 +695,33 @@
                 const modalKonfirmasiKeluar = !document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden');
                 const modalKonfirmasiKembali = !document.getElementById('modalKonfirmasiKembali').classList.contains('hidden');
                 const modalGagal = !document.getElementById('modalGagalMasuk').classList.contains('hidden');
+                const modalTema = !document.getElementById('modalPilihTemaCepat').classList.contains('hidden');
+                const modalAkun = !document.getElementById('modalMenuAkunCepat').classList.contains('hidden');
 
-                if (!modalAwal && !modalPengaturan && !modalGantiPassword && !modalKonfirmasiKeluar && !modalKonfirmasiKembali && !modalGagal) {
+                if (!modalAwal && !modalPengaturan && !modalGantiPassword && !modalKonfirmasiKeluar && !modalKonfirmasiKembali && !modalGagal && !modalTema && !modalAkun) {
                     document.body.classList.remove('overflow-hidden-modal');
                 }
             }
+        }
+
+        // KONTROL POPUP MODAL BARU UNTUK BOTTOM NAV
+        function bukaModalTemaCepat() {
+            document.getElementById('modalPilihTemaCepat').classList.remove('hidden');
+            kunciScrollLatar(true);
+        }
+        function tutupModalTemaCepat() {
+            document.getElementById('modalPilihTemaCepat').classList.add('hidden');
+            kunciScrollLatar(false);
+        }
+        function bukaModalAkunCepat() {
+            if (!GURU_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); return; }
+            document.getElementById('modalAkunTitle').innerText = GURU_AKTIF;
+            document.getElementById('modalMenuAkunCepat').classList.remove('hidden');
+            kunciScrollLatar(true);
+        }
+        function tutupModalAkunCepat() {
+            document.getElementById('modalMenuAkunCepat').classList.add('hidden');
+            kunciScrollLatar(false);
         }
 
         // FUNGSI PEMICU LAYAR PENUH NATIVE (HTML5 FULLSCREEN API) + INJEKSI STATUS RIWAYAT
@@ -792,20 +839,6 @@
             lucide.createIcons();
         }
 
-        // KONTROL DROPDOWN MENU AKUN
-        function toggleDropdownAkun() {
-            const menu = document.getElementById('dropdownAkunMenu');
-            menu.classList.toggle('hidden');
-        }
-
-        window.addEventListener('click', function(e) {
-            const btn = document.getElementById('btnMenuAkun');
-            const menu = document.getElementById('dropdownAkunMenu');
-            if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
-                menu.classList.add('hidden');
-            }
-        });
-
         // KONTROL MODAL TAMPILAN
         function bukaModalAwal() {
             document.getElementById('modalAwal').classList.remove('hidden');
@@ -841,7 +874,6 @@
         // MODAL GANTI PASSWORD
         function bukaModalGantiPassword() {
             if (!GURU_AKTIF) { tampilkanModalGagalMasuk("Akses Ditolak", "Silakan login akun guru terlebih dahulu!"); return; }
-            document.getElementById('dropdownAkunMenu').classList.add('hidden');
             document.getElementById('modalPwGuruNama').value = GURU_AKTIF;
             document.getElementById('modalPwBaru').value = "";
             document.getElementById('modalPwKonfirmasi').value = "";
@@ -858,7 +890,6 @@
 
         // KONTROL MODAL KELUAR CUSTOM
         function tampilkanModalKeluar() {
-            document.getElementById('dropdownAkunMenu').classList.add('hidden');
             document.getElementById('modalKonfirmasiKeluar').classList.remove('hidden');
             kunciScrollLatar(true);
             lucide.createIcons();
@@ -940,6 +971,7 @@
                         tutupModalAwal();
                         document.getElementById('panelAksesMengajar').classList.remove('hidden');
                         document.getElementById('infoMateriAktif').classList.remove('hidden');
+                        document.getElementById('bottomNavDock').classList.remove('hidden'); // Membuka Bottom Nav Dock saat sukses login
 
                         const selectJadwal = document.getElementById('pilihJadwalDinamis');
                         selectJadwal.innerHTML = "";
@@ -1197,7 +1229,7 @@
                 let nomorKD = komponen.replace("KD", "");
                 let judulMateri = DATA_CACHED.pengaturan['kd' + nomorKD] || "";
                 if (judulMateri.trim() === "") {
-                    tampilkanModalGagalMasuk("Penyimpanan Dibatalkan", `Gagal Menyimpan! Judul Materi untuk ${komponen} masih kosong. Anda dilarang menginput nilai sebelum mengisi Judul KD di menu kanan atas.`);
+                    tampilkanModalGagalMasuk("Penyimpanan Dibatalkan", `Gagal Menyimpan! Judul Materi untuk ${komponen} masih kosong. Anda dilarang menginput nilai sebelum mengisi Judul KD di menu bawah.`);
                     return;
                 }
             }
