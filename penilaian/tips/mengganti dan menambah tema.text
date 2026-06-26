@@ -1,0 +1,66 @@
+Sistem yang saya gunakan untuk membuat tema-tema tersebut bisa berubah secara instan dan dinamis adalah CSS Variables (Custom Properties) yang dipadukan dengan Tailwind CSS Utility Classes.
+Mari kita bedah cara kerjanya dan di mana Anda harus menambahkan jika ingin memasukkan warna atau tema baru.
+1. Sistem yang Digunakan: CSS Variables
+Di bagian paling atas <style>, saya membuat kumpulan "variabel" induk di dalam :root. Variabel ini bertindak seperti wadah kosong yang bisa kita isi dengan warna apa saja.
+CSS
+:root {
+    --body-bg: linear-gradient(135deg, #0b0f19, #1e1b4b, #111827);
+    --glow-1: #3b82f6;
+    --glow-2: #7c3aed;
+    /* ... variabel lainnya ... */
+}
+Ketika komponen HTML (seperti tombol atau background) mendeteksi perubahan isi dari variabel tersebut, tampilannya akan langsung berubah saat itu juga tanpa perlu memuat ulang (refresh) halaman.
+2. Cara Menambah Tema Baru (Langkah-demi-Langkah)
+Jika di kemudian hari Anda ingin menambah tema baru (misalkan tema "Sunset Orange" atau "Midnight Dark"), Anda hanya perlu mengedit bagian Javascript di dalam kode tersebut.
+Cari objek bernama DAFTAR_KONFIG_TEMA di bagian <script> bawah, lalu tambahkan konfigurasi warna baru Anda di sana.
+Langkah 1: Tambahkan data warna di DAFTAR_KONFIG_TEMA
+Buka kode HTML tersebut, cari baris const DAFTAR_KONFIG_TEMA = { ... }, lalu tempelkan kode tema baru Anda di dalamnya. Contohnya seperti ini:
+JavaScript
+const DAFTAR_KONFIG_TEMA = {
+    "biru-ungu": { ... },
+    "emerald": { ... },
+    "electric-blue": { ... },
+    
+    // TAMBAHKAN TEMA BARU DI SINI (Contoh: Tema Sunset)
+    "sunset-orange": {
+        bodyBg: "linear-gradient(135deg, #1a0f05, #3a1c05, #140b00)", // Background web
+        glow1: "#ea580c", // Bulatan cahaya 1 (Orange)
+        glow2: "#eab308", // Bulatan cahaya 2 (Kuning)
+        btnPrimaryBg: "linear-gradient(90deg, #ea580c, #ca8a04)", // Tombol utama
+        btnPrimaryHover: "linear-gradient(90deg, #f97316, #eab308)", // Tombol saat disentuh
+        btnShadow: "rgba(234, 88, 12, 0.4)", // Bayangan tombol
+        accentIcon: "#f97316", // Warna icon aktif
+        glassBg: "rgba(255, 255, 255, 0.05)", // Transparansi kaca
+        glassBorder: "rgba(255, 255, 255, 0.12)", // Garis tepi kaca
+        scrollbarThumb: "rgba(234, 88, 12, 0.3)", // Scrollbar
+        themeColor: "#3a1c05" // Warna browser HP
+    }
+};
+Langkah 2: Daftarkan Tema Baru di Dropdown HTML
+Agar guru bisa memilih tema baru tersebut, Anda harus menambahkannya ke dalam daftar pilihan <select> di bagian atas (Navbar). Cari kode ID themeSelector dan tambahkan baris <option> baru:
+HTML
+<select id="themeSelector" onchange="gantiTemaSitus(this.value)" ...>
+    <option value="biru-ungu">Biru-Ungu Neon</option>
+    <option value="emerald">Emerald Gold</option>
+    <option value="electric-blue">Electric Light</option>
+    
+    <!-- TAMBAHKAN PILIHAN BARU DI SINI -->
+    <option value="sunset-orange">Sunset Orange</option>
+</select>
+Catatan: Pastikan isi value="..." di HTML sama persis dengan nama kata kunci yang Anda buat di Javascript Langkah 1 (sunset-orange).
+
+Langkah 3: Untuk menentukan tema awal (tema default) sebelum pengguna mengubahnya sendiri, Anda cukup mengganti satu baris kode di bagian paling bawah Javascript, tepatnya di dalam fungsi window.addEventListener('DOMContentLoaded', ...) 
+Berikut adalah cara kerjanya dan bagian yang perlu Anda ubah:
+Ubah di Bagian Paling Bawah Script
+Cari kode inisialisasi tema yang lama (di baris-baris akhir file HTML Anda):
+JavaScript
+// KODE LAMA (Default-nya adalah 'biru-ungu')
+const temaTersimpan = localStorage.getItem('preferensi_tema_leger') || 'biru-ungu';
+Silakan ubah teks 'biru-ungu' di atas dengan kata kunci tema yang Anda inginkan sebagai standar awal saat situs pertama kali dibuka oleh guru.
+Contoh Penerapan:
+1. Jika ingin Tema Awalnya Emerald Gold:
+Ganti baris tersebut menjadi seperti ini:
+JavaScript
+const temaTersimpan = localStorage.getItem('preferensi_tema_leger') || 'emerald';
+gantiTemaSitus(temaTersimpan);
+
