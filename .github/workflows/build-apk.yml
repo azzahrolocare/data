@@ -34,8 +34,8 @@ jobs:
     - name: Install Cordova
       run: npm install -g cordova
 
-    # 4. Buat Proyek dan Konfigurasi Lengkap
-    - name: Create Cordova App with All Settings
+    # 4. Buat Proyek dan Konfigurasi Total Bebas Navigasi
+    - name: Create Cordova App with Open Whitelist
       run: |
         cordova create apk-project com.azzahro.penilaian "Penilaian Az-Zahro"
         cd apk-project
@@ -45,30 +45,17 @@ jobs:
         
         # --- INSTALASI PLUGIN ---
         cordova plugin add cordova-plugin-statusbar
-        cordova plugin add cordova-plugin-inappbrowser
         
-        # --- KONFIGURASI URL & NAVIGASI PANDUAN KETAT ---
+        # --- KONFIGURASI URL UTAMA ---
         sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/data/penilaian/" />|' config.xml
         
-        # Membuka gerbang navigasi internal sedalam mungkin
-        sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" /><allow-navigation href="https://azzahro.web.id/data/penilaian/*" /><allow-intent href="https://azzahro.web.id/*" />\n    <preference name="StayInApp" value="true" />\n    <preference name="InAppBrowserStorageEnabled" value="true" />|' config.xml
-
-        # --- JINAKKAN WINDOW.OPEN JAVASCRIPT SECARA OTOMATIS ---
-        # Trik Injeksi JavaScript: Mengganti window.open(..., '_blank') menjadi window.open(..., '_self') secara paksa pada runtime WebView
-        mkdir -p www
-        echo 'document.addEventListener("deviceready", onDeviceReady, false);' > www/index.js
-        echo 'function onDeviceReady() {' >> www/index.js
-        echo '    var originalOpen = window.open;' >> www/index.js
-        echo '    window.open = function(url, target, features) {' >> www/index.js
-        echo '        if (target === "_blank") {' >> www/index.js
-        echo '            target = "_self";' >> www/index.js
-        echo '        }' >> www/index.js
-        echo '        return originalOpen(url, target, features);' >> www/index.js
-        echo '    };' >> www/index.js
-        echo '}' >> www/index.js
-
-        # Mengintegrasikan skrip penjinak tersebut ke dalam sistem injeksi Cordova
-        sed -i '/<\/widget>/i \    <platform name="android">\n        <hooks>\n            <hook type="after_prepare" src="www/index.js" />\n        </hooks>\n    </platform>' config.xml
+        # --- SOLUSI TOTAL: IZINKAN SEMUA NAVIGASI TANPA BATAS ---
+        # Kita menghapus semua aturan bawaan yang membatasi navigasi, lalu memaksa mengizinkan segalanya (*)
+        sed -i '/<allow-intent href="http:\/\/\\*\/\\*" \/>/d' config.xml
+        sed -i '/<allow-intent href="https:\/\/\\*\/\\*" \/>/d' config.xml
+        
+        # Menyisipkan izin navigasi bebas dan setelan agar tetap di dalam aplikasi sebelum tag </widget>
+        sed -i '/<\/widget>/i \    <allow-navigation href="*" />\n    <allow-intent href="*" />\n    <preference name="StayInApp" value="true" />' config.xml
 
         # --- KONFIGURASI TOTAL FULLSCREEN ---
         sed -i '/<\/widget>/i \    <preference name="Fullscreen" value="true" />\n    <preference name="StatusBarOverlaysWebView" value="true" />' config.xml
@@ -95,5 +82,5 @@ jobs:
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: AzZahro-Penilaian-Lengkap-APK
+        name: AzZahro-Penilaian-Final-APK
         path: apk-project/platforms/android/app/build/outputs/apk/debug/app-debug.apk
