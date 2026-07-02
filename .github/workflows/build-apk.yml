@@ -34,53 +34,62 @@ jobs:
     - name: Install Cordova
       run: npm install -g cordova
 
-    # 4. Buat Proyek dan Konfigurasi (Nama Aplikasi, URL, Whitelist, Ikon, Splash)
-    - name: Create Cordova App with SmartGrader Settings
+    # 4. Buat Proyek dan Tulis Ulang Konfigurasi Secara Bersih (Anti-Error)
+    - name: Create Cordova App and Generate Config
       run: |
-        # Inisialisasi proyek dengan nama aplikasi baru
+        # Membuat proyek dasar Cordova
         cordova create apk-project com.azzahro.penilaian "SmartGrader Az-Zahro"
         cd apk-project
         
-        # Tambahkan platform Android bawaan
+        # Menambahkan platform Android resmi
         cordova platform add android
         
-        # --- INSTALASI PLUGIN ---
-        cordova plugin add cordova-plugin-statusbar
-        
-        # --- KONFIGURASI URL & PANDUAN NAVIGASI AMAN ---
-        sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/data/penilaian/" />|' config.xml
-        sed -i '/<allow-intent href="http:\/\/\\*\/\\*" \/>/d' config.xml
-        sed -i '/<allow-intent href="https:\/\/\\*\/\\*" \/>/d' config.xml
-        sed -i '/<\/widget>/i \    <allow-navigation href="*" />\n    <allow-intent href="*" />\n    <preference name="StayInApp" value="true" />' config.xml
-
-        # --- KONFIGURASI IMMERSIVE FULLSCREEN ---
-        sed -i '/<\/widget>/i \    <preference name="Fullscreen" value="true" />\n    <preference name="StatusBarOverlaysWebView" value="true" />' config.xml
-
-        # --- MANAJEMEN ASET IKON & SPLASH SCREEN ---
+        # --- MANAJEMEN ASET IKON ---
         mkdir -p res/icon/android
-        mkdir -p res/screen/android
-        
-        # Unduh berkas ikon utama SmartGrader
+        # Mengunduh ikon resmi SmartGrader
         curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-smartgrader.png
-        
-        # Pemotongan radius sudut melengkung pada ikon splash screen via ImageMagick
-        convert res/icon/android/icon.png \
-          \( +clone -alpha extract \
-             -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
-             -transverse -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
-             -flip -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
-             -transverse -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
-          \) -alpha off -compose CopyOpacity -composite res/screen/android/splash.png
-        
-        # --- OPTIMALISASI PARAMETER SPLASH SCREEN ---
-        # Mengatur durasi tampilan, animasi fade-out, serta efek penutupan otomatis yang mulus
-        sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />\n    <preference name="AutoHideSplashScreen" value="true" />\n    <preference name="FadeSplashScreen" value="true" />\n    <preference name="FadeSplashScreenDuration" value="500" />\n    <preference name="SplashShowOnlyFirstTime" value="false" />' config.xml
-        
-        # Menyelaraskan warna latar belakang splash screen dengan tema sistem aktif perangkat (?android:attr/colorBackground)
-        sed -i '/<\/widget>/i \    <preference name="AndroidWindowSplashScreenBackground" value="?android:attr/colorBackground" />' config.xml
-        
-        # Daftarkan penempatan aset ke dalam tag platform Android
-        sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n        <splash src="res/screen/android/splash.png" />\n    </platform>' config.xml
+
+        # --- SOLUSI TOTAL ANTI-ERROR: TULIS ULANG CONFIG.XML ---
+        # Metode ini menggantikan perintah 'sed' yang rapuh dengan menulis file XML yang valid dan bersih dari awal
+        cat << 'EOF' > config.xml
+        <?xml version='1.0' encoding='utf-8'?>
+        <widget id="com.azzahro.penilaian" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+            <name>SmartGrader Az-Zahro</name>
+            <description>Aplikasi Penilaian SmartGrader Az-Zahro</description>
+            <author email="dev@azzahro.web.id" href="https://azzahro.web.id">SmartGrader Team</author>
+            
+            <!-- Jalur URL Utama Halaman Penilaian -->
+            <content src="https://azzahro.web.id/data/penilaian/" />
+            
+            <!-- Mengizinkan Semua Akses Navigasi Internal (Mencegah Lempar ke Browser) -->
+            <access origin="*" />
+            <allow-navigation href="*" />
+            <allow-intent href="*" />
+            
+            <!-- Pengaturan Aplikasi Tetap Berjalan di Dalam Webview -->
+            <preference name="StayInApp" value="true" />
+
+            <!-- Pengaturan Layar Penuh Total (Sinyal, Baterai, Jam Tersembunyi) -->
+            <preference name="Fullscreen" value="true" />
+
+            <!-- Konfigurasi Manajemen Splash Screen Adaptif Sesuai Standar Android Modern -->
+            <preference name="SplashScreenDelay" value="3000" />
+            <preference name="AutoHideSplashScreen" value="true" />
+            <preference name="FadeSplashScreen" value="true" />
+            <preference name="FadeSplashScreenDuration" value="500" />
+            
+            <!-- Mengikuti Tema Latar HP (Light/Dark Mode) Secara Otomatis -->
+            <preference name="AndroidWindowSplashScreenBackground" value="?android:attr/colorBackground" />
+            
+            <!-- Konfigurasi Khusus Platform Android -->
+            <platform name="android">
+                <!-- Ikon Utama Aplikasi -->
+                <icon src="res/icon/android/icon.png" />
+                <!-- Menjadikan Ikon Utama Sebagai Splash Screen Yang Akan Dipotong Radius Secara Otomatis Oleh Sistem Android -->
+                <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/icon/android/icon.png" />
+            </platform>
+        </widget>
+        EOF
 
     # 5. Proses Kompilasi Menjadi Android APK
     - name: Build Android APK
