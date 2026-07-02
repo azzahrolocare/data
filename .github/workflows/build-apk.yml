@@ -75,8 +75,9 @@ jobs:
         # Memasang aset ikon dan splash screen ke dalam konfigurasi platform android
         sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n        <splash src="res/screen/android/splash.png" />\n    </platform>' config.xml
 
-    # 5. Proses Build menjadi APK
-    run: |
+    # 5. Proses Build menjadi APK (Sudah Diperbaiki)
+    - name: Build Android APK
+      run: |
         cd apk-project
         cordova build android --debug
 
