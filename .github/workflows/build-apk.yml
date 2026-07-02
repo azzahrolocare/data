@@ -53,19 +53,18 @@ jobs:
         # Membuka gerbang navigasi internal sedalam mungkin
         sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" /><allow-navigation href="https://azzahro.web.id/data/penilaian/*" /><allow-intent href="https://azzahro.web.id/*" />\n    <preference name="StayInApp" value="true" />\n    <preference name="InAppBrowserStorageEnabled" value="true" />|' config.xml
 
-        # --- JINAKKAN TARGET BLANK SECARA OTOMATIS (INJEKSI JAVASCRIPT) ---
-        # Membuat file skrip lokal untuk memaksa target="_blank" menjadi target="_self"
+        # --- JINAKKAN WINDOW.OPEN JAVASCRIPT SECARA OTOMATIS ---
+        # Trik Injeksi JavaScript: Mengganti window.open(..., '_blank') menjadi window.open(..., '_self') secara paksa pada runtime WebView
         mkdir -p www
         echo 'document.addEventListener("deviceready", onDeviceReady, false);' > www/index.js
         echo 'function onDeviceReady() {' >> www/index.js
-        echo '    setInterval(function() {' >> www/index.js
-        echo '        var links = document.getElementsByTagName("a");' >> www/index.js
-        echo '        for (var i = 0; i < links.length; i++) {' >> www/index.js
-        echo '            if (links[i].getAttribute("target") === "_blank") {' >> www/index.js
-        echo '                links[i].setAttribute("target", "_self");' >> www/index.js
-        echo '            }' >> www/index.js
+        echo '    var originalOpen = window.open;' >> www/index.js
+        echo '    window.open = function(url, target, features) {' >> www/index.js
+        echo '        if (target === "_blank") {' >> www/index.js
+        echo '            target = "_self";' >> www/index.js
         echo '        }' >> www/index.js
-        echo '    }, 1000);' >> www/index.js
+        echo '        return originalOpen(url, target, features);' >> www/index.js
+        echo '    };' >> www/index.js
         echo '}' >> www/index.js
 
         # Mengintegrasikan skrip penjinak tersebut ke dalam sistem injeksi Cordova
