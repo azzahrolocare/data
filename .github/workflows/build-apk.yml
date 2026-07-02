@@ -34,7 +34,7 @@ jobs:
     - name: Install Cordova
       run: npm install -g cordova
 
-    # 4. Buat Proyek dan Konfigurasi Lengkap (URL, Navigasi, Fullscreen, Ikon, Splash Screen)
+    # 4. Buat Proyek dan Konfigurasi Lengkap
     - name: Create Cordova App with All Settings
       run: |
         cordova create apk-project com.azzahro.penilaian "Penilaian Az-Zahro"
@@ -44,35 +44,29 @@ jobs:
         cordova platform add android
         
         # --- INSTALASI PLUGIN ---
-        # Plugin statusbar diperlukan untuk mengontrol tampilan jam, baterai, dan sinyal
         cordova plugin add cordova-plugin-statusbar
+        # Plugin InAppBrowser untuk menangani target="_blank" agar tetap terbuka di dalam aplikasi
+        cordova plugin add cordova-plugin-inappbrowser
         
-        # --- KONFIGURASI URL & NAVIGASI (DIPERBAIKI) ---
-        # Mengarahkan langsung ke jalur folder utama penilaian
+        # --- KONFIGURASI URL & NAVIGASI ---
         sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/data/penilaian/" />|' config.xml
         
-        # Membuka proteksi navigasi agar semua subfolder dan file .html (seperti leger.html) tetap terbuka di dalam aplikasi
-        sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" /><allow-navigation href="https://azzahro.web.id/data/penilaian/*" /><allow-intent href="https://azzahro.web.id/*" />|' config.xml
+        # Mengonfigurasi agar link internal maupun target="_blank" dipaksa terbuka di webview aplikasi
+        sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" /><allow-navigation href="https://azzahro.web.id/data/penilaian/*" /><allow-intent href="https://azzahro.web.id/*" />\n    <preference name="StayInApp" value="true" />|' config.xml
 
         # --- KONFIGURASI TOTAL FULLSCREEN ---
-        # Menyembunyikan Jam, Baterai, Sinyal (Status Bar) secara permanen saat aplikasi berjalan
         sed -i '/<\/widget>/i \    <preference name="Fullscreen" value="true" />\n    <preference name="StatusBarOverlaysWebView" value="true" />' config.xml
 
         # --- UNDUH & ATUR IKON + SPLASH SCREEN ---
         mkdir -p res/icon/android
         mkdir -p res/screen/android
-        
-        # Mengunduh file ikon langsung dari tautan web Anda
         curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-penilaian.png
-        
-        # Menyalin ikon yang sama untuk dijadikan logo Splash Screen di tengah layar
         cp res/icon/android/icon.png res/screen/android/splash.png
         
-        # --- KONFIGURASI XML UNTUK IKON & SPLASH SCREEN ---
-        # Mengatur latar belakang splash screen berwarna putih (#FFFFFF) dan durasi tampil 3 detik (3000ms)
+        # Konfigurasi Splash Screen
         sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />\n    <preference name="AutoHideSplashScreen" value="true" />\n    <preference name="FadeSplashScreen" value="true" />\n    <preference name="FadeSplashScreenDuration" value="500" />\n    <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />' config.xml
         
-        # Memasang aset ikon dan splash screen ke dalam konfigurasi platform android
+        # Masukkan aset ke platform android
         sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n        <splash src="res/screen/android/splash.png" />\n    </platform>' config.xml
 
     # 5. Proses Build menjadi APK
