@@ -47,12 +47,12 @@ jobs:
         # Plugin statusbar diperlukan untuk mengontrol tampilan jam, baterai, dan sinyal
         cordova plugin add cordova-plugin-statusbar
         
-        # --- KONFIGURASI URL & NAVIGASI ---
-        # Mengarahkan langsung ke jalur folder yang benar (index.html di subfolder /data/penilaian/)
+        # --- KONFIGURASI URL & NAVIGASI (DIPERBAIKI) ---
+        # Mengarahkan langsung ke jalur folder utama penilaian
         sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/data/penilaian/" />|' config.xml
         
-        # Memberikan izin navigasi penuh ke domain azzahro agar tidak terlempar ke browser luar
-        sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" />|' config.xml
+        # Membuka proteksi navigasi agar semua subfolder dan file .html (seperti leger.html) tetap terbuka di dalam aplikasi
+        sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" /><allow-navigation href="https://azzahro.web.id/data/penilaian/*" /><allow-intent href="https://azzahro.web.id/*" />|' config.xml
 
         # --- KONFIGURASI TOTAL FULLSCREEN ---
         # Menyembunyikan Jam, Baterai, Sinyal (Status Bar) secara permanen saat aplikasi berjalan
@@ -75,7 +75,7 @@ jobs:
         # Memasang aset ikon dan splash screen ke dalam konfigurasi platform android
         sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n        <splash src="res/screen/android/splash.png" />\n    </platform>' config.xml
 
-    # 5. Proses Build menjadi APK (Sudah Diperbaiki)
+    # 5. Proses Build menjadi APK
     - name: Build Android APK
       run: |
         cd apk-project
