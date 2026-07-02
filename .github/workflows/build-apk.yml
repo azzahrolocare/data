@@ -45,14 +45,31 @@ jobs:
         
         # --- INSTALASI PLUGIN ---
         cordova plugin add cordova-plugin-statusbar
-        # Plugin InAppBrowser untuk menangani target="_blank" agar tetap terbuka di dalam aplikasi
         cordova plugin add cordova-plugin-inappbrowser
         
-        # --- KONFIGURASI URL & NAVIGASI ---
+        # --- KONFIGURASI URL & NAVIGASI PANDUAN KETAT ---
         sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/data/penilaian/" />|' config.xml
         
-        # Mengonfigurasi agar link internal maupun target="_blank" dipaksa terbuka di webview aplikasi
-        sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" /><allow-navigation href="https://azzahro.web.id/data/penilaian/*" /><allow-intent href="https://azzahro.web.id/*" />\n    <preference name="StayInApp" value="true" />|' config.xml
+        # Membuka gerbang navigasi internal sedalam mungkin
+        sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" /><allow-navigation href="https://azzahro.web.id/data/penilaian/*" /><allow-intent href="https://azzahro.web.id/*" />\n    <preference name="StayInApp" value="true" />\n    <preference name="InAppBrowserStorageEnabled" value="true" />|' config.xml
+
+        # --- JINAKKAN TARGET BLANK SECARA OTOMATIS (INJEKSI JAVASCRIPT) ---
+        # Membuat file skrip lokal untuk memaksa target="_blank" menjadi target="_self"
+        mkdir -p www
+        echo 'document.addEventListener("deviceready", onDeviceReady, false);' > www/index.js
+        echo 'function onDeviceReady() {' >> www/index.js
+        echo '    setInterval(function() {' >> www/index.js
+        echo '        var links = document.getElementsByTagName("a");' >> www/index.js
+        echo '        for (var i = 0; i < links.length; i++) {' >> www/index.js
+        echo '            if (links[i].getAttribute("target") === "_blank") {' >> www/index.js
+        echo '                links[i].setAttribute("target", "_self");' >> www/index.js
+        echo '            }' >> www/index.js
+        echo '        }' >> www/index.js
+        echo '    }, 1000);' >> www/index.js
+        echo '}' >> www/index.js
+
+        # Mengintegrasikan skrip penjinak tersebut ke dalam sistem injeksi Cordova
+        sed -i '/<\/widget>/i \    <platform name="android">\n        <hooks>\n            <hook type="after_prepare" src="www/index.js" />\n        </hooks>\n    </platform>' config.xml
 
         # --- KONFIGURASI TOTAL FULLSCREEN ---
         sed -i '/<\/widget>/i \    <preference name="Fullscreen" value="true" />\n    <preference name="StatusBarOverlaysWebView" value="true" />' config.xml
