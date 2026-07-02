@@ -1,4 +1,4 @@
-name: Build APK with Online Icon
+name: Build APK with Splash Screen and Fullscreen
 
 on:
   push:
@@ -34,8 +34,8 @@ jobs:
     - name: Install Cordova
       run: npm install -g cordova
 
-    # 4. Buat Proyek dan Konfigurasi Ikon serta URL
-    - name: Create Cordova App with Icon Link
+    # 4. Buat Proyek dan Konfigurasi Lengkap (URL, Navigasi, Fullscreen, Ikon, Splash Screen)
+    - name: Create Cordova App with All Settings
       run: |
         cordova create apk-project com.azzahro.penilaian "Penilaian Az-Zahro"
         cd apk-project
@@ -43,26 +43,40 @@ jobs:
         # Tambahkan platform Android
         cordova platform add android
         
+        # --- INSTALASI PLUGIN ---
+        # Plugin statusbar diperlukan untuk mengontrol tampilan jam, baterai, dan sinyal
+        cordova plugin add cordova-plugin-statusbar
+        
         # --- KONFIGURASI URL & NAVIGASI ---
-        # Mengarahkan langsung ke jalur folder yang benar
+        # Mengarahkan langsung ke jalur folder yang benar (index.html di subfolder /data/penilaian/)
         sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/data/penilaian/" />|' config.xml
         
-        # Memberikan izin navigasi penuh ke domain azzahro
+        # Memberikan izin navigasi penuh ke domain azzahro agar tidak terlempar ke browser luar
         sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" />|' config.xml
 
-        # --- KONFIGURASI IKON ---
-        # 1. Buat folder untuk menampung ikon di dalam proyek cordova
+        # --- KONFIGURASI TOTAL FULLSCREEN ---
+        # Menyembunyikan Jam, Baterai, Sinyal (Status Bar) secara permanen saat aplikasi berjalan
+        sed -i '/<\/widget>/i \    <preference name="Fullscreen" value="true" />\n    <preference name="StatusBarOverlaysWebView" value="true" />' config.xml
+
+        # --- UNDUH & ATUR IKON + SPLASH SCREEN ---
         mkdir -p res/icon/android
+        mkdir -p res/screen/android
         
-        # 2. Mengunduh ikon langsung dari tautan web Anda menggunakan curl
+        # Mengunduh file ikon langsung dari tautan web Anda
         curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-penilaian.png
         
-        # 3. Tambahkan instruksi konfigurasi ikon ke config.xml (sebelum tag </widget>)
-        sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n    </platform>' config.xml
+        # Menyalin ikon yang sama untuk dijadikan logo Splash Screen di tengah layar
+        cp res/icon/android/icon.png res/screen/android/splash.png
+        
+        # --- KONFIGURASI XML UNTUK IKON & SPLASH SCREEN ---
+        # Mengatur latar belakang splash screen berwarna putih (#FFFFFF) dan durasi tampil 3 detik (3000ms)
+        sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />\n    <preference name="AutoHideSplashScreen" value="true" />\n    <preference name="FadeSplashScreen" value="true" />\n    <preference name="FadeSplashScreenDuration" value="500" />\n    <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />' config.xml
+        
+        # Memasang aset ikon dan splash screen ke dalam konfigurasi platform android
+        sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n        <splash src="res/screen/android/splash.png" />\n    </platform>' config.xml
 
     # 5. Proses Build menjadi APK
-    - name: Build Android APK
-      run: |
+    run: |
         cd apk-project
         cordova build android --debug
 
@@ -70,5 +84,5 @@ jobs:
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: AzZahro-Penilaian-Ikon-APK
+        name: AzZahro-Penilaian-Lengkap-APK
         path: apk-project/platforms/android/app/build/outputs/apk/debug/app-debug.apk
