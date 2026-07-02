@@ -1,4 +1,4 @@
-name: Build APK with Splash Screen and Fullscreen
+name: Build APK with Splash Screen and Fullscren
 
 on:
   push:
