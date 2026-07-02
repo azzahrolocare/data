@@ -1,4 +1,4 @@
-name: Build APK with Splash Screen and Fullscren
+name: Build APK with Splash Screen and Fullscreen
 
 on:
   push:
@@ -63,8 +63,7 @@ jobs:
         # Mengunduh file ikon SmartGrader baru dari tautan Anda
         curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-smartgrader.png
         
-        # Menggunakan ImageMagick (bawaan Ubuntu GitHub) untuk membuat ikon splash ber-radius (sudut melengkung)
-        # Perintah ini memotong sudut gambar ikon menjadi rounded corner (lingkaran/radius halus)
+        # Menggunakan ImageMagick untuk membuat ikon splash ber-radius (sudut melengkung)
         convert res/icon/android/icon.png \
           \( +clone -alpha extract \
              -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
@@ -74,7 +73,6 @@ jobs:
           \) -alpha off -compose CopyOpacity -composite res/screen/android/splash.png
         
         # --- KONFIGURASI SPLASH SCREEN ADAPTIF (MENGIKUTI TEMA HP) ---
-        # Mengonfigurasi durasi splash screen (3 detik) dan animasi hilangnya
         sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />\n    <preference name="AutoHideSplashScreen" value="true" />\n    <preference name="FadeSplashScreen" value="true" />\n    <preference name="FadeSplashScreenDuration" value="500" />' config.xml
         
         # Mengatur agar warna latar belakang Splash Screen mengikuti tema gelap/terang sistem Android secara otomatis
@@ -83,7 +81,7 @@ jobs:
         # Masukkan aset ikon dan splash screen bulat ke konfigurasi platform android
         sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n        <splash src="res/screen/android/splash.png" />\n    </platform>' config.xml
 
-    # 5. Proses Build menjadi APK
+    # 5. Proses Build menjadi APK (Sudah Diperbaiki)
     - name: Build Android APK
       run: |
         cd apk-project
