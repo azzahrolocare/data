@@ -1,59 +1,74 @@
-name: Build APK from Domain
+name: Build APK with Online Icon
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch: # Biar bisa di-klik tombol "Run workflow" manual dari GitHub
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Setup Node.js
+    # 1. Mengambil kode dari repositori
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
+    # 2. Setup Environment (Node.js, JDK, SDK)
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
 
-    # 2. Setup Java Development Kit (JDK)
     - name: Setup JDK 17
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '17'
 
-    # 3. Setup Android SDK
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
 
-    # 4. Install Cordova secara global
+    # 3. Install Cordova
     - name: Install Cordova
       run: npm install -g cordova
 
-    # 5. Buat Proyek dan Arahkan Langsung ke Domain Anda
-    - name: Create Cordova App Pointing to Domain
+    # 4. Buat Proyek dan Konfigurasi Ikon serta URL
+    - name: Create Cordova App with Icon Link
       run: |
         cordova create apk-project com.azzahro.penilaian "Penilaian Az-Zahro"
         cd apk-project
+        
+        # Tambahkan platform Android
         cordova platform add android
         
-        # Mengubah file config.xml agar aplikasi langsung membuka domain web Anda, bukan file lokal
-        sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/penilaian/" />|' config.xml
+        # --- KONFIGURASI URL & NAVIGASI ---
+        # Mengarahkan langsung ke jalur folder yang benar
+        sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/data/penilaian/" />|' config.xml
         
-        # Memberikan izin akses navigasi ke domain agar tidak terlempar ke browser bawaan HP
+        # Memberikan izin navigasi penuh ke domain azzahro
         sed -i 's|<allow-intent href="http://\*//\*" />|<allow-navigation href="https://azzahro.web.id/*" />|' config.xml
 
-    # 6. Proses Build menjadi APK
+        # --- KONFIGURASI IKON ---
+        # 1. Buat folder untuk menampung ikon di dalam proyek cordova
+        mkdir -p res/icon/android
+        
+        # 2. Mengunduh ikon langsung dari tautan web Anda menggunakan curl
+        curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-penilaian.png
+        
+        # 3. Tambahkan instruksi konfigurasi ikon ke config.xml (sebelum tag </widget>)
+        sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n    </platform>' config.xml
+
+    # 5. Proses Build menjadi APK
     - name: Build Android APK
       run: |
         cd apk-project
         cordova build android --debug
 
-    # 7. Upload Hasil APK ke GitHub Artifacts
+    # 6. Upload Hasil APK ke GitHub Artifacts
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: AzZahro-Penilaian-APK
+        name: AzZahro-Penilaian-Ikon-APK
         path: apk-project/platforms/android/app/build/outputs/apk/debug/app-debug.apk
