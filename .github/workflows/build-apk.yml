@@ -34,10 +34,11 @@ jobs:
     - name: Install Cordova
       run: npm install -g cordova
 
-    # 4. Buat Proyek dan Konfigurasi Total Bebas Navigasi
-    - name: Create Cordova App with Open Whitelist
+    # 4. Buat Proyek dan Konfigurasi Total (Nama Baru, Ikon Baru, Splash Adaptif)
+    - name: Create Cordova App with SmartGrader Settings
       run: |
-        cordova create apk-project com.azzahro.penilaian "Penilaian Az-Zahro"
+        # Membuat proyek dengan Nama Aplikasi Baru: SmartGrader Az-Zahro
+        cordova create apk-project com.azzahro.penilaian "SmartGrader Az-Zahro"
         cd apk-project
         
         # Tambahkan platform Android
@@ -46,30 +47,40 @@ jobs:
         # --- INSTALASI PLUGIN ---
         cordova plugin add cordova-plugin-statusbar
         
-        # --- KONFIGURASI URL UTAMA ---
+        # --- KONFIGURASI URL UTAMA & WHITELIST TOTAL ---
         sed -i 's|<content src="index.html" />|<content src="https://azzahro.web.id/data/penilaian/" />|' config.xml
-        
-        # --- SOLUSI TOTAL: IZINKAN SEMUA NAVIGASI TANPA BATAS ---
-        # Kita menghapus semua aturan bawaan yang membatasi navigasi, lalu memaksa mengizinkan segalanya (*)
         sed -i '/<allow-intent href="http:\/\/\\*\/\\*" \/>/d' config.xml
         sed -i '/<allow-intent href="https:\/\/\\*\/\\*" \/>/d' config.xml
-        
-        # Menyisipkan izin navigasi bebas dan setelan agar tetap di dalam aplikasi sebelum tag </widget>
         sed -i '/<\/widget>/i \    <allow-navigation href="*" />\n    <allow-intent href="*" />\n    <preference name="StayInApp" value="true" />' config.xml
 
         # --- KONFIGURASI TOTAL FULLSCREEN ---
         sed -i '/<\/widget>/i \    <preference name="Fullscreen" value="true" />\n    <preference name="StatusBarOverlaysWebView" value="true" />' config.xml
 
-        # --- UNDUH & ATUR IKON + SPLASH SCREEN ---
+        # --- UNDUH & ATUR IKON BARU ---
         mkdir -p res/icon/android
         mkdir -p res/screen/android
-        curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-penilaian.png
-        cp res/icon/android/icon.png res/screen/android/splash.png
         
-        # Konfigurasi Splash Screen
-        sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />\n    <preference name="AutoHideSplashScreen" value="true" />\n    <preference name="FadeSplashScreen" value="true" />\n    <preference name="FadeSplashScreenDuration" value="500" />\n    <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />' config.xml
+        # Mengunduh file ikon SmartGrader baru dari tautan Anda
+        curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-smartgrader.png
         
-        # Masukkan aset ke platform android
+        # Menggunakan ImageMagick (bawaan Ubuntu GitHub) untuk membuat ikon splash ber-radius (sudut melengkung)
+        # Perintah ini memotong sudut gambar ikon menjadi rounded corner (lingkaran/radius halus)
+        convert res/icon/android/icon.png \
+          \( +clone -alpha extract \
+             -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
+             -transverse -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
+             -flip -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
+             -transverse -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \
+          \) -alpha off -compose CopyOpacity -composite res/screen/android/splash.png
+        
+        # --- KONFIGURASI SPLASH SCREEN ADAPTIF (MENGIKUTI TEMA HP) ---
+        # Mengonfigurasi durasi splash screen (3 detik) dan animasi hilangnya
+        sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />\n    <preference name="AutoHideSplashScreen" value="true" />\n    <preference name="FadeSplashScreen" value="true" />\n    <preference name="FadeSplashScreenDuration" value="500" />' config.xml
+        
+        # Mengatur agar warna latar belakang Splash Screen mengikuti tema gelap/terang sistem Android secara otomatis
+        sed -i '/<\/widget>/i \    <preference name="AndroidWindowSplashScreenBackground" value="?android:attr/colorBackground" />' config.xml
+        
+        # Masukkan aset ikon dan splash screen bulat ke konfigurasi platform android
         sed -i '/<\/widget>/i \    <platform name="android">\n        <icon src="res/icon/android/icon.png" />\n        <splash src="res/screen/android/splash.png" />\n    </platform>' config.xml
 
     # 5. Proses Build menjadi APK
@@ -82,5 +93,5 @@ jobs:
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: AzZahro-Penilaian-Final-APK
+        name: SmartGrader-AzZahro-Lengkap-APK
         path: apk-project/platforms/android/app/build/outputs/apk/debug/app-debug.apk
