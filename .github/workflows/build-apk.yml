@@ -47,7 +47,7 @@ jobs:
         # --- MANAJEMEN ASET IKON ---
         mkdir -p res/icon/android
         # Mengunduh ikon resmi SmartGrader
-        curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-apk-smartgrader1.png
+        curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon-smartgrader-apk.png
 
         # --- SOLUSI TOTAL ANTI-ERROR: TULIS ULANG CONFIG.XML ---
         # Metode ini menggantikan perintah 'sed' yang rapuh dengan menulis file XML yang valid dan bersih dari awal
