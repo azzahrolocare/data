@@ -662,7 +662,7 @@ function jalankanAksiNav(tipe, el){
       tampilkanModalGagalMasuk("Akses Ditolak","Pilih Kelas dan Mapel terlebih dahulu!");
       resetNavActiveState();return;
     }
-    window.open(`leger.html`,'_blank');
+    window.open(`leger.html`,'_self');
     resetNavActiveState();
   } else if(tipe==='materi'){
     bukaModalPengaturan();
