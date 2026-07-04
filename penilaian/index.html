@@ -344,13 +344,6 @@ body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;backg
     </div>
     <form id="formGerbangAwal" class="space-y-4">
       <div>
-        <label class="block text-xs font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1" style="color:var(--text-muted)"><i data-lucide="layers" class="w-3.5 h-3.5 theme-icon-active"></i> Kategori Nilai</label>
-        <select id="gerbangKategoriNilai" onchange="gantiUrlAplikasiDariGerbang()" class="w-full theme-input rounded-xl px-4 py-3 font-semibold outline-none text-sm cursor-pointer">
-          <option value="https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec">Nilai Pondok/Nilai Asli</option>
-          <option value="https://script.google.com/macros/s/AKfycbzhlIuHhQALn-rjX5B0PO9PDCcqnf9MLzKy7sBR3qUmtk3QCVajw6mDyiJnYeNi2v3L/exec">Nilai Sekolah</option>
-        </select>
-      </div>
-      <div>
         <label class="block text-xs font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1" style="color:var(--text-muted)"><i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> Nama Lengkap Guru</label>
         <input type="text" id="gerbangGuru" required placeholder=" " onclick="bukaAplikasiLayarPenuh()" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" class="w-full theme-input rounded-xl px-4 py-3 font-semibold outline-none text-sm uppercase cursor-pointer">
       </div>
@@ -360,6 +353,14 @@ body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;backg
           <input type="password" id="gerbangPassword" required placeholder=" " class="w-full theme-input rounded-xl pl-4 pr-11 py-3 font-semibold outline-none text-sm">
           <button type="button" onclick="toggleVisibilitasSandi('gerbangPassword',this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors"><i data-lucide="eye" class="w-4 h-4"></i></button>
         </div>
+      </div>
+       <div>
+        <label class="block text-xs font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1" style="color:var(--text-muted)"><i data-lucide="layers" class="w-3.5 h-3.5 theme-icon-active"></i> Kategori Nilai</label>
+        <select id="gerbangKategoriNilai" onchange="gantiUrlAplikasiDariGerbang()" class="w-full theme-input rounded-xl px-4 py-3 font-semibold outline-none text-sm cursor-pointer">
+          <option value="" disabled selected hidden>Pilih Penilaian</option>
+          <option value="https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec">Nilai Pondok/Nilai Asli</option>
+          <option value="https://script.google.com/macros/s/AKfycbzhlIuHhQALn-rjX5B0PO9PDCcqnf9MLzKy7sBR3qUmtk3QCVajw6mDyiJnYeNi2v3L/exec">Nilai Sekolah</option>
+        </select>
       </div>
       <button type="submit" id="btnMasukGerbang" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 theme-btn-primary font-bold text-sm rounded-xl mt-2 disabled:opacity-75 disabled:pointer-events-none">
         <i data-lucide="log-in" class="w-4 h-4 theme-icon-active"></i> <span>Masuk</span>
