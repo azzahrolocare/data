@@ -344,6 +344,13 @@ body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;backg
     </div>
     <form id="formGerbangAwal" class="space-y-4">
       <div>
+        <label class="block text-xs font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1" style="color:var(--text-muted)"><i data-lucide="layers" class="w-3.5 h-3.5 theme-icon-active"></i> Kategori Nilai</label>
+        <select id="gerbangKategoriNilai" onchange="gantiUrlAplikasiDariGerbang()" class="w-full theme-input rounded-xl px-4 py-3 font-semibold outline-none text-sm cursor-pointer">
+          <option value="https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec">Nilai Pondok/Nilai Asli</option>
+          <option value="https://script.google.com/macros/s/AKfycbzhlIuHhQALn-rjX5B0PO9PDCcqnf9MLzKy7sBR3qUmtk3QCVajw6mDyiJnYeNi2v3L/exec">Nilai Sekolah</option>
+        </select>
+      </div>
+      <div>
         <label class="block text-xs font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1" style="color:var(--text-muted)"><i data-lucide="user" class="w-3.5 h-3.5 theme-icon-active"></i> Nama Lengkap Guru</label>
         <input type="text" id="gerbangGuru" required placeholder=" " onclick="bukaAplikasiLayarPenuh()" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" class="w-full theme-input rounded-xl px-4 py-3 font-semibold outline-none text-sm uppercase cursor-pointer">
       </div>
@@ -427,7 +434,7 @@ body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;backg
       <div>
         <label class="block text-xs font-bold mb-1 flex items-center gap-1" style="color:var(--text-main)"><i data-lucide="key" class="w-3.5 h-3.5 theme-icon-active"></i> Masukkan Password Baru</label>
         <div class="relative">
-          <input type="password" id="modalPwBaru" required placeholder="Sandi baru minimal 4 karakter" oninput="validasiKesesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs outline-none">
+          <input type="password" id="modalPwBaru" required placeholder="Sandi baru minimal 4 karakter" oninput="validasiKosesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs outline-none">
           <button type="button" onclick="toggleVisibilitasSandi('modalPwBaru',this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors"><i data-lucide="eye" class="w-4 h-4"></i></button>
         </div>
         <p id="msgSandiLemah" class="text-[11px] text-red-400 font-bold mt-1.5 hidden flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password minimal harus terdiri dari 4 karakter.</p>
@@ -435,7 +442,7 @@ body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;backg
       <div>
         <label class="block text-xs font-bold mb-1 flex items-center gap-1" style="color:var(--text-main)"><i data-lucide="check-square" class="w-3.5 h-3.5 theme-icon-active"></i> Konfirmasi Password Baru</label>
         <div class="relative">
-          <input type="password" id="modalPwKonfirmasi" required placeholder="Ketik ulang sandi baru" oninput="validasiKesesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs outline-none">
+          <input type="password" id="modalPwKonfirmasi" required placeholder="Ketik ulang sandi baru" oninput="validasiKosesuaianSandi()" class="w-full theme-input rounded-xl pl-3.5 pr-11 py-2.5 font-semibold text-xs outline-none">
           <button type="button" onclick="toggleVisibilitasSandi('modalPwKonfirmasi',this)" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white outline-none transition-colors"><i data-lucide="eye" class="w-4 h-4"></i></button>
         </div>
         <p id="msgErrorPassword" class="text-[11px] text-red-400 font-bold mt-1.5 hidden flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Password tidak cocok.</p>
@@ -474,7 +481,12 @@ body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;backg
 </div>
 
 <script>
-const WEB_APP_URL="https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
+let WEB_APP_URL="https://script.google.com/macros/s/AKfycbxPlWvYdVg7gYKh5UnMHrSIf-pJqfS1hyPRdsExVws7BIKbZqp4JXe2pv4_u5dxFb3Olw/exec";
+
+function gantiUrlAplikasiDariGerbang(){
+  const s=document.getElementById('gerbangKategoriNilai');
+  if(s) { WEB_APP_URL = s.value; }
+}
 
 const DAFTAR_TEMA={
   "emerald":{
@@ -546,7 +558,7 @@ const DAFTAR_TEMA={
     headerBg:"linear-gradient(135deg,rgba(13,8,2,.98) 0%,rgba(26,15,5,.97) 30%,rgba(58,28,5,.94) 60%,rgba(124,45,0,.88) 100%)",headerBorder:"rgba(249,115,22,.4)",
     glassBg:"linear-gradient(145deg,rgba(255,120,30,.11) 0%,rgba(234,88,12,.07) 50%,rgba(255,255,255,.04) 100%)",glassBorder:"rgba(249,115,22,.3)",
     glassShadow:"0 12px 48px rgba(0,0,0,.55),0 4px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(249,115,22,.2),inset 0 -1px 0 rgba(0,0,0,.18)",
-    tableHeaderBg:"linear-gradient(90deg,rgba(13,8,2,.96) 0%,rgba(26,15,5,.93) 30%,rgba(58,28,5,.88) 60%,rgba(26,15,5,.93) 100%)",
+    tableHeaderBg:"linear-gradient(90deg,rgba(13,8,2,.96) 0%,rgba(26,15,5,.93) 30%,rgba(58,28,5,.88) 60%,rgba(124,45,0,.88) 100%)",
     tableRowHover:"rgba(234,88,12,.18)",tableBorder:"rgba(249,115,22,.1)",tableStripe:"rgba(234,88,12,.06)",
     tableCardBg:"linear-gradient(180deg,rgba(0,0,0,.6) 0%,rgba(13,8,2,.45) 50%,rgba(26,15,5,.35) 100%)",
     badgeBg:"linear-gradient(135deg,rgba(234,88,12,.4) 0%,rgba(234,179,8,.28) 100%)",badgeBorder:"rgba(249,115,22,.55)",
@@ -702,7 +714,7 @@ function validasiKesesuaianSandi(){
   if(p2.length===0)mE.classList.add('hidden');else if(p1!==p2){mE.classList.remove('hidden');ok=false}else mE.classList.add('hidden');
   btn.disabled=!ok;lucide.createIcons();
 }
-function bukaModalAwal(){document.getElementById('modalAwal').classList.remove('hidden');kunciScrollLatar(true)}
+function bukaModalAwal(){document.getElementById('modalAwal').classList.remove('hidden');kunciScrollLatar(true);gantiUrlAplikasiDariGerbang();}
 function tutupModalAwal(){document.getElementById('modalAwal').classList.add('hidden');kunciScrollLatar(false)}
 function bukaModalPengaturan(){if(!KELAS_AKTIF||!MAPEL_AKTIF){tampilkanModalGagalMasuk("Akses Ditolak","Pilih Kelas dan Mapel terlebih dahulu!");resetNavActiveState();return;}document.getElementById('modalPengaturan').classList.remove('hidden');kunciScrollLatar(true)}
 function tutupModalPengaturan(){document.getElementById('modalPengaturan').classList.add('hidden');kunciScrollLatar(false);resetNavActiveState()}
