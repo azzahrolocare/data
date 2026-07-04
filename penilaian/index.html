@@ -841,6 +841,15 @@ document.getElementById('formNilaiSiswa').addEventListener('submit',function(e){
 window.addEventListener('popstate',()=>{if(document.getElementById('modalAwal').classList.contains('hidden')){window.history.pushState("fullscreen-mode",null,"#fullscreen");bukaModalKonfirmasiKembali();}});
 ['fullscreenchange','webkitfullscreenchange'].forEach(ev=>{document.addEventListener(ev,()=>{const fs=document.fullscreenElement||document.webkitFullscreenElement;if(!fs&&document.getElementById('modalAwal').classList.contains('hidden')&&document.getElementById('modalKonfirmasiKeluar').classList.contains('hidden'))bukaModalKonfirmasiKembali();});});
 window.addEventListener('DOMContentLoaded',()=>{pilihSistemTema(localStorage.getItem('smartgrader_theme')||'emerald');bukaModalAwal();lucide.createIcons();});
+
+  // Daftarkan Service Worker jika didukung oleh browser
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then((reg) => console.log('Service Worker berhasil terdaftar!', reg.scope))
+            .catch((err) => console.error('Pendaftaran Service Worker gagal:', err));
+    });
+}
 </script>
 </body>
 </html>
