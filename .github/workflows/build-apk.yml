@@ -1,9 +1,10 @@
-name: Build APK with Splash Screen and Fullscreen
+name: Build Cordova APK (Direct Link Wrapper)
 
 on:
   push:
     branches:
       - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -11,94 +12,72 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Mengambil kode dari repositori
-    - name: Checkout Source Code
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    # 2. Setup Environment (Node.js, JDK, SDK)
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Set up NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-    - name: Setup JDK 17
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'zulu'
-        java-version: '17'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
-    # 3. Install Cordova
-    - name: Install Cordova
-      run: npm install -g cordova
+      - name: Setup Gradle 8.4 (Fix Compatibility)
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.4'
 
-    # 4. Buat Proyek dan Tulis Ulang Konfigurasi Secara Bersih (Anti-Error)
-    - name: Create Cordova App and Generate Config
-      run: |
-        # Membuat proyek dasar Cordova
-        cordova create apk-project com.azzahro.penilaian "SmartGrader Az-Zahro"
-        cd apk-project
-        
-        # Menambahkan platform Android resmi
-        cordova platform add android
-        
-        # --- MANAJEMEN ASET IKON ---
-        mkdir -p res/icon/android
-        # Mengunduh ikon resmi SmartGrader
-        curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon2.png
+      - name: Install Cordova Global
+        run: npm install -g cordova
 
-        # --- SOLUSI TOTAL ANTI-ERROR: TULIS ULANG CONFIG.XML ---
-        cat << 'EOF' > config.xml
-        <?xml version='1.0' encoding='utf-8'?>
-        <widget id="com.azzahro.penilaian" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-            <name>SmartGrader Az-Zahro</name>
-            <description>Aplikasi Penilaian SmartGrader Az-Zahro</description>
-            <author email="dev@azzahro.web.id" href="https://azzahro.web.id">SmartGrader Team</author>
-            
-            <!-- Jalur URL Utama Halaman Penilaian -->
-            <content src="https://azzahro.web.id/data/penilaian/" />
-            
-            <!-- Mengizinkan Semua Akses Navigasi Internal (Mencegah Lempar ke Browser) -->
-            <access origin="*" />
-            <allow-navigation href="*" />
-            <allow-intent href="*" />
-            
-            <!-- Pengaturan Aplikasi Tetap Berjalan di Dalam Webview -->
-            <preference name="StayInApp" value="true" />
+      - name: Generate Cordova Project Architecture
+        run: |
+          # 1. Membuat project cordova baru bernama cbt-live-app
+          cordova create cbt-live-app id.web.azzahro.cbt "SmartGrader Az-Zahro"
+          cd cbt-live-app
 
-            <!-- Pengaturan Layar Penuh Total (Sinyal, Baterai, Jam Tersembunyi) -->
-            <preference name="Fullscreen" value="true" />
+          # 2. Setup config.xml langsung mengarah ke link login utama
+          cat << 'EOF' > config.xml
+          <?xml version='1.0' encoding='utf-8'?>
+          <widget id="id.web.azzahro.cbt" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+              <name>SmartGrader Az-Zahro</name>
+              <description>Aplikasi CBT Az-Zahro Direct Link Wrapper</description>
+              <author email="admin@azzahro.web.id" href="https://azzahro.web.id">Rahmattullah</author>
+              
+              <!-- Mengunci langsung ke link login utama -->
+              <content src="https://azzahro.web.id/cbt/login" />
+              
+              <!-- Izinkan akses penuh ke domain dan seluruh jalurnya -->
+              <access origin="https://azzahro.web.id/*" />
+              <allow-navigation href="https://azzahro.web.id/*" />
+              <allow-intent href="https://azzahro.web.id/*" />
+              
+              <preference name="LogLevel" value="DEBUG" />
+              <preference name="Fullscreen" value="true" />
+              <preference name="Orientation" value="portrait" />
+          </widget>
+          EOF
 
-            <!-- Konfigurasi Manajemen Splash Screen Adaptif Sesuai Standar Android Modern -->
-            <preference name="SplashScreenDelay" value="3000" />
-            <preference name="AutoHideSplashScreen" value="true" />
-            <preference name="FadeSplashScreen" value="true" />
-            <preference name="FadeSplashScreenDuration" value="500" />
-            
-            <!-- KUSTOMISASI WARNA BACKGROUND SPLASH SCREEN (Ganti #28A745 dengan warna pilihan Anda) -->
-            <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />
-            
-            <!-- Konfigurasi Khusus Platform Android -->
-            <platform name="android">
-                <!-- Ikon Utama Aplikasi -->
-                <icon src="res/icon/android/icon.png" />
-                <!-- Menjadikan Ikon Utama Sebagai Splash Screen Yang Akan Dipotong Radius Secara Otomatis Oleh Sistem Android -->
-                <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/icon/android/icon.png" />
-            </platform>
-        </widget>
-        EOF
+          # 3. Buat file dummy internal agar build tidak error
+          cat << 'EOF' > www/index.html
+          <!DOCTYPE html><html><head><meta charset="utf-8"></head><body>Loading...</body></html>
+          EOF
 
-    # 5. Proses Kompilasi Menjadi Android APK
-    - name: Build Android APK
-      run: |
-        cd apk-project
-        cordova build android --debug
+      - name: Add Android Platform and Build APK
+        run: |
+          cd cbt-live-app
+          cordova platform add android@12.0.0 --save
+          cordova build android --debug
 
-    # 6. Unggah Hasil Kompilasi ke GitHub Artifacts
-    - name: Upload APK Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: SmartGrader-AzZahro-Lengkap-APK
-        path: apk-project/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CBT-AzZahro-Live-APK
+          path: cbt-live-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
