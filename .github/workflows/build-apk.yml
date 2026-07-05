@@ -50,7 +50,6 @@ jobs:
         curl -L -o res/icon/android/icon.png https://azzahro.web.id/data/penilaian/icon2.png
 
         # --- SOLUSI TOTAL ANTI-ERROR: TULIS ULANG CONFIG.XML ---
-        # Metode ini menggantikan perintah 'sed' yang rapuh dengan menulis file XML yang valid dan bersih dari awal
         cat << 'EOF' > config.xml
         <?xml version='1.0' encoding='utf-8'?>
         <widget id="com.azzahro.penilaian" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
@@ -78,8 +77,8 @@ jobs:
             <preference name="FadeSplashScreen" value="true" />
             <preference name="FadeSplashScreenDuration" value="500" />
             
-            <!-- Kode Mengikuti Tema Latar HP (Light/Dark Mode) Secara Otomatis -->
-            <preference name="AndroidWindowSplashScreenBackground" value="ffffff" />
+            <!-- KUSTOMISASI WARNA BACKGROUND SPLASH SCREEN (Ganti #28A745 dengan warna pilihan Anda) -->
+            <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />
             
             <!-- Konfigurasi Khusus Platform Android -->
             <platform name="android">
