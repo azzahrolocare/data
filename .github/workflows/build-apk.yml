@@ -78,8 +78,9 @@ jobs:
             <preference name="FadeSplashScreen" value="true" />
             <preference name="FadeSplashScreenDuration" value="500" />
             
-            <!-- Mengikuti Tema Latar HP (Light/Dark Mode) Secara Otomatis -->
-            <preference name="AndroidWindowSplashScreenBackground" value="?android:attr/colorBackground" />
+            <!-- Kode Mengikuti Tema Latar HP (Light/Dark Mode) Secara Otomatis -->
+            <!-- ?android:attr/colorBackground -->
+            <preference name="AndroidWindowSplashScreenBackground" value="ffffff" />
             
             <!-- Konfigurasi Khusus Platform Android -->
             <platform name="android">
