@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Progres Guru - SMP & SMK</title>
+    <!-- Menggunakan font modern inter dari Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-emerald: #047857;
+            --emerald-hover: #065f46;
+            --emerald-light: #d1fae5;
+            --emerald-bg: #ecfdf5;
+            --accent-gold: #f59e0b;
+            --text-dark: #1f2937;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 30px 20px;
+            background-color: var(--emerald-bg);
+            color: var(--text-dark);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary-emerald);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .tab-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid var(--primary-emerald);
+            background-color: #ffffff;
+            color: var(--primary-emerald);
+            border-radius: 8px;
+            margin: 0 6px;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .tab-btn:hover {
+            background-color: var(--emerald-light);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-emerald);
+            color: #ffffff;
+            box-shadow: 0 4px 6px rgba(4, 120, 87, 0.2);
+        }
+
+        .table-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 14px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary-emerald);
+            color: #ffffff;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        td.text-left {
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        tbody tr:hover {
+            background-color: var(--emerald-light);
+            transition: background-color 0.15s ease;
+        }
+
+        /* Checkbox styling */
+        input[type="checkbox"] {
+            transform: scale(1.25);
+            accent-color: var(--primary-emerald);
+            cursor: pointer;
+            pointer-events: none;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 20px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            text-align: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 20px;
+            border-radius: 6px;
+        }
+
+        .loading, .error {
+            text-align: center;
+            padding: 30px;
+            font-style: italic;
+            color: #6b7280;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Data Progres Guru & Mata Pelajaran</h2>
+    
+    <div class="tab-container">
+        <button id="btn-smk" class="tab-btn active" onclick="switchTab('smk')">Data SMK</button>
+        <button id="btn-smp" class="tab-btn" onclick="switchTab('smp')">Data SMP</button>
+    </div>
+
+    <div class="table-container">
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th rowspan="2">NO</th>
+                    <th rowspan="2">NAMA GURU</th>
+                    <th rowspan="2">MAPEL</th>
+                    <th colspan="3">KELAS</th>
+                    <th colspan="2">PROGRES</th>
+                </tr>
+                <tr>
+                    <th>X</th>
+                    <th>XI</th>
+                    <th>XII</th>
+                    <th>Persen</th>
+                    <th>Grafik</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr>
+                    <td colspan="8" class="loading">Memuat data...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const BASE_URL = "https://script.google.com/macros/s/AKfycbwlDTFMwwo1fzPegI7niS4Ybgc_yoOM2SLSDnO-ZumF1LjpTASZzl4LCfBysl8Tp22-/exec";
+
+        function switchTab(target) {
+            document.getElementById("btn-smk").classList.toggle("active", target === "smk");
+            document.getElementById("btn-smp").classList.toggle("active", target === "smp");
+            fetchData(target);
+        }
+
+        function renderCheckbox(val) {
+            if (val === "" || val === null || val === undefined) {
+                return "";
+            }
+            let isChecked = (val === true || val === "TRUE" || val === "checked") ? "checked" : "";
+            return `<input type="checkbox" ${isChecked}>`;
+        }
+
+        async function fetchData(target) {
+            const tbody = document.getElementById("table-body");
+            tbody.innerHTML = `<tr><td colspan="8" class="loading">Memuat data ${target.toUpperCase()}...</td></tr>`;
+            
+            try {
+                const response = await fetch(`${BASE_URL}?target=${target}`);
+                if (!response.ok) throw new Error("Gagal terhubung ke server");
+                
+                const data = await response.json();
+                tbody.innerHTML = "";
+
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="loading">Tidak ada data ditemukan.</td></tr>`;
+                    return;
+                }
+
+                data.forEach(row => {
+                    let tr = document.createElement("tr");
+
+                    let persentase = row.persen || "0%";
+                    let barHTML = "";
+                    
+                    if (persentase !== "0%" && persentase !== "" && persentase !== "0") {
+                        barHTML = `<div class="progress-bar-container"><div class="progress-bar" style="width: ${persentase};"></div></div>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td>${row.no !== undefined ? row.no : ""}</td>
+                        <td class="text-left"><b>${row.nama !== undefined ? row.nama : ""}</b></td>
+                        <td class="text-left">${row.mapel !== undefined ? row.mapel : ""}</td>
+                        <td>${renderCheckbox(row.kelasX)}</td>
+                        <td>${renderCheckbox(row.kelasXI)}</td>
+                        <td>${renderCheckbox(row.kelasXII)}</td>
+                        <td><b>${persentase}</b></td>
+                        <td>${barHTML}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Error:", error);
+                tbody.innerHTML = `<tr><td colspan="8" class="error">Gagal memuat data. Pastikan Apps Script sudah di-deploy ulang dengan akses <b>"Anyone"</b>.</td></tr>`;
+            }
+        }
+
+        fetchData("smk");
+    </script>
+
+</body>
+</html>
